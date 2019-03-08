@@ -64,6 +64,7 @@
      :action 'company-coq-doc-buffer-refman)))
 
 (use-package ediff
+  :defer
   :config
   (setq ediff-split-window-function 'split-window-horizontally)
   (setq ediff-window-setup-function 'ediff-setup-windows-plain))
@@ -87,11 +88,13 @@
 
 (use-package calfw
   :ensure t
-  :defer t
+  :commands cfw:open-calendar-buffer
   :config
   (setq cfw:display-calendar-holidays nil)
   (setq calendar-week-start-day 1))
-(use-package calfw-org :ensure t :after calfw)
+(use-package calfw-org
+  :ensure t
+  :commands cfw:open-org-calendar)
 
 (use-package evil
   :ensure t
@@ -180,7 +183,6 @@
 
 (use-package counsel
   :ensure t
-  :defer t
   :config
   (ivy-mode 1)
   (use-package ivy-hydra :ensure t)
@@ -323,7 +325,9 @@
   (setq ob-ipython-resources-dir "~/obipy-resources/")
   (remove-hook 'org-mode-hook 'ob-ipython-auto-configure-kernels)
   (advice-add 'ob-babel-execute:ipython :around 'ob-ipython-auto-configure-kernels))
-(use-package ob-metapost :load-path "~/.emacs.d/packages/ob-metapost")
+(use-package ob-metapost
+  :commands org-babel-execute:metapost
+  :load-path "~/.emacs.d/packages/ob-metapost")
 
 (use-package org-bullets
   :ensure t

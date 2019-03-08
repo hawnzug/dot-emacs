@@ -36,9 +36,8 @@
 
 (use-package company :ensure t :defer t)
 
-(use-package proof-site
-  :load-path "~/PG/generic"
-  :mode ("\\.v\\'" . coq-mode)
+(use-package proof-general
+  :ensure t
   :config
   (setq proof-splash-enable nil))
 

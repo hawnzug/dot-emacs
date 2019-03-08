@@ -460,6 +460,7 @@
     "b" 'ivy-switch-buffer
     "g" 'magit-status
     "a" 'org-agenda-list
+    "r" 'counsel-rg
     "A" 'org-agenda
     "c" 'org-capture
     "s" 'save-buffer
@@ -470,12 +471,25 @@
     "e" 'hydra-eyebrowse/body
     "w" 'hydra-window/body
     "B" 'hydra-buffer/body
-    "k" 'hydra-org-clock/body
+    "SPC r" 'counsel-recentf
+    "SPC f" 'counsel-fzf
+    "h f" 'describe-function
+    "h F" 'counsel-describe-face
+    "h v" 'describe-variable
+    "h c" 'describe-char
+    "h m" 'describe-mode
+    "h i" 'describe-info
+    "h k" 'describe-key
+    "h b" 'counsel-descbinds
+    "o g" 'org-clock-goto
+    "o o" 'org-clock-out
+    "o c" 'cfw:open-org-calendar
     "n d" 'narrow-to-defun
     "n s" 'org-narrow-to-subtree
     "n w" 'widen
     "p p" 'projectile-switch-project
     "p c" 'projectile-compile-project
+    "p r" 'projectile-recentf
     "p f" 'projectile-find-file)
   (general-nmap org-mode-map
     "gh" 'outline-up-heading

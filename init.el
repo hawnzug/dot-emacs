@@ -415,6 +415,8 @@
 (use-package all-the-icons
   :ensure t
   :config
+  (add-to-list 'all-the-icons-icon-alist
+               '("\\.v" all-the-icons-fileicon "coq" :face all-the-icons-red))
   (add-to-list 'all-the-icons-mode-icon-alist
                '(coq-mode all-the-icons-fileicon "coq" :face all-the-icons-red)))
 (use-package all-the-icons-dired

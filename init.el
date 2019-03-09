@@ -436,6 +436,11 @@
       " ") 'face '(:background "sandy brown"))
     (propertize (format-time-string " %y-%m-%d %H:%M") 'face '(:background "pale green")))))
 
+(defun my:other-window-or-buffer ()
+  "Switch to other window or buffer"
+  (interactive)
+  (if (one-window-p) (switch-to-buffer (other-buffer)) (select-window (next-window))))
+
 (use-package general
   :ensure t
   :config
@@ -460,6 +465,7 @@
     "b" 'ivy-switch-buffer
     "g" 'magit-status
     "a" 'org-agenda-list
+    "," 'my:other-window-or-buffer
     "r" 'counsel-rg
     "A" 'org-agenda
     "c" 'org-capture
@@ -542,6 +548,11 @@
    "e" 'org-capture-finalize
    "w" 'org-capture-refile
    "k" 'org-capture-kill)
+  (general-def org-agenda-mode-map
+    "S" 'org-agenda-schedule
+    "D" 'org-agenda-deadline
+    "j" 'org-agenda-next-line
+    "k" 'org-agenda-previous-line)
   (general-def 'override
     "M-m" 'my:message-status
     "C-=" 'text-scale-increase
@@ -573,9 +584,6 @@
     "S-<tab>" 'Info-prev-reference)
   (general-def 'normal help-mode-map
     "q" 'quit-window)
-  (general-def 'emacs org-agenda-mode-map
-    "j" 'org-agenda-next-line
-    "k" 'org-agenda-previous-line)
   (general-def 'emacs cfw:calendar-mode-map
     "d" 'cfw:change-view-day
     "w" 'cfw:change-view-week

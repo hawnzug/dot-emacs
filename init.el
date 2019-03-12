@@ -301,7 +301,7 @@
   (setq org-agenda-start-with-log-mode t)
   (setq org-agenda-span 'day)
   (setq org-agenda-log-mode-items '(clock))
-  (add-to-list 'org-modules 'org-habit)
+  (setq org-agenda-use-time-grid nil)
   (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
   (org-clock-persistence-insinuate)
   (setq org-clock-persist t)
@@ -313,6 +313,8 @@
   (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
   (setq org-log-into-drawer t)
   (setq org-log-done 'time)
+  (setq org-enforce-todo-dependencies t)
+  (setq org-enforce-todo-checkbox-dependencies t)
   (setq org-footnote-section nil))
 
 (defun my:org-refile-to-diary ()
@@ -351,11 +353,8 @@
   (setq org-super-agenda-groups
         '((:name "Clocking"
                  :log t
-                 :and (:scheduled
-                       today
-                       :pred
-                       (lambda (item)
-                         (org-find-text-property-in-string 'time-of-day item))))
+                 :pred (lambda (item)
+                          (org-find-text-property-in-string 'time-of-day item)))
           (:name "Others"
                  :anything t))))
 

@@ -75,6 +75,7 @@
    '(org-todo ((t (:foreground "#FF2E63" :weight bold))))
    '(org-done ((t (:foreground "#00A388" :weight bold))))
    '(org-block ((t (:foreground "black"))))
+   '(org-table ((t (:foreground "black"))))
    '(org-level-1 ((t (:inherit outline-1))))
    '(org-level-2 ((t (:inherit outline-2))))
    '(org-level-3 ((t (:inherit outline-3))))

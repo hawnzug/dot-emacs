@@ -2,29 +2,32 @@
 (require 'org)
 (require 'seq)
 (require 'pcase)
-(require 'cl-lib)
-(require 'cl-extra)
 
-(defun org-alert-entry ()
-  (when (pcase-let ((`(_ _ _ . ,today-dmy) (decode-time)))
-          (seq-some
-           (pcase-lambda (`(_ _ _ . ,dmy))
-             (cl-every '= (seq-take dmy 3) today-dmy))
-           (seq-filter
-            'identity
-            (seq-map
-             (lambda (p)
-               (when-let (ts (org-entry-get (point) p))
-                 (org-parse-time-string ts)))
-             '("SCHEDULED" "DEADLINE" "TIMESTAMP")))))
-    (seq-elt (org-heading-components) 4)))
+(defun org-alert--entry ()
+  (defun org-alert--notifyp (now ts minute)
+    (and (time-less-p now ts)
+         (time-less-p ts (time-add now (* 60 minute)))))
+  (defun org-alert--get-ts (property)
+    (when-let (ts (org-entry-get (point) property))
+      (apply #'encode-time (org-parse-time-string ts))))
+  (when-let (ts (seq-some #'org-alert--get-ts
+                          '("SCHEDULED" "DEADLINE" "TIMESTAMP")))
+    (when (org-alert--notify-test (current-time) ts 30)
+      (list
+       (seq-elt (org-heading-components) 4)
+       (org-get-category)
+       (format-time-string "%H:%M" ts)))))
 
 (defun org-alert-check ()
   (interactive)
-  (dolist (title (seq-filter
-                  'identity
-                  (org-map-entries 'org-alert-entry "TODO=\"TODO\"" '("~/org/sjtu.org"))))
-    (alert title :title "Todo")))
+  (pcase-dolist
+      (`(,entry ,category ,time)
+       (seq-filter
+        #'identity
+        (org-map-entries #'org-alert--entry "TODO=\"TODO\"" '("~/org/sjtu.org"))))
+    (alert entry :title (concat
+                         category " "
+                         "<span foreground=\"#FF2E63\">[" time "]</span>"))))
 
 (defun org-alert-enable ()
   "Enable the notification timer.  Cancels existing timer if running."

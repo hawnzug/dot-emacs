@@ -123,6 +123,11 @@
   :after evil
   :config
   (global-evil-surround-mode 1))
+(use-package evil-matchit
+  :ensure t
+  :after evil
+  :config
+  (global-evil-matchit-mode 1))
 
 (use-package rainbow-delimiters
   :ensure t
@@ -448,10 +453,6 @@
   :after (dired all-the-icons)
   :hook (dired-mode . all-the-icons-dired-mode))
 
-(use-package lispyville
-  :ensure t
-  :hook (emacs-lisp-mode . lispyville-mode))
-
 (use-package tex
   :ensure auctex
   :defer t
@@ -652,7 +653,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (alert org-super-agenda expand-region proof-general highlight-indent-guides ivy-hydra general auctex lispyville all-the-icons-dired eshell-z esh-autosuggest elfeed-org elfeed org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
+    (evil-matchit alert org-super-agenda expand-region proof-general highlight-indent-guides ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest elfeed-org elfeed org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

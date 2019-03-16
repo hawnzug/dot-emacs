@@ -294,7 +294,7 @@
   (advice-add 'org-src-font-lock-fontify-block :after #'kill-org-src-buffers)
   (setq org-capture-templates
         '(("t" "Todo" entry (file+headline "~/org/sjtu.org" "Inbox")
-           "* TODO %?\n  SCHEDULED: %^T")
+           "* TODO %?")
           ("w" "Water" entry (file+olp+datetree "~/org/diary.org")
            "* water\n     :PROPERTIES:\n     :volume:   %^{PROMPT}\n     :END:"
            :immediate-finish t)

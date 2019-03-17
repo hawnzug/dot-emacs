@@ -5,14 +5,13 @@
 
 (defun org-alert--entry ()
   (defun org-alert--notifyp (now ts minute)
-    (and (time-less-p now ts)
-         (time-less-p ts (time-add now (* 60 minute)))))
+    (time-less-p ts (time-add now (* 60 minute))))
   (defun org-alert--get-ts (property)
     (when-let (ts (org-entry-get (point) property))
       (apply #'encode-time (org-parse-time-string ts))))
   (when-let (ts (seq-some #'org-alert--get-ts
                           '("SCHEDULED" "DEADLINE" "TIMESTAMP")))
-    (when (org-alert--notify-test (current-time) ts 30)
+    (when (org-alert--notifyp (current-time) ts 15)
       (list
        (seq-elt (org-heading-components) 4)
        (org-get-category)

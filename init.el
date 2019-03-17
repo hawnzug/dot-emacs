@@ -351,7 +351,9 @@
 
 (use-package org-alert
   :after (org alert)
-  :load-path "~/.emacs.d/packages/org-alert")
+  :load-path "~/.emacs.d/packages/org-alert"
+  :config
+  (org-alert-enable))
 
 (use-package org-super-agenda
   :ensure t

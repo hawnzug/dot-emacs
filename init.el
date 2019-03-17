@@ -42,7 +42,7 @@
 
 (use-package highlight-indent-guides
   :ensure t
-  :hook ((prog-mode coq-mode) . highlight-indent-guides-mode)
+  :hook (prog-mode . highlight-indent-guides-mode)
   :config
   (setq highlight-indent-guides-method 'character)
   (setq highlight-indent-guides-auto-character-face-perc 30)

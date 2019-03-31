@@ -615,12 +615,13 @@
     :prefix-command 'my:coq-mode-prefix-command
     :prefix-map 'my:coq-mode-prefix-map
     "g" 'company-coq-proof-goto-point
+    "d" 'company-coq-doc
     "e" 'proof-shell-exit
+    "c" 'proof-interrupt-process
     "p" 'proof-prf
     "u" 'proof-undo-last-successful-command
     "s" 'proof-find-theorems
-    "l" 'proof-layout-windows
-    "c" 'proof-query-identifier)
+    "l" 'proof-layout-windows)
   (general-iemap coq-mode-map
    ";" (general-key-dispatch 'self-insert-command
          :timeout 0.20

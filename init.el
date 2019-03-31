@@ -120,6 +120,7 @@
   (setq evil-want-abbrev-expand-on-insert-exit nil)
   :config
   (evil-mode 1)
+  (evil-set-initial-state 'dired-mode 'emacs)
   (setq evil-disable-insert-state-bindings t))
 (use-package evil-surround
   :ensure t
@@ -286,7 +287,8 @@
   (setq org-archive-location "~/org/diary.org::datetree/")
   :hook
   ((org-babel-after-execute . org-redisplay-inline-images)
-   (org-agenda-finalize . my:org-agenda-time-grid-spacing))
+   (org-agenda-finalize . my:org-agenda-time-grid-spacing)
+   (org-capture-mode . evil-insert-state))
   :config
   (defun kill-org-src-buffers (&rest args)
     "Kill temporary buffers created by org-src-font-lock-fontify-block."

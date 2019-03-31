@@ -486,6 +486,11 @@
   (interactive)
   (if (one-window-p) (switch-to-buffer (other-buffer)) (select-window (next-window))))
 
+(defun my:new-eshell ()
+  "Open a new eshell"
+  (interactive)
+  (eshell t))
+
 (use-package general
   :ensure t
   :config
@@ -507,6 +512,7 @@
     :prefix-command 'my:prefix-map
     "f" 'counsel-find-file
     "d" 'dired
+    "t" 'my:new-eshell
     "b" 'ivy-switch-buffer
     "g" 'magit-status
     "a" 'org-agenda-list

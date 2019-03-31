@@ -65,6 +65,7 @@
   :after proof-site
   :hook (coq-mode . company-coq-mode)
   :config
+  (setq company-coq-disabled-features '(smart-subscripts))
   (company-coq--init-refman-ltac-abbrevs-cache)
   (company-coq--init-refman-scope-abbrevs-cache)
   (company-coq--init-refman-tactic-abbrevs-cache)

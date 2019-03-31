@@ -34,12 +34,6 @@
   (package-install 'use-package))
 (eval-when-compile (require 'use-package))
 
-(use-package expand-region
-  :ensure t
-  :defer t
-  :config
-  (setq expand-region-fast-keys-enabled nil))
-
 (use-package highlight-indent-guides
   :ensure t
   :hook (prog-mode . highlight-indent-guides-mode)
@@ -176,14 +170,6 @@
     ("d" evil-delete-buffer "delete" :color blue)
     ("b" ivy-switch-buffer "switch" :color blue)
     ("q" nil "cancel" :color blue))
-  (defhydra hydra-expand-region
-    (:color red :hint nil)
-    "expand region"
-    ("k" er/expand-region "expand")
-    ("j" er/contract-region "contract")
-    ("c" er/mark-comment "comment")
-    ("f" er/mark-defun "defun")
-    ("q" nil "quit" :color blue))
   (defhydra hydra-eyebrowse
     (:color blue :hint nil)
     "eyebrowse"
@@ -556,7 +542,6 @@
     :prefix "SPC"
     "" nil
     "a" 'align
-    "e" 'hydra-expand-region/body
     "o" 'symbol-overlay-put)
   (general-nmap org-mode-map
     "gh" 'outline-up-heading
@@ -659,7 +644,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (symbol-overlay htmlize evil-matchit alert org-super-agenda expand-region proof-general highlight-indent-guides ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
+    (symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general highlight-indent-guides ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -320,7 +320,7 @@
   (setq org-confirm-babel-evaluate nil)
   (setq org-clock-clocktable-default-properties
         '(:maxlevel 4 :block today :scope file :link t))
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 2.0))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
   (setq org-log-into-drawer t)
   (setq org-log-done 'time)
   (setq org-enforce-todo-dependencies t)
@@ -379,6 +379,7 @@
 (use-package ob-scheme :after org)
 (use-package ob-python :after org)
 (use-package ob-shell :after org)
+(use-package ob-latex :after org)
 (use-package ob-ipython
   :ensure t
   :after org

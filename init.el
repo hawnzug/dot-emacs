@@ -396,19 +396,6 @@
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-(use-package elfeed
-  :ensure t
-  :defer t
-  :config
-  (evil-make-overriding-map elfeed-search-mode-map 'normal))
-
-(use-package elfeed-org
-  :ensure t
-  :after elfeed
-  :config
-  (elfeed-org)
-  (setq rmh-elfeed-org-files '("~/org/feeds.org")))
-
 (defun my:toggle-line-number ()
   "Toggle line number between relative and nil."
   (interactive)
@@ -661,7 +648,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (symbol-overlay htmlize evil-matchit alert org-super-agenda expand-region proof-general highlight-indent-guides ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest elfeed-org elfeed org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
+    (symbol-overlay htmlize evil-matchit alert org-super-agenda expand-region proof-general highlight-indent-guides ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

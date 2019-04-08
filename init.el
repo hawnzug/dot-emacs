@@ -34,16 +34,6 @@
   (package-install 'use-package))
 (eval-when-compile (require 'use-package))
 
-(use-package highlight-indent-guides
-  :ensure t
-  :hook (prog-mode . highlight-indent-guides-mode)
-  :config
-  (setq highlight-indent-guides-method 'character)
-  (setq highlight-indent-guides-auto-character-face-perc 30)
-  (setq highlight-indent-guides-auto-top-character-face-perc 70)
-  (setq highlight-indent-guides-responsive 'top)
-  (setq highlight-indent-guides-character ?\▏))
-
 (use-package symbol-overlay
   :ensure t)
 
@@ -648,7 +638,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general highlight-indent-guides ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
+    (symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

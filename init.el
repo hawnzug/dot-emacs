@@ -92,6 +92,10 @@
     (file-name-directory (shell-command-to-string "agda-mode locate"))))
 (use-package agda2 :load-path (lambda () (agda-mode-load-path)))
 
+(use-package cubicaltt
+  :load-path "~/cubicaltt"
+  :mode ("\\.ctt$" . cubicaltt-mode))
+
 (use-package haskell-mode :ensure t :defer t)
 (use-package ghcid :load-path "~/.emacs.d/packages/ghcid")
 

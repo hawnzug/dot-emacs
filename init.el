@@ -171,16 +171,6 @@
     ("j" eyebrowse-next-window-config "next" :color red)
     ("k" eyebrowse-prev-window-config "prev" :color red)
     ("s" eyebrowse-switch-to-window-config "switch")
-    ("0" eyebrowse-switch-to-window-config-0 "0" :column "Quick")
-    ("1" eyebrowse-switch-to-window-config-1 "1")
-    ("2" eyebrowse-switch-to-window-config-2 "2")
-    ("3" eyebrowse-switch-to-window-config-3 "3")
-    ("4" eyebrowse-switch-to-window-config-4 "4")
-    ("5" eyebrowse-switch-to-window-config-5 "5")
-    ("6" eyebrowse-switch-to-window-config-6 "6")
-    ("7" eyebrowse-switch-to-window-config-7 "7")
-    ("8" eyebrowse-switch-to-window-config-8 "8")
-    ("9" eyebrowse-switch-to-window-config-9 "9")
     ("d" eyebrowse-close-window-config "delete" :column "Modify")
     ("c" eyebrowse-create-window-config "last")
     ("r" eyebrowse-rename-window-config "rename"))
@@ -595,6 +585,16 @@
     "k" 'org-agenda-previous-line)
   (general-def 'override
     "M-m" 'my:message-status
+    "M-0" 'eyebrowse-switch-to-window-config-0
+    "M-1" 'eyebrowse-switch-to-window-config-1
+    "M-2" 'eyebrowse-switch-to-window-config-2
+    "M-3" 'eyebrowse-switch-to-window-config-3
+    "M-4" 'eyebrowse-switch-to-window-config-4
+    "M-5" 'eyebrowse-switch-to-window-config-5
+    "M-6" 'eyebrowse-switch-to-window-config-6
+    "M-7" 'eyebrowse-switch-to-window-config-7
+    "M-8" 'eyebrowse-switch-to-window-config-8
+    "M-9" 'eyebrowse-switch-to-window-config-9
     "C-=" 'text-scale-increase
     "C--" 'text-scale-decrease)
   (general-def 'normal coq-mode-map

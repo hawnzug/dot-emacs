@@ -420,6 +420,24 @@
 (use-package all-the-icons-dired
   :ensure t
   :after (dired all-the-icons)
+(use-package ibuffer
+  :hook (ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "default")))
+  :config
+  (setq
+   ibuffer-formats
+   '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
+  (setq
+   ibuffer-saved-filter-groups
+   '(("default"
+      ("dired" (mode . dired-mode))
+      ("org" (mode . org-mode))
+      ("Coq" (mode . coq-mode))
+      ("emacs" (or (name . "^\\*scratch\\*$")
+                   (name . "^\\*Messages\\*$")
+                   (name . "^\\*Help\\*$")
+                   (name . "^\\*info\\*$")
+                   ))))))
+
   :hook (dired-mode . all-the-icons-dired-mode))
 
 (use-package tex
@@ -489,6 +507,7 @@
     "d" 'dired
     "t" 'my:new-eshell
     "b" 'ivy-switch-buffer
+    "i" 'ibuffer
     "g" 'magit-status
     "a" 'org-agenda-list
     "," 'my:other-window-or-buffer

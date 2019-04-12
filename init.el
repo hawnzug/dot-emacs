@@ -15,7 +15,7 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default truncate-lines t)
-(setq-default fill-column 120)
+(setq-default fill-column 80)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq window-divider-default-places t)
 (setq window-divider-default-bottom-width 1)
@@ -291,7 +291,8 @@
   (setq org-confirm-babel-evaluate nil)
   (setq org-clock-clocktable-default-properties
         '(:maxlevel 4 :block today :scope file :link t))
-  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.5))
+  (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
+  (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
   (setq org-log-into-drawer t)
   (setq org-log-done 'time)
   (setq org-enforce-todo-dependencies t)
@@ -556,6 +557,7 @@
     "l" 'org-insert-link
     "p" 'org-set-property
     "i" 'org-toggle-inline-images
+    "t" 'org-toggle-latex-fragment
     "o" 'org-open-at-point
     ";" 'org-ctrl-c-ctrl-c
     "k" 'hydra-org-clock/body)

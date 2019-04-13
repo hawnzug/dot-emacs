@@ -436,24 +436,12 @@
                '(coq-mode all-the-icons-fileicon "coq" :face all-the-icons-red)))
 
 (use-package ibuffer
-  :hook (ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "default")))
+  :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
   :config
   (setq
    ibuffer-formats
    '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
-  (setq
-   ibuffer-saved-filter-groups
-   '(("default"
-      ("dired" (mode . dired-mode))
-      ("org" (mode . org-mode))
-      ("Coq" (mode . coq-mode))
-      ("emacs" (or (name . "^\\*scratch\\*$")
-                   (name . "^\\*Messages\\*$")
-                   (name . "^\\*Help\\*$")
-                   (name . "^\\*info\\*$")
-                   ))))))
-
-  :hook (dired-mode . all-the-icons-dired-mode))
+  (use-package ibuffer-vc :ensure t))
 
 (use-package tex
   :ensure auctex
@@ -626,6 +614,11 @@
     "D" 'org-agenda-deadline
     "j" 'org-agenda-next-line
     "k" 'org-agenda-previous-line)
+  (general-def 'emacs ibuffer-mode-map
+    "M-j" 'ibuffer-forward-filter-group
+    "M-k" 'ibuffer-backward-filter-group
+    "j" 'ibuffer-forward-line
+    "k" 'ibuffer-backward-line)
   (general-def 'override
     "M-m" 'my:message-status
     "M-0" 'eyebrowse-switch-to-window-config-0
@@ -681,7 +674,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
+    (ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

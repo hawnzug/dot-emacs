@@ -110,6 +110,7 @@
   :config
   (evil-mode 1)
   (evil-set-initial-state 'dired-mode 'emacs)
+  (evil-set-initial-state 'wdired-mode 'normal)
   (setq evil-disable-insert-state-bindings t))
 (use-package evil-surround
   :ensure t
@@ -406,10 +407,26 @@
 
 (use-package dired
   :config
-  (defun my:dired-mode-hide ()
-    (dired-hide-details-mode 1))
-  (add-hook 'dired-mode-hook 'my:dired-mode-hide)
-  (setq dired-dwim-target t))
+  (setq dired-dwim-target t)
+  (setq dired-listing-switches "-alh")
+  (use-package dired-open
+    :ensure t
+    :config
+    (setq
+     dired-open-extensions
+     '(("pdf" . "zathura")
+       ("doc" . "wps")
+       ("xls" . "et")
+       ("ppt" . "wpp"))))
+  (use-package dired-collapse
+    :ensure t
+    :hook (dired-mode . dired-collapse-mode))
+  (use-package all-the-icons-dired
+    :ensure t
+    :after all-the-icons
+    :hook (dired-mode . all-the-icons-dired-mode))
+  (use-package dired-narrow :ensure t))
+
 (use-package all-the-icons
   :ensure t
   :config
@@ -417,9 +434,7 @@
                '("\\.v" all-the-icons-fileicon "coq" :face all-the-icons-red))
   (add-to-list 'all-the-icons-mode-icon-alist
                '(coq-mode all-the-icons-fileicon "coq" :face all-the-icons-red)))
-(use-package all-the-icons-dired
-  :ensure t
-  :after (dired all-the-icons)
+
 (use-package ibuffer
   :hook (ibuffer-mode . (lambda () (ibuffer-switch-to-saved-filter-groups "default")))
   :config
@@ -493,6 +508,7 @@
                  minibuffer-local-completion-map
                  minibuffer-local-must-match-map
                  minibuffer-local-isearch-map
+                 dired-narrow-map
                  ivy-minibuffer-map)
     [escape] 'minibuffer-keyboard-quit)
   (general-iemap
@@ -547,6 +563,12 @@
     "" nil
     "a" 'align
     "o" 'symbol-overlay-put)
+  (general-def 'emacs dired-mode-map
+    "j" 'dired-next-line
+    "k" 'dired-previous-line
+    "r" 'dired-toggle-read-only
+    "n" 'dired-narrow-regexp
+    "p" 'dired-collapse-mode)
   (general-nmap org-mode-map
     "gh" 'outline-up-heading
     "gj" 'org-forward-heading-same-level
@@ -659,7 +681,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
+    (dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

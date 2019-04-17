@@ -364,6 +364,17 @@
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
+(defun my:syntax-color-hex ()
+  (interactive)
+  (font-lock-add-keywords
+   nil
+   '(("#[[:xdigit:]]\\{6\\}"
+      (0 (put-text-property
+          (match-beginning 0)
+          (match-end 0)
+          'face (list :background (match-string-no-properties 0)))))))
+  (font-lock-flush))
+
 (defun my:toggle-line-number ()
   "Toggle line number between relative and nil."
   (interactive)

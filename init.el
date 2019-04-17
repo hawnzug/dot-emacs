@@ -91,7 +91,7 @@
 
 (use-package magit
   :ensure t
-  :defer t)
+  :defer 3)
 
 (use-package calfw
   :ensure t
@@ -107,11 +107,11 @@
   :ensure t
   :init
   (setq evil-want-abbrev-expand-on-insert-exit nil)
+  (setq evil-disable-insert-state-bindings t)
   :config
   (evil-mode 1)
   (evil-set-initial-state 'dired-mode 'emacs)
-  (evil-set-initial-state 'wdired-mode 'normal)
-  (setq evil-disable-insert-state-bindings t))
+  (evil-set-initial-state 'wdired-mode 'normal))
 (use-package evil-surround
   :ensure t
   :after evil
@@ -254,6 +254,7 @@
             (overlay-put ov 'line-spacing (1- line-height))))))))
 
 (use-package org
+  :defer 5
   :init
   (setq org-agenda-files '("~/org/sjtu.org" "~/org/diary.org"))
   (setq org-archive-location "~/org/diary.org::datetree/")
@@ -325,6 +326,7 @@
   (setq alert-default-style 'libnotify))
 
 (use-package org-alert
+  :disabled
   :after (org alert)
   :load-path "~/.emacs.d/packages/org-alert"
   :config
@@ -408,13 +410,14 @@
 (use-package dired
   :config
   (setq dired-dwim-target t)
-  (setq dired-listing-switches "-alh")
+  (setq dired-listing-switches "-alhG --group-directories-first")
   (use-package dired-open
     :ensure t
     :config
     (setq
      dired-open-extensions
      '(("pdf" . "zathura")
+       ("html" . "firefox")
        ("doc" . "wps")
        ("xls" . "et")
        ("ppt" . "wpp"))))
@@ -555,6 +558,7 @@
     "j" 'dired-next-line
     "k" 'dired-previous-line
     "r" 'dired-toggle-read-only
+    "." 'dired-mark-extension
     "n" 'dired-narrow-regexp
     "p" 'dired-collapse-mode)
   (general-nmap org-mode-map

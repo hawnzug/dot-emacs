@@ -93,16 +93,6 @@
   :ensure t
   :defer 3)
 
-(use-package calfw
-  :ensure t
-  :commands cfw:open-calendar-buffer
-  :config
-  (setq cfw:display-calendar-holidays nil)
-  (setq calendar-week-start-day 1))
-(use-package calfw-org
-  :ensure t
-  :commands cfw:open-org-calendar)
-
 (use-package evil
   :ensure t
   :init
@@ -541,7 +531,6 @@
     "h b" 'counsel-descbinds
     "o g" 'org-clock-goto
     "o o" 'org-clock-out
-    "o c" 'cfw:open-org-calendar
     "n d" 'narrow-to-defun
     "n s" 'org-narrow-to-subtree
     "n w" 'widen
@@ -664,12 +653,7 @@
     "<tab>" 'Info-next-reference
     "S-<tab>" 'Info-prev-reference)
   (general-def 'normal help-mode-map
-    "q" 'quit-window)
-  (general-def 'emacs cfw:calendar-mode-map
-    "d" 'cfw:change-view-day
-    "w" 'cfw:change-view-week
-    "W" 'cfw:change-view-two-weeks
-    "m" 'cfw:change-view-month))
+    "q" 'quit-window))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -678,7 +662,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil calfw-org calfw magit haskell-mode eyebrowse company-coq company use-package))))
+    (ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit haskell-mode eyebrowse company-coq company use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

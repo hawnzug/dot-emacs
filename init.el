@@ -37,7 +37,12 @@
   "  "
   '(:eval (my:eyebrowse-mode-line))
   "  "
-  '(:eval (my:add-face-string (format-time-string "%b %d %H:%M") '(:foreground "#FFFFFF")))
+  '(:eval (my:add-face-string
+           (if (and (featurep 'org) (org-clocking-p))
+               (concat (format-time-string "%H:%M ")
+                       org-mode-line-string)
+             (format-time-string "%Y-%m-%d %H:%M"))
+            '(:foreground "#FFFFFF")))
   "  "
   '(:eval (moody-tab
            (concat
@@ -121,7 +126,7 @@
 
 (use-package magit
   :ensure t
-  :defer 3)
+  :defer 5)
 
 (use-package evil
   :ensure t
@@ -255,7 +260,7 @@
 (defun my:org-agenda-time-grid-spacing ()
   "Set different line spacing w.r.t. time duration."
   (save-excursion
-    (let ((colors (list "#F6B1C3" "#FFFF9D" "#BEEB9F" "#ADD5F7"))
+    (let ((colors (list "#FFF9C4" "#FFF176" "#FFF59D" "#FFEE58"))
           (pos (point-min))
           (block-minutes 30)
           duration)
@@ -276,7 +281,7 @@
             (overlay-put ov 'line-spacing (1- line-height))))))))
 
 (use-package org
-  :defer 5
+  :defer 2
   :init
   (setq org-agenda-files '("~/org/sjtu.org" "~/org/diary.org"))
   (setq org-archive-location "~/org/diary.org::datetree/")
@@ -670,7 +675,6 @@
     "j" 'ibuffer-forward-line
     "k" 'ibuffer-backward-line)
   (general-def 'override
-    "M-m" 'my:message-status
     "M-0" 'eyebrowse-switch-to-window-config-0
     "M-1" 'eyebrowse-switch-to-window-config-1
     "M-2" 'eyebrowse-switch-to-window-config-2

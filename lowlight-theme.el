@@ -96,8 +96,8 @@
    `(show-paren-mismatch ((t (:background ,red-700))))
    `(trailing-whitespace ((t (:background ,red-700))))
 
-   `(mode-line ((t (:foreground ,color-fg :background ,light-blue-500))))
-   `(mode-line-inactive ((t (:inherit mode-line :background ,light-blue-200))))
+   `(mode-line ((t (:foreground ,color-fg :background ,blue-500))))
+   `(mode-line-inactive ((t (:inherit mode-line :background ,blue-200))))
 
    `(font-lock-type-face ((t (:foreground ,color-fg))))
    `(font-lock-builtin-face ((t (:foreground ,indigo-500))))
@@ -143,8 +143,8 @@
    '(org-agenda-clocking ((t ())))
    `(org-time-grid ((t (:foreground ,gray-300))))
    `(org-date ((t (:foreground ,indigo-300 :underline t))))
-   `(org-todo ((t (:foreground ,red-A400 :weight bold))))
-   `(org-done ((t (:foreground ,green-A400 :weight bold))))
+   `(org-todo ((t (:foreground ,red-500 :weight bold))))
+   `(org-done ((t (:foreground ,green-500 :weight bold))))
    `(org-block ((t (:foreground ,color-fg))))
    `(org-table ((t (:foreground ,color-fg))))
    `(org-level-1 ((t (:inherit outline-1))))

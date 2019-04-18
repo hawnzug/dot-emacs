@@ -314,7 +314,6 @@
   (setq alert-default-style 'libnotify))
 
 (use-package org-alert
-  :disabled
   :after (org alert)
   :load-path "~/.emacs.d/packages/org-alert"
   :config

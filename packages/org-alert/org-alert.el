@@ -4,14 +4,11 @@
 (require 'pcase)
 
 (defun org-alert--entry ()
-  (defun org-alert--notifyp (now ts minute)
-    (time-less-p ts (time-add now (* 60 minute))))
-  (defun org-alert--get-ts (property)
-    (when-let (ts (org-entry-get (point) property))
+  (defun org-alert--get-ts ()
+    (when-let (ts (org-entry-get (point) "alert"))
       (apply #'encode-time (org-parse-time-string ts))))
-  (when-let (ts (seq-some #'org-alert--get-ts
-                          '("SCHEDULED" "DEADLINE" "TIMESTAMP")))
-    (when (org-alert--notifyp (current-time) ts 15)
+  (when-let (ts (org-alert--get-ts))
+    (when (time-less-p ts (time-add (current-time) (* 60 3)))
       (list
        (seq-elt (org-heading-components) 4)
        (org-get-category)
@@ -24,15 +21,13 @@
        (seq-filter
         #'identity
         (org-map-entries #'org-alert--entry "TODO=\"TODO\"" '("~/org/sjtu.org"))))
-    (alert entry :title (concat
-                         category " "
-                         "<span foreground=\"#FF2E63\">[" time "]</span>"))))
+    (alert entry :title (concat category " " "[" time "]"))))
 
 (defun org-alert-enable ()
   "Enable the notification timer.  Cancels existing timer if running."
   (interactive)
   (org-alert-disable)
-  (run-at-time 0 600 'org-alert-check))
+  (run-at-time 0 300 'org-alert-check))
 
 (defun org-alert-disable ()
   "Cancel the running notification timer."

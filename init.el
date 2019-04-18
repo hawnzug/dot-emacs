@@ -21,6 +21,40 @@
 (window-divider-mode)
 (load-theme 'lowlight t)
 
+(defun my:add-face-string (s face)
+  (add-face-text-property 0 (length s) face nil s)
+  s)
+
+(defun my:remove-icon-display (s)
+  (remove-text-properties 0 1 '(display nil) s)
+  s)
+
+(setq-default
+ mode-line-format
+ (list
+  "  "
+  (my:add-face-string "%02l,%02C" '(:foreground "#FFFFFF"))
+  "  "
+  '(:eval (my:eyebrowse-mode-line))
+  "  "
+  '(:eval (my:add-face-string (format-time-string "%b %d %H:%M") '(:foreground "#FFFFFF")))
+  "  "
+  '(:eval (moody-tab
+           (concat
+            (my:remove-icon-display (all-the-icons-icon-for-buffer))
+            " %b")
+           5 'down))
+  "  "
+  '(:eval (my:add-face-string (my:battery-mode-line) '(:foreground "#FFFFFF")))
+  "  "
+  '(:eval (when vc-mode
+            (moody-tab
+             (concat
+              (my:remove-icon-display (all-the-icons-alltheicon
+                                       "git" :face '(:foreground "#F44336")))
+              vc-mode)
+             5 'up)))))
+
 (require 'package)
 (setq package-enable-at-startup nil)
 (setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
@@ -487,10 +521,6 @@
          (concat " " slot-string " "))))
    (eyebrowse--get 'window-configs)))
 
-(defun my:remove-icon-display (s)
-  (remove-text-properties 0 1 '(display nil) s)
-  s)
-
 (use-package battery
   :config
   (defun my:battery-mode-line ()
@@ -506,37 +536,6 @@
           ((> p 0)  "battery-empty"))))
        " "
        (format "%d%%%%" p)))))
-
-(defun my:add-face-string (s face)
-  (add-face-text-property 0 (length s) face nil s)
-  s)
-
-(setq-default
- mode-line-format
- (list
-  "  "
-  (my:add-face-string "%02l,%02C" '(:foreground "#FFFFFF"))
-  "  "
-  '(:eval (my:eyebrowse-mode-line))
-  "  "
-  '(:eval (my:add-face-string (format-time-string "%b %d %H:%M") '(:foreground "#FFFFFF")))
-  "  "
-  '(:eval (moody-tab
-           (concat
-            (my:remove-icon-display (all-the-icons-icon-for-buffer))
-            " %b")
-           5 'down))
-  "  "
-  '(:eval (my:add-face-string (my:battery-mode-line) '(:foreground "#FFFFFF")))
-  "  "
-  '(:eval (moody-tab
-           (when vc-mode
-             (concat
-              (my:remove-icon-display (all-the-icons-alltheicon
-                                       "git" :face '(:foreground "#F44336")))
-              vc-mode))
-           5 'up))
-  ))
 
 (use-package general
   :ensure t

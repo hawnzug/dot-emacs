@@ -17,11 +17,8 @@
 (setq-default truncate-lines t)
 (setq-default fill-column 80)
 (defalias 'yes-or-no-p 'y-or-n-p)
-(setq window-divider-default-places t)
-(setq window-divider-default-bottom-width 1)
 (setq window-divider-default-right-width 1)
 (window-divider-mode)
-(setq-default mode-line-format nil)
 (load-theme 'lowlight t)
 
 (require 'package)
@@ -43,7 +40,6 @@
   :ensure t
   :config
   (setq proof-splash-enable nil))
-
 (use-package company-coq
   :ensure t
   :after proof-site
@@ -100,6 +96,8 @@
   (setq evil-disable-insert-state-bindings t)
   :config
   (evil-mode 1)
+  (setq evil-normal-state-cursor (list 'box (face-attribute 'region :background)))
+  (setq evil-emacs-state-cursor (list 'box (face-attribute 'default :foreground)))
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'wdired-mode 'normal))
 (use-package evil-surround
@@ -464,23 +462,6 @@
   (when (executable-find "ipython")
     (setq python-shell-interpreter "ipython")))
 
-(defun my:message-status ()
-  "message me"
-  (interactive)
-  (message
-   "%s"
-   (concat
-    (eyebrowse-mode-line-indicator)
-    (propertize (buffer-name (current-buffer)) 'face '(:background "pale green"))
-    (propertize evil-mode-line-tag 'face '(:background "sandy brown"))
-    (propertize org-mode-line-string 'face '(:background "pale green"))
-    (propertize
-     (concat
-      " "
-      (shell-command-to-string "cat /sys/class/power_supply/BAT0/capacity | tr -d '\n'")
-      " ") 'face '(:background "sandy brown"))
-    (propertize (format-time-string " %y-%m-%d %H:%M") 'face '(:background "pale green")))))
-
 (defun my:other-window-or-buffer ()
   "Switch to other window or buffer"
   (interactive)
@@ -490,6 +471,73 @@
   "Open a new eshell"
   (interactive)
   (eshell t))
+
+(use-package moody
+  :ensure t
+  :config
+  (setq x-underline-at-descent-line t)
+  (setq moody-mode-line-height 24))
+
+(defun my:eyebrowse-mode-line ()
+  (mapcar
+   (lambda (window-config)
+     (let* ((slot (car window-config))
+            (slot-string (eyebrowse-format-slot window-config)))
+       (if (= slot (eyebrowse--get 'current-slot))
+           (apply #'concat (moody-tab slot-string 1 'down))
+         (concat " " slot-string " "))))
+   (eyebrowse--get 'window-configs)))
+
+(defun my:remove-icon-display (s)
+  (remove-text-properties 0 1 '(display nil) s)
+  s)
+
+(use-package battery
+  :config
+  (defun my:battery-mode-line ()
+    (let ((p (string-to-number (battery-format "%p" (battery-linux-sysfs)))))
+      (concat
+       (my:remove-icon-display
+        (all-the-icons-faicon
+         (cond
+          ((> p 99) "battery-full")
+          ((> p 75) "battery-three-quarters")
+          ((> p 50) "battery-half")
+          ((> p 25) "battery-quarter")
+          ((> p 0)  "battery-empty"))))
+       " "
+       (format "%d%%%%" p)))))
+
+(defun my:add-face-string (s face)
+  (add-face-text-property 0 (length s) face nil s)
+  s)
+
+(setq-default
+ mode-line-format
+ (list
+  "  "
+  (my:add-face-string "%02l,%02C" '(:foreground "#FFFFFF"))
+  "  "
+  '(:eval (my:eyebrowse-mode-line))
+  "  "
+  '(:eval (my:add-face-string (format-time-string "%b %d %H:%M") '(:foreground "#FFFFFF")))
+  "  "
+  '(:eval (moody-tab
+           (concat
+            (my:remove-icon-display (all-the-icons-icon-for-buffer))
+            " %b")
+           5 'down))
+  "  "
+  '(:eval (my:add-face-string (my:battery-mode-line) '(:foreground "#FFFFFF")))
+  "  "
+  '(:eval (moody-tab
+           (when vc-mode
+             (concat
+              (my:remove-icon-display (all-the-icons-alltheicon
+                                       "git" :face '(:foreground "#F44336")))
+              vc-mode))
+           5 'up))
+  ))
 
 (use-package general
   :ensure t
@@ -673,7 +721,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit haskell-mode eyebrowse company-coq company use-package))))
+    (moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit haskell-mode eyebrowse company-coq company use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

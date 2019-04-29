@@ -121,7 +121,6 @@
   :load-path "~/cubicaltt"
   :mode ("\\.ctt$" . cubicaltt-mode))
 
-(use-package haskell-mode :ensure t :defer t)
 (use-package ghcid :load-path "~/.emacs.d/packages/ghcid")
 
 (use-package magit
@@ -149,6 +148,8 @@
   :after evil
   :config
   (global-evil-matchit-mode 1))
+
+(use-package fcitx :ensure t)
 
 (use-package rainbow-delimiters
   :ensure t
@@ -723,7 +724,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit haskell-mode eyebrowse company-coq company use-package))))
+    (fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

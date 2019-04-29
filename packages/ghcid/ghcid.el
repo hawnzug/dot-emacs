@@ -1,7 +1,7 @@
 ;; Really basic ghcid+stack support in emacs with compilation-mode
 ;; Use M-x ghcid to launch
 
-(defun ghcid-command (cmd) (format "ghcid --command=\"stack ghci %s\"\n" cmd))
+(defun ghcid-command () (format "ghcid -c \"cabal new-repl\"\n"))
 
 (setq ghcid-buf-name "*ghcid*")
 
@@ -39,10 +39,9 @@
 (defun ghcid ()
   "Run ghcid"
   (interactive)
-  (let ((command (read-string "ghcid command:"))
-        (cur (selected-window)))
+  (let ((cur (selected-window)))
     (new-ghcid-term)
-    (comint-send-string ghcid-buf-name (ghcid-command command))
+    (comint-send-string ghcid-buf-name (ghcid-command))
     (select-window cur)))
 
 (defun ghcid-stop ()

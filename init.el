@@ -12,6 +12,8 @@
 (setq inhibit-startup-echo-area-message "zhu")
 (setq make-backup-files nil)
 (setq auto-save-default nil)
+(setq trash-directory "~/Trash")
+(setq delete-by-moving-to-trash t)
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default truncate-lines t)
@@ -62,8 +64,10 @@
 
 (require 'package)
 (setq package-enable-at-startup nil)
-(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-                         ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+;(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+;                         ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -626,10 +630,10 @@
     "M-j" 'org-metadown
     "M-k" 'org-metaup
     "M-l" 'org-metaright
-    "M-H" 'org-shiftleft
-    "M-J" 'org-shiftdown
-    "M-K" 'org-shiftup
-    "M-L" 'org-shiftright)
+    "M-H" 'org-shiftmetaleft
+    "M-J" 'org-shiftmetadown
+    "M-K" 'org-shiftmetaup
+    "M-L" 'org-shiftmetaright)
   (general-mmap org-mode-map
     :prefix ";"
     :prefix-command 'my:org-mode-prefix-command

@@ -358,6 +358,7 @@
   (setq alert-default-style 'libnotify))
 
 (use-package org-alert
+  :disabled t
   :after (org alert)
   :load-path "~/.emacs.d/packages/org-alert"
   :config
@@ -365,6 +366,7 @@
 
 (use-package org-super-agenda
   :ensure t
+  :disabled t
   :after org
   :config
   (org-super-agenda-mode)
@@ -464,6 +466,7 @@
        ("xls" . "et")
        ("ppt" . "wpp"))))
   (use-package dired-collapse
+    :disabled t
     :ensure t
     :hook (dired-mode . dired-collapse-mode))
   (use-package all-the-icons-dired

@@ -64,10 +64,8 @@
 
 (require 'package)
 (setq package-enable-at-startup nil)
-;(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-;                         ("melpa" . "http://elpa.emacs-china.org/melpa/")))
-(setq package-archives '(("gnu"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                         ("melpa" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
+                         ("melpa" . "http://elpa.emacs-china.org/melpa/")))
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -141,6 +139,7 @@
   (setq evil-normal-state-cursor (list 'box (face-attribute 'region :background)))
   (setq evil-emacs-state-cursor (list 'box (face-attribute 'default :foreground)))
   (evil-set-initial-state 'dired-mode 'emacs)
+  (evil-set-initial-state 'ivy-occur-mode 'emacs)
   (evil-set-initial-state 'wdired-mode 'normal))
 (use-package evil-surround
   :ensure t
@@ -207,6 +206,17 @@
     ("d" eyebrowse-close-window-config "delete" :column "Modify")
     ("c" eyebrowse-create-window-config "last")
     ("r" eyebrowse-rename-window-config "rename"))
+  (defhydra hydra-help
+    (:color blue :hint nil)
+    "help"
+    ("f" describe-function "function")
+    ("F" counsel-describe-face "face")
+    ("v" describe-variable "variable")
+    ("c" describe-char "char")
+    ("m" describe-mode "mode")
+    ("i" describe-info "info")
+    ("k" describe-key "key")
+    ("b" counsel-descbinds "binding"))
   (defhydra hydra-org-clock
     (:color blue :hint nil)
     "org clock"
@@ -230,6 +240,7 @@
   :after (all-the-icons counsel)
   :config
   (all-the-icons-ivy-setup))
+(use-package avy :ensure t)
 
 (use-package cc-mode
   :commands c-mode
@@ -581,24 +592,15 @@
     "r" 'counsel-rg
     "A" 'org-agenda
     "c" 'org-capture
-    "s" 'save-buffer
-    "S" 'save-some-buffers
-    "q q" 'evil-save-and-quit
-    "q k" 'kill-emacs
-    "/" 'swiper
+    "s" 'swiper
+    "k" 'kill-buffer
+    "q" 'save-buffers-kill-emacs
     "e" 'hydra-eyebrowse/body
     "w" 'hydra-window/body
     "B" 'hydra-buffer/body
+    "h" 'hydra-help/body
     "SPC r" 'counsel-recentf
     "SPC f" 'counsel-fzf
-    "h f" 'describe-function
-    "h F" 'counsel-describe-face
-    "h v" 'describe-variable
-    "h c" 'describe-char
-    "h m" 'describe-mode
-    "h i" 'describe-info
-    "h k" 'describe-key
-    "h b" 'counsel-descbinds
     "o g" 'org-clock-goto
     "o o" 'org-clock-out
     "n d" 'narrow-to-defun
@@ -612,6 +614,9 @@
     :prefix "SPC"
     "" nil
     "a" 'align
+    "f" 'avy-goto-char-2
+    "w" 'avy-goto-word-1
+    "l" 'avy-goto-line
     "o" 'symbol-overlay-put)
   (general-def 'emacs dired-mode-map
     "j" 'dired-next-line
@@ -731,7 +736,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package))))
+    (avy fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

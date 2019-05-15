@@ -64,8 +64,8 @@
 
 (require 'package)
 (setq package-enable-at-startup nil)
-(setq package-archives '(("gnu"   . "http://elpa.emacs-china.org/gnu/")
-                         ("melpa" . "http://elpa.emacs-china.org/melpa/")))
+(setq package-archives '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                         ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
 (package-initialize)
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -136,7 +136,6 @@
   (setq evil-disable-insert-state-bindings t)
   :config
   (evil-mode 1)
-  (setq evil-normal-state-cursor (list 'box (face-attribute 'region :background)))
   (setq evil-emacs-state-cursor (list 'box (face-attribute 'default :foreground)))
   (evil-set-initial-state 'dired-mode 'emacs)
   (evil-set-initial-state 'ivy-occur-mode 'emacs)
@@ -241,6 +240,18 @@
   :config
   (all-the-icons-ivy-setup))
 (use-package avy :ensure t)
+
+(use-package ivy-posframe
+  :ensure t
+  :after counsel
+  :config
+  (setq ivy-height 20)
+  (setq ivy-display-function #'ivy-posframe-display-at-frame-center)
+  (setq ivy-posframe-border-width 3)
+  (setq ivy-posframe-parameters
+        '((left-fringe . 8)
+          (right-fringe . 8)))
+  (ivy-posframe-enable))
 
 (use-package cc-mode
   :commands c-mode
@@ -624,7 +635,7 @@
     "r" 'dired-toggle-read-only
     "." 'dired-mark-extension
     "n" 'dired-narrow-regexp
-    "p" 'dired-collapse-mode)
+    "p" 'dired-up-directory)
   (general-nmap org-mode-map
     "gh" 'outline-up-heading
     "gj" 'org-forward-heading-same-level
@@ -736,7 +747,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (avy fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package))))
+    (ivy-posframe avy fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

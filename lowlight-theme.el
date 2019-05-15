@@ -86,18 +86,18 @@
    ;; `(default ((t (:background ,color-bg :foreground ,color-fg :font "Sarasa Term SC-14"))))
    `(default ((t (:background ,color-bg :foreground ,color-fg :font "Iosevka Term Slab-11"))))
    `(fringe ((t (:foreground ,indigo-500 :background ,color-bg))))
-   `(window-divider ((t (:foreground ,light-blue-500 :background ,color-bg))))
+   `(window-divider ((t (:foreground ,deep-purple-500 :background ,color-bg))))
    `(line-number ((t (:foreground ,gray-500))))
-   `(region ((t (:foreground ,color-bg :background ,light-blue-500))))
-   `(highlight ((t (:background ,yellow-200))))
-   `(isearch ((t (:background ,yellow-200))))
+   `(region ((t (:background ,light-blue-100))))
+   `(highlight ((t (:background ,yellow-500))))
+   `(isearch ((t (:background ,yellow-500))))
    `(link ((t (:foreground ,blue-700 :underline t))))
-   `(show-paren-match ((t (:foreground ,color-fg :background ,yellow-300))))
+   `(show-paren-match ((t (:foreground ,color-fg :background ,yellow-500))))
    `(show-paren-mismatch ((t (:background ,red-700))))
    `(trailing-whitespace ((t (:background ,red-700))))
 
-   `(mode-line ((t (:foreground ,color-fg :background ,blue-500))))
-   `(mode-line-inactive ((t (:inherit mode-line :background ,blue-200))))
+   `(mode-line ((t (:foreground ,color-fg :background ,deep-purple-500))))
+   `(mode-line-inactive ((t (:inherit mode-line :background ,deep-purple-200))))
 
    `(font-lock-type-face ((t (:foreground ,color-fg))))
    `(font-lock-builtin-face ((t (:foreground ,indigo-500))))
@@ -109,9 +109,11 @@
    `(font-lock-constant-face ((t (:foreground ,deep-orange-900))))
 
    `(ivy-current-match ((t (:background ,light-blue-500))))
-   `(ivy-minibuffer-match-face-2 ((t (:background ,yellow-200))))
-   `(ivy-minibuffer-match-face-3 ((t (:background ,yellow-200))))
-   `(ivy-minibuffer-match-face-4 ((t (:background ,yellow-200))))
+   `(ivy-minibuffer-match-face-2 ((t (:background ,yellow-500))))
+   `(ivy-minibuffer-match-face-3 ((t (:background ,yellow-500))))
+   `(ivy-minibuffer-match-face-4 ((t (:background ,yellow-500))))
+
+   `(ivy-posframe-border ((t (:background ,deep-purple-500))))
 
    `(minibuffer-prompt ((t (:foreground ,indigo-800 :weight bold))))
 

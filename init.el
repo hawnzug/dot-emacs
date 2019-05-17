@@ -506,6 +506,14 @@
    (eshell-before-prompt
     . (lambda () (setq xterm-color-preserve-properties t))))
   :config
+  (setq eshell-destroy-buffer-when-process-dies t)
+  (setq eshell-history-size 100000)
+  (setq
+   eshell-visual-commands
+   '("htop" "top" "less" "more" "ncdu" "ssh"))
+  (setq
+   eshell-visual-subcommands
+   '(("git" "log" "diff" "show")))
   (setq
    eshell-prompt-function
    (lambda ()

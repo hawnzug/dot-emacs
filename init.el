@@ -536,6 +536,8 @@
 
 (use-package dired
   :config
+  (setq dired-recursive-copies t)
+  (setq dired-recursive-deletes t)
   (setq dired-dwim-target t)
   (setq dired-listing-switches "-alhG --group-directories-first")
   (use-package dired-open
@@ -545,8 +547,11 @@
      dired-open-extensions
      '(("pdf" . "zathura")
        ("html" . "firefox")
+       ("docx" . "wps")
        ("doc" . "wps")
+       ("xlsx" . "et")
        ("xls" . "et")
+       ("pptx" . "wpp")
        ("ppt" . "wpp"))))
   (use-package dired-collapse
     :disabled t

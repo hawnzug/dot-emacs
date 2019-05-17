@@ -195,6 +195,20 @@
     ("d" evil-delete-buffer "delete" :color blue)
     ("b" ivy-switch-buffer "switch" :color blue)
     ("q" nil "cancel" :color blue))
+  (defhydra hydra-projectile
+    (:color blue :hint nil)
+    "projectile"
+    ("p" projectile-switch-project "project" :column "Switch")
+    ("b" projectile-switch-to-buffer "buffer")
+    ("f" projectile-find-file "file")
+    ("d" projectile-dired "dired")
+    ("e" projectile-run-eshell "eshell")
+    ("c" projectile-compile-project "compile" :column "Action")
+    ("t" projectile-test-project "test")
+    ("r" projectile-run-project "run")
+    ("l" projectile-cleanup-known-projects "clean")
+    ("x" projectile-remove-known-project "remove")
+    ("s" projectile-save-project-buffers "save"))
   (defhydra hydra-eyebrowse
     (:color blue :hint nil)
     "eyebrowse"
@@ -282,6 +296,8 @@
   :defer t
   :config
   (projectile-mode 1)
+  (setq projectile-sort-order 'recently-active)
+  (setq projectile-switch-project-action #'projectile-dired)
   (setq projectile-completion-system 'ivy))
 
 (defun my:org-agenda-time-grid-spacing ()
@@ -631,7 +647,7 @@
     [escape] 'minibuffer-keyboard-quit)
   (general-iemap
     "," (general-key-dispatch 'self-insert-command
-          :timeout 0.20
+          :timeout 0.30
           :inherit-keymap my:prefix-map))
   (general-mmap
     :prefix ","
@@ -655,17 +671,12 @@
     "w" 'hydra-window/body
     "B" 'hydra-buffer/body
     "h" 'hydra-help/body
-    "SPC r" 'counsel-recentf
-    "SPC f" 'counsel-fzf
+    "p" 'hydra-projectile/body
     "o g" 'org-clock-goto
     "o o" 'org-clock-out
     "n d" 'narrow-to-defun
     "n s" 'org-narrow-to-subtree
-    "n w" 'widen
-    "p p" 'projectile-switch-project
-    "p c" 'projectile-compile-project
-    "p r" 'projectile-recentf
-    "p f" 'projectile-find-file)
+    "n w" 'widen)
   (general-mmap
     :prefix "SPC"
     "" nil

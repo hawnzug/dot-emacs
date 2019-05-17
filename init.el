@@ -448,16 +448,61 @@
 	  ('relative nil)
 	  (_ 'relative))))
 
+(use-package xterm-color
+  :ensure t)
+
 (defun my:eshell-complete ()
   (interactive)
   (pcomplete-std-complete))
 
 (defun my:eshell-hook ()
+  (setenv "TERM" "xterm-256color")
+  (add-to-list
+   'eshell-preoutput-filter-functions
+   'xterm-color-filter)
+  (setq eshell-output-filter-functions
+        (remove 'eshell-handle-ansi-color
+                eshell-output-filter-functions))
   (general-def eshell-mode-map
     "<tab>" 'completion-at-point))
 
+(defun my:shortened-path (path max-len)
+  "Return a modified version of `path', replacing some components
+      with single characters starting from the left to try and get
+      the path down to `max-len'"
+  (let* ((components (split-string (abbreviate-file-name path) "/"))
+         (len (+ (1- (length components))
+                 (reduce '+ components :key 'length)))
+         (str ""))
+    (while (and (> len max-len)
+                (cdr components))
+      (setq str (concat str (if (= 0 (length (car components)))
+                                "/"
+                              (string (elt (car components) 0) ?/)))
+            len (- len (1- (length (car components))))
+            components (cdr components)))
+    (concat str (reduce (lambda (a b) (concat a "/" b)) components))))
+
 (use-package eshell
-  :hook (eshell-mode . my:eshell-hook))
+  :after xterm-color
+  :hook
+  ((eshell-mode . my:eshell-hook)
+   (eshell-before-prompt
+    . (lambda () (setq xterm-color-preserve-properties t))))
+  :config
+  (setq
+   eshell-prompt-function
+   (lambda ()
+     (concat
+      (propertize (my:shortened-path (eshell/pwd) 20)
+                  'face '(:foreground "#0D47A1"))
+      " "
+      (propertize "❯" 'face `(:foreground "#B71C1C" :weight bold))
+      (propertize "❯" 'face `(:foreground "#F57F17" :weight bold))
+      (propertize "❯" 'face `(:foreground "#1B5E20" :weight bold))
+      " ")))
+  (setq eshell-prompt-regexp "^.* ❯❯❯ ")
+  (setq eshell-highlight-prompt nil))
 
 (use-package esh-autosuggest
   :ensure t
@@ -544,7 +589,7 @@
   :ensure t
   :config
   (setq x-underline-at-descent-line t)
-  (setq moody-mode-line-height 24))
+  (setq moody-mode-line-height 26))
 
 (defun my:eyebrowse-mode-line ()
   (mapcar
@@ -747,7 +792,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (ivy-posframe avy fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package))))
+    (xterm-color ivy-posframe avy fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

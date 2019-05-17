@@ -84,7 +84,7 @@
   (custom-theme-set-faces
    'lowlight
    ;; `(default ((t (:background ,color-bg :foreground ,color-fg :font "Sarasa Term SC-14"))))
-   `(default ((t (:background ,color-bg :foreground ,color-fg :font "Iosevka Term Slab-11"))))
+   `(default ((t (:background ,color-bg :foreground ,color-fg :font "Iosevka Term Slab-12"))))
    `(fringe ((t (:foreground ,indigo-500 :background ,color-bg))))
    `(window-divider ((t (:foreground ,deep-purple-500 :background ,color-bg))))
    `(line-number ((t (:foreground ,gray-500))))

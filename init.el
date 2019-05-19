@@ -163,7 +163,11 @@
   :config
   (global-evil-matchit-mode 1))
 
-(use-package fcitx :ensure t)
+(use-package fcitx
+  :ensure t
+  :defer 2
+  :config
+  (fcitx-aggressive-setup))
 
 (use-package rainbow-delimiters
   :ensure t

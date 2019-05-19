@@ -123,6 +123,10 @@
   :load-path "~/cubicaltt"
   :mode ("\\.ctt$" . cubicaltt-mode))
 
+(use-package haskell-mode
+  :load-path "~/.emacs.d/packages/haskell-mode"
+  :mode "\\.hs\\'")
+
 (use-package ghcid :load-path "~/.emacs.d/packages/ghcid")
 
 (use-package magit

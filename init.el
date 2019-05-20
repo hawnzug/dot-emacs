@@ -35,7 +35,7 @@
  mode-line-format
  (list
   "  "
-  (my:add-face-string "%02l,%02C" '(:foreground "#FFFFFF"))
+  (my:add-face-string "%02l,%02C" '(:foreground "#eeeeee"))
   "  "
   '(:eval (my:eyebrowse-mode-line))
   "  "
@@ -44,7 +44,7 @@
                (concat (format-time-string "%H:%M ")
                        org-mode-line-string)
              (format-time-string "%Y-%m-%d %H:%M"))
-            '(:foreground "#FFFFFF")))
+            '(:foreground "#eeeeee")))
   "  "
   '(:eval (moody-tab
            (concat
@@ -52,7 +52,7 @@
             " %b")
            5 'down))
   "  "
-  '(:eval (my:add-face-string (my:battery-mode-line) '(:foreground "#FFFFFF")))
+  '(:eval (my:add-face-string (my:battery-mode-line) '(:foreground "#eeeeee")))
   "  "
   '(:eval (when vc-mode
             (moody-tab
@@ -590,6 +590,8 @@
 (use-package all-the-icons
   :ensure t
   :config
+  (add-to-list 'all-the-icons-mode-icon-alist
+               '(latex-mode all-the-icons-fileicon "tex" :face all-the-icons-lred))
   (add-to-list 'all-the-icons-icon-alist
                '("\\.v" all-the-icons-fileicon "coq" :face all-the-icons-red))
   (add-to-list 'all-the-icons-mode-icon-alist

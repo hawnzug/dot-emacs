@@ -7,7 +7,7 @@
 
 (deftheme lowlight)
 
-(let ((color-bg "#ffffff")
+(let ((color-bg "#eeeeee")
       (color-fg "#000000")
 
       (brown-50    "#EFEBE9") (gray-50    "#FAFAFA") (blue-gray-50     "#ECEFF1")

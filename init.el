@@ -17,11 +17,12 @@
 (setq-default indent-tabs-mode nil)
 (setq-default tab-width 4)
 (setq-default truncate-lines t)
-(setq-default fill-column 80)
+(setq-default fill-column 90)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq window-divider-default-right-width 1)
 (window-divider-mode)
 (load-theme 'lowlight t)
+(setenv "MAGICK_OCL_DEVICE" "OFF")
 
 (defun my:add-face-string (s face)
   (add-face-text-property 0 (length s) face nil s)
@@ -417,6 +418,9 @@
   :load-path "~/.emacs.d/packages/org-alert"
   :config
   (org-alert-enable))
+
+(use-package org-make-toc
+  :ensure t)
 
 (use-package org-super-agenda
   :ensure t
@@ -834,7 +838,11 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (exec-path-from-shell xterm-color ivy-posframe avy fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package))))
+    (org-make-toc exec-path-from-shell xterm-color ivy-posframe avy fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package)))
+ '(safe-local-variable-values
+   (quote
+    ((projectile-project-run-cmd . "make run")
+     (projectile-project-compilation-cmd . "make")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

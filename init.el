@@ -20,7 +20,8 @@
 (setq-default fill-column 90)
 (defalias 'yes-or-no-p 'y-or-n-p)
 (setq window-divider-default-right-width 1)
-(window-divider-mode)
+(setq window-divider-default-bottom-width 1)
+(window-divider-mode t)
 (load-theme 'lowlight t)
 (setenv "MAGICK_OCL_DEVICE" "OFF")
 
@@ -36,7 +37,7 @@
  mode-line-format
  (list
   "  "
-  (my:add-face-string "%02l,%02C" '(:foreground "#eeeeee"))
+  (my:add-face-string "%04l,%02C" '(:foreground "#eeeeee"))
   "  "
   '(:eval (my:eyebrowse-mode-line))
   "  "
@@ -169,6 +170,8 @@
   :defer 2
   :config
   (fcitx-aggressive-setup))
+
+(use-package academic-phrases :ensure t)
 
 (use-package rainbow-delimiters
   :ensure t
@@ -484,6 +487,10 @@
 	  ('relative nil)
 	  (_ 'relative))))
 
+(use-package hl-line-mode
+  :hook ((prog-mode . hl-line-mode)
+         (prog-mode . (lambda () (setq-local display-line-numbers 'relative)))))
+
 (use-package xterm-color
   :ensure t)
 
@@ -716,6 +723,7 @@
     :prefix "SPC"
     "" nil
     "a" 'align
+    "t" 'my:toggle-line-number
     "f" 'avy-goto-char-2
     "w" 'avy-goto-word-1
     "l" 'avy-goto-line
@@ -838,10 +846,11 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (org-make-toc exec-path-from-shell xterm-color ivy-posframe avy fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package)))
+    (academic-phrases org-make-toc exec-path-from-shell xterm-color ivy-posframe avy fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package)))
  '(safe-local-variable-values
    (quote
-    ((projectile-project-run-cmd . "make run")
+    ((projectile-project-run-cmd . "make push")
+     (projectile-project-run-cmd . "make run")
      (projectile-project-compilation-cmd . "make")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

@@ -96,6 +96,9 @@
    `(show-paren-mismatch ((t (:background ,red-700))))
    `(trailing-whitespace ((t (:background ,red-700))))
 
+   `(hl-line ((t (:background "#e7e7e7"))))
+   `(line-number-current-line ((t (:background "#e7e7e7"))))
+
    `(mode-line ((t (:foreground ,color-fg :background ,deep-purple-500))))
    `(mode-line-inactive ((t (:inherit mode-line :background ,deep-purple-200))))
 

@@ -375,6 +375,8 @@
   (setq org-agenda-span 'day)
   (setq org-agenda-log-mode-items '(clock))
   (setq org-agenda-use-time-grid nil)
+  (setq org-agenda-skip-deadline-if-done t)
+  (setq org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
   (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
   (org-clock-persistence-insinuate)
   (setq org-clock-persist t)
@@ -467,6 +469,9 @@
   (setq org-bullets-bullet-list '("⚫" "○" "∙"))
   :config
   (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+(use-package org-tree-slide
+  :ensure t)
 
 (defun my:syntax-color-hex ()
   (interactive)
@@ -846,7 +851,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (academic-phrases org-make-toc exec-path-from-shell xterm-color ivy-posframe avy fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package)))
+    (org-tree-slide academic-phrases org-make-toc exec-path-from-shell xterm-color ivy-posframe avy fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package)))
  '(safe-local-variable-values
    (quote
     ((projectile-project-run-cmd . "make push")

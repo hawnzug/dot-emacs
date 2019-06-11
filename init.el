@@ -280,7 +280,7 @@
   :after counsel
   :config
   (setq ivy-height 20)
-  (setq ivy-display-function #'ivy-posframe-display-at-frame-center)
+  (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
   (setq ivy-posframe-border-width 3)
   (setq ivy-posframe-parameters
         '((left-fringe . 8)

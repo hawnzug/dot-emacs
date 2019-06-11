@@ -12,6 +12,8 @@
 (setq inhibit-startup-echo-area-message "zhu")
 (setq make-backup-files nil)
 (setq auto-save-default nil)
+(setq auto-save-visited-interval 1)
+(auto-save-visited-mode)
 (setq trash-directory "~/Trash")
 (setq delete-by-moving-to-trash t)
 (setq-default indent-tabs-mode nil)
@@ -253,7 +255,7 @@
     ("v" describe-variable "variable")
     ("c" describe-char "char")
     ("m" describe-mode "mode")
-    ("i" describe-info "info")
+    ("i" info "info")
     ("k" describe-key "key")
     ("b" counsel-descbinds "binding"))
   (defhydra hydra-org-clock

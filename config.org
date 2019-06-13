@@ -1,5 +1,6 @@
+#+PROPERTY: header-args:elisp :tangle yes
 * Init
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC elisp
     (setq gc-cons-threshold 64000000)
     (add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold 800000)))
     (scroll-bar-mode -1)
@@ -30,7 +31,7 @@
     (setenv "MAGICK_OCL_DEVICE" "OFF")
   #+END_SRC
 * Mode line
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC elisp
     (defun my:add-face-string (s face)
       (add-face-text-property 0 (length s) face nil s)
       s)
@@ -72,7 +73,7 @@
 
   #+END_SRC
 * use-package
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC elisp
     (require 'package)
     (setq package-enable-at-startup nil)
     (setq package-archives '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -84,7 +85,7 @@
     (eval-when-compile (require 'use-package))
   #+END_SRC
 * hydra
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC elisp
     (use-package hydra
       :ensure t
       :config
@@ -162,10 +163,9 @@
         ("o" org-clock-out "out")
         ("c" org-clock-cancel "cancel")
         ("r" org-clock-report "report")))
-
   #+END_SRC
 * general.el
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC elisp
     (use-package general
       :ensure t
       :config
@@ -332,37 +332,11 @@
         "q" 'quit-window))
   #+END_SRC
 * packages
-  #+BEGIN_SRC elisp :tangle yes
+  #+BEGIN_SRC elisp
     (use-package symbol-overlay
       :ensure t)
 
     (use-package company :ensure t :defer t)
-
-    (use-package proof-general
-      :ensure t
-      :config
-      (setq proof-splash-enable nil))
-    (use-package company-coq
-      :ensure t
-      :after proof-site
-      :hook (coq-mode . company-coq-mode)
-      :config
-      (setq company-coq-disabled-features '(smart-subscripts))
-      (company-coq--init-refman-ltac-abbrevs-cache)
-      (company-coq--init-refman-scope-abbrevs-cache)
-      (company-coq--init-refman-tactic-abbrevs-cache)
-      (company-coq--init-refman-vernac-abbrevs-cache)
-      (defun my:company-coq-doc-search ()
-        "Search identifier in coq refman"
-        (interactive)
-        (ivy-read
-         "doc: "
-         (append company-coq--refman-tactic-abbrevs-cache
-                 company-coq--refman-vernac-abbrevs-cache
-                 company-coq--refman-scope-abbrevs-cache
-                 company-coq--refman-ltac-abbrevs-cache)
-         :preselect (ivy-thing-at-point)
-         :action 'company-coq-doc-buffer-refman)))
 
     (use-package ediff
       :defer
@@ -380,21 +354,6 @@
       :config
       (keyfreq-mode 1)
       (keyfreq-autosave-mode 1))
-
-    (eval-and-compile
-      (defun agda-mode-load-path ()
-        (file-name-directory (shell-command-to-string "agda-mode locate"))))
-    (use-package agda2 :load-path (lambda () (agda-mode-load-path)))
-
-    (use-package cubicaltt
-      :load-path "~/cubicaltt"
-      :mode ("\\.ctt$" . cubicaltt-mode))
-
-    (use-package haskell-mode
-      :load-path "~/.emacs.d/packages/haskell-mode"
-      :mode "\\.hs\\'")
-
-    (use-package ghcid :load-path "~/.emacs.d/packages/ghcid")
 
     (use-package exec-path-from-shell
       :ensure t
@@ -474,12 +433,6 @@
               (right-fringe . 8)))
       (ivy-posframe-enable))
 
-    (use-package cc-mode
-      :commands c-mode
-      :config
-      (setq c-basic-offset 4)
-      (setq c-default-style "linux"))
-
     (use-package flycheck
       :ensure t
       :hook (c-mode . flycheck-mode))
@@ -490,13 +443,6 @@
       :ensure t
       :defer t
       :hook ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp))))
-
-    (use-package lua-mode
-      :ensure t
-      :mode "\\.lua$"
-      :interpreter "lua"
-      :config
-      (setq lua-indent-level 4))
 
     (use-package projectile
       :ensure t
@@ -817,15 +763,6 @@
             TeX-PDF-mode t
             TeX-electric-sub-and-superscript t))
 
-    (use-package python
-      :defer t
-      :config
-      (setq python-indent-offset 4)
-      (setq python-indent-guess-indent-offset-verbose nil)
-      (setq python-shell-completion-native-enable nil)
-      (when (executable-find "ipython")
-        (setq python-shell-interpreter "ipython")))
-
     (defun my:other-window-or-buffer ()
       "Switch to other window or buffer"
       (interactive)
@@ -868,3 +805,81 @@
            " "
            (format "%d%%%%" p)))))
   #+END_SRC
+* Languages
+** Coq
+   #+BEGIN_SRC elisp
+     (use-package proof-general
+       :ensure t
+       :config
+       (setq proof-splash-enable nil))
+     (use-package company-coq
+       :ensure t
+       :after proof-site
+       :hook (coq-mode . company-coq-mode)
+       :config
+       (setq company-coq-disabled-features '(smart-subscripts))
+       (company-coq--init-refman-ltac-abbrevs-cache)
+       (company-coq--init-refman-scope-abbrevs-cache)
+       (company-coq--init-refman-tactic-abbrevs-cache)
+       (company-coq--init-refman-vernac-abbrevs-cache)
+       (defun my:company-coq-doc-search ()
+         "Search identifier in coq refman"
+         (interactive)
+         (ivy-read
+          "doc: "
+          (append company-coq--refman-tactic-abbrevs-cache
+                  company-coq--refman-vernac-abbrevs-cache
+                  company-coq--refman-scope-abbrevs-cache
+                  company-coq--refman-ltac-abbrevs-cache)
+          :preselect (ivy-thing-at-point)
+          :action 'company-coq-doc-buffer-refman)))
+   #+END_SRC
+** Haskell
+   #+BEGIN_SRC elisp
+     (use-package haskell-mode
+       :load-path "~/.emacs.d/packages/haskell-mode"
+       :mode "\\.hs\\'")
+
+     (use-package ghcid :load-path "~/.emacs.d/packages/ghcid")
+   #+END_SRC
+** Agda
+   #+BEGIN_SRC elisp
+     (eval-and-compile
+       (defun agda-mode-load-path ()
+         (file-name-directory (shell-command-to-string "agda-mode locate"))))
+     (use-package agda2 :load-path (lambda () (agda-mode-load-path)))
+   #+END_SRC
+** Cubicaltt
+   #+BEGIN_SRC elisp
+     (use-package cubicaltt
+       :load-path "~/cubicaltt"
+       :mode ("\\.ctt$" . cubicaltt-mode))
+   #+END_SRC
+** C
+   #+BEGIN_SRC elisp
+     (use-package cc-mode
+       :commands c-mode
+       :config
+       (setq c-basic-offset 4)
+       (setq c-default-style "linux"))
+   #+END_SRC
+** Lua
+   #+BEGIN_SRC elisp
+     (use-package lua-mode
+       :ensure t
+       :mode "\\.lua$"
+       :interpreter "lua"
+       :config
+       (setq lua-indent-level 4))
+   #+END_SRC
+** Python
+   #+BEGIN_SRC elisp
+     (use-package python
+       :defer t
+       :config
+       (setq python-indent-offset 4)
+       (setq python-indent-guess-indent-offset-verbose nil)
+       (setq python-shell-completion-native-enable nil)
+       (when (executable-find "ipython")
+         (setq python-shell-interpreter "ipython")))
+   #+END_SRC

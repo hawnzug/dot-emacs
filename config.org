@@ -136,99 +136,135 @@
     (eval-when-compile (require 'use-package))
   #+END_SRC
 * hydra
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :noweb no-export
     (use-package hydra
       :ensure t
       :config
-      (defhydra hydra-window
-        (:color red :hint nil)
-        "window"
-        ("j" evil-window-down "down" :column "Move")
-        ("k" evil-window-up "up")
-        ("h" evil-window-left "left")
-        ("l" evil-window-right "right")
-        ("n" evil-window-next "next" :color blue)
-        ("H" evil-window-move-far-left "left" :column "Swap")
-        ("L" evil-window-move-far-right "right")
-        ("J" evil-window-move-very-bottom "bottom")
-        ("K" evil-window-move-very-top "top")
-        ("+" evil-window-increase-height "+ h" :column "Size")
-        ("-" evil-window-decrease-height "- h")
-        (">" evil-window-increase-width "+ w")
-        ("<" evil-window-decrease-width "- w")
-        ("=" evil-balance-window "balance")
-        ("d" evil-window-delete "delete" :color blue :column "Operate")
-        ("s" evil-window-split "split")
-        ("v" evil-window-vsplit "vsplit")
-        ("o" delete-other-windows "only" :color blue)
-        ("q" nil "cancel" :color blue))
-      (defhydra hydra-buffer
-        (:color red :hint nil)
-        "buffer"
-        ("j" evil-next-buffer "next")
-        ("k" evil-prev-buffer "prev")
-        ("d" evil-delete-buffer "delete" :color blue)
-        ("b" ivy-switch-buffer "switch" :color blue)
-        ("q" nil "cancel" :color blue))
-      (defhydra hydra-projectile
-        (:color blue :hint nil)
-        "projectile"
-        ("p" projectile-switch-project "project" :column "Switch")
-        ("b" projectile-switch-to-buffer "buffer")
-        ("f" projectile-find-file "file")
-        ("d" projectile-dired "dired")
-        ("e" projectile-run-eshell "eshell")
-        ("c" projectile-compile-project "compile" :column "Action")
-        ("t" projectile-test-project "test")
-        ("r" projectile-run-project "run")
-        ("l" projectile-cleanup-known-projects "clean")
-        ("x" projectile-remove-known-project "remove")
-        ("s" projectile-save-project-buffers "save"))
-      (defhydra hydra-eyebrowse
-        (:color blue :hint nil)
-        "eyebrowse"
-        ("l" eyebrowse-last-window-config "last" :column "Switch")
-        ("j" eyebrowse-next-window-config "next" :color red)
-        ("k" eyebrowse-prev-window-config "prev" :color red)
-        ("s" eyebrowse-switch-to-window-config "switch")
-        ("d" eyebrowse-close-window-config "delete" :column "Modify")
-        ("c" eyebrowse-create-window-config "last")
-        ("r" eyebrowse-rename-window-config "rename"))
-      (defhydra hydra-help
-        (:color blue :hint nil)
-        "help"
-        ("f" describe-function "function")
-        ("F" counsel-describe-face "face")
-        ("v" describe-variable "variable")
-        ("c" describe-char "char")
-        ("m" describe-mode "mode")
-        ("i" info "info")
-        ("k" describe-key "key")
-        ("b" counsel-descbinds "binding"))
-      (defhydra hydra-org-clock
-        (:color blue :hint nil)
-        "org clock"
-        ("g" org-clock-goto "goto")
-        ("i" org-clock-in "in")
-        ("I" org-clock-in-last "in last")
-        ("o" org-clock-out "out")
-        ("c" org-clock-cancel "cancel")
-        ("r" org-clock-report "report")))
+      <<hydra-window>>
+      <<hydra-buffer>>
+      <<hydra-projectile>>
+      <<hydra-eyebrowse>>
+      <<hydra-help>>
+      <<hydra-org-clock>>
+      )
+  #+END_SRC
+
+  #+NAME: hydra-window
+  #+BEGIN_SRC elisp :tangle no
+    (defhydra hydra-window
+      (:color red :hint nil)
+      "window"
+      ("j" evil-window-down "down" :column "Move")
+      ("k" evil-window-up "up")
+      ("h" evil-window-left "left")
+      ("l" evil-window-right "right")
+      ("n" evil-window-next "next" :color blue)
+      ("H" evil-window-move-far-left "left" :column "Swap")
+      ("L" evil-window-move-far-right "right")
+      ("J" evil-window-move-very-bottom "bottom")
+      ("K" evil-window-move-very-top "top")
+      ("+" evil-window-increase-height "+ h" :column "Size")
+      ("-" evil-window-decrease-height "- h")
+      (">" evil-window-increase-width "+ w")
+      ("<" evil-window-decrease-width "- w")
+      ("=" evil-balance-window "balance")
+      ("d" evil-window-delete "delete" :color blue :column "Operate")
+      ("s" evil-window-split "split")
+      ("v" evil-window-vsplit "vsplit")
+      ("o" delete-other-windows "only" :color blue)
+      ("q" nil "cancel" :color blue))
+  #+END_SRC
+
+  #+NAME: hydra-buffer
+  #+BEGIN_SRC elisp :tangle no
+    (defhydra hydra-buffer
+      (:color red :hint nil)
+      "buffer"
+      ("j" evil-next-buffer "next")
+      ("k" evil-prev-buffer "prev")
+      ("d" evil-delete-buffer "delete" :color blue)
+      ("b" ivy-switch-buffer "switch" :color blue)
+      ("q" nil "cancel" :color blue))
+  #+END_SRC
+
+  #+NAME: hydra-projectile
+  #+BEGIN_SRC elisp :tangle no
+    (defhydra hydra-projectile
+      (:color blue :hint nil)
+      "projectile"
+      ("p" projectile-switch-project "project" :column "Switch")
+      ("b" projectile-switch-to-buffer "buffer")
+      ("f" projectile-find-file "file")
+      ("d" projectile-dired "dired")
+      ("e" projectile-run-eshell "eshell")
+      ("c" projectile-compile-project "compile" :column "Action")
+      ("t" projectile-test-project "test")
+      ("r" projectile-run-project "run")
+      ("l" projectile-cleanup-known-projects "clean")
+      ("x" projectile-remove-known-project "remove")
+      ("s" projectile-save-project-buffers "save"))
+  #+END_SRC
+
+  #+NAME: hydra-eyebrowse
+  #+BEGIN_SRC elisp :tangle no
+    (defhydra hydra-eyebrowse
+      (:color blue :hint nil)
+      "eyebrowse"
+      ("l" eyebrowse-last-window-config "last" :column "Switch")
+      ("j" eyebrowse-next-window-config "next" :color red)
+      ("k" eyebrowse-prev-window-config "prev" :color red)
+      ("s" eyebrowse-switch-to-window-config "switch")
+      ("d" eyebrowse-close-window-config "delete" :column "Modify")
+      ("c" eyebrowse-create-window-config "last")
+      ("r" eyebrowse-rename-window-config "rename"))
+  #+END_SRC
+
+  #+NAME: hydra-help
+  #+BEGIN_SRC elisp :tangle no
+    (defhydra hydra-help
+      (:color blue :hint nil)
+      "help"
+      ("f" describe-function "function")
+      ("F" counsel-describe-face "face")
+      ("v" describe-variable "variable")
+      ("c" describe-char "char")
+      ("m" describe-mode "mode")
+      ("i" info "info")
+      ("k" describe-key "key")
+      ("b" counsel-descbinds "binding"))
+  #+END_SRC
+
+  #+NAME: hydra-org-clock
+  #+BEGIN_SRC elisp :tangle no
+    (defhydra hydra-org-clock
+      (:color blue :hint nil)
+      "org clock"
+      ("g" org-clock-goto "goto")
+      ("i" org-clock-in "in")
+      ("I" org-clock-in-last "in last")
+      ("o" org-clock-out "out")
+      ("c" org-clock-cancel "cancel")
+      ("r" org-clock-report "report"))
   #+END_SRC
 * general.el
-  #+BEGIN_SRC elisp
+  #+NAME: general-minibuffer-escape
+  #+BEGIN_SRC elisp :tangle no
+    (general-def '(minibuffer-local-map
+                   minibuffer-local-ns-map
+                   minibuffer-local-completion-map
+                   minibuffer-local-must-match-map
+                   minibuffer-local-isearch-map
+                   dired-narrow-map
+                   ivy-minibuffer-map)
+      [escape] 'minibuffer-keyboard-quit)
+  #+END_SRC
+
+  #+BEGIN_SRC elisp :noweb no-export
     (use-package general
       :ensure t
       :config
       (general-evil-setup)
-      (general-def '(minibuffer-local-map
-                     minibuffer-local-ns-map
-                     minibuffer-local-completion-map
-                     minibuffer-local-must-match-map
-                     minibuffer-local-isearch-map
-                     dired-narrow-map
-                     ivy-minibuffer-map)
-        [escape] 'minibuffer-keyboard-quit)
+      <<general-minibuffer-escape>>
       (general-iemap
         "," (general-key-dispatch 'self-insert-command
               :timeout 0.30

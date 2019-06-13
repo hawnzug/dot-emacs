@@ -4,40 +4,39 @@
   :TOC:      this
   :END:
   -  [[#init][init]]
-  -  [[#mode-line][mode line]]
   -  [[#use-package][use-package]]
-  -  [[#hydra][hydra]]
   -  [[#generalel][general.el]]
+  -  [[#hydra][hydra]]
+  -  [[#mode-line][mode line]]
   -  [[#org][org]]
   -  [[#eshell][eshell]]
   -  [[#dired][dired]]
   -  [[#packages][packages]]
-    -  [[#symbol-overlay][symbol-overlay]]
+    -  [[#academic-phrases][academic-phrases]]
+    -  [[#alert][alert]]
+    -  [[#all-the-icons][all-the-icons]]
+    -  [[#battery][battery]]
     -  [[#company][company]]
     -  [[#ediff][ediff]]
-    -  [[#eyebrowse][eyebrowse]]
-    -  [[#keyfreq][keyfreq]]
-    -  [[#exec-path-from-shell][exec-path-from-shell]]
-    -  [[#magit][magit]]
     -  [[#evil][evil]]
+    -  [[#exec-path-from-shell][exec-path-from-shell]]
+    -  [[#eyebrowse][eyebrowse]]
     -  [[#fcitx][fcitx]]
-    -  [[#academic-phrases][academic-phrases]]
-    -  [[#rainbow-delimiters][rainbow-delimiters]]
-    -  [[#htmlize][htmlize]]
-    -  [[#geiser][geiser]]
-    -  [[#which-key][which-key]]
-    -  [[#ivy][ivy]]
     -  [[#flycheck][flycheck]]
-    -  [[#lsp][lsp]]
-    -  [[#projectile][projectile]]
-    -  [[#alert][alert]]
+    -  [[#geiser][geiser]]
     -  [[#hl-line-mode][hl-line-mode]]
-    -  [[#xterm-color][xterm-color]]
-    -  [[#all-the-icons][all-the-icons]]
+    -  [[#htmlize][htmlize]]
     -  [[#ibuffer][ibuffer]]
+    -  [[#ivy][ivy]]
+    -  [[#keyfreq][keyfreq]]
+    -  [[#lsp][lsp]]
+    -  [[#magit][magit]]
     -  [[#moody][moody]]
-    -  [[#battery][battery]]
-  -  [[#help-functions][help functions]]
+    -  [[#projectile][projectile]]
+    -  [[#rainbow-delimiters][rainbow-delimiters]]
+    -  [[#symbol-overlay][symbol-overlay]]
+    -  [[#which-key][which-key]]
+    -  [[#xterm-color][xterm-color]]
   -  [[#languages][languages]]
     -  [[#coq][Coq]]
     -  [[#haskell][Haskell]]
@@ -47,6 +46,7 @@
     -  [[#lua][Lua]]
     -  [[#python][Python]]
     -  [[#tex][TeX]]
+  -  [[#help-functions][help functions]]
 
 * init
   Allow large garbage collection threshold when init.
@@ -130,78 +130,6 @@
   #+BEGIN_SRC elisp
     (setenv "MAGICK_OCL_DEVICE" "OFF")
   #+END_SRC
-* mode line
-  Honestly mode line is just an eye candy for me. The only useful part is column number,
-  and maybe the current buffer name. But a pretty mode line does please me to some extent,
-  and it makes my emacs seem more modern, so I keep it.
-
-  Here are two aux functions to add foreground color to text and remove icon shift.
-  #+BEGIN_SRC elisp
-    (defun my:add-face-string (s face)
-      (add-face-text-property 0 (length s) face nil s) s)
-
-    (defun my:remove-icon-display (s)
-      (remove-text-properties 0 1 '(display nil) s) s)
-  #+END_SRC
-
-  The mode line contains:
-  1. Line number, column number.
-  2. Tabs of eyebrowse. Current workspace tab opens above.
-  3. Date time. If org clock is running, show the clocking entry and duration.
-  4. Buffer icon and name, upward openning.
-  5. Battery icon and percent.
-  6. Icon and branch of vc-mode. Just an eye candy to show off the downward openning tab.
-  #+BEGIN_SRC elisp :noweb no-export
-    (setq-default
-     mode-line-format
-     (list
-      "  "
-      (my:add-face-string "%04l,%02C" '(:foreground "#eeeeee"))
-      "  "
-      '(:eval (my:eyebrowse-mode-line))
-      "  "
-      <<mode-line-datetime>>
-      "  "
-      <<mode-line-buffer-name>>
-      "  "
-      '(:eval (my:add-face-string (my:battery-mode-line) '(:foreground "#eeeeee")))
-      "  "
-      <<mode-line-vc-mode>>
-      ))
-  #+END_SRC
-
-  #+NAME: mode-line-datetime
-  #+BEGIN_SRC elisp :tangle no
-    '(:eval
-      (my:add-face-string
-       (if (and (featurep 'org) (org-clocking-p))
-           (concat (format-time-string "%H:%M ")
-                   org-mode-line-string)
-         (format-time-string "%Y-%m-%d %H:%M"))
-       '(:foreground "#eeeeee")))
-  #+END_SRC
-
-  #+NAME: mode-line-buffer-name
-  #+BEGIN_SRC elisp :tangle no
-    '(:eval
-      (moody-tab
-       (concat
-        (my:remove-icon-display (all-the-icons-icon-for-buffer))
-        " %b")
-       5 'down))
-  #+END_SRC
-
-  #+NAME: mode-line-vc-mode
-  #+BEGIN_SRC elisp :tangle no
-    '(:eval
-      (when vc-mode
-        (moody-tab
-         (concat
-          (my:remove-icon-display
-           (all-the-icons-alltheicon "git" :face '(:foreground "#F44336")))
-          vc-mode)
-         5 'up)))
-  #+END_SRC
 * use-package
   #+BEGIN_SRC elisp
     (require 'package)
@@ -213,6 +141,102 @@
       (package-refresh-contents)
       (package-install 'use-package))
     (eval-when-compile (require 'use-package))
+  #+END_SRC
+* general.el
+  #+BEGIN_SRC elisp :noweb no-export
+    (use-package general
+      :ensure t
+      :config
+      (general-evil-setup)
+      <<general-minibuffer-escape>>
+      <<general-global-leader>>
+      <<general-space-leader>>
+      <<general-dired>>
+      <<general-org>>
+      <<general-coq>>
+      <<general-eyebrowse>>
+      (general-def 'emacs ibuffer-mode-map
+        "M-j" 'ibuffer-forward-filter-group
+        "M-k" 'ibuffer-backward-filter-group
+        "j" 'ibuffer-forward-line
+        "k" 'ibuffer-backward-line)
+      (general-def 'override
+        "C-=" 'text-scale-increase
+        "C--" 'text-scale-decrease)
+      (general-mmap Info-mode-map
+        "q" 'Info-exit
+        "u" 'Info-up
+        "b" 'Info-history-back
+        "n" 'Info-next
+        "p" 'Info-prev
+        "<tab>" 'Info-next-reference
+        "S-<tab>" 'Info-prev-reference)
+      (general-def 'normal help-mode-map
+        "q" 'quit-window))
+  #+END_SRC
+
+  Use Esc to quit minibuffer, which is previously C-g.
+  #+NAME: general-minibuffer-escape
+  #+BEGIN_SRC elisp :tangle no
+    (general-def '(minibuffer-local-map
+                   minibuffer-local-ns-map
+                   minibuffer-local-completion-map
+                   minibuffer-local-must-match-map
+                   minibuffer-local-isearch-map
+                   dired-narrow-map
+                   ivy-minibuffer-map)
+      [escape] 'minibuffer-keyboard-quit)
+  #+END_SRC
+
+  Use comma as the global leader key. It is supported in any mode and evil state.
+  #+NAME: general-global-leader
+  #+BEGIN_SRC elisp :tangle no
+    (general-iemap
+      "," (general-key-dispatch 'self-insert-command
+            :timeout 0.30
+            :inherit-keymap my:prefix-map))
+    (general-mmap
+      :prefix ","
+      :keymaps 'override
+      :prefix-command 'my:prefix-map
+      "f" 'counsel-find-file
+      "d" 'dired
+      "t" 'my:new-eshell
+      "b" 'ivy-switch-buffer
+      "i" 'ibuffer
+      "g" 'magit-status
+      "a" 'org-agenda-list
+      "," 'my:other-window-or-buffer
+      "r" 'counsel-rg
+      "A" 'org-agenda
+      "c" 'org-capture
+      "s" 'swiper
+      "k" 'kill-buffer
+      "q" 'save-buffers-kill-emacs
+      "e" 'hydra-eyebrowse/body
+      "w" 'hydra-window/body
+      "B" 'hydra-buffer/body
+      "h" 'hydra-help/body
+      "p" 'hydra-projectile/body
+      "o g" 'org-clock-goto
+      "o o" 'org-clock-out
+      "n d" 'narrow-to-defun
+      "n s" 'org-narrow-to-subtree
+      "n w" 'widen)
+  #+END_SRC
+
+  Use space as the leader key for those keybindings which are useful only in normal mode.
+  #+NAME: general-space-leader
+  #+BEGIN_SRC elisp :tangle no
+    (general-mmap
+      :prefix "SPC"
+      "" nil
+      "a" 'align
+      "t" 'my:toggle-line-number
+      "f" 'avy-goto-char-2
+      "w" 'avy-goto-word-1
+      "l" 'avy-goto-line
+      "o" 'symbol-overlay-put)
   #+END_SRC
 * hydra
   #+BEGIN_SRC elisp :noweb no-export
@@ -331,101 +355,77 @@
       ("c" org-clock-cancel "cancel")
       ("r" org-clock-report "report"))
   #+END_SRC
-* general.el
+* mode line
+  Honestly mode line is just an eye candy for me. The only useful part is column number,
+  and maybe the current buffer name. But a pretty mode line does please me to some extent,
+  and it makes my emacs seem more modern, so I keep it.
+
+  Here are two aux functions to add foreground color to text and remove icon shift.
+  #+BEGIN_SRC elisp
+    (defun my:add-face-string (s face)
+      (add-face-text-property 0 (length s) face nil s) s)
+
+    (defun my:remove-icon-display (s)
+      (remove-text-properties 0 1 '(display nil) s) s)
+  #+END_SRC
+
+  The mode line contains:
+  1. Line number, column number.
+  2. Tabs of eyebrowse. Current workspace tab opens above.
+  3. Date time. If org clock is running, show the clocking entry and duration.
+  4. Buffer icon and name, upward openning.
+  5. Battery icon and percent.
+  6. Icon and branch of vc-mode. Just an eye candy to show off the downward openning tab.
   #+BEGIN_SRC elisp :noweb no-export
-    (use-package general
-      :ensure t
-      :config
-      (general-evil-setup)
-      <<general-minibuffer-escape>>
-      <<general-global-leader>>
-      <<general-space-leader>>
-      <<general-dired>>
-      <<general-org>>
-      <<general-coq>>
-      <<general-eyebrowse>>
-      (general-def 'emacs ibuffer-mode-map
-        "M-j" 'ibuffer-forward-filter-group
-        "M-k" 'ibuffer-backward-filter-group
-        "j" 'ibuffer-forward-line
-        "k" 'ibuffer-backward-line)
-      (general-def 'override
-        "C-=" 'text-scale-increase
-        "C--" 'text-scale-decrease)
-      (general-mmap Info-mode-map
-        "q" 'Info-exit
-        "u" 'Info-up
-        "b" 'Info-history-back
-        "n" 'Info-next
-        "p" 'Info-prev
-        "<tab>" 'Info-next-reference
-        "S-<tab>" 'Info-prev-reference)
-      (general-def 'normal help-mode-map
-        "q" 'quit-window))
+    (setq-default
+     mode-line-format
+     (list
+      "  "
+      (my:add-face-string "%04l,%02C" '(:foreground "#eeeeee"))
+      "  "
+      '(:eval (my:eyebrowse-mode-line))
+      "  "
+      <<mode-line-datetime>>
+      "  "
+      <<mode-line-buffer-name>>
+      "  "
+      '(:eval (my:add-face-string (my:battery-mode-line) '(:foreground "#eeeeee")))
+      "  "
+      <<mode-line-vc-mode>>
+      ))
   #+END_SRC
 
-  Use Esc to quit minibuffer, which is previously C-g.
-  #+NAME: general-minibuffer-escape
+  #+NAME: mode-line-datetime
   #+BEGIN_SRC elisp :tangle no
-    (general-def '(minibuffer-local-map
-                   minibuffer-local-ns-map
-                   minibuffer-local-completion-map
-                   minibuffer-local-must-match-map
-                   minibuffer-local-isearch-map
-                   dired-narrow-map
-                   ivy-minibuffer-map)
-      [escape] 'minibuffer-keyboard-quit)
+    '(:eval
+      (my:add-face-string
+       (if (and (featurep 'org) (org-clocking-p))
+           (concat (format-time-string "%H:%M ")
+                   org-mode-line-string)
+         (format-time-string "%Y-%m-%d %H:%M"))
+       '(:foreground "#eeeeee")))
   #+END_SRC
 
-  Use comma as the global leader key. It is supported in any mode and evil state.
-  #+NAME: general-global-leader
+  #+NAME: mode-line-buffer-name
   #+BEGIN_SRC elisp :tangle no
-    (general-iemap
-      "," (general-key-dispatch 'self-insert-command
-            :timeout 0.30
-            :inherit-keymap my:prefix-map))
-    (general-mmap
-      :prefix ","
-      :keymaps 'override
-      :prefix-command 'my:prefix-map
-      "f" 'counsel-find-file
-      "d" 'dired
-      "t" 'my:new-eshell
-      "b" 'ivy-switch-buffer
-      "i" 'ibuffer
-      "g" 'magit-status
-      "a" 'org-agenda-list
-      "," 'my:other-window-or-buffer
-      "r" 'counsel-rg
-      "A" 'org-agenda
-      "c" 'org-capture
-      "s" 'swiper
-      "k" 'kill-buffer
-      "q" 'save-buffers-kill-emacs
-      "e" 'hydra-eyebrowse/body
-      "w" 'hydra-window/body
-      "B" 'hydra-buffer/body
-      "h" 'hydra-help/body
-      "p" 'hydra-projectile/body
-      "o g" 'org-clock-goto
-      "o o" 'org-clock-out
-      "n d" 'narrow-to-defun
-      "n s" 'org-narrow-to-subtree
-      "n w" 'widen)
+    '(:eval
+      (moody-tab
+       (concat
+        (my:remove-icon-display (all-the-icons-icon-for-buffer))
+        " %b")
+       5 'down))
   #+END_SRC
 
-  Use space as the leader key for those keybindings which are useful only in normal mode.
-  #+NAME: general-space-leader
+  #+NAME: mode-line-vc-mode
   #+BEGIN_SRC elisp :tangle no
-    (general-mmap
-      :prefix "SPC"
-      "" nil
-      "a" 'align
-      "t" 'my:toggle-line-number
-      "f" 'avy-goto-char-2
-      "w" 'avy-goto-word-1
-      "l" 'avy-goto-line
-      "o" 'symbol-overlay-put)
+    '(:eval
+      (when vc-mode
+        (moody-tab
+         (concat
+          (my:remove-icon-display
+           (all-the-icons-alltheicon "git" :face '(:foreground "#F44336")))
+          vc-mode)
+         5 'up)))
   #+END_SRC
 * org
   #+BEGIN_SRC elisp
@@ -761,7 +761,6 @@
         :after all-the-icons
         :hook (dired-mode . all-the-icons-dired-mode))
       (use-package dired-narrow :ensure t))
-
   #+END_SRC
   
   Keybindings
@@ -956,8 +955,7 @@
        (setq ivy-posframe-parameters
              '((left-fringe . 8)
                (right-fringe . 8)))
-       (ivy-posframe-enable))
-
+       (ivy-posframe-mode))
    #+END_SRC
 ** keyfreq
    #+BEGIN_SRC elisp
@@ -1024,47 +1022,6 @@
    #+BEGIN_SRC elisp
     (use-package xterm-color :ensure t)
    #+END_SRC
-* help functions
-  #+BEGIN_SRC elisp
-    (defun my:other-window-or-buffer ()
-      "Switch to other window or buffer"
-      (interactive)
-      (if (one-window-p) (switch-to-buffer (other-buffer)) (select-window (next-window))))
-
-    (defun my:new-eshell ()
-      "Open a new eshell"
-      (interactive)
-      (eshell t))
-
-    (defun my:eyebrowse-mode-line ()
-      (mapcar
-       (lambda (window-config)
-         (let* ((slot (car window-config))
-                (slot-string (eyebrowse-format-slot window-config)))
-           (if (= slot (eyebrowse--get 'current-slot))
-               (apply #'concat (moody-tab slot-string 1 'down))
-             (concat " " slot-string " "))))
-       (eyebrowse--get 'window-configs)))
-
-    (defun my:syntax-color-hex ()
-      (interactive)
-      (font-lock-add-keywords
-       nil
-       '(("#[[:xdigit:]]\\{6\\}"
-          (0 (put-text-property
-              (match-beginning 0)
-              (match-end 0)
-              'face (list :background (match-string-no-properties 0)))))))
-      (font-lock-flush))
-
-    (defun my:toggle-line-number ()
-      "Toggle line number between relative and nil."
-      (interactive)
-      (setq display-line-numbers
-        (pcase display-line-numbers
-          ('relative nil)
-          (_ 'relative))))
-  #+END_SRC
 * languages
 ** Coq
    #+BEGIN_SRC elisp
@@ -1176,3 +1133,44 @@
              TeX-PDF-mode t
              TeX-electric-sub-and-superscript t))
    #+END_SRC
+* help functions
+  #+BEGIN_SRC elisp
+    (defun my:other-window-or-buffer ()
+      "Switch to other window or buffer"
+      (interactive)
+      (if (one-window-p) (switch-to-buffer (other-buffer)) (select-window (next-window))))
+
+    (defun my:new-eshell ()
+      "Open a new eshell"
+      (interactive)
+      (eshell t))
+
+    (defun my:eyebrowse-mode-line ()
+      (mapcar
+       (lambda (window-config)
+         (let* ((slot (car window-config))
+                (slot-string (eyebrowse-format-slot window-config)))
+           (if (= slot (eyebrowse--get 'current-slot))
+               (apply #'concat (moody-tab slot-string 1 'down))
+             (concat " " slot-string " "))))
+       (eyebrowse--get 'window-configs)))
+
+    (defun my:syntax-color-hex ()
+      (interactive)
+      (font-lock-add-keywords
+       nil
+       '(("#[[:xdigit:]]\\{6\\}"
+          (0 (put-text-property
+              (match-beginning 0)
+              (match-end 0)
+              'face (list :background (match-string-no-properties 0)))))))
+      (font-lock-flush))
+
+    (defun my:toggle-line-number ()
+      "Toggle line number between relative and nil."
+      (interactive)
+      (setq display-line-numbers
+        (pcase display-line-numbers
+          ('relative nil)
+          (_ 'relative))))
+  #+END_SRC

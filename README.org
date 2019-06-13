@@ -429,6 +429,112 @@
   #+END_SRC
 * org
   #+BEGIN_SRC elisp
+    (use-package org
+      :defer 2
+      :init
+      (setq org-agenda-files '("~/org/sjtu.org" "~/org/diary.org"))
+      (setq org-archive-location "~/org/diary.org::datetree/")
+      :hook
+      ((org-babel-after-execute . org-redisplay-inline-images)
+       (org-agenda-finalize . my:org-agenda-time-grid-spacing)
+       (org-capture-mode . evil-insert-state))
+      :config
+      <<org-kill-temp-fontify-buffer>>
+      <<org-capture-templates>>
+      <<org-agenda-config>>
+      <<org-clock-config>>
+      (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
+      (setq org-confirm-babel-evaluate nil)
+      (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
+      (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
+      (setq org-log-into-drawer t)
+      (setq org-log-done 'time)
+      (setq org-enforce-todo-dependencies t)
+      (setq org-enforce-todo-checkbox-dependencies t)
+      (setq org-footnote-section nil))
+  #+END_SRC
+
+  Kill temporary buffers created by ~org-src-font-lock-fontify-block~.
+  #+NAME: org-kill-temp-fontify-buffer
+  #+BEGIN_SRC elisp :tangle no
+    (defun kill-org-src-buffers (&rest args)
+      "Kill temporary buffers created by org-src-font-lock-fontify-block."
+      (dolist (b (buffer-list))
+        (let ((bufname (buffer-name b)))
+          (if (string-match-p (regexp-quote "org-src-fontification") bufname)
+              (kill-buffer b)))))
+    (advice-add 'org-src-font-lock-fontify-block :after #'kill-org-src-buffers)
+  #+END_SRC
+
+  Org capture templates.
+  #+NAME: org-capture-templates
+  #+BEGIN_SRC elisp :tangle no
+    (setq org-capture-templates
+          '(("t" "Todo" entry (file+headline "~/org/sjtu.org" "Inbox")
+             "* TODO %?")
+            ("w" "Water" entry (file+olp+datetree "~/org/diary.org")
+             "* water\n     :PROPERTIES:\n     :volume:   %^{PROMPT}\n     :END:"
+             :immediate-finish t)
+            ("c" "Clock" entry (file+olp+datetree "~/org/diary.org")
+             "* %^{PROMPT}\n"
+             :immediate-finish t
+             :clock-in t
+             :clock-keep t)))
+  #+END_SRC
+
+  Org agenda config.
+  #+NAME: org-agenda-config
+  #+BEGIN_SRC elisp :tangle no
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-agenda-span 'day)
+    (setq org-agenda-log-mode-items '(clock))
+    (setq org-agenda-use-time-grid nil)
+    (setq org-agenda-skip-deadline-if-done t)
+    (setq org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
+  #+END_SRC
+
+  Org clock config.
+  #+NAME: org-clock-config
+  #+BEGIN_SRC elisp :tangle no
+    (org-clock-persistence-insinuate)
+    (setq org-clock-persist t)
+    (setq org-clock-in-resume t)
+    (setq org-clock-persist-query-resume nil)
+    (setq org-clock-clocktable-default-properties
+          '(:maxlevel 4 :block today :scope file :link t))
+  #+END_SRC
+
+  I'd like to keep the main org file clean and tiny, but I also want to see an accurate
+  agenda history. However archive or refile don't work for me, so I write this function.
+  It simply moves the current subtree to the diary file according to its CLOSED time.
+  #+BEGIN_SRC elisp
+    (defun my:org-refile-to-diary ()
+      "Refile a subtree to a datetree corresponding to its CLOSED time."
+      (interactive)
+      (let* ((diary-file "~/org/diary.org")
+             (datetree-date (org-entry-get nil "CLOSED" t))
+             (date (org-date-to-gregorian datetree-date)))
+        (save-window-excursion
+          (org-cut-subtree)
+          (find-file diary-file)
+          (org-datetree-find-date-create date)
+          (org-end-of-subtree t)
+          (newline)
+          (org-paste-subtree 4))))
+  #+END_SRC
+
+  I cannot remember why I wrote this function (This is one of the reasons for putting my
+  config in org mode). It might be related to previous refile function, and it seems
+  useful. So I decide not to delete it and hope I will find its usage someday.
+  #+BEGIN_SRC elisp
+    (defun my:org-datetree-find-date-create-subtree ()
+      (interactive)
+      (let ((date (org-date-to-gregorian (org-read-date))))
+       (org-datetree-find-date-create date 'subtree-at-point)))
+  #+END_SRC
+
+  Show time grid in org agenda.
+  #+BEGIN_SRC elisp
     (defun my:org-agenda-time-grid-spacing ()
       "Set different line spacing w.r.t. time duration."
       (save-excursion
@@ -451,127 +557,8 @@
                 (setq colors (cdr colors))
                 (overlay-put ov 'line-height line-height)
                 (overlay-put ov 'line-spacing (1- line-height))))))))
-
-    (use-package org
-      :defer 2
-      :init
-      (setq org-agenda-files '("~/org/sjtu.org" "~/org/diary.org"))
-      (setq org-archive-location "~/org/diary.org::datetree/")
-      :hook
-      ((org-babel-after-execute . org-redisplay-inline-images)
-       (org-agenda-finalize . my:org-agenda-time-grid-spacing)
-       (org-capture-mode . evil-insert-state))
-      :config
-      (defun kill-org-src-buffers (&rest args)
-        "Kill temporary buffers created by org-src-font-lock-fontify-block."
-        (dolist (b (buffer-list))
-          (let ((bufname (buffer-name b)))
-            (if (string-match-p (regexp-quote "org-src-fontification") bufname)
-                (kill-buffer b)))))
-      (advice-add 'org-src-font-lock-fontify-block :after #'kill-org-src-buffers)
-      (setq org-capture-templates
-            '(("t" "Todo" entry (file+headline "~/org/sjtu.org" "Inbox")
-               "* TODO %?")
-              ("w" "Water" entry (file+olp+datetree "~/org/diary.org")
-               "* water\n     :PROPERTIES:\n     :volume:   %^{PROMPT}\n     :END:"
-               :immediate-finish t)
-              ("c" "Clock" entry (file+olp+datetree "~/org/diary.org")
-               "* %^{PROMPT}\n"
-               :immediate-finish t
-               :clock-in t
-               :clock-keep t)))
-      (setq org-agenda-start-with-log-mode t)
-      (setq org-agenda-span 'day)
-      (setq org-agenda-log-mode-items '(clock))
-      (setq org-agenda-use-time-grid nil)
-      (setq org-agenda-skip-deadline-if-done t)
-      (setq org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
-      (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
-      (org-clock-persistence-insinuate)
-      (setq org-clock-persist t)
-      (setq org-clock-in-resume t)
-      (setq org-clock-persist-query-resume nil)
-      (setq org-confirm-babel-evaluate nil)
-      (setq org-clock-clocktable-default-properties
-            '(:maxlevel 4 :block today :scope file :link t))
-      (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
-      (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
-      (setq org-log-into-drawer t)
-      (setq org-log-done 'time)
-      (setq org-enforce-todo-dependencies t)
-      (setq org-enforce-todo-checkbox-dependencies t)
-      (setq org-footnote-section nil))
-
-    (defun my:org-refile-to-diary ()
-      "Refile a subtree to a datetree corresponding to it's CLOSED time."
-      (interactive)
-      (let* ((diary-file "~/org/diary.org")
-             (datetree-date (org-entry-get nil "CLOSED" t))
-             (date (org-date-to-gregorian datetree-date)))
-        (save-window-excursion
-          (org-cut-subtree)
-          (find-file diary-file)
-          (org-datetree-find-date-create date)
-          (org-end-of-subtree t)
-          (newline)
-          (org-paste-subtree 4))))
-
-    (defun my:org-datetree-find-date-create-subtree ()
-      (interactive)
-      (let ((date (org-date-to-gregorian (org-read-date))))
-       (org-datetree-find-date-create date 'subtree-at-point)))
-
-    (use-package org-alert
-      :disabled t
-      :after (org alert)
-      :load-path "~/.emacs.d/packages/org-alert"
-      :config
-      (org-alert-enable))
-
-    (use-package org-make-toc
-      :ensure t)
-
-    (use-package org-super-agenda
-      :ensure t
-      :disabled t
-      :after org
-      :config
-      (org-super-agenda-mode)
-      (setq org-super-agenda-groups
-            '((:name "Clocking"
-                     :log t
-                     :pred (lambda (item)
-                             (org-find-text-property-in-string 'time-of-day item)))
-              (:name "Others"
-                     :anything t))))
-
-    (use-package ob-scheme :after org)
-    (use-package ob-python :after org)
-    (use-package ob-shell :after org)
-    (use-package ob-latex :after org)
-    (use-package ob-ipython
-      :ensure t
-      :after org
-      :config
-      (setq ob-ipython-resources-dir "~/obipy-resources/")
-      (remove-hook 'org-mode-hook 'ob-ipython-auto-configure-kernels)
-      (advice-add 'ob-babel-execute:ipython :around 'ob-ipython-auto-configure-kernels))
-    (use-package ob-metapost
-      :commands org-babel-execute:metapost
-      :load-path "~/.emacs.d/packages/ob-metapost")
-
-    (use-package org-bullets
-      :ensure t
-      :after org
-      :init
-      (setq org-bullets-bullet-list '("⚫" "○" "∙"))
-      :config
-      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
-
-    (use-package org-tree-slide
-      :ensure t)
   #+END_SRC
-  
+
   Collect all source block names for ivy. This function is useful when using noweb syntax
   in source code block.
   #+BEGIN_SRC elisp
@@ -587,6 +574,60 @@
          (seq-filter #'identity names))
        :require-match t
        :action #'insert))
+  #+END_SRC
+
+  Org babel.
+  #+BEGIN_SRC elisp
+    (use-package ob-scheme :after org)
+    (use-package ob-python :after org)
+    (use-package ob-shell :after org)
+    (use-package ob-latex :after org)
+    (use-package ob-ipython
+      :ensure t
+      :after org
+      :config
+      (setq ob-ipython-resources-dir "~/obipy-resources/")
+      (remove-hook 'org-mode-hook 'ob-ipython-auto-configure-kernels)
+      (advice-add 'ob-babel-execute:ipython :around 'ob-ipython-auto-configure-kernels))
+    (use-package ob-metapost
+      :commands org-babel-execute:metapost
+      :load-path "~/.emacs.d/packages/ob-metapost")
+  #+END_SRC
+
+  Other org packages
+  #+BEGIN_SRC elisp
+    (use-package org-alert
+      :disabled t
+      :after (org alert)
+      :load-path "~/.emacs.d/packages/org-alert"
+      :config
+      (org-alert-enable))
+
+    (use-package org-make-toc :ensure t)
+
+    (use-package org-super-agenda
+      :ensure t
+      :disabled t
+      :after org
+      :config
+      (org-super-agenda-mode)
+      (setq org-super-agenda-groups
+            '((:name "Clocking"
+                     :log t
+                     :pred (lambda (item)
+                             (org-find-text-property-in-string 'time-of-day item)))
+              (:name "Others"
+                     :anything t))))
+
+    (use-package org-bullets
+      :ensure t
+      :after org
+      :init
+      (setq org-bullets-bullet-list '("⚫" "○" "∙"))
+      :config
+      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
+    (use-package org-tree-slide :ensure t)
   #+END_SRC
 
   Keybindings

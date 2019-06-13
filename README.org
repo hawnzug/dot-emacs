@@ -228,6 +228,7 @@
       )
   #+END_SRC
 
+  hydra-window
   #+NAME: hydra-window
   #+BEGIN_SRC elisp :tangle no
     (defhydra hydra-window
@@ -254,6 +255,7 @@
       ("q" nil "cancel" :color blue))
   #+END_SRC
 
+  hydra-buffer
   #+NAME: hydra-buffer
   #+BEGIN_SRC elisp :tangle no
     (defhydra hydra-buffer
@@ -266,6 +268,7 @@
       ("q" nil "cancel" :color blue))
   #+END_SRC
 
+  hydra-projectile
   #+NAME: hydra-projectile
   #+BEGIN_SRC elisp :tangle no
     (defhydra hydra-projectile
@@ -284,6 +287,7 @@
       ("s" projectile-save-project-buffers "save"))
   #+END_SRC
 
+  hydra-eyebrowse
   #+NAME: hydra-eyebrowse
   #+BEGIN_SRC elisp :tangle no
     (defhydra hydra-eyebrowse
@@ -298,6 +302,7 @@
       ("r" eyebrowse-rename-window-config "rename"))
   #+END_SRC
 
+  hydra-help
   #+NAME: hydra-help
   #+BEGIN_SRC elisp :tangle no
     (defhydra hydra-help
@@ -313,6 +318,7 @@
       ("b" counsel-descbinds "binding"))
   #+END_SRC
 
+  hydra-org-clock
   #+NAME: hydra-org-clock
   #+BEGIN_SRC elisp :tangle no
     (defhydra hydra-org-clock
@@ -358,6 +364,7 @@
         "q" 'quit-window))
   #+END_SRC
 
+  Use Esc to quit minibuffer, which is previously C-g.
   #+NAME: general-minibuffer-escape
   #+BEGIN_SRC elisp :tangle no
     (general-def '(minibuffer-local-map
@@ -370,6 +377,7 @@
       [escape] 'minibuffer-keyboard-quit)
   #+END_SRC
 
+  Use comma as the global leader key. It is supported in any mode and evil state.
   #+NAME: general-global-leader
   #+BEGIN_SRC elisp :tangle no
     (general-iemap
@@ -406,6 +414,7 @@
       "n w" 'widen)
   #+END_SRC
 
+  Use space as the leader key for those keybindings which are useful only in normal mode.
   #+NAME: general-space-leader
   #+BEGIN_SRC elisp :tangle no
     (general-mmap

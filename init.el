@@ -588,6 +588,7 @@
   (setq dired-recursive-deletes t)
   (setq dired-dwim-target t)
   (setq dired-listing-switches "-alhG --group-directories-first")
+  (setq dired-isearch-filenames 'dwim)
   (use-package dired-open
     :ensure t
     :config
@@ -747,6 +748,7 @@
     "r" 'dired-toggle-read-only
     "." 'dired-mark-extension
     "n" 'dired-narrow-regexp
+    "/" 'dired-goto-file
     "p" 'dired-up-directory)
   (general-nmap org-mode-map
     "gh" 'outline-up-heading

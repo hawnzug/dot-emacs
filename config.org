@@ -484,6 +484,23 @@
       :ensure t)
   #+END_SRC
   
+  Collect all source block names for ivy. This function is useful when using noweb syntax
+  in source code block.
+  #+BEGIN_SRC elisp
+    (defun my:org-search-src-block-name ()
+      "Search source block name in current file"
+      (interactive)
+      (ivy-read
+       "Code block: "
+       (let (names)
+         (org-babel-map-src-blocks nil
+           (let ((name (nth 4 (org-babel-get-src-block-info))))
+             (push name names)))
+         (seq-filter #'identity names))
+       :require-match t
+       :action #'insert))
+  #+END_SRC
+
   Keybindings
   #+NAME: general-org
   #+BEGIN_SRC elisp :tangle no
@@ -509,6 +526,8 @@
       :prefix-command 'my:org-mode-prefix-command
       :prefix-map 'my:org-mode-prefix-map
       "r" 'my:org-refile-to-diary
+      "b" 'my:org-search-src-block-name
+      "g" 'counsel-org-goto
       "s" 'org-schedule
       "d" 'org-deadline
       "e" 'org-edit-src-code

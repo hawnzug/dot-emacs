@@ -247,6 +247,38 @@
       ("r" org-clock-report "report"))
   #+END_SRC
 * general.el
+  #+BEGIN_SRC elisp :noweb no-export
+    (use-package general
+      :ensure t
+      :config
+      (general-evil-setup)
+      <<general-minibuffer-escape>>
+      <<general-global-leader>>
+      <<general-space-leader>>
+      <<general-dired>>
+      <<general-org>>
+      <<general-coq>>
+      <<general-eyebrowse>>
+      (general-def 'emacs ibuffer-mode-map
+        "M-j" 'ibuffer-forward-filter-group
+        "M-k" 'ibuffer-backward-filter-group
+        "j" 'ibuffer-forward-line
+        "k" 'ibuffer-backward-line)
+      (general-def 'override
+        "C-=" 'text-scale-increase
+        "C--" 'text-scale-decrease)
+      (general-mmap Info-mode-map
+        "q" 'Info-exit
+        "u" 'Info-up
+        "b" 'Info-history-back
+        "n" 'Info-next
+        "p" 'Info-prev
+        "<tab>" 'Info-next-reference
+        "S-<tab>" 'Info-prev-reference)
+      (general-def 'normal help-mode-map
+        "q" 'quit-window))
+  #+END_SRC
+
   #+NAME: general-minibuffer-escape
   #+BEGIN_SRC elisp :tangle no
     (general-def '(minibuffer-local-map
@@ -259,164 +291,53 @@
       [escape] 'minibuffer-keyboard-quit)
   #+END_SRC
 
-  #+BEGIN_SRC elisp :noweb no-export
-    (use-package general
-      :ensure t
-      :config
-      (general-evil-setup)
-      <<general-minibuffer-escape>>
-      (general-iemap
-        "," (general-key-dispatch 'self-insert-command
-              :timeout 0.30
-              :inherit-keymap my:prefix-map))
-      (general-mmap
-        :prefix ","
-        :keymaps 'override
-        :prefix-command 'my:prefix-map
-        "f" 'counsel-find-file
-        "d" 'dired
-        "t" 'my:new-eshell
-        "b" 'ivy-switch-buffer
-        "i" 'ibuffer
-        "g" 'magit-status
-        "a" 'org-agenda-list
-        "," 'my:other-window-or-buffer
-        "r" 'counsel-rg
-        "A" 'org-agenda
-        "c" 'org-capture
-        "s" 'swiper
-        "k" 'kill-buffer
-        "q" 'save-buffers-kill-emacs
-        "e" 'hydra-eyebrowse/body
-        "w" 'hydra-window/body
-        "B" 'hydra-buffer/body
-        "h" 'hydra-help/body
-        "p" 'hydra-projectile/body
-        "o g" 'org-clock-goto
-        "o o" 'org-clock-out
-        "n d" 'narrow-to-defun
-        "n s" 'org-narrow-to-subtree
-        "n w" 'widen)
-      (general-mmap
-        :prefix "SPC"
-        "" nil
-        "a" 'align
-        "t" 'my:toggle-line-number
-        "f" 'avy-goto-char-2
-        "w" 'avy-goto-word-1
-        "l" 'avy-goto-line
-        "o" 'symbol-overlay-put)
-      (general-def 'emacs dired-mode-map
-        "j" 'dired-next-line
-        "k" 'dired-previous-line
-        "r" 'dired-toggle-read-only
-        "." 'dired-mark-extension
-        "n" 'dired-narrow-regexp
-        "/" 'dired-goto-file
-        "p" 'dired-up-directory)
-      (general-nmap org-mode-map
-        "gh" 'outline-up-heading
-        "gj" 'org-forward-heading-same-level
-        "gk" 'org-backward-heading-same-level
-        "gl" 'outline-next-visible-heading
-        "<" 'org-metaleft
-        ">" 'org-metaright
-        "t" 'org-todo)
-      (general-def org-mode-map
-        "M-h" 'org-metaleft
-        "M-j" 'org-metadown
-        "M-k" 'org-metaup
-        "M-l" 'org-metaright
-        "M-H" 'org-shiftmetaleft
-        "M-J" 'org-shiftmetadown
-        "M-K" 'org-shiftmetaup
-        "M-L" 'org-shiftmetaright)
-      (general-mmap org-mode-map
-        :prefix ";"
-        :prefix-command 'my:org-mode-prefix-command
-        :prefix-map 'my:org-mode-prefix-map
-        "r" 'my:org-refile-to-diary
-        "s" 'org-schedule
-        "d" 'org-deadline
-        "e" 'org-edit-src-code
-        "c" 'org-columns
-        "l" 'org-insert-link
-        "p" 'org-set-property
-        "i" 'org-toggle-inline-images
-        "t" 'org-toggle-latex-fragment
-        "o" 'org-open-at-point
-        ";" 'org-ctrl-c-ctrl-c
-        "k" 'hydra-org-clock/body)
-      (general-iemap org-mode-map
-       ";" (general-key-dispatch 'self-insert-command
-             :timeout 0.20
-             :inherit-keymap my:org-mode-prefix-map))
-      (general-define-key
-       :definer 'minor-mode
-       :states '(normal visual)
-       :keymaps 'org-src-mode
-       :prefix ";"
-       "e" 'org-edit-src-exit
-       "k" 'org-edit-src-abort)
-      (general-define-key
-       :definer 'minor-mode
-       :states '(normal visual)
-       :keymaps 'org-capture-mode
-       :prefix ";"
-       "e" 'org-capture-finalize
-       "w" 'org-capture-refile
-       "k" 'org-capture-kill)
-      (general-def org-agenda-mode-map
-        "S" 'org-agenda-schedule
-        "D" 'org-agenda-deadline
-        "j" 'org-agenda-next-line
-        "k" 'org-agenda-previous-line)
-      (general-def 'emacs ibuffer-mode-map
-        "M-j" 'ibuffer-forward-filter-group
-        "M-k" 'ibuffer-backward-filter-group
-        "j" 'ibuffer-forward-line
-        "k" 'ibuffer-backward-line)
-      (general-def 'override
-        "M-0" 'eyebrowse-switch-to-window-config-0
-        "M-1" 'eyebrowse-switch-to-window-config-1
-        "M-2" 'eyebrowse-switch-to-window-config-2
-        "M-3" 'eyebrowse-switch-to-window-config-3
-        "M-4" 'eyebrowse-switch-to-window-config-4
-        "M-5" 'eyebrowse-switch-to-window-config-5
-        "M-6" 'eyebrowse-switch-to-window-config-6
-        "M-7" 'eyebrowse-switch-to-window-config-7
-        "M-8" 'eyebrowse-switch-to-window-config-8
-        "M-9" 'eyebrowse-switch-to-window-config-9
-        "C-=" 'text-scale-increase
-        "C--" 'text-scale-decrease)
-      (general-def 'normal coq-mode-map
-        "K" 'my:company-coq-doc-search)
-      (general-mmap coq-mode-map
-        :prefix ";"
-        :prefix-command 'my:coq-mode-prefix-command
-        :prefix-map 'my:coq-mode-prefix-map
-        "g" 'company-coq-proof-goto-point
-        "d" 'company-coq-doc
-        "e" 'proof-shell-exit
-        "c" 'proof-interrupt-process
-        "p" 'proof-prf
-        "u" 'proof-undo-last-successful-command
-        "s" 'proof-find-theorems
-        "l" 'proof-layout-windows)
-      (general-iemap coq-mode-map
-       ";" (general-key-dispatch 'self-insert-command
-             :timeout 0.20
-             :inherit-keymap my:coq-mode-prefix-map))
-      (general-mmap Info-mode-map
-        "q" 'Info-exit
-        "u" 'Info-up
-        "b" 'Info-history-back
-        "n" 'Info-next
-        "p" 'Info-prev
-        "<tab>" 'Info-next-reference
-        "S-<tab>" 'Info-prev-reference)
-      (general-def 'normal help-mode-map
-        "q" 'quit-window))
+  #+NAME: general-global-leader
+  #+BEGIN_SRC elisp :tangle no
+    (general-iemap
+      "," (general-key-dispatch 'self-insert-command
+            :timeout 0.30
+            :inherit-keymap my:prefix-map))
+    (general-mmap
+      :prefix ","
+      :keymaps 'override
+      :prefix-command 'my:prefix-map
+      "f" 'counsel-find-file
+      "d" 'dired
+      "t" 'my:new-eshell
+      "b" 'ivy-switch-buffer
+      "i" 'ibuffer
+      "g" 'magit-status
+      "a" 'org-agenda-list
+      "," 'my:other-window-or-buffer
+      "r" 'counsel-rg
+      "A" 'org-agenda
+      "c" 'org-capture
+      "s" 'swiper
+      "k" 'kill-buffer
+      "q" 'save-buffers-kill-emacs
+      "e" 'hydra-eyebrowse/body
+      "w" 'hydra-window/body
+      "B" 'hydra-buffer/body
+      "h" 'hydra-help/body
+      "p" 'hydra-projectile/body
+      "o g" 'org-clock-goto
+      "o o" 'org-clock-out
+      "n d" 'narrow-to-defun
+      "n s" 'org-narrow-to-subtree
+      "n w" 'widen)
+  #+END_SRC
+
+  #+NAME: general-space-leader
+  #+BEGIN_SRC elisp :tangle no
+    (general-mmap
+      :prefix "SPC"
+      "" nil
+      "a" 'align
+      "t" 'my:toggle-line-number
+      "f" 'avy-goto-char-2
+      "w" 'avy-goto-word-1
+      "l" 'avy-goto-line
+      "o" 'symbol-overlay-put)
   #+END_SRC
 * org
   #+BEGIN_SRC elisp
@@ -562,6 +483,68 @@
     (use-package org-tree-slide
       :ensure t)
   #+END_SRC
+  
+  Keybindings
+  #+NAME: general-org
+  #+BEGIN_SRC elisp :tangle no
+    (general-nmap org-mode-map
+      "gh" 'outline-up-heading
+      "gj" 'org-forward-heading-same-level
+      "gk" 'org-backward-heading-same-level
+      "gl" 'outline-next-visible-heading
+      "<" 'org-metaleft
+      ">" 'org-metaright
+      "t" 'org-todo)
+    (general-def org-mode-map
+      "M-h" 'org-metaleft
+      "M-j" 'org-metadown
+      "M-k" 'org-metaup
+      "M-l" 'org-metaright
+      "M-H" 'org-shiftmetaleft
+      "M-J" 'org-shiftmetadown
+      "M-K" 'org-shiftmetaup
+      "M-L" 'org-shiftmetaright)
+    (general-mmap org-mode-map
+      :prefix ";"
+      :prefix-command 'my:org-mode-prefix-command
+      :prefix-map 'my:org-mode-prefix-map
+      "r" 'my:org-refile-to-diary
+      "s" 'org-schedule
+      "d" 'org-deadline
+      "e" 'org-edit-src-code
+      "c" 'org-columns
+      "l" 'org-insert-link
+      "p" 'org-set-property
+      "i" 'org-toggle-inline-images
+      "t" 'org-toggle-latex-fragment
+      "o" 'org-open-at-point
+      ";" 'org-ctrl-c-ctrl-c
+      "k" 'hydra-org-clock/body)
+    (general-iemap org-mode-map
+     ";" (general-key-dispatch 'self-insert-command
+           :timeout 0.20
+           :inherit-keymap my:org-mode-prefix-map))
+    (general-define-key
+     :definer 'minor-mode
+     :states '(normal visual)
+     :keymaps 'org-src-mode
+     :prefix ";"
+     "e" 'org-edit-src-exit
+     "k" 'org-edit-src-abort)
+    (general-define-key
+     :definer 'minor-mode
+     :states '(normal visual)
+     :keymaps 'org-capture-mode
+     :prefix ";"
+     "e" 'org-capture-finalize
+     "w" 'org-capture-refile
+     "k" 'org-capture-kill)
+    (general-def org-agenda-mode-map
+      "S" 'org-agenda-schedule
+      "D" 'org-agenda-deadline
+      "j" 'org-agenda-next-line
+      "k" 'org-agenda-previous-line)
+  #+END_SRC
 * eshell
   #+BEGIN_SRC elisp
     (defun my:eshell-complete ()
@@ -673,6 +656,19 @@
       (use-package dired-narrow :ensure t))
 
   #+END_SRC
+  
+  Keybindings
+  #+NAME: general-dired
+  #+BEGIN_SRC elisp :tangle no
+    (general-def 'emacs dired-mode-map
+      "j" 'dired-next-line
+      "k" 'dired-previous-line
+      "r" 'dired-toggle-read-only
+      "." 'dired-mark-extension
+      "n" 'dired-narrow-regexp
+      "/" 'dired-goto-file
+      "p" 'dired-up-directory)
+  #+END_SRC
 * packages
 ** symbol-overlay
    #+BEGIN_SRC elisp
@@ -697,6 +693,22 @@
        :ensure t
        :config
        (eyebrowse-mode t))
+   #+END_SRC
+
+   Keybindings
+   #+NAME: general-eyebrowse
+   #+BEGIN_SRC elisp :tangle no
+     (general-def 'override
+       "M-0" 'eyebrowse-switch-to-window-config-0
+       "M-1" 'eyebrowse-switch-to-window-config-1
+       "M-2" 'eyebrowse-switch-to-window-config-2
+       "M-3" 'eyebrowse-switch-to-window-config-3
+       "M-4" 'eyebrowse-switch-to-window-config-4
+       "M-5" 'eyebrowse-switch-to-window-config-5
+       "M-6" 'eyebrowse-switch-to-window-config-6
+       "M-7" 'eyebrowse-switch-to-window-config-7
+       "M-8" 'eyebrowse-switch-to-window-config-8
+       "M-9" 'eyebrowse-switch-to-window-config-9)
    #+END_SRC
 ** keyfreq
    #+BEGIN_SRC elisp
@@ -974,6 +986,29 @@
                   company-coq--refman-ltac-abbrevs-cache)
           :preselect (ivy-thing-at-point)
           :action 'company-coq-doc-buffer-refman)))
+   #+END_SRC
+   
+   Keybindings
+   #+NAME: general-coq
+   #+BEGIN_SRC elisp :tangle no
+     (general-def 'normal coq-mode-map
+       "K" 'my:company-coq-doc-search)
+     (general-mmap coq-mode-map
+       :prefix ";"
+       :prefix-command 'my:coq-mode-prefix-command
+       :prefix-map 'my:coq-mode-prefix-map
+       "g" 'company-coq-proof-goto-point
+       "d" 'company-coq-doc
+       "e" 'proof-shell-exit
+       "c" 'proof-interrupt-process
+       "p" 'proof-prf
+       "u" 'proof-undo-last-successful-command
+       "s" 'proof-find-theorems
+       "l" 'proof-layout-windows)
+     (general-iemap coq-mode-map
+      ";" (general-key-dispatch 'self-insert-command
+            :timeout 0.20
+            :inherit-keymap my:coq-mode-prefix-map))
    #+END_SRC
 ** Haskell
    #+BEGIN_SRC elisp

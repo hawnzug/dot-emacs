@@ -1,4 +1,4 @@
-* Config
+* Init
   #+BEGIN_SRC elisp :tangle yes
     (setq gc-cons-threshold 64000000)
     (add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold 800000)))
@@ -28,7 +28,9 @@
     (window-divider-mode t)
     (load-theme 'lowlight t)
     (setenv "MAGICK_OCL_DEVICE" "OFF")
-
+  #+END_SRC
+* Mode line
+  #+BEGIN_SRC elisp :tangle yes
     (defun my:add-face-string (s face)
       (add-face-text-property 0 (length s) face nil s)
       s)
@@ -68,6 +70,9 @@
                   vc-mode)
                  5 'up)))))
 
+  #+END_SRC
+* use-package
+  #+BEGIN_SRC elisp :tangle yes
     (require 'package)
     (setq package-enable-at-startup nil)
     (setq package-archives '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
@@ -77,7 +82,257 @@
       (package-refresh-contents)
       (package-install 'use-package))
     (eval-when-compile (require 'use-package))
+  #+END_SRC
+* hydra
+  #+BEGIN_SRC elisp :tangle yes
+    (use-package hydra
+      :ensure t
+      :config
+      (defhydra hydra-window
+        (:color red :hint nil)
+        "window"
+        ("j" evil-window-down "down" :column "Move")
+        ("k" evil-window-up "up")
+        ("h" evil-window-left "left")
+        ("l" evil-window-right "right")
+        ("n" evil-window-next "next" :color blue)
+        ("H" evil-window-move-far-left "left" :column "Swap")
+        ("L" evil-window-move-far-right "right")
+        ("J" evil-window-move-very-bottom "bottom")
+        ("K" evil-window-move-very-top "top")
+        ("+" evil-window-increase-height "+ h" :column "Size")
+        ("-" evil-window-decrease-height "- h")
+        (">" evil-window-increase-width "+ w")
+        ("<" evil-window-decrease-width "- w")
+        ("=" evil-balance-window "balance")
+        ("d" evil-window-delete "delete" :color blue :column "Operate")
+        ("s" evil-window-split "split")
+        ("v" evil-window-vsplit "vsplit")
+        ("o" delete-other-windows "only" :color blue)
+        ("q" nil "cancel" :color blue))
+      (defhydra hydra-buffer
+        (:color red :hint nil)
+        "buffer"
+        ("j" evil-next-buffer "next")
+        ("k" evil-prev-buffer "prev")
+        ("d" evil-delete-buffer "delete" :color blue)
+        ("b" ivy-switch-buffer "switch" :color blue)
+        ("q" nil "cancel" :color blue))
+      (defhydra hydra-projectile
+        (:color blue :hint nil)
+        "projectile"
+        ("p" projectile-switch-project "project" :column "Switch")
+        ("b" projectile-switch-to-buffer "buffer")
+        ("f" projectile-find-file "file")
+        ("d" projectile-dired "dired")
+        ("e" projectile-run-eshell "eshell")
+        ("c" projectile-compile-project "compile" :column "Action")
+        ("t" projectile-test-project "test")
+        ("r" projectile-run-project "run")
+        ("l" projectile-cleanup-known-projects "clean")
+        ("x" projectile-remove-known-project "remove")
+        ("s" projectile-save-project-buffers "save"))
+      (defhydra hydra-eyebrowse
+        (:color blue :hint nil)
+        "eyebrowse"
+        ("l" eyebrowse-last-window-config "last" :column "Switch")
+        ("j" eyebrowse-next-window-config "next" :color red)
+        ("k" eyebrowse-prev-window-config "prev" :color red)
+        ("s" eyebrowse-switch-to-window-config "switch")
+        ("d" eyebrowse-close-window-config "delete" :column "Modify")
+        ("c" eyebrowse-create-window-config "last")
+        ("r" eyebrowse-rename-window-config "rename"))
+      (defhydra hydra-help
+        (:color blue :hint nil)
+        "help"
+        ("f" describe-function "function")
+        ("F" counsel-describe-face "face")
+        ("v" describe-variable "variable")
+        ("c" describe-char "char")
+        ("m" describe-mode "mode")
+        ("i" info "info")
+        ("k" describe-key "key")
+        ("b" counsel-descbinds "binding"))
+      (defhydra hydra-org-clock
+        (:color blue :hint nil)
+        "org clock"
+        ("g" org-clock-goto "goto")
+        ("i" org-clock-in "in")
+        ("I" org-clock-in-last "in last")
+        ("o" org-clock-out "out")
+        ("c" org-clock-cancel "cancel")
+        ("r" org-clock-report "report")))
 
+  #+END_SRC
+* general.el
+  #+BEGIN_SRC elisp :tangle yes
+    (use-package general
+      :ensure t
+      :config
+      (general-evil-setup)
+      (general-def '(minibuffer-local-map
+                     minibuffer-local-ns-map
+                     minibuffer-local-completion-map
+                     minibuffer-local-must-match-map
+                     minibuffer-local-isearch-map
+                     dired-narrow-map
+                     ivy-minibuffer-map)
+        [escape] 'minibuffer-keyboard-quit)
+      (general-iemap
+        "," (general-key-dispatch 'self-insert-command
+              :timeout 0.30
+              :inherit-keymap my:prefix-map))
+      (general-mmap
+        :prefix ","
+        :keymaps 'override
+        :prefix-command 'my:prefix-map
+        "f" 'counsel-find-file
+        "d" 'dired
+        "t" 'my:new-eshell
+        "b" 'ivy-switch-buffer
+        "i" 'ibuffer
+        "g" 'magit-status
+        "a" 'org-agenda-list
+        "," 'my:other-window-or-buffer
+        "r" 'counsel-rg
+        "A" 'org-agenda
+        "c" 'org-capture
+        "s" 'swiper
+        "k" 'kill-buffer
+        "q" 'save-buffers-kill-emacs
+        "e" 'hydra-eyebrowse/body
+        "w" 'hydra-window/body
+        "B" 'hydra-buffer/body
+        "h" 'hydra-help/body
+        "p" 'hydra-projectile/body
+        "o g" 'org-clock-goto
+        "o o" 'org-clock-out
+        "n d" 'narrow-to-defun
+        "n s" 'org-narrow-to-subtree
+        "n w" 'widen)
+      (general-mmap
+        :prefix "SPC"
+        "" nil
+        "a" 'align
+        "t" 'my:toggle-line-number
+        "f" 'avy-goto-char-2
+        "w" 'avy-goto-word-1
+        "l" 'avy-goto-line
+        "o" 'symbol-overlay-put)
+      (general-def 'emacs dired-mode-map
+        "j" 'dired-next-line
+        "k" 'dired-previous-line
+        "r" 'dired-toggle-read-only
+        "." 'dired-mark-extension
+        "n" 'dired-narrow-regexp
+        "/" 'dired-goto-file
+        "p" 'dired-up-directory)
+      (general-nmap org-mode-map
+        "gh" 'outline-up-heading
+        "gj" 'org-forward-heading-same-level
+        "gk" 'org-backward-heading-same-level
+        "gl" 'outline-next-visible-heading
+        "<" 'org-metaleft
+        ">" 'org-metaright
+        "t" 'org-todo)
+      (general-def org-mode-map
+        "M-h" 'org-metaleft
+        "M-j" 'org-metadown
+        "M-k" 'org-metaup
+        "M-l" 'org-metaright
+        "M-H" 'org-shiftmetaleft
+        "M-J" 'org-shiftmetadown
+        "M-K" 'org-shiftmetaup
+        "M-L" 'org-shiftmetaright)
+      (general-mmap org-mode-map
+        :prefix ";"
+        :prefix-command 'my:org-mode-prefix-command
+        :prefix-map 'my:org-mode-prefix-map
+        "r" 'my:org-refile-to-diary
+        "s" 'org-schedule
+        "d" 'org-deadline
+        "e" 'org-edit-src-code
+        "c" 'org-columns
+        "l" 'org-insert-link
+        "p" 'org-set-property
+        "i" 'org-toggle-inline-images
+        "t" 'org-toggle-latex-fragment
+        "o" 'org-open-at-point
+        ";" 'org-ctrl-c-ctrl-c
+        "k" 'hydra-org-clock/body)
+      (general-iemap org-mode-map
+       ";" (general-key-dispatch 'self-insert-command
+             :timeout 0.20
+             :inherit-keymap my:org-mode-prefix-map))
+      (general-define-key
+       :definer 'minor-mode
+       :states '(normal visual)
+       :keymaps 'org-src-mode
+       :prefix ";"
+       "e" 'org-edit-src-exit
+       "k" 'org-edit-src-abort)
+      (general-define-key
+       :definer 'minor-mode
+       :states '(normal visual)
+       :keymaps 'org-capture-mode
+       :prefix ";"
+       "e" 'org-capture-finalize
+       "w" 'org-capture-refile
+       "k" 'org-capture-kill)
+      (general-def org-agenda-mode-map
+        "S" 'org-agenda-schedule
+        "D" 'org-agenda-deadline
+        "j" 'org-agenda-next-line
+        "k" 'org-agenda-previous-line)
+      (general-def 'emacs ibuffer-mode-map
+        "M-j" 'ibuffer-forward-filter-group
+        "M-k" 'ibuffer-backward-filter-group
+        "j" 'ibuffer-forward-line
+        "k" 'ibuffer-backward-line)
+      (general-def 'override
+        "M-0" 'eyebrowse-switch-to-window-config-0
+        "M-1" 'eyebrowse-switch-to-window-config-1
+        "M-2" 'eyebrowse-switch-to-window-config-2
+        "M-3" 'eyebrowse-switch-to-window-config-3
+        "M-4" 'eyebrowse-switch-to-window-config-4
+        "M-5" 'eyebrowse-switch-to-window-config-5
+        "M-6" 'eyebrowse-switch-to-window-config-6
+        "M-7" 'eyebrowse-switch-to-window-config-7
+        "M-8" 'eyebrowse-switch-to-window-config-8
+        "M-9" 'eyebrowse-switch-to-window-config-9
+        "C-=" 'text-scale-increase
+        "C--" 'text-scale-decrease)
+      (general-def 'normal coq-mode-map
+        "K" 'my:company-coq-doc-search)
+      (general-mmap coq-mode-map
+        :prefix ";"
+        :prefix-command 'my:coq-mode-prefix-command
+        :prefix-map 'my:coq-mode-prefix-map
+        "g" 'company-coq-proof-goto-point
+        "d" 'company-coq-doc
+        "e" 'proof-shell-exit
+        "c" 'proof-interrupt-process
+        "p" 'proof-prf
+        "u" 'proof-undo-last-successful-command
+        "s" 'proof-find-theorems
+        "l" 'proof-layout-windows)
+      (general-iemap coq-mode-map
+       ";" (general-key-dispatch 'self-insert-command
+             :timeout 0.20
+             :inherit-keymap my:coq-mode-prefix-map))
+      (general-mmap Info-mode-map
+        "q" 'Info-exit
+        "u" 'Info-up
+        "b" 'Info-history-back
+        "n" 'Info-next
+        "p" 'Info-prev
+        "<tab>" 'Info-next-reference
+        "S-<tab>" 'Info-prev-reference)
+      (general-def 'normal help-mode-map
+        "q" 'quit-window))
+  #+END_SRC
+* packages
+  #+BEGIN_SRC elisp :tangle yes
     (use-package symbol-overlay
       :ensure t)
 
@@ -191,84 +446,6 @@
       :ensure t
       :config
       (which-key-mode 1))
-
-    (use-package hydra
-      :ensure t
-      :config
-      (defhydra hydra-window
-        (:color red :hint nil)
-        "window"
-        ("j" evil-window-down "down" :column "Move")
-        ("k" evil-window-up "up")
-        ("h" evil-window-left "left")
-        ("l" evil-window-right "right")
-        ("n" evil-window-next "next" :color blue)
-        ("H" evil-window-move-far-left "left" :column "Swap")
-        ("L" evil-window-move-far-right "right")
-        ("J" evil-window-move-very-bottom "bottom")
-        ("K" evil-window-move-very-top "top")
-        ("+" evil-window-increase-height "+ h" :column "Size")
-        ("-" evil-window-decrease-height "- h")
-        (">" evil-window-increase-width "+ w")
-        ("<" evil-window-decrease-width "- w")
-        ("=" evil-balance-window "balance")
-        ("d" evil-window-delete "delete" :color blue :column "Operate")
-        ("s" evil-window-split "split")
-        ("v" evil-window-vsplit "vsplit")
-        ("o" delete-other-windows "only" :color blue)
-        ("q" nil "cancel" :color blue))
-      (defhydra hydra-buffer
-        (:color red :hint nil)
-        "buffer"
-        ("j" evil-next-buffer "next")
-        ("k" evil-prev-buffer "prev")
-        ("d" evil-delete-buffer "delete" :color blue)
-        ("b" ivy-switch-buffer "switch" :color blue)
-        ("q" nil "cancel" :color blue))
-      (defhydra hydra-projectile
-        (:color blue :hint nil)
-        "projectile"
-        ("p" projectile-switch-project "project" :column "Switch")
-        ("b" projectile-switch-to-buffer "buffer")
-        ("f" projectile-find-file "file")
-        ("d" projectile-dired "dired")
-        ("e" projectile-run-eshell "eshell")
-        ("c" projectile-compile-project "compile" :column "Action")
-        ("t" projectile-test-project "test")
-        ("r" projectile-run-project "run")
-        ("l" projectile-cleanup-known-projects "clean")
-        ("x" projectile-remove-known-project "remove")
-        ("s" projectile-save-project-buffers "save"))
-      (defhydra hydra-eyebrowse
-        (:color blue :hint nil)
-        "eyebrowse"
-        ("l" eyebrowse-last-window-config "last" :column "Switch")
-        ("j" eyebrowse-next-window-config "next" :color red)
-        ("k" eyebrowse-prev-window-config "prev" :color red)
-        ("s" eyebrowse-switch-to-window-config "switch")
-        ("d" eyebrowse-close-window-config "delete" :column "Modify")
-        ("c" eyebrowse-create-window-config "last")
-        ("r" eyebrowse-rename-window-config "rename"))
-      (defhydra hydra-help
-        (:color blue :hint nil)
-        "help"
-        ("f" describe-function "function")
-        ("F" counsel-describe-face "face")
-        ("v" describe-variable "variable")
-        ("c" describe-char "char")
-        ("m" describe-mode "mode")
-        ("i" info "info")
-        ("k" describe-key "key")
-        ("b" counsel-descbinds "binding"))
-      (defhydra hydra-org-clock
-        (:color blue :hint nil)
-        "org clock"
-        ("g" org-clock-goto "goto")
-        ("i" org-clock-in "in")
-        ("I" org-clock-in-last "in last")
-        ("o" org-clock-out "out")
-        ("c" org-clock-cancel "cancel")
-        ("r" org-clock-report "report")))
 
     (use-package counsel
       :ensure t
@@ -690,190 +867,4 @@
               ((> p 0)  "battery-empty"))))
            " "
            (format "%d%%%%" p)))))
-
-    (use-package general
-      :ensure t
-      :config
-      (general-evil-setup)
-      (general-def '(minibuffer-local-map
-                     minibuffer-local-ns-map
-                     minibuffer-local-completion-map
-                     minibuffer-local-must-match-map
-                     minibuffer-local-isearch-map
-                     dired-narrow-map
-                     ivy-minibuffer-map)
-        [escape] 'minibuffer-keyboard-quit)
-      (general-iemap
-        "," (general-key-dispatch 'self-insert-command
-              :timeout 0.30
-              :inherit-keymap my:prefix-map))
-      (general-mmap
-        :prefix ","
-        :keymaps 'override
-        :prefix-command 'my:prefix-map
-        "f" 'counsel-find-file
-        "d" 'dired
-        "t" 'my:new-eshell
-        "b" 'ivy-switch-buffer
-        "i" 'ibuffer
-        "g" 'magit-status
-        "a" 'org-agenda-list
-        "," 'my:other-window-or-buffer
-        "r" 'counsel-rg
-        "A" 'org-agenda
-        "c" 'org-capture
-        "s" 'swiper
-        "k" 'kill-buffer
-        "q" 'save-buffers-kill-emacs
-        "e" 'hydra-eyebrowse/body
-        "w" 'hydra-window/body
-        "B" 'hydra-buffer/body
-        "h" 'hydra-help/body
-        "p" 'hydra-projectile/body
-        "o g" 'org-clock-goto
-        "o o" 'org-clock-out
-        "n d" 'narrow-to-defun
-        "n s" 'org-narrow-to-subtree
-        "n w" 'widen)
-      (general-mmap
-        :prefix "SPC"
-        "" nil
-        "a" 'align
-        "t" 'my:toggle-line-number
-        "f" 'avy-goto-char-2
-        "w" 'avy-goto-word-1
-        "l" 'avy-goto-line
-        "o" 'symbol-overlay-put)
-      (general-def 'emacs dired-mode-map
-        "j" 'dired-next-line
-        "k" 'dired-previous-line
-        "r" 'dired-toggle-read-only
-        "." 'dired-mark-extension
-        "n" 'dired-narrow-regexp
-        "/" 'dired-goto-file
-        "p" 'dired-up-directory)
-      (general-nmap org-mode-map
-        "gh" 'outline-up-heading
-        "gj" 'org-forward-heading-same-level
-        "gk" 'org-backward-heading-same-level
-        "gl" 'outline-next-visible-heading
-        "<" 'org-metaleft
-        ">" 'org-metaright
-        "t" 'org-todo)
-      (general-def org-mode-map
-        "M-h" 'org-metaleft
-        "M-j" 'org-metadown
-        "M-k" 'org-metaup
-        "M-l" 'org-metaright
-        "M-H" 'org-shiftmetaleft
-        "M-J" 'org-shiftmetadown
-        "M-K" 'org-shiftmetaup
-        "M-L" 'org-shiftmetaright)
-      (general-mmap org-mode-map
-        :prefix ";"
-        :prefix-command 'my:org-mode-prefix-command
-        :prefix-map 'my:org-mode-prefix-map
-        "r" 'my:org-refile-to-diary
-        "s" 'org-schedule
-        "d" 'org-deadline
-        "e" 'org-edit-src-code
-        "c" 'org-columns
-        "l" 'org-insert-link
-        "p" 'org-set-property
-        "i" 'org-toggle-inline-images
-        "t" 'org-toggle-latex-fragment
-        "o" 'org-open-at-point
-        ";" 'org-ctrl-c-ctrl-c
-        "k" 'hydra-org-clock/body)
-      (general-iemap org-mode-map
-       ";" (general-key-dispatch 'self-insert-command
-             :timeout 0.20
-             :inherit-keymap my:org-mode-prefix-map))
-      (general-define-key
-       :definer 'minor-mode
-       :states '(normal visual)
-       :keymaps 'org-src-mode
-       :prefix ";"
-       "e" 'org-edit-src-exit
-       "k" 'org-edit-src-abort)
-      (general-define-key
-       :definer 'minor-mode
-       :states '(normal visual)
-       :keymaps 'org-capture-mode
-       :prefix ";"
-       "e" 'org-capture-finalize
-       "w" 'org-capture-refile
-       "k" 'org-capture-kill)
-      (general-def org-agenda-mode-map
-        "S" 'org-agenda-schedule
-        "D" 'org-agenda-deadline
-        "j" 'org-agenda-next-line
-        "k" 'org-agenda-previous-line)
-      (general-def 'emacs ibuffer-mode-map
-        "M-j" 'ibuffer-forward-filter-group
-        "M-k" 'ibuffer-backward-filter-group
-        "j" 'ibuffer-forward-line
-        "k" 'ibuffer-backward-line)
-      (general-def 'override
-        "M-0" 'eyebrowse-switch-to-window-config-0
-        "M-1" 'eyebrowse-switch-to-window-config-1
-        "M-2" 'eyebrowse-switch-to-window-config-2
-        "M-3" 'eyebrowse-switch-to-window-config-3
-        "M-4" 'eyebrowse-switch-to-window-config-4
-        "M-5" 'eyebrowse-switch-to-window-config-5
-        "M-6" 'eyebrowse-switch-to-window-config-6
-        "M-7" 'eyebrowse-switch-to-window-config-7
-        "M-8" 'eyebrowse-switch-to-window-config-8
-        "M-9" 'eyebrowse-switch-to-window-config-9
-        "C-=" 'text-scale-increase
-        "C--" 'text-scale-decrease)
-      (general-def 'normal coq-mode-map
-        "K" 'my:company-coq-doc-search)
-      (general-mmap coq-mode-map
-        :prefix ";"
-        :prefix-command 'my:coq-mode-prefix-command
-        :prefix-map 'my:coq-mode-prefix-map
-        "g" 'company-coq-proof-goto-point
-        "d" 'company-coq-doc
-        "e" 'proof-shell-exit
-        "c" 'proof-interrupt-process
-        "p" 'proof-prf
-        "u" 'proof-undo-last-successful-command
-        "s" 'proof-find-theorems
-        "l" 'proof-layout-windows)
-      (general-iemap coq-mode-map
-       ";" (general-key-dispatch 'self-insert-command
-             :timeout 0.20
-             :inherit-keymap my:coq-mode-prefix-map))
-      (general-mmap Info-mode-map
-        "q" 'Info-exit
-        "u" 'Info-up
-        "b" 'Info-history-back
-        "n" 'Info-next
-        "p" 'Info-prev
-        "<tab>" 'Info-next-reference
-        "S-<tab>" 'Info-prev-reference)
-      (general-def 'normal help-mode-map
-        "q" 'quit-window))
-
-    (custom-set-variables
-     ;; custom-set-variables was added by Custom.
-     ;; If you edit it by hand, you could mess it up, so be careful.
-     ;; Your init file should contain only one such instance.
-     ;; If there is more than one, they won't work right.
-     '(package-selected-packages
-       (quote
-        (keyfreq org-tree-slide academic-phrases org-make-toc exec-path-from-shell xterm-color ivy-posframe avy fcitx moody ibuffer-vc dired-collapse dired-open dired-narrow symbol-overlay htmlize evil-matchit alert org-super-agenda proof-general ivy-hydra general auctex all-the-icons-dired eshell-z esh-autosuggest org-bullets ob-ipython geiser lua-mode ccls company-lsp lsp-ui lsp-mode flycheck all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package)))
-     '(safe-local-variable-values
-       (quote
-        ((projectile-project-run-cmd . "make push")
-         (projectile-project-run-cmd . "make run")
-         (projectile-project-compilation-cmd . "make")))))
-    (custom-set-faces
-     ;; custom-set-faces was added by Custom.
-     ;; If you edit it by hand, you could mess it up, so be careful.
-     ;; Your init file should contain only one such instance.
-     ;; If there is more than one, they won't work right.
-     )
-
   #+END_SRC

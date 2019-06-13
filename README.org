@@ -777,10 +777,46 @@
       "p" 'dired-up-directory)
   #+END_SRC
 * packages
-** symbol-overlay
+** academic-phrases
    #+BEGIN_SRC elisp
-     (use-package symbol-overlay
-       :ensure t)
+     (use-package academic-phrases :ensure t)
+   #+END_SRC
+** alert
+   #+BEGIN_SRC elisp
+     (use-package alert
+       :ensure t
+       :config
+       (setq alert-default-style 'libnotify))
+   #+END_SRC
+** all-the-icons
+   #+BEGIN_SRC elisp
+     (use-package all-the-icons
+       :ensure t
+       :config
+       (add-to-list 'all-the-icons-mode-icon-alist
+                    '(latex-mode all-the-icons-fileicon "tex" :face all-the-icons-lred))
+       (add-to-list 'all-the-icons-icon-alist
+                    '("\\.v" all-the-icons-fileicon "coq" :face all-the-icons-red))
+       (add-to-list 'all-the-icons-mode-icon-alist
+                    '(coq-mode all-the-icons-fileicon "coq" :face all-the-icons-red)))
+   #+END_SRC
+** battery
+   #+BEGIN_SRC elisp
+     (use-package battery
+       :config
+       (defun my:battery-mode-line ()
+         (let ((p (string-to-number (battery-format "%p" (battery-linux-sysfs)))))
+           (concat
+            (my:remove-icon-display
+             (all-the-icons-faicon
+              (cond
+               ((> p 99) "battery-full")
+               ((> p 75) "battery-three-quarters")
+               ((> p 50) "battery-half")
+               ((> p 25) "battery-quarter")
+               ((> p 0)  "battery-empty"))))
+            " "
+            (format "%d%%%%" p)))))
    #+END_SRC
 ** company
    #+BEGIN_SRC elisp
@@ -793,53 +829,6 @@
        :config
        (setq ediff-split-window-function 'split-window-horizontally)
        (setq ediff-window-setup-function 'ediff-setup-windows-plain))
-   #+END_SRC
-** eyebrowse
-   #+BEGIN_SRC elisp
-     (use-package eyebrowse
-       :ensure t
-       :config
-       (eyebrowse-mode t))
-   #+END_SRC
-
-   Keybindings
-   #+NAME: general-eyebrowse
-   #+BEGIN_SRC elisp :tangle no
-     (general-def 'override
-       "M-0" 'eyebrowse-switch-to-window-config-0
-       "M-1" 'eyebrowse-switch-to-window-config-1
-       "M-2" 'eyebrowse-switch-to-window-config-2
-       "M-3" 'eyebrowse-switch-to-window-config-3
-       "M-4" 'eyebrowse-switch-to-window-config-4
-       "M-5" 'eyebrowse-switch-to-window-config-5
-       "M-6" 'eyebrowse-switch-to-window-config-6
-       "M-7" 'eyebrowse-switch-to-window-config-7
-       "M-8" 'eyebrowse-switch-to-window-config-8
-       "M-9" 'eyebrowse-switch-to-window-config-9)
-   #+END_SRC
-** keyfreq
-   #+BEGIN_SRC elisp
-     (use-package keyfreq
-       :ensure t
-       :config
-       (keyfreq-mode 1)
-       (keyfreq-autosave-mode 1))
-   #+END_SRC
-** exec-path-from-shell
-   #+BEGIN_SRC elisp
-     (use-package exec-path-from-shell
-       :ensure t
-       :defer 1
-       :config
-       (setq exec-path-from-shell-check-startup-files nil)
-       (exec-path-from-shell-copy-env "SSH_AGENT_PID")
-       (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
-   #+END_SRC
-** magit
-   #+BEGIN_SRC elisp
-     (use-package magit
-       :ensure t
-       :defer 5)
    #+END_SRC
 ** evil
    #+BEGIN_SRC elisp
@@ -866,6 +855,39 @@
        (global-evil-matchit-mode 1))
 
    #+END_SRC
+** exec-path-from-shell
+   #+BEGIN_SRC elisp
+     (use-package exec-path-from-shell
+       :ensure t
+       :defer 1
+       :config
+       (setq exec-path-from-shell-check-startup-files nil)
+       (exec-path-from-shell-copy-env "SSH_AGENT_PID")
+       (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
+   #+END_SRC
+** eyebrowse
+   #+BEGIN_SRC elisp
+     (use-package eyebrowse
+       :ensure t
+       :config
+       (eyebrowse-mode t))
+   #+END_SRC
+
+   Keybindings
+   #+NAME: general-eyebrowse
+   #+BEGIN_SRC elisp :tangle no
+     (general-def 'override
+       "M-0" 'eyebrowse-switch-to-window-config-0
+       "M-1" 'eyebrowse-switch-to-window-config-1
+       "M-2" 'eyebrowse-switch-to-window-config-2
+       "M-3" 'eyebrowse-switch-to-window-config-3
+       "M-4" 'eyebrowse-switch-to-window-config-4
+       "M-5" 'eyebrowse-switch-to-window-config-5
+       "M-6" 'eyebrowse-switch-to-window-config-6
+       "M-7" 'eyebrowse-switch-to-window-config-7
+       "M-8" 'eyebrowse-switch-to-window-config-8
+       "M-9" 'eyebrowse-switch-to-window-config-9)
+   #+END_SRC
 ** fcitx
    #+BEGIN_SRC elisp
      (use-package fcitx
@@ -874,19 +896,11 @@
        :config
        (fcitx-aggressive-setup))
    #+END_SRC
-** academic-phrases
+** flycheck
    #+BEGIN_SRC elisp
-     (use-package academic-phrases :ensure t)
-   #+END_SRC
-** rainbow-delimiters
-   #+BEGIN_SRC elisp
-    (use-package rainbow-delimiters
-      :ensure t
-      :hook ((prog-mode coq-mode) . rainbow-delimiters-mode))
-   #+END_SRC
-** htmlize
-   #+BEGIN_SRC elisp
-     (use-package htmlize :ensure t)
+     (use-package flycheck
+       :ensure t
+       :hook (c-mode . flycheck-mode))
    #+END_SRC
 ** geiser
    #+BEGIN_SRC elisp
@@ -895,12 +909,25 @@
        (setq geiser-chez-binary "chez-scheme")
        (setq geiser-default-implementation 'chez))
    #+END_SRC
-** which-key
+** hl-line-mode
    #+BEGIN_SRC elisp
-     (use-package which-key
-       :ensure t
+     (use-package hl-line-mode
+       :hook ((prog-mode . hl-line-mode)
+              (prog-mode . (lambda () (setq-local display-line-numbers 'relative)))))
+   #+END_SRC
+** htmlize
+   #+BEGIN_SRC elisp
+     (use-package htmlize :ensure t)
+   #+END_SRC
+** ibuffer
+   #+BEGIN_SRC elisp
+     (use-package ibuffer
+       :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
        :config
-       (which-key-mode 1))
+       (setq
+        ibuffer-formats
+        '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
+       (use-package ibuffer-vc :ensure t))
    #+END_SRC
 ** ivy
    #+BEGIN_SRC elisp
@@ -932,11 +959,13 @@
        (ivy-posframe-enable))
 
    #+END_SRC
-** flycheck
+** keyfreq
    #+BEGIN_SRC elisp
-     (use-package flycheck
+     (use-package keyfreq
        :ensure t
-       :hook (c-mode . flycheck-mode))
+       :config
+       (keyfreq-mode 1)
+       (keyfreq-autosave-mode 1))
    #+END_SRC
 ** lsp
    #+BEGIN_SRC elisp
@@ -947,6 +976,20 @@
        :ensure t
        :defer t
        :hook ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp))))
+   #+END_SRC
+** magit
+   #+BEGIN_SRC elisp
+     (use-package magit
+       :ensure t
+       :defer 5)
+   #+END_SRC
+** moody
+   #+BEGIN_SRC elisp
+     (use-package moody
+       :ensure t
+       :config
+       (setq x-underline-at-descent-line t)
+       (setq moody-mode-line-height 26))
    #+END_SRC
 ** projectile
    #+BEGIN_SRC elisp
@@ -959,70 +1002,27 @@
       (setq projectile-switch-project-action #'projectile-dired)
       (setq projectile-completion-system 'ivy))
    #+END_SRC
-** alert
+** rainbow-delimiters
    #+BEGIN_SRC elisp
-     (use-package alert
+    (use-package rainbow-delimiters
+      :ensure t
+      :hook ((prog-mode coq-mode) . rainbow-delimiters-mode))
+   #+END_SRC
+** symbol-overlay
+   #+BEGIN_SRC elisp
+     (use-package symbol-overlay
+       :ensure t)
+   #+END_SRC
+** which-key
+   #+BEGIN_SRC elisp
+     (use-package which-key
        :ensure t
        :config
-       (setq alert-default-style 'libnotify))
-   #+END_SRC
-** hl-line-mode
-   #+BEGIN_SRC elisp
-     (use-package hl-line-mode
-       :hook ((prog-mode . hl-line-mode)
-              (prog-mode . (lambda () (setq-local display-line-numbers 'relative)))))
+       (which-key-mode 1))
    #+END_SRC
 ** xterm-color
    #+BEGIN_SRC elisp
     (use-package xterm-color :ensure t)
-   #+END_SRC
-** all-the-icons
-   #+BEGIN_SRC elisp
-     (use-package all-the-icons
-       :ensure t
-       :config
-       (add-to-list 'all-the-icons-mode-icon-alist
-                    '(latex-mode all-the-icons-fileicon "tex" :face all-the-icons-lred))
-       (add-to-list 'all-the-icons-icon-alist
-                    '("\\.v" all-the-icons-fileicon "coq" :face all-the-icons-red))
-       (add-to-list 'all-the-icons-mode-icon-alist
-                    '(coq-mode all-the-icons-fileicon "coq" :face all-the-icons-red)))
-   #+END_SRC
-** ibuffer
-   #+BEGIN_SRC elisp
-     (use-package ibuffer
-       :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
-       :config
-       (setq
-        ibuffer-formats
-        '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
-       (use-package ibuffer-vc :ensure t))
-   #+END_SRC
-** moody
-   #+BEGIN_SRC elisp
-     (use-package moody
-       :ensure t
-       :config
-       (setq x-underline-at-descent-line t)
-       (setq moody-mode-line-height 26))
-   #+END_SRC
-** battery
-   #+BEGIN_SRC elisp
-     (use-package battery
-       :config
-       (defun my:battery-mode-line ()
-         (let ((p (string-to-number (battery-format "%p" (battery-linux-sysfs)))))
-           (concat
-            (my:remove-icon-display
-             (all-the-icons-faicon
-              (cond
-               ((> p 99) "battery-full")
-               ((> p 75) "battery-three-quarters")
-               ((> p 50) "battery-half")
-               ((> p 25) "battery-quarter")
-               ((> p 0)  "battery-empty"))))
-            " "
-            (format "%d%%%%" p)))))
    #+END_SRC
 * help functions
   #+BEGIN_SRC elisp

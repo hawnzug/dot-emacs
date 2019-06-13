@@ -1,4 +1,4 @@
-#+PROPERTY: header-args:elisp :tangle yes
+#+PROPERTY: header-args:elisp :tangle config.el
 * init
   Allow large garbage collection threshold when init.
   #+BEGIN_SRC elisp

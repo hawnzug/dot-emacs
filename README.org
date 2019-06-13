@@ -131,15 +131,27 @@
     (setenv "MAGICK_OCL_DEVICE" "OFF")
   #+END_SRC
 * mode line
+  Honestly mode line is just an eye candy for me. The only useful part is column number,
+  and maybe the current buffer name. But a pretty mode line does please me to some extent,
+  and it makes my emacs seem more modern, so I keep it.
+
+  Here are two aux functions to add foreground color to text and remove icon shift.
   #+BEGIN_SRC elisp
     (defun my:add-face-string (s face)
-      (add-face-text-property 0 (length s) face nil s)
-      s)
+      (add-face-text-property 0 (length s) face nil s) s)
 
     (defun my:remove-icon-display (s)
-      (remove-text-properties 0 1 '(display nil) s)
-      s)
+      (remove-text-properties 0 1 '(display nil) s) s)
+  #+END_SRC
 
+  The mode line contains:
+  1. Line number, column number.
+  2. Tabs of eyebrowse. Current workspace tab opens above.
+  3. Date time. If org clock is running, show the clocking entry and duration.
+  4. Buffer icon and name, upward openning.
+  5. Battery icon and percent.
+  6. Icon and branch of vc-mode. Just an eye candy to show off the downward openning tab.
+  #+BEGIN_SRC elisp :noweb no-export
     (setq-default
      mode-line-format
      (list
@@ -148,29 +160,47 @@
       "  "
       '(:eval (my:eyebrowse-mode-line))
       "  "
-      '(:eval (my:add-face-string
-               (if (and (featurep 'org) (org-clocking-p))
-                   (concat (format-time-string "%H:%M ")
-                           org-mode-line-string)
-                 (format-time-string "%Y-%m-%d %H:%M"))
-                '(:foreground "#eeeeee")))
+      <<mode-line-datetime>>
       "  "
-      '(:eval (moody-tab
-               (concat
-                (my:remove-icon-display (all-the-icons-icon-for-buffer))
-                " %b")
-               5 'down))
+      <<mode-line-buffer-name>>
       "  "
       '(:eval (my:add-face-string (my:battery-mode-line) '(:foreground "#eeeeee")))
       "  "
-      '(:eval (when vc-mode
-                (moody-tab
-                 (concat
-                  (my:remove-icon-display (all-the-icons-alltheicon
-                                           "git" :face '(:foreground "#F44336")))
-                  vc-mode)
-                 5 'up)))))
+      <<mode-line-vc-mode>>
+      ))
+  #+END_SRC
 
+  #+NAME: mode-line-datetime
+  #+BEGIN_SRC elisp :tangle no
+    '(:eval
+      (my:add-face-string
+       (if (and (featurep 'org) (org-clocking-p))
+           (concat (format-time-string "%H:%M ")
+                   org-mode-line-string)
+         (format-time-string "%Y-%m-%d %H:%M"))
+       '(:foreground "#eeeeee")))
+  #+END_SRC
+
+  #+NAME: mode-line-buffer-name
+  #+BEGIN_SRC elisp :tangle no
+    '(:eval
+      (moody-tab
+       (concat
+        (my:remove-icon-display (all-the-icons-icon-for-buffer))
+        " %b")
+       5 'down))
+  #+END_SRC
+
+  #+NAME: mode-line-vc-mode
+  #+BEGIN_SRC elisp :tangle no
+    '(:eval
+      (when vc-mode
+        (moody-tab
+         (concat
+          (my:remove-icon-display
+           (all-the-icons-alltheicon "git" :face '(:foreground "#F44336")))
+          vc-mode)
+         5 'up)))
   #+END_SRC
 * use-package
   #+BEGIN_SRC elisp

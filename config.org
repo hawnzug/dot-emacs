@@ -1,5 +1,5 @@
 #+PROPERTY: header-args:elisp :tangle yes
-* Init
+* init
   #+BEGIN_SRC elisp
     (setq gc-cons-threshold 64000000)
     (add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold 800000)))
@@ -30,7 +30,7 @@
     (load-theme 'lowlight t)
     (setenv "MAGICK_OCL_DEVICE" "OFF")
   #+END_SRC
-* Mode line
+* mode line
   #+BEGIN_SRC elisp
     (defun my:add-face-string (s face)
       (add-face-text-property 0 (length s) face nil s)
@@ -331,128 +331,8 @@
       (general-def 'normal help-mode-map
         "q" 'quit-window))
   #+END_SRC
-* packages
+* org
   #+BEGIN_SRC elisp
-    (use-package symbol-overlay
-      :ensure t)
-
-    (use-package company :ensure t :defer t)
-
-    (use-package ediff
-      :defer
-      :config
-      (setq ediff-split-window-function 'split-window-horizontally)
-      (setq ediff-window-setup-function 'ediff-setup-windows-plain))
-
-    (use-package eyebrowse
-      :ensure t
-      :config
-      (eyebrowse-mode t))
-
-    (use-package keyfreq
-      :ensure t
-      :config
-      (keyfreq-mode 1)
-      (keyfreq-autosave-mode 1))
-
-    (use-package exec-path-from-shell
-      :ensure t
-      :defer 1
-      :config
-      (setq exec-path-from-shell-check-startup-files nil)
-      (exec-path-from-shell-copy-env "SSH_AGENT_PID")
-      (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
-
-    (use-package magit
-      :ensure t
-      :defer 5)
-
-    (use-package evil
-      :ensure t
-      :init
-      (setq evil-want-abbrev-expand-on-insert-exit nil)
-      (setq evil-disable-insert-state-bindings t)
-      :config
-      (evil-mode 1)
-      (setq evil-emacs-state-cursor (list 'box (face-attribute 'default :foreground)))
-      (evil-set-initial-state 'dired-mode 'emacs)
-      (evil-set-initial-state 'ivy-occur-mode 'emacs)
-      (evil-set-initial-state 'wdired-mode 'normal))
-    (use-package evil-surround
-      :ensure t
-      :after evil
-      :config
-      (global-evil-surround-mode 1))
-    (use-package evil-matchit
-      :ensure t
-      :after evil
-      :config
-      (global-evil-matchit-mode 1))
-
-    (use-package fcitx
-      :ensure t
-      :defer 2
-      :config
-      (fcitx-aggressive-setup))
-
-    (use-package academic-phrases :ensure t)
-
-    (use-package rainbow-delimiters
-      :ensure t
-      :hook ((prog-mode coq-mode) . rainbow-delimiters-mode))
-
-    (use-package which-key
-      :ensure t
-      :config
-      (which-key-mode 1))
-
-    (use-package counsel
-      :ensure t
-      :config
-      (ivy-mode 1)
-      (use-package ivy-hydra :ensure t)
-      (setq ivy-use-virtual-buffers t)
-      (setq ivy-count-format "(%d/%d) ")
-      (setq ivy-re-builders-alist '((t . ivy--regex-plus))))
-    (use-package all-the-icons-ivy
-      :ensure t
-      :after (all-the-icons counsel)
-      :config
-      (all-the-icons-ivy-setup))
-    (use-package avy :ensure t)
-
-    (use-package ivy-posframe
-      :ensure t
-      :after counsel
-      :config
-      (setq ivy-height 20)
-      (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-      (setq ivy-posframe-border-width 3)
-      (setq ivy-posframe-parameters
-            '((left-fringe . 8)
-              (right-fringe . 8)))
-      (ivy-posframe-enable))
-
-    (use-package flycheck
-      :ensure t
-      :hook (c-mode . flycheck-mode))
-    (use-package lsp-mode :ensure t :commands lsp)
-    (use-package lsp-ui :ensure t :commands lsp-ui-mode)
-    (use-package company-lsp :ensure t :commands company-lsp)
-    (use-package ccls
-      :ensure t
-      :defer t
-      :hook ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp))))
-
-    (use-package projectile
-      :ensure t
-      :defer t
-      :config
-      (projectile-mode 1)
-      (setq projectile-sort-order 'recently-active)
-      (setq projectile-switch-project-action #'projectile-dired)
-      (setq projectile-completion-system 'ivy))
-
     (defun my:org-agenda-time-grid-spacing ()
       "Set different line spacing w.r.t. time duration."
       (save-excursion
@@ -545,11 +425,6 @@
       (let ((date (org-date-to-gregorian (org-read-date))))
        (org-datetree-find-date-create date 'subtree-at-point)))
 
-    (use-package alert
-      :ensure t
-      :config
-      (setq alert-default-style 'libnotify))
-
     (use-package org-alert
       :disabled t
       :after (org alert)
@@ -570,16 +445,10 @@
             '((:name "Clocking"
                      :log t
                      :pred (lambda (item)
-                              (org-find-text-property-in-string 'time-of-day item)))
+                             (org-find-text-property-in-string 'time-of-day item)))
               (:name "Others"
                      :anything t))))
 
-    (use-package htmlize :ensure t)
-
-    (use-package geiser :ensure t
-      :config
-      (setq geiser-chez-binary "chez-scheme")
-      (setq geiser-default-implementation 'chez))
     (use-package ob-scheme :after org)
     (use-package ob-python :after org)
     (use-package ob-shell :after org)
@@ -605,33 +474,9 @@
 
     (use-package org-tree-slide
       :ensure t)
-
-    (defun my:syntax-color-hex ()
-      (interactive)
-      (font-lock-add-keywords
-       nil
-       '(("#[[:xdigit:]]\\{6\\}"
-          (0 (put-text-property
-              (match-beginning 0)
-              (match-end 0)
-              'face (list :background (match-string-no-properties 0)))))))
-      (font-lock-flush))
-
-    (defun my:toggle-line-number ()
-      "Toggle line number between relative and nil."
-      (interactive)
-      (setq display-line-numbers
-        (pcase display-line-numbers
-          ('relative nil)
-          (_ 'relative))))
-
-    (use-package hl-line-mode
-      :hook ((prog-mode . hl-line-mode)
-             (prog-mode . (lambda () (setq-local display-line-numbers 'relative)))))
-
-    (use-package xterm-color
-      :ensure t)
-
+  #+END_SRC
+* eshell
+  #+BEGIN_SRC elisp
     (defun my:eshell-complete ()
       (interactive)
       (pcomplete-std-complete))
@@ -707,6 +552,9 @@
       :config
       (add-to-list 'eshell-modules-list 'eshell-tramp))
 
+  #+END_SRC
+* dired
+  #+BEGIN_SRC elisp
     (use-package dired
       :config
       (setq dired-recursive-copies t)
@@ -737,6 +585,167 @@
         :hook (dired-mode . all-the-icons-dired-mode))
       (use-package dired-narrow :ensure t))
 
+  #+END_SRC
+* packages
+  #+BEGIN_SRC elisp
+    (use-package symbol-overlay
+      :ensure t)
+
+    (use-package company :ensure t :defer t)
+
+    (use-package ediff
+      :defer
+      :config
+      (setq ediff-split-window-function 'split-window-horizontally)
+      (setq ediff-window-setup-function 'ediff-setup-windows-plain))
+
+    (use-package eyebrowse
+      :ensure t
+      :config
+      (eyebrowse-mode t))
+
+    (use-package keyfreq
+      :ensure t
+      :config
+      (keyfreq-mode 1)
+      (keyfreq-autosave-mode 1))
+
+    (use-package exec-path-from-shell
+      :ensure t
+      :defer 1
+      :config
+      (setq exec-path-from-shell-check-startup-files nil)
+      (exec-path-from-shell-copy-env "SSH_AGENT_PID")
+      (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
+
+    (use-package magit
+      :ensure t
+      :defer 5)
+
+    (use-package evil
+      :ensure t
+      :init
+      (setq evil-want-abbrev-expand-on-insert-exit nil)
+      (setq evil-disable-insert-state-bindings t)
+      :config
+      (evil-mode 1)
+      (setq evil-emacs-state-cursor (list 'box (face-attribute 'default :foreground)))
+      (evil-set-initial-state 'dired-mode 'emacs)
+      (evil-set-initial-state 'ivy-occur-mode 'emacs)
+      (evil-set-initial-state 'wdired-mode 'normal))
+    (use-package evil-surround
+      :ensure t
+      :after evil
+      :config
+      (global-evil-surround-mode 1))
+    (use-package evil-matchit
+      :ensure t
+      :after evil
+      :config
+      (global-evil-matchit-mode 1))
+
+    (use-package fcitx
+      :ensure t
+      :defer 2
+      :config
+      (fcitx-aggressive-setup))
+
+    (use-package academic-phrases :ensure t)
+
+    (use-package rainbow-delimiters
+      :ensure t
+      :hook ((prog-mode coq-mode) . rainbow-delimiters-mode))
+
+    (use-package htmlize :ensure t)
+
+    (use-package geiser :ensure t
+      :config
+      (setq geiser-chez-binary "chez-scheme")
+      (setq geiser-default-implementation 'chez))
+
+    (use-package which-key
+      :ensure t
+      :config
+      (which-key-mode 1))
+
+    (use-package counsel
+      :ensure t
+      :config
+      (ivy-mode 1)
+      (use-package ivy-hydra :ensure t)
+      (setq ivy-use-virtual-buffers t)
+      (setq ivy-count-format "(%d/%d) ")
+      (setq ivy-re-builders-alist '((t . ivy--regex-plus))))
+    (use-package all-the-icons-ivy
+      :ensure t
+      :after (all-the-icons counsel)
+      :config
+      (all-the-icons-ivy-setup))
+    (use-package avy :ensure t)
+
+    (use-package ivy-posframe
+      :ensure t
+      :after counsel
+      :config
+      (setq ivy-height 20)
+      (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+      (setq ivy-posframe-border-width 3)
+      (setq ivy-posframe-parameters
+            '((left-fringe . 8)
+              (right-fringe . 8)))
+      (ivy-posframe-enable))
+
+    (use-package flycheck
+      :ensure t
+      :hook (c-mode . flycheck-mode))
+    (use-package lsp-mode :ensure t :commands lsp)
+    (use-package lsp-ui :ensure t :commands lsp-ui-mode)
+    (use-package company-lsp :ensure t :commands company-lsp)
+    (use-package ccls
+      :ensure t
+      :defer t
+      :hook ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp))))
+
+    (use-package projectile
+      :ensure t
+      :defer t
+      :config
+      (projectile-mode 1)
+      (setq projectile-sort-order 'recently-active)
+      (setq projectile-switch-project-action #'projectile-dired)
+      (setq projectile-completion-system 'ivy))
+
+    (use-package alert
+      :ensure t
+      :config
+      (setq alert-default-style 'libnotify))
+
+    (defun my:syntax-color-hex ()
+      (interactive)
+      (font-lock-add-keywords
+       nil
+       '(("#[[:xdigit:]]\\{6\\}"
+          (0 (put-text-property
+              (match-beginning 0)
+              (match-end 0)
+              'face (list :background (match-string-no-properties 0)))))))
+      (font-lock-flush))
+
+    (defun my:toggle-line-number ()
+      "Toggle line number between relative and nil."
+      (interactive)
+      (setq display-line-numbers
+        (pcase display-line-numbers
+          ('relative nil)
+          (_ 'relative))))
+
+    (use-package hl-line-mode
+      :hook ((prog-mode . hl-line-mode)
+             (prog-mode . (lambda () (setq-local display-line-numbers 'relative)))))
+
+    (use-package xterm-color
+      :ensure t)
+
     (use-package all-the-icons
       :ensure t
       :config
@@ -754,14 +763,6 @@
        ibuffer-formats
        '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
       (use-package ibuffer-vc :ensure t))
-
-    (use-package tex
-      :ensure auctex
-      :defer t
-      :config
-      (setq TeX-auto-save t
-            TeX-PDF-mode t
-            TeX-electric-sub-and-superscript t))
 
     (defun my:other-window-or-buffer ()
       "Switch to other window or buffer"
@@ -805,7 +806,7 @@
            " "
            (format "%d%%%%" p)))))
   #+END_SRC
-* Languages
+* languages
 ** Coq
    #+BEGIN_SRC elisp
      (use-package proof-general
@@ -882,4 +883,14 @@
        (setq python-shell-completion-native-enable nil)
        (when (executable-find "ipython")
          (setq python-shell-interpreter "ipython")))
+   #+END_SRC
+** TeX
+   #+BEGIN_SRC elisp
+     (use-package tex
+       :ensure auctex
+       :defer t
+       :config
+       (setq TeX-auto-save t
+             TeX-PDF-mode t
+             TeX-electric-sub-and-superscript t))
    #+END_SRC

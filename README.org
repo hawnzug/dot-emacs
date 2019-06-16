@@ -428,12 +428,9 @@
          5 'up)))
   #+END_SRC
 * org
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :noweb no-export
     (use-package org
       :defer 2
-      :init
-      (setq org-agenda-files '("~/org/sjtu.org" "~/org/diary.org"))
-      (setq org-archive-location "~/org/diary.org::datetree/")
       :hook
       ((org-babel-after-execute . org-redisplay-inline-images)
        (org-agenda-finalize . my:org-agenda-time-grid-spacing)
@@ -443,6 +440,7 @@
       <<org-capture-templates>>
       <<org-agenda-config>>
       <<org-clock-config>>
+      (setq org-agenda-files '("~/org/sjtu.org" "~/org/diary.org"))
       (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
       (setq org-confirm-babel-evaluate nil)
       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))

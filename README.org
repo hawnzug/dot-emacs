@@ -967,6 +967,11 @@
         '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
        (use-package ibuffer-vc :ensure t))
    #+END_SRC
+** info
+   #+BEGIN_SRC elisp
+     (use-package info
+       :hook (Info-mode . font-switch-serif))
+   #+END_SRC
 ** ivy
    #+BEGIN_SRC elisp
      (use-package counsel
@@ -1173,6 +1178,12 @@
              TeX-electric-sub-and-superscript t))
    #+END_SRC
 * help functions
+  #+BEGIN_SRC elisp
+    (defun font-switch-serif ()
+      (interactive)
+      (face-remap-add-relative 'default :family "Source Serif Pro"))
+  #+END_SRC
+
   #+BEGIN_SRC elisp
     (defun my:other-window-or-buffer ()
       "Switch to other window or buffer"

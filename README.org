@@ -1176,6 +1176,33 @@
          (file-name-directory (shell-command-to-string "agda-mode locate"))))
      (use-package agda2 :load-path (lambda () (agda-mode-load-path)))
    #+END_SRC
+** Ocaml
+   #+BEGIN_SRC elisp
+     (eval-and-compile
+       (defun merlin-mode-load-path ()
+         (expand-file-name
+          "share/emacs/site-lisp"
+          (file-name-directory
+           (shell-command-to-string "opam config var share")))))
+     (use-package merlin
+       :load-path (lambda () (merlin-mode-load-path))
+       :hook
+       (merlin-mode . company-mode))
+   #+END_SRC
+
+   #+BEGIN_SRC elisp
+     (use-package tuareg
+       :ensure t
+       :hook
+       (tuareg-mode . merlin-mode))
+   #+END_SRC
+
+   #+BEGIN_SRC elisp
+     (use-package caml-mode
+       :ensure t
+       :hook
+       (caml-mode . merlin-mode))
+   #+END_SRC
 ** Cubicaltt
    #+BEGIN_SRC elisp
      (use-package cubicaltt

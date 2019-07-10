@@ -64,6 +64,14 @@
     (menu-bar-mode -1)
   #+END_SRC
 
+  Quiet startup
+  #+BEGIN_SRC elisp
+    (setq inhibit-startup-screen t)
+    (setq inhibit-startup-message t)
+    (setq inhibit-startup-echo-area-message t)
+    (setq initial-scratch-message nil)
+  #+END_SRC
+
   Show paren pair.
   #+BEGIN_SRC elisp
     (show-paren-mode 1)
@@ -241,7 +249,8 @@
       :prefix "SPC"
       "" nil
       "a" 'align
-      "t" 'my:toggle-line-number
+      "t l" 'my:toggle-line-number
+      "t t" 'my:toggle-transparency
       "f" 'avy-goto-char-2
       "w" 'avy-goto-word-1
       "l" 'avy-goto-line
@@ -1069,6 +1078,16 @@
       :ensure t
       :hook ((prog-mode coq-mode) . rainbow-delimiters-mode))
    #+END_SRC
+** sublimity
+   #+BEGIN_SRC elisp
+     (use-package sublimity
+       :ensure t
+       :config
+       (use-package sublimity-scroll)
+       (use-package sublimity-map
+         :config
+         (sublimity-map-set-delay nil)))
+   #+END_SRC
 ** symbol-overlay
    #+BEGIN_SRC elisp
      (use-package symbol-overlay
@@ -1247,4 +1266,15 @@
         (pcase display-line-numbers
           ('relative nil)
           (_ 'relative))))
+  #+END_SRC
+
+  #+BEGIN_SRC elisp
+    (defun my:toggle-transparency ()
+      (interactive)
+      (let ((transparency 95)
+            (opacity 100)
+            (old-alpha (frame-parameter nil 'alpha)))
+        (if (and (numberp old-alpha) (< old-alpha opacity))
+            (set-frame-parameter nil 'alpha opacity)
+          (set-frame-parameter nil 'alpha transparency))))
   #+END_SRC

@@ -722,7 +722,12 @@
             (remove 'eshell-handle-ansi-color
                     eshell-output-filter-functions))
       (general-def eshell-mode-map
-        "<tab>" 'completion-at-point))
+        "<tab>" 'completion-at-point)
+      (general-def 'normal eshell-mode-map
+        "0" 'eshell-bol
+        "^" 'eshell-bol
+        "gk" 'eshell-previous-prompt
+        "gj" 'eshell-next-prompt))
 
     (defun my:shortened-path (path max-len)
       "Return a modified version of `path', replacing some components

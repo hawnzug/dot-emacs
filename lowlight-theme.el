@@ -85,8 +85,8 @@
    'lowlight
    ;; `(default ((t (:background ,color-bg :foreground ,color-fg :font "Sarasa Term SC-14"))))
    `(default ((t (:background ,color-bg :foreground ,color-fg :font "Iosevka Term Slab-12"))))
-   `(fringe ((t (:foreground ,indigo-500 :background ,color-bg))))
-   `(window-divider ((t (:foreground ,deep-purple-500 :background ,color-bg))))
+   `(fringe ((t (:foreground ,indigo-500))))
+   `(window-divider ((t (:foreground ,gray-500 :background ,gray-500))))
    `(line-number ((t (:foreground ,gray-500))))
    `(region ((t (:background ,light-blue-100))))
    `(highlight ((t (:background ,yellow-500))))
@@ -96,11 +96,11 @@
    `(show-paren-mismatch ((t (:background ,red-700))))
    `(trailing-whitespace ((t (:background ,red-700))))
 
-   `(hl-line ((t (:background "#e7e7e7"))))
-   `(line-number-current-line ((t (:background "#e7e7e7"))))
+   `(hl-line ((t (:background ,gray-300))))
+   `(line-number-current-line ((t (:background ,color-bg))))
 
-   `(mode-line ((t (:foreground ,color-fg :background ,deep-purple-500))))
-   `(mode-line-inactive ((t (:inherit mode-line :background ,deep-purple-200))))
+   `(mode-line ((t (:foreground ,gray-800 :background ,gray-300 :overline ,gray-500 :underline ,gray-500 :font "Sarasa Term SC-12"))))
+   `(mode-line-inactive ((t (:foreground ,gray-500 :background ,gray-300 :overline ,gray-500 :underline ,gray-500 :font "Sarasa Term SC-12"))))
 
    `(font-lock-type-face ((t (:foreground ,color-fg))))
    `(font-lock-builtin-face ((t (:foreground ,indigo-500))))
@@ -116,7 +116,8 @@
    `(ivy-minibuffer-match-face-3 ((t (:background ,yellow-500))))
    `(ivy-minibuffer-match-face-4 ((t (:background ,yellow-500))))
 
-   `(ivy-posframe-border ((t (:background ,deep-purple-500))))
+   `(ivy-posframe ((t (:background "#EBEBEB"))))
+   `(ivy-posframe-border ((t (:background ,gray-500))))
 
    `(minibuffer-prompt ((t (:foreground ,indigo-800 :weight bold))))
 

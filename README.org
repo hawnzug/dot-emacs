@@ -1,4 +1,4 @@
-#+PROPERTY: header-args:elisp :tangle config.el
+#+PROPERTY: header-args:elisp :tangle config.el :results output silent
 * Contents
   :PROPERTIES:
   :TOC:      this
@@ -108,6 +108,11 @@
     (setq-default fill-column 90)
   #+END_SRC
 
+  Use straight single quote in help and messages.
+  #+BEGIN_SRC elisp
+    (setq text-quoting-style 'straight)
+  #+END_SRC
+
   y or n.
   #+BEGIN_SRC elisp
     (defalias 'yes-or-no-p 'y-or-n-p)
@@ -129,6 +134,10 @@
   Avoid crash when open image in Emacs.
   #+BEGIN_SRC elisp
     (setenv "MAGICK_OCL_DEVICE" "OFF")
+  #+END_SRC
+
+  #+BEGIN_SRC elisp
+    (setq password-cache-expiry 1200)
   #+END_SRC
 * use-package
   #+BEGIN_SRC elisp
@@ -360,6 +369,13 @@
   and maybe the current buffer name. But a pretty mode line does please me to some extent,
   and it makes my emacs seem more modern, so I keep it.
 
+  #+BEGIN_SRC elisp
+    (use-package moody
+      :ensure t
+      :config
+      (setq x-underline-at-descent-line t)
+      (setq moody-mode-line-height 30))
+  #+END_SRC
   Here are two aux functions to add foreground color to text and remove icon shift.
   #+BEGIN_SRC elisp
     (defun my:add-face-string (s face)
@@ -380,8 +396,7 @@
     (setq-default
      mode-line-format
      (list
-      "  "
-      (my:add-face-string "%04l,%02C" '(:foreground "#eeeeee"))
+      "%04l,%02C"
       "  "
       '(:eval (my:eyebrowse-mode-line))
       "  "
@@ -389,7 +404,7 @@
       "  "
       <<mode-line-buffer-name>>
       "  "
-      '(:eval (my:add-face-string (my:battery-mode-line) '(:foreground "#eeeeee")))
+      '(:eval (my:battery-mode-line))
       "  "
       <<mode-line-vc-mode>>
       ))
@@ -398,12 +413,10 @@
   #+NAME: mode-line-datetime
   #+BEGIN_SRC elisp :tangle no
     '(:eval
-      (my:add-face-string
-       (if (and (featurep 'org) (org-clocking-p))
-           (concat (format-time-string "%H:%M ")
-                   org-mode-line-string)
-         (format-time-string "%Y-%m-%d %H:%M"))
-       '(:foreground "#eeeeee")))
+      (if (and (featurep 'org) (org-clocking-p))
+          (concat (format-time-string "%H:%M ")
+                  org-mode-line-string)
+        (format-time-string "%m-%d %H:%M")))
   #+END_SRC
 
   #+NAME: mode-line-buffer-name
@@ -601,7 +614,10 @@
       :config
       (org-alert-enable))
 
-    (use-package org-make-toc :ensure t)
+    (use-package org-make-toc
+      :ensure t
+      :after org
+      :defer 5)
 
     (use-package org-super-agenda
       :ensure t
@@ -772,6 +788,7 @@
 * dired
   #+BEGIN_SRC elisp
     (use-package dired
+      :hook (dired-mode . hl-line-mode)
       :config
       (setq dired-recursive-copies t)
       (setq dired-recursive-deletes t)
@@ -801,7 +818,7 @@
         :hook (dired-mode . all-the-icons-dired-mode))
       (use-package dired-narrow :ensure t))
   #+END_SRC
-  
+
   Keybindings
   #+NAME: general-dired
   #+BEGIN_SRC elisp :tangle no
@@ -867,6 +884,11 @@
        :config
        (setq ediff-split-window-function 'split-window-horizontally)
        (setq ediff-window-setup-function 'ediff-setup-windows-plain))
+   #+END_SRC
+** emmet
+   #+BEGIN_SRC elisp
+     (use-package emmet-mode
+       :ensure t)
    #+END_SRC
 ** evil
    #+BEGIN_SRC elisp
@@ -995,7 +1017,7 @@
        :config
        (setq ivy-height 20)
        (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-       (setq ivy-posframe-border-width 3)
+       (setq ivy-posframe-border-width 1)
        (setq ivy-posframe-parameters
              '((left-fringe . 8)
                (right-fringe . 8)))
@@ -1025,14 +1047,6 @@
        :ensure t
        :defer 5)
    #+END_SRC
-** moody
-   #+BEGIN_SRC elisp
-     (use-package moody
-       :ensure t
-       :config
-       (setq x-underline-at-descent-line t)
-       (setq moody-mode-line-height 26))
-   #+END_SRC
 ** projectile
    #+BEGIN_SRC elisp
     (use-package projectile
@@ -1053,6 +1067,11 @@
 ** symbol-overlay
    #+BEGIN_SRC elisp
      (use-package symbol-overlay
+       :ensure t)
+   #+END_SRC
+** web-mode
+   #+BEGIN_SRC elisp
+     (use-package web-mode
        :ensure t)
    #+END_SRC
 ** which-key

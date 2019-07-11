@@ -131,6 +131,9 @@
    `(magit-diff-removed ((t (:foreground ,red-600 :background ,red-50))))
    `(magit-diff-removed-highlight ((t (:foreground ,red-700 :background ,red-100))))
 
+   `(emms-playlist-track-face ((t (:foreground ,gray-500))))
+   `(emms-playlist-selected-face ((t (:foreground ,color-fg :background ,gray-300))))
+
    `(outline-1 ((t (:foreground ,color-fg))))
    `(outline-2 ((t (:foreground ,color-fg))))
    `(outline-3 ((t (:foreground ,color-fg))))

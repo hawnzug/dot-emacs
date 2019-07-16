@@ -727,6 +727,37 @@
       "j" 'org-agenda-next-line
       "k" 'org-agenda-previous-line)
   #+END_SRC
+
+  #+BEGIN_SRC elisp
+    (defun make-org-capture-frame ()
+      "Create a new frame and run org-capture."
+      (interactive)
+      (defun my:delete-other-windows (&rest args)
+        (setq-local mode-line-format nil)
+        (delete-other-windows))
+      (advice-add 'org-switch-to-buffer-other-window :after
+                  #'my:delete-other-windows)
+      (defun my:capture-after ()
+        (advice-remove 'org-switch-to-buffer-other-window
+                       #'my:delete-other-windows)
+        (delete-frame)
+        (remove-hook 'org-capture-after-finalize-hook #'my:capture-after)
+        (fmakunbound 'my:delete-other-windows)
+        (fmakunbound 'my:capture-after))
+      (add-hook 'org-capture-after-finalize-hook #'my:capture-after)
+      (condition-case nil
+          (org-capture)
+        ((user-error error) (my:capture-after))))
+  #+END_SRC
+
+  #+BEGIN_SRC elisp
+    (defun make-org-agenda-frame ()
+      "Create a new frame and run org-agenda."
+      (interactive)
+      (org-agenda-list)
+      (setq-local mode-line-format nil)
+      (delete-other-windows))
+  #+END_SRC
 * eshell
   #+BEGIN_SRC elisp
     (defun my:eshell-complete ()

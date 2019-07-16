@@ -165,6 +165,18 @@
       (package-install 'use-package))
     (eval-when-compile (require 'use-package))
   #+END_SRC
+* all-the-icons
+  #+BEGIN_SRC elisp
+    (use-package all-the-icons
+      :ensure t
+      :config
+      (add-to-list 'all-the-icons-mode-icon-alist
+                   '(latex-mode all-the-icons-fileicon "tex" :face all-the-icons-lred))
+      (add-to-list 'all-the-icons-icon-alist
+                   '("\\.v" all-the-icons-fileicon "coq" :face all-the-icons-red))
+      (add-to-list 'all-the-icons-mode-icon-alist
+                   '(coq-mode all-the-icons-fileicon "coq" :face all-the-icons-red)))
+  #+END_SRC
 * general.el
   #+BEGIN_SRC elisp :noweb no-export
     (use-package general
@@ -274,132 +286,115 @@
               :background-color "#EBEBEB"
               :left-fringe 15
               :right-fringe 15
-              :poshandler posframe-poshandler-frame-center))
-      <<hydra-buffer>>
-      <<hydra-projectile>>
-      <<hydra-eyebrowse>>
-      <<hydra-help>>
-      <<hydra-org-clock>>
-      )
+              :poshandler posframe-poshandler-frame-center)))
   #+END_SRC
+** hydra-window
+   #+BEGIN_SRC elisp
+     (defhydra hydra-window
+       (:color pink :hint nil)
+       (concat
+        "            "
+        (all-the-icons-material "apps" :height 2 :v-adjust -0.3)
+        " Window Management"
+        "
 
-  hydra-window
-  #+BEGIN_SRC elisp
-    (defhydra hydra-window
-      (:color pink :hint nil)
-      (concat
-       "            "
-       (all-the-icons-material "apps" :height 2 :v-adjust -0.3)
-       " Window Management"
-       "
+     ^Move^         ^Swap^         ^Size^         ^Action^
+     ─────────────────────────────────────────────────
+     _j_: down      _H_: left      _+_: + h       _s_: split
+     _k_: up        _L_: right     _-_: - h       _v_: vsplit
+     _h_: left      _J_: bottom    _>_: + w       _d_: delete
+     _l_: right     _K_: top       _<_: - w       _o_: only
+     _n_: next      ^ ^            _=_: equal     _q_: quit
 
-    ^Move^         ^Swap^         ^Size^         ^Action^
-    ─────────────────────────────────────────────────
-    _j_: down      _H_: left      _+_: + h       _s_: split
-    _k_: up        _L_: right     _-_: - h       _v_: vsplit
-    _h_: left      _J_: bottom    _>_: + w       _d_: delete
-    _l_: right     _K_: top       _<_: - w       _o_: only
-    _n_: next      ^ ^            _=_: equal     _q_: quit
-
-    "
-       )
-      ("j" evil-window-down)
-      ("k" evil-window-up)
-      ("h" evil-window-left)
-      ("l" evil-window-right)
-      ("n" evil-window-next :color blue)
-      ("H" evil-window-move-far-left)
-      ("L" evil-window-move-far-right)
-      ("J" evil-window-move-very-bottom)
-      ("K" evil-window-move-very-top)
-      ("+" evil-window-increase-height)
-      ("-" evil-window-decrease-height)
-      (">" evil-window-increase-width)
-      ("<" evil-window-decrease-width)
-      ("=" evil-balance-window)
-      ("s" evil-window-split)
-      ("v" evil-window-vsplit)
-      ("d" evil-window-delete :color blue)
-      ("o" delete-other-windows :color blue)
-      ("q" nil :color blue))
-  #+END_SRC
-
-  hydra-buffer
-  #+NAME: hydra-buffer
-  #+BEGIN_SRC elisp :tangle no
-    (defhydra hydra-buffer
-      (:color red :hint nil)
-      "buffer"
-      ("j" evil-next-buffer "next")
-      ("k" evil-prev-buffer "prev")
-      ("d" evil-delete-buffer "delete" :color blue)
-      ("b" ivy-switch-buffer "switch" :color blue)
-      ("q" nil "cancel" :color blue))
-  #+END_SRC
-
-  hydra-projectile
-  #+NAME: hydra-projectile
-  #+BEGIN_SRC elisp :tangle no
-    (defhydra hydra-projectile
-      (:color blue :hint nil)
-      "projectile"
-      ("p" projectile-switch-project "project" :column "Switch")
-      ("b" projectile-switch-to-buffer "buffer")
-      ("f" projectile-find-file "file")
-      ("d" projectile-dired "dired")
-      ("e" projectile-run-eshell "eshell")
-      ("c" projectile-compile-project "compile" :column "Action")
-      ("t" projectile-test-project "test")
-      ("r" projectile-run-project "run")
-      ("l" projectile-cleanup-known-projects "clean")
-      ("x" projectile-remove-known-project "remove")
-      ("s" projectile-save-project-buffers "save"))
-  #+END_SRC
-
-  hydra-eyebrowse
-  #+NAME: hydra-eyebrowse
-  #+BEGIN_SRC elisp :tangle no
-    (defhydra hydra-eyebrowse
-      (:color blue :hint nil)
-      "eyebrowse"
-      ("l" eyebrowse-last-window-config "last" :column "Switch")
-      ("j" eyebrowse-next-window-config "next" :color red)
-      ("k" eyebrowse-prev-window-config "prev" :color red)
-      ("s" eyebrowse-switch-to-window-config "switch")
-      ("d" eyebrowse-close-window-config "delete" :column "Modify")
-      ("c" eyebrowse-create-window-config "last")
-      ("r" eyebrowse-rename-window-config "rename"))
-  #+END_SRC
-
-  hydra-help
-  #+NAME: hydra-help
-  #+BEGIN_SRC elisp :tangle no
-    (defhydra hydra-help
-      (:color blue :hint nil)
-      "help"
-      ("f" describe-function "function")
-      ("F" counsel-describe-face "face")
-      ("v" describe-variable "variable")
-      ("c" describe-char "char")
-      ("m" describe-mode "mode")
-      ("i" info "info")
-      ("k" describe-key "key")
-      ("b" counsel-descbinds "binding"))
-  #+END_SRC
-
-  hydra-org-clock
-  #+NAME: hydra-org-clock
-  #+BEGIN_SRC elisp :tangle no
-    (defhydra hydra-org-clock
-      (:color blue :hint nil)
-      "org clock"
-      ("g" org-clock-goto "goto")
-      ("i" org-clock-in "in")
-      ("I" org-clock-in-last "in last")
-      ("o" org-clock-out "out")
-      ("c" org-clock-cancel "cancel")
-      ("r" org-clock-report "report"))
-  #+END_SRC
+     "
+        )
+       ("j" evil-window-down)
+       ("k" evil-window-up)
+       ("h" evil-window-left)
+       ("l" evil-window-right)
+       ("n" evil-window-next :color blue)
+       ("H" evil-window-move-far-left)
+       ("L" evil-window-move-far-right)
+       ("J" evil-window-move-very-bottom)
+       ("K" evil-window-move-very-top)
+       ("+" evil-window-increase-height)
+       ("-" evil-window-decrease-height)
+       (">" evil-window-increase-width)
+       ("<" evil-window-decrease-width)
+       ("=" evil-balance-window)
+       ("s" evil-window-split)
+       ("v" evil-window-vsplit)
+       ("d" evil-window-delete :color blue)
+       ("o" delete-other-windows :color blue)
+       ("q" nil :color blue))
+   #+END_SRC
+** hydra-buffer
+   #+BEGIN_SRC elisp
+     (defhydra hydra-buffer
+       (:color red :hint nil)
+       "buffer"
+       ("j" evil-next-buffer "next")
+       ("k" evil-prev-buffer "prev")
+       ("d" evil-delete-buffer "delete" :color blue)
+       ("b" ivy-switch-buffer "switch" :color blue)
+       ("q" nil "cancel" :color blue))
+   #+END_SRC
+** hydra-projectile
+   #+BEGIN_SRC elisp
+     (defhydra hydra-projectile
+       (:color blue :hint nil)
+       "projectile"
+       ("p" projectile-switch-project "project" :column "Switch")
+       ("b" projectile-switch-to-buffer "buffer")
+       ("f" projectile-find-file "file")
+       ("d" projectile-dired "dired")
+       ("e" projectile-run-eshell "eshell")
+       ("c" projectile-compile-project "compile" :column "Action")
+       ("t" projectile-test-project "test")
+       ("r" projectile-run-project "run")
+       ("l" projectile-cleanup-known-projects "clean")
+       ("x" projectile-remove-known-project "remove")
+       ("s" projectile-save-project-buffers "save"))
+   #+END_SRC
+** hydra-eyebrowse
+   #+BEGIN_SRC elisp
+     (defhydra hydra-eyebrowse
+       (:color blue :hint nil)
+       "eyebrowse"
+       ("l" eyebrowse-last-window-config "last" :column "Switch")
+       ("j" eyebrowse-next-window-config "next" :color red)
+       ("k" eyebrowse-prev-window-config "prev" :color red)
+       ("s" eyebrowse-switch-to-window-config "switch")
+       ("d" eyebrowse-close-window-config "delete" :column "Modify")
+       ("c" eyebrowse-create-window-config "last")
+       ("r" eyebrowse-rename-window-config "rename"))
+   #+END_SRC
+** hydra-help
+   #+BEGIN_SRC elisp
+     (defhydra hydra-help
+       (:color blue :hint nil)
+       "help"
+       ("f" describe-function "function")
+       ("F" counsel-describe-face "face")
+       ("v" describe-variable "variable")
+       ("c" describe-char "char")
+       ("m" describe-mode "mode")
+       ("i" info "info")
+       ("k" describe-key "key")
+       ("b" counsel-descbinds "binding"))
+   #+END_SRC
+** hydra-org-clock
+   #+BEGIN_SRC elisp
+     (defhydra hydra-org-clock
+       (:color blue :hint nil)
+       "org clock"
+       ("g" org-clock-goto "goto")
+       ("i" org-clock-in "in")
+       ("I" org-clock-in-last "in last")
+       ("o" org-clock-out "out")
+       ("c" org-clock-cancel "cancel")
+       ("r" org-clock-report "report"))
+   #+END_SRC
 * mode line
   Honestly mode line is just an eye candy for me. The only useful part is column number,
   and maybe the current buffer name. But a pretty mode line does please me to some extent,
@@ -930,18 +925,6 @@
        :ensure t
        :config
        (setq alert-default-style 'libnotify))
-   #+END_SRC
-** all-the-icons
-   #+BEGIN_SRC elisp
-     (use-package all-the-icons
-       :ensure t
-       :config
-       (add-to-list 'all-the-icons-mode-icon-alist
-                    '(latex-mode all-the-icons-fileicon "tex" :face all-the-icons-lred))
-       (add-to-list 'all-the-icons-icon-alist
-                    '("\\.v" all-the-icons-fileicon "coq" :face all-the-icons-red))
-       (add-to-list 'all-the-icons-mode-icon-alist
-                    '(coq-mode all-the-icons-fileicon "coq" :face all-the-icons-red)))
    #+END_SRC
 ** battery
    #+BEGIN_SRC elisp

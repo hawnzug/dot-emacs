@@ -267,7 +267,14 @@
     (use-package hydra
       :ensure t
       :config
-      <<hydra-window>>
+      (setq hydra-hint-display-type 'posframe)
+      (setq hydra-posframe-show-params
+            '(:internal-border-width 1
+              :internal-border-color "#9E9E9E"
+              :background-color "#EBEBEB"
+              :left-fringe 15
+              :right-fringe 15
+              :poshandler posframe-poshandler-frame-center))
       <<hydra-buffer>>
       <<hydra-projectile>>
       <<hydra-eyebrowse>>
@@ -277,30 +284,44 @@
   #+END_SRC
 
   hydra-window
-  #+NAME: hydra-window
-  #+BEGIN_SRC elisp :tangle no
+  #+BEGIN_SRC elisp
     (defhydra hydra-window
-      (:color red :hint nil)
-      "window"
-      ("j" evil-window-down "down" :column "Move")
-      ("k" evil-window-up "up")
-      ("h" evil-window-left "left")
-      ("l" evil-window-right "right")
-      ("n" evil-window-next "next" :color blue)
-      ("H" evil-window-move-far-left "left" :column "Swap")
-      ("L" evil-window-move-far-right "right")
-      ("J" evil-window-move-very-bottom "bottom")
-      ("K" evil-window-move-very-top "top")
-      ("+" evil-window-increase-height "+ h" :column "Size")
-      ("-" evil-window-decrease-height "- h")
-      (">" evil-window-increase-width "+ w")
-      ("<" evil-window-decrease-width "- w")
-      ("=" evil-balance-window "balance")
-      ("d" evil-window-delete "delete" :color blue :column "Operate")
-      ("s" evil-window-split "split")
-      ("v" evil-window-vsplit "vsplit")
-      ("o" delete-other-windows "only" :color blue)
-      ("q" nil "cancel" :color blue))
+      (:color pink :hint nil)
+      (concat
+       "            "
+       (all-the-icons-material "apps" :height 2 :v-adjust -0.3)
+       " Window Management"
+       "
+
+    ^Move^         ^Swap^         ^Size^         ^Action^
+    ─────────────────────────────────────────────────
+    _j_: down      _H_: left      _+_: + h       _s_: split
+    _k_: up        _L_: right     _-_: - h       _v_: vsplit
+    _h_: left      _J_: bottom    _>_: + w       _d_: delete
+    _l_: right     _K_: top       _<_: - w       _o_: only
+    _n_: next      ^ ^            _=_: equal     _q_: quit
+
+    "
+       )
+      ("j" evil-window-down)
+      ("k" evil-window-up)
+      ("h" evil-window-left)
+      ("l" evil-window-right)
+      ("n" evil-window-next :color blue)
+      ("H" evil-window-move-far-left)
+      ("L" evil-window-move-far-right)
+      ("J" evil-window-move-very-bottom)
+      ("K" evil-window-move-very-top)
+      ("+" evil-window-increase-height)
+      ("-" evil-window-decrease-height)
+      (">" evil-window-increase-width)
+      ("<" evil-window-decrease-width)
+      ("=" evil-balance-window)
+      ("s" evil-window-split)
+      ("v" evil-window-vsplit)
+      ("d" evil-window-delete :color blue)
+      ("o" delete-other-windows :color blue)
+      ("q" nil :color blue))
   #+END_SRC
 
   hydra-buffer

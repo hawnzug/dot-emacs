@@ -12,6 +12,7 @@
   -  [[#org][org]]
   -  [[#eshell][eshell]]
   -  [[#dired][dired]]
+  -  [[#emms][EMMS]]
   -  [[#packages][packages]]
     -  [[#academic-phrases][academic-phrases]]
     -  [[#alert][alert]]
@@ -19,6 +20,7 @@
     -  [[#battery][battery]]
     -  [[#company][company]]
     -  [[#ediff][ediff]]
+    -  [[#emmet][emmet]]
     -  [[#evil][evil]]
     -  [[#exec-path-from-shell][exec-path-from-shell]]
     -  [[#eyebrowse][eyebrowse]]
@@ -28,20 +30,23 @@
     -  [[#hl-line-mode][hl-line-mode]]
     -  [[#htmlize][htmlize]]
     -  [[#ibuffer][ibuffer]]
+    -  [[#info][info]]
     -  [[#ivy][ivy]]
     -  [[#keyfreq][keyfreq]]
     -  [[#lsp][lsp]]
     -  [[#magit][magit]]
-    -  [[#moody][moody]]
     -  [[#projectile][projectile]]
     -  [[#rainbow-delimiters][rainbow-delimiters]]
+    -  [[#sublimity][sublimity]]
     -  [[#symbol-overlay][symbol-overlay]]
+    -  [[#web-mode][web-mode]]
     -  [[#which-key][which-key]]
     -  [[#xterm-color][xterm-color]]
   -  [[#languages][languages]]
     -  [[#coq][Coq]]
     -  [[#haskell][Haskell]]
     -  [[#agda][Agda]]
+    -  [[#ocaml][Ocaml]]
     -  [[#cubicaltt][Cubicaltt]]
     -  [[#c][C]]
     -  [[#lua][Lua]]
@@ -151,10 +156,10 @@
 * use-package
   #+BEGIN_SRC elisp
     (require 'package)
-    (setq package-enable-at-startup nil)
+    ;; (setq package-enable-at-startup nil)
     (setq package-archives '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
                              ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
-    (package-initialize)
+    ;; (package-initialize)
     (unless (package-installed-p 'use-package)
       (package-refresh-contents)
       (package-install 'use-package))
@@ -456,8 +461,7 @@
       :defer 2
       :hook
       ((org-babel-after-execute . org-redisplay-inline-images)
-       (org-agenda-finalize . my:org-agenda-time-grid-spacing)
-       (org-capture-mode . evil-insert-state))
+       (org-agenda-finalize . my:org-agenda-time-grid-spacing))
       :config
       <<org-kill-temp-fontify-buffer>>
       <<org-capture-templates>>
@@ -617,6 +621,8 @@
 
   Other org packages
   #+BEGIN_SRC elisp
+    (use-package org-protocol)
+
     (use-package org-alert
       :disabled t
       :after (org alert)
@@ -651,7 +657,9 @@
       :config
       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
-    (use-package org-tree-slide :ensure t)
+    (use-package org-tree-slide
+      :ensure t
+      :after org)
   #+END_SRC
 
   Keybindings
@@ -681,6 +689,8 @@
       "r" 'my:org-refile-to-diary
       "b" 'my:org-search-src-block-name
       "g" 'counsel-org-goto
+      "q" 'org-babel-tangle
+      "x" 'org-export-dispatch
       "s" 'org-schedule
       "d" 'org-deadline
       "e" 'org-edit-src-code
@@ -850,6 +860,7 @@
   #+BEGIN_SRC elisp
     (use-package emms
       :ensure t
+      :defer t
       :config
       (emms-all)
       (emms-default-players)
@@ -1070,7 +1081,18 @@
    #+BEGIN_SRC elisp
      (use-package magit
        :ensure t
+       :hook (git-commit-mode . evil-insert-state)
        :defer 5)
+   #+END_SRC
+
+   #+BEGIN_SRC elisp
+     (general-define-key
+      :definer 'minor-mode
+      :states '(normal visual)
+      :keymaps 'git-commit-mode
+      :prefix ";"
+      ";" 'with-editor-finish
+      "k" 'with-editor-cancel)
    #+END_SRC
 ** projectile
    #+BEGIN_SRC elisp
@@ -1209,7 +1231,7 @@
    #+END_SRC
 
    #+BEGIN_SRC elisp
-     (use-package caml-mode
+     (use-package caml
        :ensure t
        :hook
        (caml-mode . merlin-mode))

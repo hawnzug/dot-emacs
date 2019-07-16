@@ -304,10 +304,9 @@
      _k_: up        _L_: right     _-_: - h       _v_: vsplit
      _h_: left      _J_: bottom    _>_: + w       _d_: delete
      _l_: right     _K_: top       _<_: - w       _o_: only
-     _n_: next      ^ ^            _=_: equal     _q_: quit
+     _n_: next      ^ ^            _=_: equal
 
-     "
-        )
+     ")
        ("j" evil-window-down)
        ("k" evil-window-up)
        ("h" evil-window-left)
@@ -326,40 +325,72 @@
        ("v" evil-window-vsplit)
        ("d" evil-window-delete :color blue)
        ("o" delete-other-windows :color blue)
-       ("q" nil :color blue))
+       ("q" nil :color blue)
+       ("<escape>" nil :color blue))
    #+END_SRC
 ** hydra-buffer
    #+BEGIN_SRC elisp
      (defhydra hydra-buffer
-       (:color red :hint nil)
-       "buffer"
-       ("j" evil-next-buffer "next")
-       ("k" evil-prev-buffer "prev")
-       ("d" evil-delete-buffer "delete" :color blue)
-       ("b" ivy-switch-buffer "switch" :color blue)
-       ("q" nil "cancel" :color blue))
+       (:color teal :hint nil)
+       (concat
+        (all-the-icons-faicon "clone" :height 2 :v-adjust -0.2)
+        " Buffer"
+        "
+
+     ^Action^
+     ─────────────
+     _j_: next
+     _k_: previous
+     _d_: delete
+     _b_: switch
+
+     ")
+       ("j" evil-next-buffer :color red)
+       ("k" evil-prev-buffer :color red)
+       ("d" evil-delete-buffer)
+       ("b" ivy-switch-buffer)
+       ("q" nil)
+       ("<escape>" nil))
    #+END_SRC
 ** hydra-projectile
    #+BEGIN_SRC elisp
      (defhydra hydra-projectile
-       (:color blue :hint nil)
-       "projectile"
-       ("p" projectile-switch-project "project" :column "Switch")
-       ("b" projectile-switch-to-buffer "buffer")
-       ("f" projectile-find-file "file")
-       ("d" projectile-dired "dired")
-       ("e" projectile-run-eshell "eshell")
-       ("c" projectile-compile-project "compile" :column "Action")
-       ("t" projectile-test-project "test")
-       ("r" projectile-run-project "run")
-       ("l" projectile-cleanup-known-projects "clean")
-       ("x" projectile-remove-known-project "remove")
-       ("s" projectile-save-project-buffers "save"))
+       (:color teal :hint nil)
+       (concat
+        "       "
+        (all-the-icons-material "dashboard" :height 2 :v-adjust -0.3)
+        " Projectile"
+        "
+
+     ^Switch^            ^Action^
+     ────────────────────────────────
+     _p_: project        _c_: compile
+     _b_: buffer         _t_: test
+     _f_: file           _r_: run
+     _d_: dired          _l_: clean
+     _e_: eshell         _x_: remove
+     ^ ^                 _s_: save
+
+     ")
+       ("p" projectile-switch-project)
+       ("b" projectile-switch-to-buffer)
+       ("f" projectile-find-file)
+       ("d" projectile-dired)
+       ("e" projectile-run-eshell)
+       ("c" projectile-compile-project)
+       ("t" projectile-test-project)
+       ("r" projectile-run-project)
+       ("l" projectile-cleanup-known-projects)
+       ("x" projectile-remove-known-project)
+       ("s" projectile-save-project-buffers)
+       ("q" nil)
+       ("<escape>" nil)
+       )
    #+END_SRC
 ** hydra-eyebrowse
    #+BEGIN_SRC elisp
      (defhydra hydra-eyebrowse
-       (:color blue :hint nil)
+       (:color teal :hint nil)
        "eyebrowse"
        ("l" eyebrowse-last-window-config "last" :column "Switch")
        ("j" eyebrowse-next-window-config "next" :color red)
@@ -372,16 +403,36 @@
 ** hydra-help
    #+BEGIN_SRC elisp
      (defhydra hydra-help
-       (:color blue :hint nil)
-       "help"
-       ("f" describe-function "function")
-       ("F" counsel-describe-face "face")
-       ("v" describe-variable "variable")
-       ("c" describe-char "char")
-       ("m" describe-mode "mode")
-       ("i" info "info")
-       ("k" describe-key "key")
-       ("b" counsel-descbinds "binding"))
+       (:color teal :hint nil)
+       (concat
+        "      "
+        (all-the-icons-material "help_outline" :height 2 :v-adjust -0.3)
+        " Help"
+        "
+
+     ^Describe^         ^Info^
+     ──────────────────────────
+     _f_: function      _i_: info
+     _F_: face          _n_: news
+     _m_: mode          _w_: woman
+     _v_: variable
+     _b_: binding
+     _k_: key
+     _c_: char
+
+     ")
+       ("f" describe-function)
+       ("v" describe-variable)
+       ("m" describe-mode)
+       ("F" counsel-describe-face)
+       ("b" counsel-descbinds)
+       ("k" describe-key)
+       ("c" describe-char)
+       ("i" info)
+       ("n" view-emacs-news)
+       ("w" woman)
+       ("q" nil)
+       ("<escape>" nil))
    #+END_SRC
 ** hydra-org-clock
    #+BEGIN_SRC elisp

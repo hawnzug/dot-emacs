@@ -183,13 +183,6 @@
       :ensure t
       :config
       (general-evil-setup)
-      <<general-minibuffer-escape>>
-      <<general-global-leader>>
-      <<general-space-leader>>
-      <<general-dired>>
-      <<general-org>>
-      <<general-coq>>
-      <<general-eyebrowse>>
       (general-def 'emacs ibuffer-mode-map
         "M-j" 'ibuffer-forward-filter-group
         "M-k" 'ibuffer-backward-filter-group
@@ -211,8 +204,7 @@
   #+END_SRC
 
   Use Esc to quit minibuffer, which is previously C-g.
-  #+NAME: general-minibuffer-escape
-  #+BEGIN_SRC elisp :tangle no
+  #+BEGIN_SRC elisp
     (general-def '(minibuffer-local-map
                    minibuffer-local-ns-map
                    minibuffer-local-completion-map
@@ -224,16 +216,10 @@
   #+END_SRC
 
   Use comma as the global leader key. It is supported in any mode and evil state.
-  #+NAME: general-global-leader
-  #+BEGIN_SRC elisp :tangle no
-    (general-iemap
-      "," (general-key-dispatch 'self-insert-command
-            :timeout 0.30
-            :inherit-keymap my:prefix-map))
-    (general-mmap
-      :prefix ","
+  #+BEGIN_SRC elisp
+    (general-def
+      :prefix "M-,"
       :keymaps 'override
-      :prefix-command 'my:prefix-map
       "f" 'counsel-find-file
       "d" 'dired
       "t" 'my:new-eshell
@@ -261,8 +247,7 @@
   #+END_SRC
 
   Use space as the leader key for those keybindings which are useful only in normal mode.
-  #+NAME: general-space-leader
-  #+BEGIN_SRC elisp :tangle no
+  #+BEGIN_SRC elisp
     (general-mmap
       :prefix "SPC"
       "" nil
@@ -732,8 +717,7 @@
   #+END_SRC
 
   Keybindings
-  #+NAME: general-org
-  #+BEGIN_SRC elisp :tangle no
+  #+BEGIN_SRC elisp
     (general-nmap org-mode-map
       "gh" 'outline-up-heading
       "gj" 'org-forward-heading-same-level
@@ -751,10 +735,8 @@
       "M-J" 'org-shiftmetadown
       "M-K" 'org-shiftmetaup
       "M-L" 'org-shiftmetaright)
-    (general-mmap org-mode-map
-      :prefix ";"
-      :prefix-command 'my:org-mode-prefix-command
-      :prefix-map 'my:org-mode-prefix-map
+    (general-def org-mode-map
+      :prefix "M-;"
       "r" 'my:org-refile-to-diary
       "b" 'my:org-search-src-block-name
       "g" 'counsel-org-goto
@@ -769,24 +751,18 @@
       "i" 'org-toggle-inline-images
       "t" 'org-toggle-latex-fragment
       "o" 'org-open-at-point
-      ";" 'org-ctrl-c-ctrl-c
+      "M-;" 'org-ctrl-c-ctrl-c
       "k" 'hydra-org-clock/body)
-    (general-iemap org-mode-map
-     ";" (general-key-dispatch 'self-insert-command
-           :timeout 0.20
-           :inherit-keymap my:org-mode-prefix-map))
     (general-define-key
      :definer 'minor-mode
-     :states '(normal visual)
      :keymaps 'org-src-mode
-     :prefix ";"
+     :prefix "M-;"
      "e" 'org-edit-src-exit
      "k" 'org-edit-src-abort)
     (general-define-key
      :definer 'minor-mode
-     :states '(normal visual)
      :keymaps 'org-capture-mode
-     :prefix ";"
+     :prefix "M-;"
      "e" 'org-capture-finalize
      "w" 'org-capture-refile
      "k" 'org-capture-kill)
@@ -949,8 +925,7 @@
   #+END_SRC
 
   Keybindings
-  #+NAME: general-dired
-  #+BEGIN_SRC elisp :tangle no
+  #+BEGIN_SRC elisp
     (general-def 'emacs dired-mode-map
       "j" 'dired-next-line
       "k" 'dired-previous-line
@@ -1062,8 +1037,7 @@
    #+END_SRC
 
    Keybindings
-   #+NAME: general-eyebrowse
-   #+BEGIN_SRC elisp :tangle no
+   #+BEGIN_SRC elisp
      (general-def 'override
        "M-0" 'eyebrowse-switch-to-window-config-0
        "M-1" 'eyebrowse-switch-to-window-config-1
@@ -1179,9 +1153,8 @@
    #+BEGIN_SRC elisp
      (general-define-key
       :definer 'minor-mode
-      :states '(normal visual)
       :keymaps 'git-commit-mode
-      :prefix ";"
+      :prefix "M-;"
       ";" 'with-editor-finish
       "k" 'with-editor-cancel)
    #+END_SRC
@@ -1264,14 +1237,11 @@
    #+END_SRC
    
    Keybindings
-   #+NAME: general-coq
-   #+BEGIN_SRC elisp :tangle no
+   #+BEGIN_SRC elisp
      (general-def 'normal coq-mode-map
        "K" 'my:company-coq-doc-search)
      (general-mmap coq-mode-map
-       :prefix ";"
-       :prefix-command 'my:coq-mode-prefix-command
-       :prefix-map 'my:coq-mode-prefix-map
+       :prefix "M-;"
        "g" 'company-coq-proof-goto-point
        "d" 'company-coq-doc
        "e" 'proof-shell-exit
@@ -1280,10 +1250,6 @@
        "u" 'proof-undo-last-successful-command
        "s" 'proof-find-theorems
        "l" 'proof-layout-windows)
-     (general-iemap coq-mode-map
-      ";" (general-key-dispatch 'self-insert-command
-            :timeout 0.20
-            :inherit-keymap my:coq-mode-prefix-map))
    #+END_SRC
 ** Haskell
    #+BEGIN_SRC elisp

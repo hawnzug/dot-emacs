@@ -543,136 +543,6 @@
     (advice-add 'org-src-font-lock-fontify-block :after #'kill-org-src-buffers)
   #+END_SRC
 
-  Org capture templates.
-  #+NAME: org-capture-templates
-  #+BEGIN_SRC elisp :tangle no
-    (setq org-capture-templates
-          '(("t" "Todo" entry (file+headline "~/org/sjtu.org" "Inbox")
-             "* TODO %?")
-            ("w" "Water" entry (file+olp+datetree "~/org/diary.org")
-             "* water\n     :PROPERTIES:\n     :volume:   %^{PROMPT}\n     :END:"
-             :immediate-finish t)
-            ("c" "Clock" entry (file+olp+datetree "~/org/diary.org")
-             "* %^{PROMPT}\n"
-             :immediate-finish t
-             :clock-in t
-             :clock-keep t)))
-  #+END_SRC
-
-  Org agenda config.
-  #+NAME: org-agenda-config
-  #+BEGIN_SRC elisp :tangle no
-    (setq org-agenda-start-with-log-mode t)
-    (setq org-agenda-span 'day)
-    (setq org-agenda-log-mode-items '(clock))
-    (setq org-agenda-use-time-grid nil)
-    (setq org-agenda-skip-deadline-if-done t)
-    (setq org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
-    (setq org-agenda-overriding-columns-format
-          "%25ITEM %25Effort{:} %25CLOCKSUM{:}")
-  #+END_SRC
-
-  Org clock config.
-  #+NAME: org-clock-config
-  #+BEGIN_SRC elisp :tangle no
-    (org-clock-persistence-insinuate)
-    (setq org-clock-persist t)
-    (setq org-clock-in-resume t)
-    (setq org-clock-persist-query-resume nil)
-    (setq org-clock-clocktable-default-properties
-          '(:maxlevel 4 :block today :scope file :link t))
-  #+END_SRC
-
-  I'd like to keep the main org file clean and tiny, but I also want to see an accurate
-  agenda history. However archive or refile don't work for me, so I write this function.
-  It simply moves the current subtree to the diary file according to its CLOSED time.
-  #+BEGIN_SRC elisp
-    (defun my:org-refile-to-diary ()
-      "Refile a subtree to a datetree corresponding to its CLOSED time."
-      (interactive)
-      (let* ((diary-file "~/org/diary.org")
-             (datetree-date (org-entry-get nil "CLOSED" t))
-             (date (org-date-to-gregorian datetree-date)))
-        (save-window-excursion
-          (org-cut-subtree)
-          (find-file diary-file)
-          (org-datetree-find-date-create date)
-          (org-end-of-subtree t)
-          (newline)
-          (org-paste-subtree 4))))
-  #+END_SRC
-
-  I cannot remember why I wrote this function (This is one of the reasons for putting my
-  config in org mode). It might be related to previous refile function, and it seems
-  useful. So I decide not to delete it and hope I will find its usage someday.
-  #+BEGIN_SRC elisp
-    (defun my:org-datetree-find-date-create-subtree ()
-      (interactive)
-      (let ((date (org-date-to-gregorian (org-read-date))))
-       (org-datetree-find-date-create date 'subtree-at-point)))
-  #+END_SRC
-
-  Show time grid in org agenda.
-  #+BEGIN_SRC elisp
-    (defun my:org-agenda-time-grid-spacing ()
-      "Set different line spacing w.r.t. time duration."
-      (save-excursion
-        (let ((colors (list "#FFF9C4" "#FFF176" "#FFF59D" "#FFEE58"))
-              (pos (point-min))
-              (block-minutes 30)
-              duration)
-          (nconc colors colors)
-          (while (setq pos (next-single-property-change pos 'org-hd-marker))
-            (goto-char pos)
-            (when (and (not (equal pos (point-at-eol)))
-                       (setq duration
-                             (or (org-get-at-bol 'duration)
-                                 (when (equal (org-get-at-bol 'org-hd-marker) org-clock-hd-marker)
-                                   (/ (- (float-time) (float-time org-clock-start-time)) 60)))))
-              (let ((line-height (if (< duration block-minutes) 1.0
-                                   (+ 0.5 (/ duration (* 2.0 block-minutes)))))
-                    (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
-                (overlay-put ov 'face `(:background ,(car colors)))
-                (setq colors (cdr colors))
-                (overlay-put ov 'line-height line-height)
-                (overlay-put ov 'line-spacing (1- line-height))))))))
-  #+END_SRC
-
-  Collect all source block names for ivy. This function is useful when using noweb syntax
-  in source code block.
-  #+BEGIN_SRC elisp
-    (defun my:org-search-src-block-name ()
-      "Search source block name in current file"
-      (interactive)
-      (ivy-read
-       "Code block: "
-       (let (names)
-         (org-babel-map-src-blocks nil
-           (let ((name (nth 4 (org-babel-get-src-block-info))))
-             (push name names)))
-         (seq-filter #'identity names))
-       :require-match t
-       :action #'insert))
-  #+END_SRC
-
-  Org babel.
-  #+BEGIN_SRC elisp
-    (use-package ob-scheme :after org)
-    (use-package ob-python :after org)
-    (use-package ob-shell :after org)
-    (use-package ob-latex :after org)
-    (use-package ob-ipython
-      :ensure t
-      :after org
-      :config
-      (setq ob-ipython-resources-dir "~/obipy-resources/")
-      (remove-hook 'org-mode-hook 'ob-ipython-auto-configure-kernels)
-      (advice-add 'ob-babel-execute:ipython :around 'ob-ipython-auto-configure-kernels))
-    (use-package ob-metapost
-      :commands org-babel-execute:metapost
-      :load-path "~/.emacs.d/packages/ob-metapost")
-  #+END_SRC
-
   Other org packages
   #+BEGIN_SRC elisp
     (use-package org-protocol)
@@ -688,20 +558,6 @@
       :ensure t
       :after org
       :defer 5)
-
-    (use-package org-super-agenda
-      :ensure t
-      :disabled t
-      :after org
-      :config
-      (org-super-agenda-mode)
-      (setq org-super-agenda-groups
-            '((:name "Clocking"
-                     :log t
-                     :pred (lambda (item)
-                             (org-find-text-property-in-string 'time-of-day item)))
-              (:name "Others"
-                     :anything t))))
 
     (use-package org-bullets
       :ensure t
@@ -753,19 +609,75 @@
       "o" 'org-open-at-point
       "M-;" 'org-ctrl-c-ctrl-c
       "k" 'hydra-org-clock/body)
-    (general-define-key
-     :definer 'minor-mode
-     :keymaps 'org-src-mode
-     :prefix "M-;"
-     "e" 'org-edit-src-exit
-     "k" 'org-edit-src-abort)
-    (general-define-key
-     :definer 'minor-mode
-     :keymaps 'org-capture-mode
-     :prefix "M-;"
-     "e" 'org-capture-finalize
-     "w" 'org-capture-refile
-     "k" 'org-capture-kill)
+  #+END_SRC
+** org agenda
+  Org agenda config.
+  #+NAME: org-agenda-config
+  #+BEGIN_SRC elisp :tangle no
+    (setq org-agenda-start-with-log-mode t)
+    (setq org-agenda-span 'day)
+    (setq org-agenda-log-mode-items '(clock))
+    (setq org-agenda-use-time-grid nil)
+    (setq org-agenda-skip-deadline-if-done t)
+    (setq org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
+    (setq org-agenda-overriding-columns-format
+          "%25ITEM %25Effort{:} %25CLOCKSUM{:}")
+  #+END_SRC
+
+  Show time grid in org agenda.
+  #+BEGIN_SRC elisp
+    (defun my:org-agenda-time-grid-spacing ()
+      "Set different line spacing w.r.t. time duration."
+      (save-excursion
+        (let ((colors (list "#FFF9C4" "#FFF176" "#FFF59D" "#FFEE58"))
+              (pos (point-min))
+              (block-minutes 30)
+              duration)
+          (nconc colors colors)
+          (while (setq pos (next-single-property-change pos 'org-hd-marker))
+            (goto-char pos)
+            (when (and (not (equal pos (point-at-eol)))
+                       (setq duration
+                             (or (org-get-at-bol 'duration)
+                                 (when (equal (org-get-at-bol 'org-hd-marker) org-clock-hd-marker)
+                                   (/ (- (float-time) (float-time org-clock-start-time)) 60)))))
+              (let ((line-height (if (< duration block-minutes) 1.0
+                                   (+ 0.5 (/ duration (* 2.0 block-minutes)))))
+                    (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
+                (overlay-put ov 'face `(:background ,(car colors)))
+                (setq colors (cdr colors))
+                (overlay-put ov 'line-height line-height)
+                (overlay-put ov 'line-spacing (1- line-height))))))))
+  #+END_SRC
+
+  #+BEGIN_SRC elisp
+    (defun make-org-agenda-frame ()
+      "Create a new frame and run org-agenda."
+      (interactive)
+      (org-agenda-list)
+      (setq-local mode-line-format nil)
+      (delete-other-windows))
+  #+END_SRC
+  
+  Super agenda
+  #+BEGIN_SRC elisp
+    (use-package org-super-agenda
+      :ensure t
+      :disabled t
+      :after org
+      :config
+      (org-super-agenda-mode)
+      (setq org-super-agenda-groups
+            '((:name "Clocking"
+                     :log t
+                     :pred (lambda (item)
+                             (org-find-text-property-in-string 'time-of-day item)))
+              (:name "Others"
+                     :anything t))))
+  #+END_SRC
+  
+  Keybindings
+  #+BEGIN_SRC elisp
     (general-def org-agenda-mode-map
       "S" 'org-agenda-schedule
       "D" 'org-agenda-deadline
@@ -775,6 +687,22 @@
       "l" 'forward-char
       "j" 'org-agenda-next-line
       "k" 'org-agenda-previous-line)
+  #+END_SRC
+** org capture
+  Org capture templates.
+  #+NAME: org-capture-templates
+  #+BEGIN_SRC elisp :tangle no
+    (setq org-capture-templates
+          '(("t" "Todo" entry (file+headline "~/org/sjtu.org" "Inbox")
+             "* TODO %?")
+            ("w" "Water" entry (file+olp+datetree "~/org/diary.org")
+             "* water\n     :PROPERTIES:\n     :volume:   %^{PROMPT}\n     :END:"
+             :immediate-finish t)
+            ("c" "Clock" entry (file+olp+datetree "~/org/diary.org")
+             "* %^{PROMPT}\n"
+             :immediate-finish t
+             :clock-in t
+             :clock-keep t)))
   #+END_SRC
 
   #+BEGIN_SRC elisp
@@ -799,13 +727,102 @@
         ((user-error error) (my:capture-after))))
   #+END_SRC
 
+  Keybindings
   #+BEGIN_SRC elisp
-    (defun make-org-agenda-frame ()
-      "Create a new frame and run org-agenda."
+    (general-define-key
+     :definer 'minor-mode
+     :states '(motion visual normal insert emacs)
+     :keymaps 'org-capture-mode
+     :prefix "M-;"
+     "e" 'org-capture-finalize
+     "w" 'org-capture-refile
+     "k" 'org-capture-kill)
+  #+END_SRC
+** org clock
+  Org clock config.
+  #+NAME: org-clock-config
+  #+BEGIN_SRC elisp :tangle no
+    (org-clock-persistence-insinuate)
+    (setq org-clock-persist t)
+    (setq org-clock-in-resume t)
+    (setq org-clock-persist-query-resume nil)
+    (setq org-clock-clocktable-default-properties
+          '(:maxlevel 4 :block today :scope file :link t))
+  #+END_SRC
+** org babel
+  Org babel.
+  #+BEGIN_SRC elisp
+    (use-package ob-scheme :after org)
+    (use-package ob-python :after org)
+    (use-package ob-shell :after org)
+    (use-package ob-latex :after org)
+    (use-package ob-ipython
+      :ensure t
+      :after org
+      :config
+      (setq ob-ipython-resources-dir "~/obipy-resources/")
+      (remove-hook 'org-mode-hook 'ob-ipython-auto-configure-kernels)
+      (advice-add 'ob-babel-execute:ipython :around 'ob-ipython-auto-configure-kernels))
+    (use-package ob-metapost
+      :commands org-babel-execute:metapost
+      :load-path "~/.emacs.d/packages/ob-metapost")
+  #+END_SRC
+
+  Keybindings
+  #+BEGIN_SRC elisp
+    (general-define-key
+     :definer 'minor-mode
+     :states '(motion visual normal insert emacs)
+     :keymaps 'org-src-mode
+     :prefix "M-;"
+     "e" 'org-edit-src-exit
+     "k" 'org-edit-src-abort)
+  #+END_SRC
+** Help functions
+  I'd like to keep the main org file clean and tiny, but I also want to see an accurate
+  agenda history. However archive or refile don't work for me, so I write this function.
+  It simply moves the current subtree to the diary file according to its CLOSED time.
+  #+BEGIN_SRC elisp
+    (defun my:org-refile-to-diary ()
+      "Refile a subtree to a datetree corresponding to its CLOSED time."
       (interactive)
-      (org-agenda-list)
-      (setq-local mode-line-format nil)
-      (delete-other-windows))
+      (let* ((diary-file "~/org/diary.org")
+             (datetree-date (org-entry-get nil "CLOSED" t))
+             (date (org-date-to-gregorian datetree-date)))
+        (save-window-excursion
+          (org-cut-subtree)
+          (find-file diary-file)
+          (org-datetree-find-date-create date)
+          (org-end-of-subtree t)
+          (newline)
+          (org-paste-subtree 4))))
+  #+END_SRC
+
+  I cannot remember why I wrote this function (This is one of the reasons for putting my
+  config in org mode). It might be related to previous refile function, and it seems
+  useful. So I decide not to delete it and hope I will find its usage someday.
+  #+BEGIN_SRC elisp
+    (defun my:org-datetree-find-date-create-subtree ()
+      (interactive)
+      (let ((date (org-date-to-gregorian (org-read-date))))
+       (org-datetree-find-date-create date 'subtree-at-point)))
+  #+END_SRC
+
+  Collect all source block names for ivy. This function is useful when using noweb syntax
+  in source code block.
+  #+BEGIN_SRC elisp
+    (defun my:org-search-src-block-name ()
+      "Search source block name in current file"
+      (interactive)
+      (ivy-read
+       "Code block: "
+       (let (names)
+         (org-babel-map-src-blocks nil
+           (let ((name (nth 4 (org-babel-get-src-block-info))))
+             (push name names)))
+         (seq-filter #'identity names))
+       :require-match t
+       :action #'insert))
   #+END_SRC
 * eshell
   #+BEGIN_SRC elisp
@@ -1153,6 +1170,7 @@
    #+BEGIN_SRC elisp
      (general-define-key
       :definer 'minor-mode
+      :states '(motion visual normal insert emacs)
       :keymaps 'git-commit-mode
       :prefix "M-;"
       ";" 'with-editor-finish

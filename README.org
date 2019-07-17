@@ -527,8 +527,8 @@
     (use-package org
       :defer 2
       :hook
-      ((org-babel-after-execute . org-redisplay-inline-images)
-       (org-agenda-finalize . my:org-agenda-time-grid-spacing))
+      ((org-babel-after-execute . org-redisplay-inline-images))
+      ;; (org-agenda-finalize . my:org-agenda-time-grid-spacing))
       :config
       <<org-kill-temp-fontify-buffer>>
       <<org-capture-templates>>
@@ -583,6 +583,8 @@
     (setq org-agenda-use-time-grid nil)
     (setq org-agenda-skip-deadline-if-done t)
     (setq org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
+    (setq org-agenda-overriding-columns-format
+          "%25ITEM %25Effort{:} %25CLOCKSUM{:}")
   #+END_SRC
 
   Org clock config.
@@ -791,6 +793,10 @@
     (general-def org-agenda-mode-map
       "S" 'org-agenda-schedule
       "D" 'org-agenda-deadline
+      "c" 'org-agenda-columns
+      "z" 'org-agenda-log-mode
+      "h" 'backward-char
+      "l" 'forward-char
       "j" 'org-agenda-next-line
       "k" 'org-agenda-previous-line)
   #+END_SRC
@@ -1113,8 +1119,7 @@
    #+END_SRC
 ** info
    #+BEGIN_SRC elisp
-     (use-package info
-       :hook (Info-mode . font-switch-serif))
+     (use-package info)
    #+END_SRC
 ** ivy
    #+BEGIN_SRC elisp

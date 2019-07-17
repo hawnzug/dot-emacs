@@ -153,6 +153,7 @@
    `(org-time-grid ((t (:foreground ,gray-300))))
    `(org-date ((t (:foreground ,indigo-300 :underline t))))
    `(org-todo ((t (:foreground ,red-500 :weight bold))))
+   `(org-tag ((t (:foreground ,gray-400 :weight bold))))
    `(org-done ((t (:foreground ,green-500 :weight bold))))
    `(org-block ((t (:foreground ,color-fg))))
    `(org-table ((t (:foreground ,color-fg))))

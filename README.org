@@ -520,6 +520,7 @@
 * org
   #+BEGIN_SRC elisp :noweb no-export
     (use-package org
+      :load-path "~/Projects/org-mode/lisp"
       :defer 2
       :hook
       ((org-babel-after-execute . org-redisplay-inline-images))
@@ -529,6 +530,7 @@
       <<org-capture-templates>>
       <<org-agenda-config>>
       <<org-clock-config>>
+      (add-to-list 'Info-additional-directory-list "~/Projects/org-mode")
       (setq org-agenda-files '("~/org/sjtu.org" "~/org/diary.org"))
       (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
       (setq org-confirm-babel-evaluate nil)
@@ -653,9 +655,10 @@
     (setq org-agenda-log-mode-items '(clock))
     (setq org-agenda-use-time-grid nil)
     (setq org-agenda-skip-deadline-if-done t)
+    (setq org-agenda-remove-tags t)
     (setq org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
     (setq org-agenda-overriding-columns-format
-          "%25ITEM %25Effort %25CLOCKSUM")
+          "%25ITEM %10Effort{:} %10CLOCKSUM{:}")
   #+END_SRC
 
   Show time grid in org agenda.
@@ -697,15 +700,16 @@
   #+BEGIN_SRC elisp
     (use-package org-super-agenda
       :ensure t
-      :disabled t
       :after org
       :config
       (org-super-agenda-mode)
       (setq org-super-agenda-groups
-            '((:name "Clocking"
-                     :log t
-                     :pred (lambda (item)
-                             (org-find-text-property-in-string 'time-of-day item)))
+            '((:name "Focus"
+                     :tag "focus")
+              (:name "Regular"
+                     :tag "regular")
+              (:name "Casual"
+                     :tag "casual")
               (:name "Others"
                      :anything t))))
   #+END_SRC

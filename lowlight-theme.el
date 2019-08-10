@@ -8,7 +8,7 @@
 (deftheme lowlight)
 
 (let ((color-bg "#F0F0F0")
-      (color-fg "#000000")
+      (color-fg "#0F0F0F")
 
       (brown-50    "#EFEBE9") (gray-50    "#FAFAFA") (blue-gray-50     "#ECEFF1")
       (brown-100   "#D7CCC8") (gray-100   "#F5F5F5") (blue-gray-100    "#CFD8DC")
@@ -96,22 +96,22 @@
    `(show-paren-mismatch ((t (:background ,red-700))))
    `(trailing-whitespace ((t (:background ,red-700))))
 
-   `(hl-line ((t (:background ,gray-300))))
+   `(hl-line ((t (:background "#EAEAEA"))))
    `(line-number-current-line ((t (:background ,color-bg))))
 
    `(mode-line ((t (:foreground ,gray-800 :background ,gray-300 :overline ,gray-500 :underline ,gray-500 :font "Sarasa Term SC-12"))))
    `(mode-line-inactive ((t (:foreground ,gray-500 :background ,gray-300 :overline ,gray-500 :underline ,gray-500 :font "Sarasa Term SC-12"))))
 
    `(font-lock-type-face ((t (:foreground ,color-fg))))
-   `(font-lock-builtin-face ((t (:foreground ,indigo-500))))
-   `(font-lock-keyword-face ((t (:foreground ,indigo-500))))
+   `(font-lock-builtin-face ((t (:foreground ,cyan-900))))
+   `(font-lock-keyword-face ((t (:foreground ,cyan-900))))
    `(font-lock-comment-face ((t (:foreground ,gray-500))))
    `(font-lock-function-name-face ((t (:foreground ,color-fg))))
    `(font-lock-variable-name-face ((t (:foreground ,color-fg))))
-   `(font-lock-string-face ((t (:foreground ,green-900))))
+   `(font-lock-string-face ((t (:foreground ,light-green-900))))
    `(font-lock-constant-face ((t (:foreground ,deep-orange-900))))
 
-   `(ivy-current-match ((t (:background ,light-blue-500))))
+   `(ivy-current-match ((t (:background ,cyan-500))))
    `(ivy-minibuffer-match-face-2 ((t (:background ,yellow-500))))
    `(ivy-minibuffer-match-face-3 ((t (:background ,yellow-500))))
    `(ivy-minibuffer-match-face-4 ((t (:background ,yellow-500))))
@@ -119,11 +119,11 @@
    `(ivy-posframe ((t (:background "#EBEBEB"))))
    `(ivy-posframe-border ((t (:background ,gray-500))))
 
-   `(minibuffer-prompt ((t (:foreground ,indigo-800 :weight bold))))
+   `(minibuffer-prompt ((t (:foreground ,cyan-900 :weight bold))))
 
-   `(magit-section-heading ((t (:foreground ,indigo-800 :weight bold))))
+   `(magit-section-heading ((t (:foreground ,cyan-900 :weight bold))))
    `(magit-diff-hunk-heading ((t (:foreground ,color-fg :background ,blue-gray-100 :weight bold))))
-   `(magit-diff-hunk-heading-highlight ((t (:foreground ,color-bg :background ,light-blue-600 :weight bold))))
+   `(magit-diff-hunk-heading-highlight ((t (:foreground ,color-fg :background ,cyan-500 :weight bold))))
    `(magit-diff-context ((t (:foreground ,gray-500))))
    `(magit-diff-context-highlight ((t (:foreground ,gray-600 :background ,gray-100))))
    `(magit-diff-added ((t (:foreground ,green-600 :background ,green-50))))
@@ -143,8 +143,8 @@
    `(outline-7 ((t (:foreground ,color-fg))))
    `(outline-8 ((t (:foreground ,color-fg))))
 
-   `(org-agenda-structure ((t (:foreground ,indigo-800 :weight bold))))
-   `(org-agenda-date ((t (:foreground ,indigo-800))))
+   `(org-agenda-structure ((t (:foreground ,cyan-900 :weight bold))))
+   `(org-agenda-date ((t (:foreground ,cyan-900))))
    `(org-agenda-date-weekend ((t (:inherit org-agenda-date))))
    `(org-agenda-date-today ((t (:inherit org-agenda-date :weight bold))))
    `(org-agenda-done ((t (:foreground ,color-fg))))
@@ -152,9 +152,9 @@
    '(org-agenda-clocking ((t ())))
    `(org-time-grid ((t (:foreground ,gray-300))))
    `(org-date ((t (:foreground ,indigo-300 :underline t))))
-   `(org-todo ((t (:foreground ,red-500 :weight bold))))
+   `(org-todo ((t (:foreground ,red-500 :background ,red-100 :weight bold))))
    `(org-tag ((t (:foreground ,gray-400 :weight bold))))
-   `(org-done ((t (:foreground ,green-500 :weight bold))))
+   `(org-done ((t (:foreground ,green-500 :background ,green-100 :weight bold))))
    `(org-block ((t (:foreground ,color-fg))))
    `(org-table ((t (:foreground ,color-fg))))
    `(org-level-1 ((t (:inherit outline-1))))
@@ -164,8 +164,7 @@
    `(org-level-5 ((t (:inherit outline-5))))
    `(org-level-6 ((t (:inherit outline-6))))
    `(org-level-7 ((t (:inherit outline-7))))
-   `(org-level-8 ((t (:inherit outline-8))))
-   `(org-tag ((t (:weight bold))))))
+   `(org-level-8 ((t (:inherit outline-8))))))
 
 (provide-theme 'lowlight)
 

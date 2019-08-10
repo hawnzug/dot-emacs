@@ -6,17 +6,28 @@
   :END:
   -  [[#init][init]]
   -  [[#use-package][use-package]]
+  -  [[#all-the-icons][all-the-icons]]
   -  [[#generalel][general.el]]
   -  [[#hydra][hydra]]
+    -  [[#hydra-global][hydra-global]]
+    -  [[#hydra-window][hydra-window]]
+    -  [[#hydra-buffer][hydra-buffer]]
+    -  [[#hydra-projectile][hydra-projectile]]
+    -  [[#hydra-eyebrowse][hydra-eyebrowse]]
+    -  [[#hydra-help][hydra-help]]
   -  [[#mode-line][mode line]]
   -  [[#org][org]]
+    -  [[#org-agenda][org agenda]]
+    -  [[#org-capture][org capture]]
+    -  [[#org-clock][org clock]]
+    -  [[#org-babel][org babel]]
+    -  [[#help-functions][Help functions]]
   -  [[#eshell][eshell]]
   -  [[#dired][dired]]
   -  [[#emms][EMMS]]
   -  [[#packages][packages]]
     -  [[#academic-phrases][academic-phrases]]
     -  [[#alert][alert]]
-    -  [[#all-the-icons][all-the-icons]]
     -  [[#battery][battery]]
     -  [[#company][company]]
     -  [[#ediff][ediff]]
@@ -30,6 +41,7 @@
     -  [[#hl-line-mode][hl-line-mode]]
     -  [[#htmlize][htmlize]]
     -  [[#ibuffer][ibuffer]]
+    -  [[#imenu-list][imenu-list]]
     -  [[#info][info]]
     -  [[#ivy][ivy]]
     -  [[#keyfreq][keyfreq]]
@@ -157,8 +169,8 @@
   #+BEGIN_SRC elisp
     (require 'package)
     ;; (setq package-enable-at-startup nil)
-    (setq package-archives '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                             ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+    ;; (setq package-archives '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+    ;;                          ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
     ;; (package-initialize)
     (unless (package-installed-p 'use-package)
       (package-refresh-contents)
@@ -229,6 +241,7 @@
       "a" 'align
       "t l" 'my:toggle-line-number
       "t t" 'my:toggle-transparency
+      "t m" 'my:load-theme
       "f" 'avy-goto-char-2
       "w" 'avy-goto-word-1
       "l" 'avy-goto-line
@@ -243,7 +256,7 @@
       (setq hydra-posframe-show-params
             '(:internal-border-width 1
               :internal-border-color "#9E9E9E"
-              :background-color "#EBEBEB"
+              :background-color "#ECECEC"
               :left-fringe 15
               :right-fringe 15
               :poshandler posframe-poshandler-frame-center)))
@@ -520,7 +533,6 @@
 * org
   #+BEGIN_SRC elisp :noweb no-export
     (use-package org
-      :load-path "~/Projects/org-mode/lisp"
       :defer 2
       :hook
       ((org-babel-after-execute . org-redisplay-inline-images))
@@ -530,12 +542,18 @@
       <<org-capture-templates>>
       <<org-agenda-config>>
       <<org-clock-config>>
-      (add-to-list 'Info-additional-directory-list "~/Projects/org-mode")
-      (setq org-agenda-files '("~/org/sjtu.org" "~/org/diary.org"))
+      (setq org-agenda-files '("~/org/todos.org" "~/org/diary.org"))
       (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
       (setq org-confirm-babel-evaluate nil)
       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
       (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
+      (setq org-todo-keywords
+            '((sequence "TODO" "WAITING" "|" "DONE")))
+      (setq org-todo-keyword-faces
+            '(("TODO" . org-todo)
+              ("WAITING" . (:foreground "#F57F17"
+                            :background "#FFF9C4"
+                            :weight bold))))
       (setq org-log-into-drawer t)
       (setq org-log-done 'time)
       (setq org-enforce-todo-dependencies t)
@@ -699,6 +717,7 @@
   Super agenda
   #+BEGIN_SRC elisp
     (use-package org-super-agenda
+      :disabled t
       :ensure t
       :after org
       :config
@@ -726,18 +745,28 @@
       "j" 'org-agenda-next-line
       "k" 'org-agenda-previous-line)
   #+END_SRC
+
+  #+BEGIN_SRC elisp
+    (general-def org-super-agenda-header-map
+      "c" 'org-agenda-columns
+      "z" 'org-agenda-log-mode
+      "h" 'backward-char
+      "l" 'forward-char
+      "j" 'org-agenda-next-line
+      "k" 'org-agenda-previous-line)
+  #+END_SRC
 ** org capture
   Org capture templates.
   #+NAME: org-capture-templates
   #+BEGIN_SRC elisp :tangle no
     (setq org-capture-templates
-          '(("t" "Todo" entry (file+headline "~/org/sjtu.org" "Inbox")
+          '(("t" "Todo" entry (file+headline "~/org/todos.org" "Inbox")
              "* TODO %?")
             ("w" "Water" entry (file+olp+datetree "~/org/diary.org")
              "* water\n     :PROPERTIES:\n     :volume:   %^{PROMPT}\n     :END:"
              :immediate-finish t)
             ("c" "Clock" entry (file+olp+datetree "~/org/diary.org")
-             "* %^{PROMPT}\n"
+             "* %^{PROMPT}\n  %t\n"
              :immediate-finish t
              :clock-in t
              :clock-keep t)))
@@ -1008,6 +1037,7 @@
            ("html" . "firefox")
            ("docx" . "wps")
            ("doc" . "wps")
+           ("mp4" . "mpv")
            ("xlsx" . "et")
            ("xls" . "et")
            ("pptx" . "wpp")
@@ -1200,6 +1230,11 @@
         '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
        (use-package ibuffer-vc :ensure t))
    #+END_SRC
+** imenu-list
+   #+BEGIN_SRC elisp
+     (use-package imenu-list
+       :ensure t)
+   #+END_SRC
 ** info
    #+BEGIN_SRC elisp
      (use-package info)
@@ -1281,9 +1316,10 @@
    #+END_SRC
 ** rainbow-delimiters
    #+BEGIN_SRC elisp
-    (use-package rainbow-delimiters
-      :ensure t
-      :hook ((prog-mode coq-mode) . rainbow-delimiters-mode))
+     (use-package rainbow-delimiters
+       :disabled t
+       :ensure t
+       :hook ((prog-mode coq-mode) . rainbow-delimiters-mode))
    #+END_SRC
 ** sublimity
    #+BEGIN_SRC elisp
@@ -1448,6 +1484,12 @@
              TeX-electric-sub-and-superscript t))
    #+END_SRC
 * help functions
+  #+BEGIN_SRC elisp
+    (defun my:load-theme ()
+      (interactive)
+      (load-theme 'lowlight t))
+  #+END_SRC
+
   #+BEGIN_SRC elisp
     (defun font-switch-serif ()
       (interactive)

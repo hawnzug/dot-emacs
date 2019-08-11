@@ -291,7 +291,7 @@
        ("i" ibuffer)
 
        ("g" magit-status)
-       ("a" org-agenda-list)
+       ("a" my:agenda)
        ("A" org-agenda)
 
        ("t" my:new-eshell)
@@ -544,6 +544,7 @@
       <<org-clock-config>>
       (setq org-agenda-files '("~/org/todos.org" "~/org/diary.org"))
       (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
+      (setq org-ellipsis "𝌆")
       (setq org-confirm-babel-evaluate nil)
       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
       (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
@@ -674,9 +675,15 @@
     (setq org-agenda-use-time-grid nil)
     (setq org-agenda-skip-deadline-if-done t)
     (setq org-agenda-remove-tags t)
+    (setq org-agenda-todo-ignore-with-date nil)
     (setq org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
     (setq org-agenda-overriding-columns-format
           "%25ITEM %10Effort{:} %10CLOCKSUM{:}")
+    (setq org-agenda-block-separator ?―)
+    (setq org-agenda-custom-commands
+          '(("h" "Test"
+             ((agenda "" ((org-agenda-overriding-header "Today")))
+              (todo "WAITING" ((org-agenda-overriding-header "Waiting")))))))
   #+END_SRC
 
   Show time grid in org agenda.
@@ -717,20 +724,17 @@
   Super agenda
   #+BEGIN_SRC elisp
     (use-package org-super-agenda
-      :disabled t
       :ensure t
       :after org
       :config
       (org-super-agenda-mode)
       (setq org-super-agenda-groups
-            '((:name "Focus"
-                     :tag "focus")
-              (:name "Regular"
-                     :tag "regular")
-              (:name "Casual"
-                     :tag "casual")
-              (:name "Others"
-                     :anything t))))
+            '((:name "Today"
+                     :and (:todo "TODO" :scheduled today))
+              (:name "Waiting"
+                     :todo "WAITING")
+              (:name "No Date"
+                     :date nil))))
   #+END_SRC
   
   Keybindings
@@ -760,8 +764,9 @@
   #+NAME: org-capture-templates
   #+BEGIN_SRC elisp :tangle no
     (setq org-capture-templates
-          '(("t" "Todo" entry (file+headline "~/org/todos.org" "Inbox")
-             "* TODO %?")
+          '(("t" "Todo" entry (file "~/org/todos.org")
+             "* TODO %?"
+             :prepend t)
             ("w" "Water" entry (file+olp+datetree "~/org/diary.org")
              "* water\n     :PROPERTIES:\n     :volume:   %^{PROMPT}\n     :END:"
              :immediate-finish t)
@@ -934,6 +939,12 @@
          (seq-filter #'identity names))
        :require-match t
        :action #'insert))
+  #+END_SRC
+  
+  #+BEGIN_SRC elisp
+    (defun my:agenda ()
+      (interactive)
+      (org-agenda nil "h"))
   #+END_SRC
 * eshell
   #+BEGIN_SRC elisp

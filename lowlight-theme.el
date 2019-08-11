@@ -143,6 +143,10 @@
    `(outline-7 ((t (:foreground ,color-fg))))
    `(outline-8 ((t (:foreground ,color-fg))))
 
+   `(calendar-month-header ((t (:foreground ,cyan-900 :weight bold))))
+   `(calendar-weekday-header ((t (:foreground ,green-800))))
+   `(calendar-weekend-header ((t (:foreground ,gray-700))))
+
    `(org-agenda-structure ((t (:foreground ,cyan-900 :weight bold))))
    `(org-agenda-date ((t (:foreground ,cyan-900))))
    `(org-agenda-date-weekend ((t (:inherit org-agenda-date))))
@@ -152,6 +156,7 @@
    '(org-agenda-clocking ((t ())))
    `(org-time-grid ((t (:foreground ,gray-300))))
    `(org-date ((t (:foreground ,indigo-300 :underline t))))
+   `(org-ellipsis ((t (:foreground ,gray-400 :background ,color-bg :weight bold))))
    `(org-todo ((t (:foreground ,red-500 :background ,red-100 :weight bold))))
    `(org-tag ((t (:foreground ,gray-400 :weight bold))))
    `(org-done ((t (:foreground ,green-500 :background ,green-100 :weight bold))))

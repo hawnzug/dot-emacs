@@ -1110,6 +1110,7 @@
      (use-package company
        :ensure t
        :defer t
+       :config
        (setq company-idle-delay 0))
    #+END_SRC
 
@@ -1423,21 +1424,12 @@
      (use-package merlin
        :load-path (lambda () (merlin-mode-load-path))
        :hook
-       (merlin-mode . company-mode))
-   #+END_SRC
-
-   #+BEGIN_SRC elisp
-     (use-package tuareg
-       :ensure t
-       :hook
        (tuareg-mode . merlin-mode))
    #+END_SRC
 
    #+BEGIN_SRC elisp
-     (use-package caml
-       :ensure t
-       :hook
-       (caml-mode . merlin-mode))
+     (use-package tuareg
+       :ensure t)
    #+END_SRC
 ** Cubicaltt
    #+BEGIN_SRC elisp

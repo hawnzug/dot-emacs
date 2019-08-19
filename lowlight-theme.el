@@ -102,9 +102,13 @@
    `(mode-line ((t (:foreground ,gray-800 :background ,gray-300 :overline ,gray-500 :underline ,gray-500 :font "Sarasa Term SC-12"))))
    `(mode-line-inactive ((t (:foreground ,gray-500 :background ,gray-300 :overline ,gray-500 :underline ,gray-500 :font "Sarasa Term SC-12"))))
 
+   `(widget-field ((t (:background "#FAFAFA" :box (:line-width 1 :color ,color-fg :style nil)))))
+   `(widget-button ((t (:foreground ,light-blue-900 :underline t))))
+
+
    `(font-lock-type-face ((t (:foreground ,color-fg))))
    `(font-lock-builtin-face ((t (:foreground ,cyan-900))))
-   `(font-lock-keyword-face ((t (:foreground ,cyan-900))))
+   `(font-lock-keyword-face ((t (:foreground ,light-blue-900))))
    `(font-lock-comment-face ((t (:foreground ,gray-500))))
    `(font-lock-function-name-face ((t (:foreground ,color-fg))))
    `(font-lock-variable-name-face ((t (:foreground ,color-fg))))
@@ -121,9 +125,9 @@
 
    `(minibuffer-prompt ((t (:foreground ,cyan-900 :weight bold))))
 
-   `(magit-section-heading ((t (:foreground ,cyan-900 :weight bold))))
+   `(magit-section-heading ((t (:foreground ,light-blue-900 :weight bold))))
    `(magit-diff-hunk-heading ((t (:foreground ,color-fg :background ,blue-gray-100 :weight bold))))
-   `(magit-diff-hunk-heading-highlight ((t (:foreground ,color-fg :background ,cyan-500 :weight bold))))
+   `(magit-diff-hunk-heading-highlight ((t (:foreground ,color-fg :background ,light-blue-300 :weight bold))))
    `(magit-diff-context ((t (:foreground ,gray-500))))
    `(magit-diff-context-highlight ((t (:foreground ,gray-600 :background ,gray-100))))
    `(magit-diff-added ((t (:foreground ,green-600 :background ,green-50))))
@@ -147,8 +151,8 @@
    `(calendar-weekday-header ((t (:foreground ,green-800))))
    `(calendar-weekend-header ((t (:foreground ,gray-700))))
 
-   `(org-agenda-structure ((t (:foreground ,cyan-900 :weight bold))))
-   `(org-agenda-date ((t (:foreground ,cyan-900))))
+   `(org-agenda-structure ((t (:foreground ,light-blue-900 :weight bold))))
+   `(org-agenda-date ((t (:foreground ,light-blue-900))))
    `(org-agenda-date-weekend ((t (:inherit org-agenda-date))))
    `(org-agenda-date-today ((t (:inherit org-agenda-date :weight bold))))
    `(org-agenda-done ((t (:foreground ,color-fg))))

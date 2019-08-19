@@ -162,6 +162,11 @@
     (setenv "MAGICK_OCL_DEVICE" "OFF")
   #+END_SRC
 
+  User full name will appear in mail header (From).
+  #+BEGIN_SRC elisp
+    (setq user-full-name "Zhuyang Wang")
+  #+END_SRC
+
   #+BEGIN_SRC elisp
     (setq password-cache-expiry 1200)
   #+END_SRC
@@ -172,6 +177,8 @@
     ;; (setq package-archives '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
     ;;                          ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
     ;; (package-initialize)
+    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+    (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
     (unless (package-installed-p 'use-package)
       (package-refresh-contents)
       (package-install 'use-package))
@@ -202,6 +209,7 @@
         "k" 'ibuffer-backward-line)
       (general-def 'override
         "C-=" 'text-scale-increase
+        "M-o" 'my:other-window-or-buffer
         "C--" 'text-scale-decrease)
       (general-mmap Info-mode-map
         "q" 'Info-exit
@@ -274,10 +282,10 @@
      ^Ivy^          ^View^         ^Hydra^         ^Action^
      ─────────────────────────────────────────────────
      _b_: buffer    _g_: magit     _e_: eyebrowse  _t_: eshell
-     _f_: file      _a_: agenda    _w_: window     _c_: capture
-     _s_: swiper    _A_: Agenda    _B_: buffer     _q_: quit
-     _d_: dired     ^ ^            _h_: help       _Q_: Quit
-     _r_: ripgrep   ^ ^            _p_: project    _M-,_: other
+     _f_: file      _a_: agenda    _w_: window     _l_: link
+     _s_: swiper    _A_: Agenda    _B_: buffer     _c_: capture
+     _d_: dired     _m_: Email     _h_: help       _q_: quit
+     _r_: ripgrep   ^ ^            _p_: project    _Q_: Quit
      _k_: kill
      _i_: ibuffer
 
@@ -293,9 +301,10 @@
        ("g" magit-status)
        ("a" my:agenda)
        ("A" org-agenda)
+       ("m" my:notmuch-transient)
 
        ("t" my:new-eshell)
-       ("M-," my:other-window-or-buffer)
+       ("l" org-store-link)
        ("c" org-capture)
        ("q" save-buffers-kill-terminal)
        ("Q" save-buffers-kill-emacs)
@@ -454,6 +463,11 @@
        ("q" nil)
        ("<escape>" nil))
    #+END_SRC
+* transient
+  #+BEGIN_SRC elisp
+    (use-package transient
+      :ensure magit)
+  #+END_SRC
 * mode line
   Honestly mode line is just an eye candy for me. The only useful part is column number,
   and maybe the current buffer name. But a pretty mode line does please me to some extent,
@@ -533,11 +547,14 @@
 * org
   #+BEGIN_SRC elisp :noweb no-export
     (use-package org
+      :ensure org-plus-contrib
       :defer 2
       :hook
       ((org-babel-after-execute . org-redisplay-inline-images))
       ;; (org-agenda-finalize . my:org-agenda-time-grid-spacing))
       :config
+      (use-package org-notmuch)
+      (use-package org-mouse)
       <<org-kill-temp-fontify-buffer>>
       <<org-capture-templates>>
       <<org-agenda-config>>
@@ -643,6 +660,7 @@
     _d_: deadline   _i_: image   _b_: babel  _o_: open
     _t_: timestamp  _x_: latex
     _l_: link
+    _L_: link
     _p_: property
 
     ")
@@ -650,6 +668,7 @@
       ("d" org-deadline)
       ("t" org-time-stamp)
       ("l" org-insert-link)
+      ("L" org-insert-last-stored-link)
       ("p" org-set-property)
 
       ("c" org-columns)
@@ -683,7 +702,11 @@
     (setq org-agenda-custom-commands
           '(("h" "Test"
              ((agenda "" ((org-agenda-overriding-header "Today")))
-              (todo "WAITING" ((org-agenda-overriding-header "Waiting")))))))
+              (todo "WAITING" ((org-agenda-overriding-header "Waiting")))
+              (todo
+               "TODO"
+               ((org-agenda-overriding-header "Read")
+                (org-agenda-files '("~/org/notes.org"))))))))
   #+END_SRC
 
   Show time grid in org agenda.
@@ -724,6 +747,7 @@
   Super agenda
   #+BEGIN_SRC elisp
     (use-package org-super-agenda
+      :disabled t
       :ensure t
       :after org
       :config
@@ -1315,6 +1339,247 @@
       "M-;" 'with-editor-finish
       "M-k" 'with-editor-cancel)
    #+END_SRC
+** notmuch
+   #+BEGIN_SRC elisp
+     (use-package notmuch
+       :commands (notmuch notmuch-search)
+       :config
+       (setq mail-host-address "hawnzug.me")
+       (use-package message
+         :config
+         (setq message-sendmail-envelope-from 'header)
+         (setq message-send-mail-function 'message-send-mail-with-sendmail))
+       (use-package sendmail
+         :config
+         (setq sendmail-program "/usr/bin/msmtp")
+         (setq mail-specify-envelope-from t)
+         (setq mail-envelope-from 'header))
+       (setq notmuch-fcc-dirs
+             '(("hawnzug@gmail.com" . "personal/sent +sent -unread -inbox")
+               ("wang9163@umn.edu" . "umn/sent +sent -unread -inbox")))
+
+       (setq notmuch-search-oldest-first nil)
+       (setq notmuch-hello-sections
+         (list #'notmuch-hello-insert-header
+               #'notmuch-hello-insert-saved-searches
+               #'notmuch-hello-insert-search
+               #'notmuch-hello-insert-recent-searches
+               #'notmuch-hello-insert-footer))
+       (setq notmuch-hello-thousands-separator "")
+       (setq notmuch-column-control 0.2)
+       (setq mm-text-html-renderer 'gnus-w3m)
+       (setq
+        notmuch-saved-searches
+        '((:name "Inbox" :query "tag:inbox" :key "i")
+          (:name "unread" :query "tag:unread" :key "u")
+          (:name "emacs-devel" :query "to:emacs-devel@gnu.org")
+          (:name "orgmode" :query "to:emacs-orgmode@gnu.org")
+          (:name "CSSA" :query "to:umncssa@googlegroups.com")
+          (:name "Sandy" :query "to:sandymn@umich.edu")
+          (:name "flagged" :query "tag:flagged" :key "f")
+          (:name "sent" :query "tag:sent" :key "t")
+          (:name "drafts" :query "tag:draft" :key "d")
+          (:name "all mail" :query "*" :key "a")))
+       (setq notmuch-search-result-format
+             '(("date" . "%12s  ")
+               ("count" . "%-7s ")
+               ("authors" . "%-40s  ")
+               ("subject" . "%s ")
+               ("tags" . "(%s)")))
+
+       (evil-set-initial-state 'notmuch-show-mode 'normal)
+       (evil-set-initial-state 'notmuch-search-mode 'normal)
+       (evil-set-initial-state 'notmuch-hello-mode 'normal)
+       (evil-set-initial-state 'notmuch-tree-mode 'normal)
+
+       (general-nmap notmuch-common-keymap
+         "g?" 'notmuch-help
+         "q" 'notmuch-bury-or-kill-this-buffer
+         "s" 'notmuch-search
+         "S" 'notmuch-tree
+         "C" 'notmuch-mua-new-mail
+         "cc" 'notmuch-mua-new-mail
+         "r" 'notmuch-refresh-this-buffer
+         "J" 'notmuch-jump-search)
+
+       (general-nmap notmuch-hello-mode-map
+         "g?" 'notmuch-hello-versions
+         "RET" 'widget-button-press
+         "TAB" 'widget-forward
+         "S-TAB" 'widget-backward)
+
+       (general-nmap 'notmuch-search-mode-map
+       "cC" 'compose-mail-other-frame
+         "a" (lambda (&optional beg end)
+               "Read and archive thread"
+               (interactive (notmuch-interactive-region))
+               (notmuch-search-tag (list "-unread" "-inbox") beg end)
+               (when (eq beg end)
+                 (notmuch-search-next-thread)))
+         "i" (lambda (&optional beg end)
+               "Move to inbox"
+               (interactive (notmuch-interactive-region))
+               (notmuch-search-tag (list "+inbox") beg end))
+         "J" 'notmuch-jump-search
+         "S" 'notmuch-search-filter
+         "o" 'notmuch-search-toggle-order
+         "*" 'notmuch-search-tag-all
+         "cc" 'compose-mail
+         "cr" 'notmuch-search-reply-to-thread-sender
+         "cR" 'notmuch-search-reply-to-thread
+         "t" 'notmuch-search-filter-by-tag
+         "-" 'notmuch-search-remove-tag
+         "+" 'notmuch-search-add-tag
+         "RET" 'notmuch-search-show-thread)
+
+       (general-nmap 'notmuch-show-mode-map
+         "C" 'notmuch-mua-new-mail
+         "cc" 'notmuch-mua-new-mail
+         "cr" 'notmuch-show-reply-sender
+         "cR" 'notmuch-show-reply
+         "cf" 'notmuch-show-forward-message
+         "p" 'notmuch-show-save-attachments
+         "a" 'notmuch-show-archive-thread-then-next
+         "A" 'notmuch-show-archive-message-then-next-or-next-thread
+         "x" 'notmuch-show-archive-thread-then-exit
+         "X" 'notmuch-show-archive-message-then-next-or-exit
+         "S" 'notmuch-show-filter-thread
+         "<" 'notmuch-show-toggle-thread-indentation
+         "H" 'notmuch-show-toggle-visibility-headers
+         "gj" 'notmuch-show-next-open-message
+         "gk" 'notmuch-show-previous-open-message
+         "]]" 'notmuch-show-next-message
+         "[[" 'notmuch-show-previous-message
+         "C-j" 'notmuch-show-next-message
+         "C-k" 'notmuch-show-previous-message
+         "M-j" 'notmuch-show-next-thread-show
+         "M-k" 'notmuch-show-previous-thread-show
+         "*" 'notmuch-show-tag-all
+         "-" 'notmuch-show-remove-tag
+         "+" 'notmuch-show-add-tag
+         "TAB" 'notmuch-show-next-button
+         "S-TAB" 'notmuch-show-previous-button
+         "RET" 'notmuch-show-toggle-message
+         "." 'notmuch-show-part-map)
+
+       (defun notmuch-hello-insert-header ()
+         "Insert the default notmuch-hello header."
+         (let* ((banner "~/Pictures/gmail.png")
+                (spec (create-image banner))
+                (size (image-size spec))
+                (width (car size))
+                (left-margin (max 0 (floor (- (window-width) width) 2))))
+           (widget-insert (make-string left-margin ?\ ))
+           (insert-image spec)
+           (widget-insert "\n")))
+
+       (defun notmuch-hello-insert-saved-searches ()
+         "Insert the saved-searches section."
+         (let ((searches (notmuch-hello-query-counts
+                          (if notmuch-saved-search-sort-function
+                              (funcall notmuch-saved-search-sort-function
+                                       notmuch-saved-searches)
+                            notmuch-saved-searches)
+                          :show-empty-searches notmuch-show-empty-saved-searches)))
+           (when searches
+             (let ((start (point)))
+               (notmuch-hello-insert-buttons searches)
+               (indent-rigidly start (point) notmuch-hello-indent)))))
+
+       )
+   #+END_SRC
+
+   #+BEGIN_SRC elisp
+     (defun my:notmuch-dispatch (&optional args)
+       (interactive (list (transient-args 'my:notmuch-transient)))
+       (let ((query-account nil)
+             (query-tag nil)
+             (query-ml nil)
+             (query))
+         (dolist (arg args)
+           (pcase arg
+             ("to:hawnzug" (push "to:hawnzug@gmail.com" query-account))
+             ("to:umn" (push "to:wang9163@umn.edu" query-account))
+             ("to:sandy" (push "to:sandymn@umich.edu" query-account))
+             ("Inbox" (push "tag:inbox" query-tag))
+             ("Unread" (push "tag:unread" query-tag))
+             ((or "@all" "@emacs") (push "to:emacs-devel@gnu.org" query-ml))
+             ((or "@all" "@orgmode") (push "to:emacs-orgmode@gnu.org" query-ml))
+             ((or "@all" "@cssa") (push "to:umncssa@googlegroups.com" query-ml))))
+         (setq
+          query
+          (format "(%s) (%s) %s"
+                  (string-join query-account " or ")
+                  (string-join query-ml " or ")
+                  (string-join query-tag " ")))
+         (message "%s" query)
+         (notmuch-search query)))
+
+     (define-transient-command my:notmuch-transient ()
+       "Transient for notmuch"
+       ["Account"
+        ("ap" "Personal" "to:hawnzug")
+        ("au" "UMN" "to:umn")
+        ("as" "Sandy" "to:sandy")]
+       ["Mailing List"
+        ("la" "All" "@all")
+        ("le" "Emacs" "@emacs")
+        ("lo" "Orgmode" "@orgmode")]
+       ["Tag"
+        ("i" "Inbox" "Inbox")
+        ("u" "Unread" "Unread")]
+       ["Search"
+        ("g" "Go" my:notmuch-dispatch)])
+   #+END_SRC
+** projectile
+   #+BEGIN_SRC elisp
+    (use-package projectile
+      :ensure t
+      :defer t
+      :config
+      (projectile-mode 1)
+      (setq projectile-sort-order 'recently-active)
+      (setq projectile-switch-project-action #'projectile-dired)
+      (setq projectile-completion-system 'ivy))
+   #+END_SRC
+** rainbow-delimiters
+   #+BEGIN_SRC elisp
+     (use-package rainbow-delimiters
+       :disabled t
+       :ensure t
+       :hook ((prog-mode coq-mode) . rainbow-delimiters-mode))
+   #+END_SRC
+** sublimity
+   #+BEGIN_SRC elisp
+     (use-package sublimity
+       :ensure t
+       :config
+       (use-package sublimity-scroll)
+       (use-package sublimity-map
+         :config
+         (sublimity-map-set-delay nil)))
+   #+END_SRC
+** symbol-overlay
+   #+BEGIN_SRC elisp
+     (use-package symbol-overlay
+       :ensure t)
+   #+END_SRC
+** web-mode
+   #+BEGIN_SRC elisp
+     (use-package web-mode
+       :ensure t)
+   #+END_SRC
+** which-key
+   #+BEGIN_SRC elisp
+     (use-package which-key
+       :ensure t
+       :config
+       (which-key-mode 1))
+   #+END_SRC
+** xterm-color
+   #+BEGIN_SRC elisp
+    (use-package xterm-color :ensure t)
+   #+END_SRC
 ** projectile
    #+BEGIN_SRC elisp
     (use-package projectile
@@ -1440,7 +1705,8 @@
 
    #+BEGIN_SRC elisp
      (use-package tuareg
-       :ensure t)
+       :ensure t
+       :defer t)
    #+END_SRC
 ** Cubicaltt
    #+BEGIN_SRC elisp

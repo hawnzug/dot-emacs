@@ -184,6 +184,13 @@
       (package-install 'use-package))
     (eval-when-compile (require 'use-package))
   #+END_SRC
+* benchmark-init
+  #+BEGIN_SRC elisp
+    (use-package benchmark-init
+      :ensure t
+      :config
+      (add-hook 'after-init-hook 'benchmark-init/deactivate))
+  #+END_SRC
 * all-the-icons
   #+BEGIN_SRC elisp
     (use-package all-the-icons
@@ -548,7 +555,7 @@
   #+BEGIN_SRC elisp :noweb no-export
     (use-package org
       :ensure org-plus-contrib
-      :defer 2
+      :defer 4
       :hook
       ((org-babel-after-execute . org-redisplay-inline-images))
       ;; (org-agenda-finalize . my:org-agenda-time-grid-spacing))
@@ -593,7 +600,8 @@
 
   Other org packages
   #+BEGIN_SRC elisp
-    (use-package org-protocol)
+    (use-package org-protocol
+      :after org)
 
     (use-package org-alert
       :disabled t
@@ -1056,6 +1064,7 @@
 * dired
   #+BEGIN_SRC elisp
     (use-package dired
+      :commands dired
       :hook (dired-mode . hl-line-mode)
       :config
       (setq dired-recursive-copies t)
@@ -1113,11 +1122,14 @@
 * packages
 ** academic-phrases
    #+BEGIN_SRC elisp
-     (use-package academic-phrases :ensure t)
+     (use-package academic-phrases
+       :ensure t
+       :commands (academic-phrases academic-phrases-by-section))
    #+END_SRC
 ** alert
    #+BEGIN_SRC elisp
      (use-package alert
+       :commands alert
        :ensure t
        :config
        (setq alert-default-style 'libnotify))
@@ -1152,6 +1164,7 @@
    #+BEGIN_SRC elisp
      (use-package company-tabnine
        :ensure t
+       :commands company-tabnine
        :config
        (add-to-list 'company-backends #'company-tabnine))
    #+END_SRC
@@ -1166,11 +1179,13 @@
 ** emmet
    #+BEGIN_SRC elisp
      (use-package emmet-mode
-       :ensure t)
+       :ensure t
+       :hook web-mode)
    #+END_SRC
 ** evil
    #+BEGIN_SRC elisp
      (use-package evil
+       :defer 1
        :ensure t
        :init
        (setq evil-want-abbrev-expand-on-insert-exit nil)
@@ -1241,7 +1256,8 @@
    #+END_SRC
 ** geiser
    #+BEGIN_SRC elisp
-     (use-package geiser :ensure t
+     (use-package geiser
+       :ensure t
        :config
        (setq geiser-chez-binary "chez-scheme")
        (setq geiser-default-implementation 'chez))
@@ -1254,7 +1270,9 @@
    #+END_SRC
 ** htmlize
    #+BEGIN_SRC elisp
-     (use-package htmlize :ensure t)
+     (use-package htmlize
+       :ensure t
+       :commands (htmlize htmlize-file htmlize-region htmlize-buffer))
    #+END_SRC
 ** ibuffer
    #+BEGIN_SRC elisp
@@ -1269,7 +1287,8 @@
 ** imenu-list
    #+BEGIN_SRC elisp
      (use-package imenu-list
-       :ensure t)
+       :ensure t
+       :commands imenu-list)
    #+END_SRC
 ** info
    #+BEGIN_SRC elisp
@@ -1277,7 +1296,7 @@
    #+END_SRC
 ** ivy
    #+BEGIN_SRC elisp
-     (use-package counsel
+     (use-package ivy
        :ensure t
        :config
        (ivy-mode 1)
@@ -1285,16 +1304,25 @@
        (setq ivy-use-virtual-buffers t)
        (setq ivy-count-format "(%d/%d) ")
        (setq ivy-re-builders-alist '((t . ivy--regex-plus))))
+     (use-package swiper
+       :commands swiper
+       :ensure t
+       :after ivy)
+     (use-package counsel
+       :ensure t
+       :after swiper)
      (use-package all-the-icons-ivy
        :ensure t
-       :after (all-the-icons counsel)
+       :after (all-the-icons ivy)
        :config
        (all-the-icons-ivy-setup))
-     (use-package avy :ensure t)
+     (use-package avy
+       :ensure t
+       :after ivy)
 
      (use-package ivy-posframe
        :ensure t
-       :after counsel
+       :after ivy
        :config
        (setq ivy-height 20)
        (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
@@ -1327,7 +1355,7 @@
      (use-package magit
        :ensure t
        :hook (git-commit-mode . evil-insert-state)
-       :defer 5)
+       :defer 6)
    #+END_SRC
 
    #+BEGIN_SRC elisp
@@ -1517,19 +1545,19 @@
 
      (define-transient-command my:notmuch-transient ()
        "Transient for notmuch"
-       ["Account"
-        ("ap" "Personal" "to:hawnzug")
-        ("au" "UMN" "to:umn")
-        ("as" "Sandy" "to:sandy")]
-       ["Mailing List"
-        ("la" "All" "@all")
-        ("le" "Emacs" "@emacs")
-        ("lo" "Orgmode" "@orgmode")]
-       ["Tag"
-        ("i" "Inbox" "Inbox")
-        ("u" "Unread" "Unread")]
+       [["Account"
+         ("ap" "Personal" "to:hawnzug")
+         ("au" "UMN" "to:umn")
+         ("as" "Sandy" "to:sandy")]
+        ["Mailing List"
+         ("la" "All" "@all")
+         ("le" "Emacs" "@emacs")
+         ("lo" "Orgmode" "@orgmode")]
+        ["Tag"
+         ("i" "Inbox" "Inbox")
+         ("u" "Unread" "Unread")]]
        ["Search"
-        ("g" "Go" my:notmuch-dispatch)])
+        ("<RET>" "Go" my:notmuch-dispatch)])
    #+END_SRC
 ** projectile
    #+BEGIN_SRC elisp
@@ -1552,56 +1580,8 @@
 ** sublimity
    #+BEGIN_SRC elisp
      (use-package sublimity
-       :ensure t
-       :config
-       (use-package sublimity-scroll)
-       (use-package sublimity-map
-         :config
-         (sublimity-map-set-delay nil)))
-   #+END_SRC
-** symbol-overlay
-   #+BEGIN_SRC elisp
-     (use-package symbol-overlay
-       :ensure t)
-   #+END_SRC
-** web-mode
-   #+BEGIN_SRC elisp
-     (use-package web-mode
-       :ensure t)
-   #+END_SRC
-** which-key
-   #+BEGIN_SRC elisp
-     (use-package which-key
-       :ensure t
-       :config
-       (which-key-mode 1))
-   #+END_SRC
-** xterm-color
-   #+BEGIN_SRC elisp
-    (use-package xterm-color :ensure t)
-   #+END_SRC
-** projectile
-   #+BEGIN_SRC elisp
-    (use-package projectile
-      :ensure t
-      :defer t
-      :config
-      (projectile-mode 1)
-      (setq projectile-sort-order 'recently-active)
-      (setq projectile-switch-project-action #'projectile-dired)
-      (setq projectile-completion-system 'ivy))
-   #+END_SRC
-** rainbow-delimiters
-   #+BEGIN_SRC elisp
-     (use-package rainbow-delimiters
        :disabled t
        :ensure t
-       :hook ((prog-mode coq-mode) . rainbow-delimiters-mode))
-   #+END_SRC
-** sublimity
-   #+BEGIN_SRC elisp
-     (use-package sublimity
-       :ensure t
        :config
        (use-package sublimity-scroll)
        (use-package sublimity-map
@@ -1611,11 +1591,13 @@
 ** symbol-overlay
    #+BEGIN_SRC elisp
      (use-package symbol-overlay
-       :ensure t)
+       :ensure t
+       :commands symbol-overlay-put)
    #+END_SRC
 ** web-mode
    #+BEGIN_SRC elisp
      (use-package web-mode
+       :mode "\\.html?\\'"
        :ensure t)
    #+END_SRC
 ** which-key
@@ -1633,6 +1615,7 @@
 ** Coq
    #+BEGIN_SRC elisp
      (use-package proof-general
+       :mode ("\\.v\\'" . coq-mode)
        :ensure t
        :config
        (setq proof-splash-enable nil))
@@ -1680,14 +1663,19 @@
        :load-path "~/.emacs.d/packages/haskell-mode"
        :mode "\\.hs\\'")
 
-     (use-package ghcid :load-path "~/.emacs.d/packages/ghcid")
+     (use-package ghcid
+       :load-path "~/.emacs.d/packages/ghcid"
+       :after haskell-mode
+       :commands ghcid)
    #+END_SRC
 ** Agda
    #+BEGIN_SRC elisp
      (eval-and-compile
        (defun agda-mode-load-path ()
          (file-name-directory (shell-command-to-string "agda-mode locate"))))
-     (use-package agda2 :load-path (lambda () (agda-mode-load-path)))
+     (use-package agda2
+       :load-path (lambda () (agda-mode-load-path))
+       :mode ("\\.agda\\'" agda2-mode))
    #+END_SRC
 ** Ocaml
    #+BEGIN_SRC elisp

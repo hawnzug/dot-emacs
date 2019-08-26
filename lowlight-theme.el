@@ -99,12 +99,21 @@
    `(hl-line ((t (:background "#EAEAEA"))))
    `(line-number-current-line ((t (:background ,color-bg))))
 
-   `(mode-line ((t (:foreground ,gray-800 :background ,gray-300 :overline ,gray-500 :underline ,gray-500 :font "Sarasa Term SC-12"))))
-   `(mode-line-inactive ((t (:foreground ,gray-500 :background ,gray-300 :overline ,gray-500 :underline ,gray-500 :font "Sarasa Term SC-12"))))
+   ;; `(mode-line ((t (:foreground ,gray-800 :background ,gray-300 :overline ,gray-500 :underline ,gray-500 :font "Sarasa Term SC-12"))))
+   ;; `(mode-line-inactive ((t (:foreground ,gray-500 :background ,gray-300 :overline ,gray-500 :underline ,gray-500 :font "Sarasa Term SC-12"))))
+   `(mode-line ((t (:weight bold :background ,red-A100 :overline ,red-700 :underline ,red-700 :font "Sarasa Term SC-12"))))
+   `(mode-line-inactive ((t (:foreground "#2f2f2f" :background ,red-A100 :overline ,red-700 :underline ,red-700 :font "Sarasa Term SC-12"))))
 
    `(widget-field ((t (:background "#FAFAFA" :box (:line-width 1 :color ,color-fg :style nil)))))
    `(widget-button ((t (:foreground ,light-blue-900 :underline t))))
 
+   `(header-line ((t (:inherit mode-line))))
+
+   `(message-header-subject ((t ())))
+   `(message-header-name ((t (:foreground ,blue-900))))
+   `(message-header-other ((t ())))
+   `(message-cited-text ((t (:foreground ,red-500))))
+   `(message-mml ((t (:foreground ,green-700 :background ,green-A100 :underline t))))
 
    `(font-lock-type-face ((t (:foreground ,color-fg))))
    `(font-lock-builtin-face ((t (:foreground ,cyan-900))))

@@ -1025,6 +1025,7 @@
         . (lambda () (setq xterm-color-preserve-properties t))))
       :config
       (setq eshell-destroy-buffer-when-process-dies t)
+      (setq eshell-hist-ignoredups t)
       (setq eshell-history-size 100000)
       (setq
        eshell-visual-commands
@@ -1117,6 +1118,8 @@
       (emms-all)
       (emms-default-players)
       (setq emms-player-list '(emms-player-mplayer))
+      (setq emms-browser-covers nil)
+      (setq emms-source-file-directory-tree-function 'emms-source-file-directory-tree-find)
       (setq emms-source-file-default-directory "~/Music"))
   #+END_SRC
 * packages
@@ -1159,14 +1162,6 @@
        :defer t
        :config
        (setq company-idle-delay 0))
-   #+END_SRC
-
-   #+BEGIN_SRC elisp
-     (use-package company-tabnine
-       :ensure t
-       :commands company-tabnine
-       :config
-       (add-to-list 'company-backends #'company-tabnine))
    #+END_SRC
 ** ediff
    #+BEGIN_SRC elisp

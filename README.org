@@ -1401,7 +1401,8 @@
         '((:name "Inbox" :query "tag:inbox" :key "i")
           (:name "unread" :query "tag:unread" :key "u")
           (:name "emacs-devel" :query "to:emacs-devel@gnu.org")
-          (:name "orgmode" :query "to:emacs-orgmode@gnu.org")
+          (:name "Coq Club" :query "to:coq-club@inria.fr")
+          (:name "Org Mode" :query "to:emacs-orgmode@gnu.org")
           (:name "CSSA" :query "to:umncssa@googlegroups.com")
           (:name "Sandy" :query "to:sandymn@umich.edu")
           (:name "flagged" :query "tag:flagged" :key "f")
@@ -1428,6 +1429,7 @@
          "C" 'notmuch-mua-new-mail
          "cc" 'notmuch-mua-new-mail
          "r" 'notmuch-refresh-this-buffer
+         "R" 'notmuch-poll-and-refresh-this-buffer
          "J" 'notmuch-jump-search)
 
        (general-nmap notmuch-hello-mode-map
@@ -1437,7 +1439,7 @@
          "S-TAB" 'widget-backward)
 
        (general-nmap 'notmuch-search-mode-map
-       "cC" 'compose-mail-other-frame
+         "cC" 'compose-mail-other-frame
          "a" (lambda (&optional beg end)
                "Read and archive thread"
                (interactive (notmuch-interactive-region))

@@ -507,7 +507,7 @@
     (setq-default
      mode-line-format
      (list
-      "%04l,%02C"
+      " %04l,%03C"
       "  "
       '(:eval (my:eyebrowse-mode-line))
       "  "
@@ -519,6 +519,20 @@
       "  "
       <<mode-line-vc-mode>>
       ))
+  #+END_SRC
+
+  #+BEGIN_SRC elisp
+    (defun my:eyebrowse-mode-line ()
+      (mapcar
+       (lambda (window-config)
+         (let* ((slot (car window-config))
+                (slot-string (eyebrowse-format-slot window-config)))
+           (if (= slot (eyebrowse--get 'current-slot))
+               (my:add-face-string
+                (apply #'concat (moody-tab slot-string 1 'down))
+                (list :foreground "#0F0F0F"))
+             (concat " " slot-string " "))))
+       (eyebrowse--get 'window-configs)))
   #+END_SRC
 
   #+NAME: mode-line-datetime
@@ -536,7 +550,7 @@
       (moody-tab
        (concat
         (my:remove-icon-display (all-the-icons-icon-for-buffer))
-        " %b")
+        (my:add-face-string " %b" (list :foreground "#0F0F0F")))
        5 'down))
   #+END_SRC
 
@@ -548,7 +562,7 @@
          (concat
           (my:remove-icon-display
            (all-the-icons-alltheicon "git" :face '(:foreground "#F44336")))
-          vc-mode)
+          (my:add-face-string vc-mode (list :foreground "#0F0F0F")))
          5 'up)))
   #+END_SRC
 * org
@@ -1760,16 +1774,6 @@
       "Open a new eshell"
       (interactive)
       (eshell t))
-
-    (defun my:eyebrowse-mode-line ()
-      (mapcar
-       (lambda (window-config)
-         (let* ((slot (car window-config))
-                (slot-string (eyebrowse-format-slot window-config)))
-           (if (= slot (eyebrowse--get 'current-slot))
-               (apply #'concat (moody-tab slot-string 1 'down))
-             (concat " " slot-string " "))))
-       (eyebrowse--get 'window-configs)))
 
     (defun my:syntax-color-hex ()
       (interactive)

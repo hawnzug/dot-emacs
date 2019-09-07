@@ -1261,7 +1261,7 @@
    #+BEGIN_SRC elisp
      (use-package flycheck
        :ensure t
-       :hook (c-mode . flycheck-mode))
+       :hook ((sh-mode c-mode) . flycheck-mode))
    #+END_SRC
 ** geiser
    #+BEGIN_SRC elisp

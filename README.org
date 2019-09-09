@@ -6,6 +6,7 @@
   :END:
   -  [[#init][init]]
   -  [[#use-package][use-package]]
+  -  [[#benchmark-init][benchmark-init]]
   -  [[#all-the-icons][all-the-icons]]
   -  [[#generalel][general.el]]
   -  [[#hydra][hydra]]
@@ -15,6 +16,7 @@
     -  [[#hydra-projectile][hydra-projectile]]
     -  [[#hydra-eyebrowse][hydra-eyebrowse]]
     -  [[#hydra-help][hydra-help]]
+  -  [[#transient][transient]]
   -  [[#mode-line][mode line]]
   -  [[#org][org]]
     -  [[#org-agenda][org agenda]]
@@ -22,6 +24,8 @@
     -  [[#org-clock][org clock]]
     -  [[#org-babel][org babel]]
     -  [[#help-functions][Help functions]]
+    -  [[#keybindings][Keybindings]]
+    -  [[#hydra][Hydra]]
   -  [[#eshell][eshell]]
   -  [[#dired][dired]]
   -  [[#emms][EMMS]]
@@ -47,6 +51,7 @@
     -  [[#keyfreq][keyfreq]]
     -  [[#lsp][lsp]]
     -  [[#magit][magit]]
+    -  [[#notmuch][notmuch]]
     -  [[#projectile][projectile]]
     -  [[#rainbow-delimiters][rainbow-delimiters]]
     -  [[#sublimity][sublimity]]
@@ -641,72 +646,6 @@
       :ensure t
       :after org)
   #+END_SRC
-
-  Keybindings
-  #+BEGIN_SRC elisp
-    (general-nmap org-mode-map
-      "gh" 'outline-up-heading
-      "gj" 'org-forward-heading-same-level
-      "gk" 'org-backward-heading-same-level
-      "gl" 'outline-next-visible-heading
-      "gt" 'counsel-org-goto
-      "<" 'org-metaleft
-      ">" 'org-metaright
-      "t" 'org-todo)
-    (general-def org-mode-map
-      "M-h" 'org-metaleft
-      "M-j" 'org-metadown
-      "M-k" 'org-metaup
-      "M-l" 'org-metaright
-      "M-H" 'org-shiftmetaleft
-      "M-J" 'org-shiftmetadown
-      "M-K" 'org-shiftmetaup
-      "M-L" 'org-shiftmetaright)
-    (general-def org-mode-map
-      "M-;" 'hydra-org/body)
-  #+END_SRC
-
-  Hydra
-  #+BEGIN_SRC elisp
-    (defhydra hydra-org
-      (:color teal :hint nil)
-      (concat
-       "               "
-       (all-the-icons-fileicon "org" :height 2 :v-adjust -0.2 :face 'all-the-icons-purple)
-       " Org mode"
-       "
-
-    ^Insert^        ^View^       ^Hydra^    ^Action^
-    ────────────────────────────────────────────────
-    _s_: schedule   _c_: column  _k_: clock  _r_: refile
-    _d_: deadline   _i_: image   _b_: babel  _o_: open
-    _t_: timestamp  _x_: latex
-    _l_: link
-    _L_: link
-    _p_: property
-
-    ")
-      ("s" org-schedule)
-      ("d" org-deadline)
-      ("t" org-time-stamp)
-      ("l" org-insert-link)
-      ("L" org-insert-last-stored-link)
-      ("p" org-set-property)
-
-      ("c" org-columns)
-      ("i" org-toggle-inline-images)
-      ("x" org-toggle-latex-fragment)
-
-      ("k" hydra-org-clock/body)
-      ("b" hydra-org-babel/body)
-
-      ("r" my:org-refile-to-diary)
-      ("o" org-open-at-point)
-      ("M-;" org-ctrl-c-ctrl-c)
-
-      ("q" nil)
-      ("<escape>" nil))
-  #+END_SRC
 ** org agenda
   Org agenda config.
   #+NAME: org-agenda-config
@@ -992,6 +931,70 @@
       (interactive)
       (org-agenda nil "h"))
   #+END_SRC
+** Keybindings
+   #+BEGIN_SRC elisp
+     (general-nmap org-mode-map
+       "gh" 'outline-up-heading
+       "gj" 'org-forward-heading-same-level
+       "gk" 'org-backward-heading-same-level
+       "gl" 'outline-next-visible-heading
+       "gt" 'counsel-org-goto
+       "<" 'org-metaleft
+       ">" 'org-metaright
+       "t" 'org-todo)
+     (general-def org-mode-map
+       "M-h" 'org-metaleft
+       "M-j" 'org-metadown
+       "M-k" 'org-metaup
+       "M-l" 'org-metaright
+       "M-H" 'org-shiftmetaleft
+       "M-J" 'org-shiftmetadown
+       "M-K" 'org-shiftmetaup
+       "M-L" 'org-shiftmetaright)
+     (general-def org-mode-map
+       "M-;" 'hydra-org/body)
+   #+END_SRC
+** Hydra
+   #+BEGIN_SRC elisp
+     (defhydra hydra-org
+       (:color teal :hint nil)
+       (concat
+        "               "
+        (all-the-icons-fileicon "org" :height 2 :v-adjust -0.2 :face 'all-the-icons-purple)
+        " Org mode"
+        "
+
+     ^Insert^        ^View^       ^Hydra^    ^Action^
+     ────────────────────────────────────────────────
+     _s_: schedule   _c_: column  _k_: clock  _r_: refile
+     _d_: deadline   _i_: image   _b_: babel  _o_: open
+     _t_: timestamp  _x_: latex
+     _l_: link
+     _L_: link
+     _p_: property
+
+     ")
+       ("s" org-schedule)
+       ("d" org-deadline)
+       ("t" org-time-stamp)
+       ("l" org-insert-link)
+       ("L" org-insert-last-stored-link)
+       ("p" org-set-property)
+
+       ("c" org-columns)
+       ("i" org-toggle-inline-images)
+       ("x" org-toggle-latex-fragment)
+
+       ("k" hydra-org-clock/body)
+       ("b" hydra-org-babel/body)
+
+       ("r" my:org-refile-to-diary)
+       ("o" org-open-at-point)
+       ("M-;" org-ctrl-c-ctrl-c)
+
+       ("q" nil)
+       ("<escape>" nil))
+   #+END_SRC
 * eshell
   #+BEGIN_SRC elisp
     (defun my:eshell-complete ()

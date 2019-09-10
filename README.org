@@ -292,7 +292,7 @@
         "
 
      ^Ivy^          ^View^         ^Hydra^         ^Action^
-     ─────────────────────────────────────────────────
+     ─────────────────────────
      _b_: buffer    _g_: magit     _e_: eyebrowse  _t_: eshell
      _f_: file      _a_: agenda    _w_: window     _l_: link
      _s_: swiper    _A_: Agenda    _B_: buffer     _c_: capture
@@ -340,7 +340,7 @@
         "
 
      ^Move^         ^Swap^         ^Size^         ^Action^
-     ─────────────────────────────────────────────────
+     ─────────────────────────
      _j_: down      _H_: left      _+_: + h       _s_: split
      _k_: up        _L_: right     _-_: - h       _v_: vsplit
      _h_: left      _J_: bottom    _>_: + w       _d_: delete
@@ -379,7 +379,7 @@
         "
 
      ^Action^
-     ─────────────
+     ─────
      _j_: next
      _k_: previous
      _d_: delete
@@ -404,7 +404,7 @@
         "
 
      ^Switch^            ^Action^
-     ────────────────────────────────
+     ──────────────
      _p_: project        _c_: compile
      _b_: buffer         _t_: test
      _f_: file           _r_: run
@@ -452,7 +452,7 @@
         "
 
      ^Describe^         ^Info^
-     ──────────────────────────
+     ─────────────
      _f_: function      _i_: info
      _F_: face          _n_: news
      _m_: mode          _w_: woman
@@ -860,7 +860,7 @@
        "
 
     ^Move^      ^Action^
-    ────────────────────
+    ──────────
     _j_: next   _e_: edit
     _k_: prev   _t_: tangle
     _h_: head   _r_: result
@@ -965,7 +965,7 @@
         "
 
      ^Insert^        ^View^       ^Hydra^    ^Action^
-     ────────────────────────────────────────────────
+     ───────────────────────
      _s_: schedule   _c_: column  _k_: clock  _r_: refile
      _d_: deadline   _i_: image   _b_: babel  _o_: open
      _t_: timestamp  _x_: latex

@@ -585,7 +585,6 @@
       <<org-capture-templates>>
       <<org-agenda-config>>
       <<org-clock-config>>
-      (setq org-agenda-files '("~/org/todos.org" "~/org/diary.org"))
       (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
       (setq org-ellipsis "𝌆")
       (setq org-confirm-babel-evaluate nil)
@@ -638,7 +637,7 @@
       :ensure t
       :after org
       :init
-      (setq org-bullets-bullet-list '("⚫" "∙"))
+      (setq org-bullets-bullet-list '("⚫" "⚪" "▪" "▫"))
       :config
       (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
 
@@ -650,6 +649,18 @@
   Org agenda config.
   #+NAME: org-agenda-config
   #+BEGIN_SRC elisp :tangle no
+    (setq org-agenda-files '("~/org/todos.org"
+                             "~/org/diary.org"
+                             "~/UMN/CSCI2041/main.org"
+                             "~/UMN/CSCI5511/main.org"
+                             "~/UMN/CSCI8001/main.org"
+                             "~/UMN/GRAD5102/main.org"
+                             "~/UMN/CSCI5106/main.org"))
+    (setq org-agenda-prefix-format
+          '((agenda . "   %?-12t% s")
+            (todo . "  ")
+            (tags . "   ")
+            (search . "   ")))
     (setq org-agenda-span 'day)
     (setq org-agenda-log-mode-items '(clock))
     (setq org-agenda-use-time-grid nil)
@@ -662,12 +673,16 @@
     (setq org-agenda-block-separator ?―)
     (setq org-agenda-custom-commands
           '(("h" "Test"
-             ((agenda "" ((org-agenda-overriding-header "Today")))
-              (todo "WAITING" ((org-agenda-overriding-header "Waiting")))
+             ((agenda "" ((org-agenda-overriding-header "Agenda")))
               (todo
                "TODO"
                ((org-agenda-overriding-header "Read")
-                (org-agenda-files '("~/org/notes.org"))))))))
+                (org-super-agenda-groups nil)
+                (org-agenda-files '("~/org/notes.org"))))
+              (todo
+               "WAITING"
+               ((org-agenda-overriding-header "Waiting")
+                (org-super-agenda-groups nil)))))))
   #+END_SRC
 
   Show time grid in org agenda.
@@ -708,18 +723,33 @@
   Super agenda
   #+BEGIN_SRC elisp
     (use-package org-super-agenda
-      :disabled t
       :ensure t
       :after org
       :config
       (org-super-agenda-mode)
       (setq org-super-agenda-groups
-            '((:name "Today"
-                     :and (:todo "TODO" :scheduled today))
-              (:name "Waiting"
-                     :todo "WAITING")
-              (:name "No Date"
-                     :date nil))))
+            '((:name "Today" :time-grid t)
+              (:name "CSCI 2041" :order 2 :category "CSCI2041")
+              (:name "CSCI 5106" :order 3 :category "CSCI5106")
+              (:name "Schedule" :order 1 :category "schedule")
+              (:name "CSCI 5511" :order 4 :category "CSCI5511")
+              (:name "CSCI 8001" :order 5 :category "CSCI8001")
+              (:name "GRAD 5102" :order 6 :category "GRAD5102")
+              (:name "TODO" :anything t))))
+  #+END_SRC
+
+  #+BEGIN_SRC elisp
+    (use-package org-ql
+      :disabled t
+      :ensure t
+      :after org-super-agenda
+      :config
+      (org-ql-agenda "~/org/todos.org"
+        (or (ts-active :on today)
+            (deadline auto)
+            (scheduled :to today))
+        :title "My Agenda View")
+      )
   #+END_SRC
   
   Keybindings

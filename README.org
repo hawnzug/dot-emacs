@@ -651,11 +651,11 @@
   #+BEGIN_SRC elisp :tangle no
     (setq org-agenda-files '("~/org/todos.org"
                              "~/org/diary.org"
-                             "~/UMN/CSCI2041/main.org"
-                             "~/UMN/CSCI5511/main.org"
-                             "~/UMN/CSCI8001/main.org"
-                             "~/UMN/GRAD5102/main.org"
-                             "~/UMN/CSCI5106/main.org"))
+                             "~/org/CSCI2041.org"
+                             "~/org/CSCI5511.org"
+                             "~/org/CSCI8001.org"
+                             "~/org/GRAD5102.org"
+                             "~/org/CSCI5106.org"))
     (setq org-agenda-prefix-format
           '((agenda . "   %?-12t% s")
             (todo . "  ")
@@ -727,6 +727,7 @@
       :after org
       :config
       (org-super-agenda-mode)
+      (setq org-super-agenda-header-separator "")
       (setq org-super-agenda-groups
             '((:name "Today" :time-grid t)
               (:name "CSCI 2041" :order 2 :category "CSCI2041")
@@ -1206,7 +1207,7 @@
    #+BEGIN_SRC elisp
      (use-package company
        :ensure t
-       :defer t
+       :hook (merlin-mode . company-mode)
        :config
        (setq company-idle-delay 0))
    #+END_SRC
@@ -1217,6 +1218,11 @@
        :config
        (setq ediff-split-window-function 'split-window-horizontally)
        (setq ediff-window-setup-function 'ediff-setup-windows-plain))
+   #+END_SRC
+** emacs-vterm
+   #+BEGIN_SRC elisp
+     (use-package vterm
+       :load-path "~/.emacs.d/emacs-libvterm")
    #+END_SRC
 ** emmet
    #+BEGIN_SRC elisp

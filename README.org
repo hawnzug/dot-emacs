@@ -591,10 +591,10 @@
       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
       (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
       (setq org-todo-keywords
-            '((sequence "TODO" "WAITING" "|" "DONE")))
+            '((sequence "TODO" "NEXT" "|" "DONE")))
       (setq org-todo-keyword-faces
             '(("TODO" . org-todo)
-              ("WAITING" . (:foreground "#F57F17"
+              ("NEXT" . (:foreground "#F57F17"
                             :background "#FFF9C4"
                             :weight bold))))
       (setq org-log-into-drawer t)
@@ -650,12 +650,7 @@
   #+NAME: org-agenda-config
   #+BEGIN_SRC elisp :tangle no
     (setq org-agenda-files '("~/org/todos.org"
-                             "~/org/diary.org"
-                             "~/org/CSCI2041.org"
-                             "~/org/CSCI5511.org"
-                             "~/org/CSCI8001.org"
-                             "~/org/GRAD5102.org"
-                             "~/org/CSCI5106.org"))
+                             "~/org/diary.org"))
     (setq org-agenda-prefix-format
           '((agenda . "   %?-12t% s")
             (todo . "  ")
@@ -673,16 +668,18 @@
     (setq org-agenda-block-separator ?―)
     (setq org-agenda-custom-commands
           '(("h" "Test"
-             ((agenda "" ((org-agenda-overriding-header "Agenda")))
+             ((todo
+               "NEXT"
+               ((org-agenda-overriding-header "Next")))
+              (agenda
+               ""
+               ((org-agenda-overriding-header "Calendar")
+                (org-super-agenda-groups nil)))
               (todo
                "TODO"
                ((org-agenda-overriding-header "Read")
                 (org-super-agenda-groups nil)
-                (org-agenda-files '("~/org/notes.org"))))
-              (todo
-               "WAITING"
-               ((org-agenda-overriding-header "Waiting")
-                (org-super-agenda-groups nil)))))))
+                (org-agenda-files '("~/org/notes.org"))))))))
   #+END_SRC
 
   Show time grid in org agenda.
@@ -729,14 +726,13 @@
       (org-super-agenda-mode)
       (setq org-super-agenda-header-separator "")
       (setq org-super-agenda-groups
-            '((:name "Today" :time-grid t)
-              (:name "CSCI 2041" :order 2 :category "CSCI2041")
+            '((:name "CSCI 2041" :order 2 :category "CSCI2041")
               (:name "CSCI 5106" :order 3 :category "CSCI5106")
-              (:name "Schedule" :order 1 :category "schedule")
               (:name "CSCI 5511" :order 4 :category "CSCI5511")
               (:name "CSCI 8001" :order 5 :category "CSCI8001")
               (:name "GRAD 5102" :order 6 :category "GRAD5102")
-              (:name "TODO" :anything t))))
+              (:name "Home" :order 7 :tag "@home")
+              (:name "TODO" :order 90 :anything t))))
   #+END_SRC
 
   #+BEGIN_SRC elisp
@@ -779,18 +775,10 @@
   Org capture templates.
   #+NAME: org-capture-templates
   #+BEGIN_SRC elisp :tangle no
+    (add-hook 'org-capture-mode-hook 'evil-insert-state)
     (setq org-capture-templates
-          '(("t" "Todo" entry (file "~/org/todos.org")
-             "* TODO %?"
-             :prepend t)
-            ("w" "Water" entry (file+olp+datetree "~/org/diary.org")
-             "* water\n     :PROPERTIES:\n     :volume:   %^{PROMPT}\n     :END:"
-             :immediate-finish t)
-            ("c" "Clock" entry (file+olp+datetree "~/org/diary.org")
-             "* %^{PROMPT}\n  %t\n"
-             :immediate-finish t
-             :clock-in t
-             :clock-keep t)))
+          '(("t" "Todo" entry (file+headline "~/org/todos.org" "Inbox")
+             "* %?")))
   #+END_SRC
 
   #+BEGIN_SRC elisp
@@ -999,7 +987,7 @@
      ───────────────────────
      _s_: schedule   _c_: column  _k_: clock  _r_: refile
      _d_: deadline   _i_: image   _b_: babel  _o_: open
-     _t_: timestamp  _x_: latex
+     _t_: timestamp  _x_: latex   ^ ^         _w_: refile
      _l_: link
      _L_: link
      _p_: property
@@ -1021,6 +1009,7 @@
 
        ("r" my:org-refile-to-diary)
        ("o" org-open-at-point)
+       ("w" org-refile)
        ("M-;" org-ctrl-c-ctrl-c)
 
        ("q" nil)
@@ -1243,6 +1232,7 @@
        (setq evil-emacs-state-cursor (list 'box (face-attribute 'default :foreground)))
        (evil-set-initial-state 'dired-mode 'emacs)
        (evil-set-initial-state 'ivy-occur-mode 'emacs)
+       (evil-set-initial-state 'org-capture-mode 'insert)
        (evil-set-initial-state 'wdired-mode 'normal))
      (use-package evil-surround
        :ensure t

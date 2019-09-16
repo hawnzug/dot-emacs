@@ -248,12 +248,14 @@
   Use comma as the global leader key. It is supported in any mode and evil state.
   #+BEGIN_SRC elisp
     (general-def 'override
-      "M-," 'hydra-global/body)
+      "M-," 'hydra-global/body
+      "M-RET" 'anylink
+      "C-/" 'comment-dwim)
   #+END_SRC
 
   Use space as the leader key for those keybindings which are useful only in normal mode.
   #+BEGIN_SRC elisp
-    (general-mmap
+    (general-mmap                           ;
       :prefix "SPC"
       "" nil
       "a" 'align
@@ -1158,6 +1160,12 @@
        :ensure t
        :config
        (setq alert-default-style 'libnotify))
+   #+END_SRC
+** anylink
+   #+BEGIN_SRC elisp
+     (use-package anylink
+       :load-path "~/.emacs.d/packages/anylink"
+       :commands anylink)
    #+END_SRC
 ** battery
    #+BEGIN_SRC elisp

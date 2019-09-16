@@ -596,6 +596,7 @@
               ("NEXT" . (:foreground "#F57F17"
                             :background "#FFF9C4"
                             :weight bold))))
+      (setq org-fontify-done-headline t)
       (setq org-log-into-drawer t)
       (setq org-log-done 'time)
       (setq org-enforce-todo-dependencies t)

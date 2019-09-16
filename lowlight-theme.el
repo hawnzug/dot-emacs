@@ -173,6 +173,7 @@
    `(org-todo ((t (:foreground ,red-500 :background ,red-100 :weight bold))))
    `(org-tag ((t (:foreground ,gray-400 :weight bold))))
    `(org-done ((t (:foreground ,green-500 :background ,green-100 :weight bold))))
+   `(org-headline-done ((t (:foreground ,gray-400))))
    `(org-block ((t (:foreground ,color-fg))))
    `(org-table ((t (:foreground ,color-fg))))
    `(org-level-1 ((t (:inherit outline-1))))

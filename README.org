@@ -174,6 +174,7 @@
 
   #+BEGIN_SRC elisp
     (setq password-cache-expiry 1200)
+    (setq-default show-trailing-whitespace t)
   #+END_SRC
 * use-package
   #+BEGIN_SRC elisp
@@ -931,7 +932,7 @@
        :require-match t
        :action #'insert))
   #+END_SRC
-  
+
   #+BEGIN_SRC elisp
     (defun my:agenda ()
       (interactive)
@@ -1676,7 +1677,7 @@
           :preselect (ivy-thing-at-point)
           :action 'company-coq-doc-buffer-refman)))
    #+END_SRC
-   
+
    Keybindings
    #+BEGIN_SRC elisp
      (general-def 'normal coq-mode-map

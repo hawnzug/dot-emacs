@@ -296,8 +296,8 @@
      ─────────────────────────
      _b_: buffer    _g_: magit     _e_: eyebrowse  _t_: eshell
      _f_: file      _a_: agenda    _w_: window     _l_: link
-     _s_: swiper    _A_: Agenda    _B_: buffer     _c_: capture
-     _d_: dired     _m_: Email     _h_: help       _q_: quit
+     _s_: swiper    _m_: Email     _B_: buffer     _c_: capture
+     _d_: dired     ^ ^            _h_: help       _q_: quit
      _r_: ripgrep   ^ ^            _p_: project    _Q_: Quit
      _k_: kill
      _i_: ibuffer
@@ -312,8 +312,7 @@
        ("i" ibuffer)
 
        ("g" magit-status)
-       ("a" my:agenda)
-       ("A" org-agenda)
+       ("a" org-agenda)
        ("m" my:notmuch-transient)
 
        ("t" my:new-eshell)
@@ -597,6 +596,8 @@
               ("NEXT" . (:foreground "#F57F17"
                             :background "#FFF9C4"
                             :weight bold))))
+      (setq org-global-properties
+            '(("Effort_ALL". "0:10 0:30 1:00 2:00 3:00 4:00")))
       (setq org-fontify-done-headline t)
       (setq org-log-into-drawer t)
       (setq org-log-done 'time)
@@ -651,13 +652,8 @@
       :after org
       :commands (org-agenda)
       :config
-      (setq org-agenda-files '("~/org/todos.org"))
-                               ;; "~/org/diary.org"))
-      (setq org-agenda-prefix-format
-            '((agenda . "   %?-12t% s")
-              (todo . "  ")
-              (tags . "   ")
-              (search . "   ")))
+      (setq org-agenda-files '("~/org/todos.org"
+                               "~/org/diary.org"))
       (setq org-agenda-start-with-follow-mode nil)
       (setq org-agenda-dim-blocked-tasks nil)
       (setq org-agenda-span 'day)
@@ -705,19 +701,11 @@
   #+NAME: org-agenda-custom-commands
   #+BEGIN_SRC elisp :tangle no
     (setq org-agenda-custom-commands
-          '(("h" "Test"
-             ((todo
-               "NEXT"
-               ((org-agenda-overriding-header "Next")))
-              (agenda
-               ""
-               ((org-agenda-overriding-header "Calendar")
-                (org-super-agenda-groups nil)))
-              (todo
-               "TODO"
-               ((org-agenda-overriding-header "Read")
-                (org-super-agenda-groups nil)
-                (org-agenda-files '("~/org/notes.org"))))))))
+          '(("n" todo "NEXT"
+             ((org-agenda-overriding-header "Next Actions")))
+            ("r" todo "TODO"
+             ((org-agenda-overriding-header "Read")
+              (org-agenda-files '("~/org/notes.org"))))))
   #+END_SRC
 
   Super agenda
@@ -725,6 +713,7 @@
   #+BEGIN_SRC elisp :tangle no
     (use-package org-super-agenda
       :ensure t
+      :disabled t
       :after org-agenda
       :config
       (org-super-agenda-mode)
@@ -931,12 +920,6 @@
          (seq-filter #'identity names))
        :require-match t
        :action #'insert))
-  #+END_SRC
-
-  #+BEGIN_SRC elisp
-    (defun my:agenda ()
-      (interactive)
-      (org-agenda nil "h"))
   #+END_SRC
 ** Keybindings
    #+BEGIN_SRC elisp

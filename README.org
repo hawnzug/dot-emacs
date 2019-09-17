@@ -174,7 +174,6 @@
 
   #+BEGIN_SRC elisp
     (setq password-cache-expiry 1200)
-    (setq-default show-trailing-whitespace t)
   #+END_SRC
 * use-package
   #+BEGIN_SRC elisp
@@ -579,6 +578,8 @@
       ;; ((org-babel-after-execute . org-redisplay-inline-images))
       ;; (org-agenda-finalize . my:org-agenda-time-grid-spacing))
       :config
+      (add-hook 'org-mode-hook
+                (lambda () (setq show-trailing-whitespace t)))
       (use-package org-notmuch)
       (use-package org-mouse)
       <<org-kill-temp-fontify-buffer>>
@@ -1631,6 +1632,13 @@
     (use-package xterm-color :ensure t)
    #+END_SRC
 * languages
+** prog-mode
+   #+BEGIN_SRC elisp
+     (use-package prog-mode
+       :config
+       (add-hook 'prog-mode-hook
+                 (lambda () (setq show-trailing-whitespace t))))
+   #+END_SRC
 ** Coq
    #+BEGIN_SRC elisp
      (use-package proof-general

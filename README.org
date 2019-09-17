@@ -963,6 +963,7 @@
      _l_: link
      _L_: link
      _p_: property
+     _e_: effort
 
      ")
        ("s" org-schedule)
@@ -971,6 +972,7 @@
        ("l" org-insert-link)
        ("L" org-insert-last-stored-link)
        ("p" org-set-property)
+       ("e" org-set-effort)
 
        ("c" org-columns)
        ("i" org-toggle-inline-images)
@@ -1820,6 +1822,7 @@
   #+BEGIN_SRC elisp
     (defun my:toggle-transparency ()
       (interactive)
+      (set-face-font 'fixed-pitch-serif "Iosevka Type Slab-12")
       (let ((transparency 95)
             (opacity 100)
             (old-alpha (frame-parameter nil 'alpha)))

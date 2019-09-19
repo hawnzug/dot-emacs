@@ -1775,6 +1775,11 @@
              TeX-PDF-mode t
              TeX-electric-sub-and-superscript t))
    #+END_SRC
+** YAML
+   #+BEGIN_SRC elisp
+     (use-package yaml-mode
+       :ensure t)
+   #+END_SRC
 * help functions
   #+BEGIN_SRC elisp
     (defun my:load-theme ()

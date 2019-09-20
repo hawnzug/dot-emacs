@@ -497,6 +497,18 @@
       :config
       (setq doom-modeline-icon t))
   #+END_SRC
+
+  #+BEGIN_SRC elisp
+    (use-package time
+      :after doom-modeline
+      :config
+      (display-time-mode))
+    (use-package fancy-battery
+      :ensure t
+      :after doom-modeline
+      :config
+      (fancy-battery-mode))
+  #+END_SRC
 * org
   #+BEGIN_SRC elisp :noweb no-export
     (use-package org

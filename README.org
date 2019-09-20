@@ -232,6 +232,7 @@
       (general-def 'override
         "C-=" 'text-scale-increase
         "M-p" 'my:other-window-or-buffer
+        "M-m" 'ivy-switch-buffer
         "C--" 'text-scale-decrease)
       (general-mmap Info-mode-map
         "q" 'Info-exit
@@ -293,7 +294,7 @@
 ** hydra-global
    #+BEGIN_SRC elisp
      (defhydra hydra-global
-       (:color teal :hint nil)
+       (:color teal :hint nil :idle 1.0)
        (concat
         "                 "
         (all-the-icons-fileicon "emacs" :height 2 :v-adjust -0.2 :face 'all-the-icons-purple)
@@ -302,16 +303,14 @@
 
      ^Ivy^          ^View^         ^Hydra^         ^Action^
      ─────────────────────────
-     _b_: buffer    _g_: magit     _E_: eyebrowse  _e_: eshell
-     _f_: file      _a_: agenda    _w_: window     _v_: vterm
-     _s_: swiper    _m_: Email     _B_: buffer     _l_: link
-     _d_: dired     _[_: Side      _h_: help       _c_: capture
-     _r_: ripgrep   ^ ^            _p_: project    _q_: quit
-     _k_: kill      ^ ^                            _Q_: Quit
-     _i_: ibuffer
+     _f_: file      _g_: magit     _E_: eyebrowse  _e_: eshell
+     _s_: swiper    _a_: agenda    _w_: window     _v_: vterm
+     _d_: dired     _m_: Email     _B_: buffer     _l_: link
+     _r_: ripgrep   _[_: Side      _h_: help       _c_: capture
+     _k_: kill      ^ ^            _p_: project    _q_: quit
+     _i_: ibuffer   ^ ^            ^ ^             _Q_: Quit
 
      ")
-       ("b" ivy-switch-buffer)
        ("f" counsel-find-file)
        ("s" swiper)
        ("d" dired)
@@ -342,7 +341,7 @@
 ** hydra-window
    #+BEGIN_SRC elisp
      (defhydra hydra-window
-       (:color pink :hint nil)
+       (:color pink :hint nil :idle 1.0)
        (concat
         "            "
         (all-the-icons-material "apps" :height 2 :v-adjust -0.3)
@@ -382,7 +381,7 @@
 ** hydra-buffer
    #+BEGIN_SRC elisp
      (defhydra hydra-buffer
-       (:color teal :hint nil)
+       (:color teal :hint nil :idle 1.0)
        (concat
         (all-the-icons-faicon "clone" :height 2 :v-adjust -0.2)
         " Buffer"
@@ -406,7 +405,7 @@
 ** hydra-projectile
    #+BEGIN_SRC elisp
      (defhydra hydra-projectile
-       (:color teal :hint nil)
+       (:color teal :hint nil :idle 1.0)
        (concat
         "       "
         (all-the-icons-material "dashboard" :height 2 :v-adjust -0.3)
@@ -441,7 +440,7 @@
 ** hydra-eyebrowse
    #+BEGIN_SRC elisp
      (defhydra hydra-eyebrowse
-       (:color teal :hint nil)
+       (:color teal :hint nil :idle 1.0)
        "eyebrowse"
        ("l" eyebrowse-last-window-config "last" :column "Switch")
        ("j" eyebrowse-next-window-config "next" :color red)
@@ -454,7 +453,7 @@
 ** hydra-help
    #+BEGIN_SRC elisp
      (defhydra hydra-help
-       (:color teal :hint nil)
+       (:color teal :hint nil :idle 1.0)
        (concat
         "      "
         (all-the-icons-material "help_outline" :height 2 :v-adjust -0.3)
@@ -731,7 +730,7 @@
    Hydra
    #+BEGIN_SRC elisp
      (defhydra hydra-org-clock
-       (:color blue :hint nil)
+       (:color blue :hint nil :idle 1.0)
        "org clock"
        ("g" org-clock-goto "goto")
        ("i" org-clock-in "in")
@@ -773,7 +772,7 @@
   Hydra
   #+BEGIN_SRC elisp
     (defhydra hydra-org-babel
-      (:color teal :hint nil)
+      (:color teal :hint nil :idle 1.0)
       (concat
        "  "
        (all-the-icons-fileicon "org" :height 2 :v-adjust -0.2 :face 'all-the-icons-purple)
@@ -872,7 +871,7 @@
 ** Hydra
    #+BEGIN_SRC elisp
      (defhydra hydra-org
-       (:color teal :hint nil)
+       (:color teal :hint nil :idle 1.0)
        (concat
         "               "
         (all-the-icons-fileicon "org" :height 2 :v-adjust -0.2 :face 'all-the-icons-purple)

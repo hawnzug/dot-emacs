@@ -756,7 +756,11 @@
     (add-hook 'org-capture-mode-hook 'evil-insert-state)
     (setq org-capture-templates
           '(("t" "Todo" entry (file+headline "~/org/todos.org" "Inbox")
-             "* %?")))
+             "* %?")
+            ("r" "Thoughts" plain (file+headline "~/Projects/blog/thoughts.org" "")
+             "%?"
+             :prepend t
+             :empty-lines-after 1)))
   #+END_SRC
 
   #+BEGIN_SRC elisp

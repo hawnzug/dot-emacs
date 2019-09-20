@@ -80,6 +80,7 @@
 
   Disable useless UIs.
   #+BEGIN_SRC elisp
+    (setq default-frame-alist '((font . "Iosevka Type Slab 12")))
     (scroll-bar-mode -1)
     (horizontal-scroll-bar-mode -1)
     (tool-bar-mode -1)
@@ -158,7 +159,7 @@
   #+END_SRC
 
   Load theme.
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :tangle no
     (load-theme 'lowlight t)
   #+END_SRC
 
@@ -205,6 +206,16 @@
                    '("\\.v" all-the-icons-fileicon "coq" :face all-the-icons-red))
       (add-to-list 'all-the-icons-mode-icon-alist
                    '(coq-mode all-the-icons-fileicon "coq" :face all-the-icons-red)))
+  #+END_SRC
+* doom-themes
+  #+BEGIN_SRC elisp
+    (use-package doom-themes
+      :ensure t
+      :config
+      (setq doom-themes-enable-bold t)
+      (setq doom-themes-enable-italic t)
+      (load-theme 'doom-solarized-light t)
+      (doom-themes-org-config))
   #+END_SRC
 * general.el
   #+BEGIN_SRC elisp :noweb no-export
@@ -274,11 +285,8 @@
       :config
       (setq hydra-hint-display-type 'posframe)
       (setq hydra-posframe-show-params
-            '(:internal-border-width 1
-              :internal-border-color "#9E9E9E"
-              :background-color "#ECECEC"
-              :left-fringe 15
-              :right-fringe 15
+            '(:internal-border-width 10
+              :background-color "#f0e9d7"
               :poshandler posframe-poshandler-frame-center)))
   #+END_SRC
 ** hydra-global
@@ -480,94 +488,12 @@
       :ensure magit)
   #+END_SRC
 * mode line
-  Honestly mode line is just an eye candy for me. The only useful part is column number,
-  and maybe the current buffer name. But a pretty mode line does please me to some extent,
-  and it makes my emacs seem more modern, so I keep it.
-
   #+BEGIN_SRC elisp
-    (use-package moody
+    (use-package doom-modeline
       :ensure t
+      :hook (after-init . doom-modeline-mode)
       :config
-      (setq x-underline-at-descent-line t)
-      (setq moody-mode-line-height 30))
-  #+END_SRC
-  Here are two aux functions to add foreground color to text and remove icon shift.
-  #+BEGIN_SRC elisp
-    (defun my:add-face-string (s face)
-      (add-face-text-property 0 (length s) face nil s) s)
-
-    (defun my:remove-icon-display (s)
-      (remove-text-properties 0 1 '(display nil) s) s)
-  #+END_SRC
-
-  The mode line contains:
-  1. Line number, column number.
-  2. Tabs of eyebrowse. Current workspace tab opens above.
-  3. Date time. If org clock is running, show the clocking entry and duration.
-  4. Buffer icon and name, upward openning.
-  5. Battery icon and percent.
-  6. Icon and branch of vc-mode. Just an eye candy to show off the downward openning tab.
-  #+BEGIN_SRC elisp :noweb no-export
-    (setq-default
-     mode-line-format
-     (list
-      " %04l,%03C"
-      "  "
-      '(:eval (my:eyebrowse-mode-line))
-      "  "
-      <<mode-line-datetime>>
-      "  "
-      <<mode-line-buffer-name>>
-      "  "
-      '(:eval (my:battery-mode-line))
-      "  "
-      <<mode-line-vc-mode>>
-      ))
-  #+END_SRC
-
-  #+BEGIN_SRC elisp
-    (defun my:eyebrowse-mode-line ()
-      (mapcar
-       (lambda (window-config)
-         (let* ((slot (car window-config))
-                (slot-string (eyebrowse-format-slot window-config)))
-           (if (= slot (eyebrowse--get 'current-slot))
-               (my:add-face-string
-                (apply #'concat (moody-tab slot-string 1 'down))
-                (list :foreground "#0F0F0F"))
-             (concat " " slot-string " "))))
-       (eyebrowse--get 'window-configs)))
-  #+END_SRC
-
-  #+NAME: mode-line-datetime
-  #+BEGIN_SRC elisp :tangle no
-    '(:eval
-      (if (and (featurep 'org) (org-clocking-p))
-          (concat (format-time-string "%H:%M ")
-                  org-mode-line-string)
-        (format-time-string "%m-%d %H:%M")))
-  #+END_SRC
-
-  #+NAME: mode-line-buffer-name
-  #+BEGIN_SRC elisp :tangle no
-    '(:eval
-      (moody-tab
-       (concat
-        (my:remove-icon-display (all-the-icons-icon-for-buffer))
-        (my:add-face-string " %b" (list :foreground "#0F0F0F")))
-       5 'down))
-  #+END_SRC
-
-  #+NAME: mode-line-vc-mode
-  #+BEGIN_SRC elisp :tangle no
-    '(:eval
-      (when vc-mode
-        (moody-tab
-         (concat
-          (my:remove-icon-display
-           (all-the-icons-alltheicon "git" :face '(:foreground "#F44336")))
-          (my:add-face-string vc-mode (list :foreground "#0F0F0F")))
-         5 'up)))
+      (setq doom-modeline-icon t))
   #+END_SRC
 * org
   #+BEGIN_SRC elisp :noweb no-export
@@ -592,11 +518,6 @@
       (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
       (setq org-todo-keywords
             '((sequence "TODO" "NEXT" "|" "DONE")))
-      (setq org-todo-keyword-faces
-            '(("TODO" . org-todo)
-              ("NEXT" . (:foreground "#F57F17"
-                            :background "#FFF9C4"
-                            :weight bold))))
       (setq org-global-properties
             '(("Effort_ALL". "0:10 0:30 1:00 2:00 3:00 4:00")))
       (setq org-fontify-done-headline t)
@@ -1348,10 +1269,7 @@
        :config
        (setq ivy-height 20)
        (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-       (setq ivy-posframe-border-width 1)
-       (setq ivy-posframe-parameters
-             '((left-fringe . 8)
-               (right-fringe . 8)))
+       (setq ivy-posframe-border-width 10)
        (ivy-posframe-mode))
    #+END_SRC
 ** keyfreq

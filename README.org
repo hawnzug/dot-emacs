@@ -301,12 +301,12 @@
 
      ^Ivy^          ^View^         ^Hydra^         ^Action^
      ─────────────────────────
-     _b_: buffer    _g_: magit     _e_: eyebrowse  _t_: eshell
-     _f_: file      _a_: agenda    _w_: window     _l_: link
-     _s_: swiper    _m_: Email     _B_: buffer     _c_: capture
-     _d_: dired     ^ ^            _h_: help       _q_: quit
-     _r_: ripgrep   ^ ^            _p_: project    _Q_: Quit
-     _k_: kill
+     _b_: buffer    _g_: magit     _E_: eyebrowse  _e_: eshell
+     _f_: file      _a_: agenda    _w_: window     _v_: vterm
+     _s_: swiper    _m_: Email     _B_: buffer     _l_: link
+     _d_: dired     _[_: Side      _h_: help       _c_: capture
+     _r_: ripgrep   ^ ^            _p_: project    _q_: quit
+     _k_: kill      ^ ^                            _Q_: Quit
      _i_: ibuffer
 
      ")
@@ -321,14 +321,16 @@
        ("g" magit-status)
        ("a" org-agenda)
        ("m" my:notmuch-transient)
+       ("[" window-toggle-side-windows)
 
-       ("t" my:new-eshell)
+       ("e" eshell)
+       ("v" vterm)
        ("l" org-store-link)
        ("c" org-capture)
        ("q" save-buffers-kill-terminal)
        ("Q" save-buffers-kill-emacs)
 
-       ("e" hydra-eyebrowse/body)
+       ("E" hydra-eyebrowse/body)
        ("w" hydra-window/body)
        ("B" hydra-buffer/body)
        ("h" hydra-help/body)
@@ -1123,7 +1125,6 @@
 ** evil
    #+BEGIN_SRC elisp
      (use-package evil
-       :defer 1
        :ensure t
        :init
        (setq evil-want-abbrev-expand-on-insert-exit nil)
@@ -1145,7 +1146,6 @@
        :after evil
        :config
        (global-evil-matchit-mode 1))
-
    #+END_SRC
 ** exec-path-from-shell
    #+BEGIN_SRC elisp
@@ -1716,11 +1716,6 @@
       "Switch to other window or buffer"
       (interactive)
       (if (one-window-p) (switch-to-buffer (other-buffer)) (select-window (next-window))))
-
-    (defun my:new-eshell ()
-      "Open a new eshell"
-      (interactive)
-      (eshell t))
 
     (defun my:syntax-color-hex ()
       (interactive)

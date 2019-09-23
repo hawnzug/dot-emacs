@@ -609,6 +609,20 @@
       )
   #+END_SRC
 
+  Open timestamp in Google Calendar:
+  #+BEGIN_SRC elisp
+    (defun my:org-open-gcal ()
+      (interactive)
+      (let ((timestamp (cadr (org-element-timestamp-parser))))
+        (let ((year (plist-get timestamp :year-start))
+              (month (plist-get timestamp :month-start))
+              (day (plist-get timestamp :day-start)))
+          (browse-url
+           (format
+            "https://calendar.google.com/calendar/b/2/r/day/%d/%d/%d"
+            year month day)))))
+  #+END_SRC
+
   Show time grid in org agenda.
   #+BEGIN_SRC elisp :tangle no
     (defun my:org-agenda-time-grid-spacing ()
@@ -683,19 +697,6 @@
       "j" 'org-agenda-next-line
       "k" 'org-agenda-previous-line)
   #+END_SRC
-** org-gcal
-   #+BEGIN_SRC elisp
-     (use-package org-gcal
-       :ensure t
-       :after org
-       :config
-       (setq org-gcal-client-id
-             (shell-command-to-string "gpg -q -d ~/mail/passwords/gcal-id.asc"))
-       (setq org-gcal-client-secret
-             (shell-command-to-string "gpg -q -d ~/mail/passwords/gcal-secret.asc"))
-       (setq org-gcal-file-alist
-             '(("wang9163@umn.edu" .  "~/org/schedule.org"))))
-   #+END_SRC
 ** org capture
   Org capture templates.
   #+NAME: org-capture-templates

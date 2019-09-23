@@ -811,6 +811,19 @@
       ("q" nil)
       ("<escape>" nil))
   #+END_SRC
+** org drill
+   #+BEGIN_SRC elisp
+     (use-package org-drill
+       :after org
+       :config
+       (setq org-drill-learn-fraction 0.35)
+       (setq org-drill-add-random-noise-to-intervals-p t))
+   #+END_SRC
+** org checklist
+   #+BEGIN_SRC elisp
+     (use-package org-checklist
+       :after org)
+   #+END_SRC
 ** Help functions
   I'd like to keep the main org file clean and tiny, but I also want to see an accurate
   agenda history. However archive or refile don't work for me, so I write this function.

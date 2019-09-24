@@ -589,6 +589,7 @@
       :commands (org-agenda)
       :config
       (setq org-agenda-files '("~/org/todos.org"
+                               "~/org/schedule.org"
                                "~/org/diary.org"))
       (setq org-agenda-start-with-follow-mode nil)
       (setq org-agenda-dim-blocked-tasks nil)
@@ -684,6 +685,19 @@
       "j" 'org-agenda-next-line
       "k" 'org-agenda-previous-line)
   #+END_SRC
+** org-gcal
+   #+BEGIN_SRC elisp
+     (use-package org-gcal
+       :ensure t
+       :after org
+       :config
+       (setq org-gcal-client-id
+             (shell-command-to-string "gpg -q -d ~/mail/passwords/gcal-id.asc"))
+       (setq org-gcal-client-secret
+             (shell-command-to-string "gpg -q -d ~/mail/passwords/gcal-secret.asc"))
+       (setq org-gcal-file-alist
+             '(("wang9163@umn.edu" .  "~/org/schedule.org"))))
+   #+END_SRC
 ** org capture
   Org capture templates.
   #+NAME: org-capture-templates
@@ -691,7 +705,9 @@
     (add-hook 'org-capture-mode-hook 'evil-insert-state)
     (setq org-capture-templates
           '(("t" "Todo" entry (file+headline "~/org/todos.org" "Inbox")
-             "* %?")))
+             "* %?")
+            ("c" "Calendar" entry (file "~/org/schedule.org")
+             "* TODO %?\n  :PROPERTIES:\n  %^{LOCATION}p:calendar-id: wang9163@umn.edu\n  :END:\n:org-gcal:\n%^T\n:END:\n")))
   #+END_SRC
 
   #+BEGIN_SRC elisp
@@ -1136,10 +1152,10 @@
        (setq ediff-split-window-function 'split-window-horizontally)
        (setq ediff-window-setup-function 'ediff-setup-windows-plain))
    #+END_SRC
-** emacs-vterm
+** emacs-libvterm
    #+BEGIN_SRC elisp
      (use-package vterm
-       :load-path "~/.emacs.d/emacs-libvterm")
+       :load-path "~/.emacs.d/packages/emacs-libvterm")
    #+END_SRC
 ** emmet
    #+BEGIN_SRC elisp
@@ -1165,11 +1181,13 @@
      (use-package evil-surround
        :ensure t
        :after evil
+       :defer 2
        :config
        (global-evil-surround-mode 1))
      (use-package evil-matchit
        :ensure t
        :after evil
+       :defer 2
        :config
        (global-evil-matchit-mode 1))
    #+END_SRC
@@ -1527,14 +1545,14 @@
    #+END_SRC
 ** projectile
    #+BEGIN_SRC elisp
-    (use-package projectile
-      :ensure t
-      :defer t
-      :config
-      (projectile-mode 1)
-      (setq projectile-sort-order 'recently-active)
-      (setq projectile-switch-project-action #'projectile-dired)
-      (setq projectile-completion-system 'ivy))
+     (use-package projectile
+       :ensure t
+       :defer t
+       :config
+       (projectile-mode 1)
+       (setq projectile-sort-order 'recently-active)
+       (setq projectile-switch-project-action #'projectile-dired)
+       (setq projectile-completion-system 'ivy))
    #+END_SRC
 ** rainbow-delimiters
    #+BEGIN_SRC elisp

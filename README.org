@@ -525,7 +525,7 @@
       <<org-kill-temp-fontify-buffer>>
       <<org-capture-templates>>
       <<org-clock-config>>
-      (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
+      (setcdr (assoc "\\.pdf\\'" org-file-apps) "llpp %s")
       (setq org-ellipsis "𝌆")
       (setq org-confirm-babel-evaluate nil)
       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
@@ -589,7 +589,7 @@
       :commands (org-agenda)
       :config
       (setq org-agenda-files '("~/org/todos.org"
-                               "~/org/schedule.org"
+                               "~/org/notes.org"
                                "~/org/diary.org"))
       (setq org-agenda-start-with-follow-mode nil)
       (setq org-agenda-dim-blocked-tasks nil)
@@ -639,10 +639,8 @@
   #+BEGIN_SRC elisp :tangle no
     (setq org-agenda-custom-commands
           '(("n" todo "NEXT"
-             ((org-agenda-overriding-header "Next Actions")))
-            ("r" todo "TODO"
-             ((org-agenda-overriding-header "Read")
-              (org-agenda-files '("~/org/notes.org"))))))
+             ((org-agenda-overriding-header "Next Actions")
+              (org-agenda-files '("~/org/notes.org" "~/org/todos.org"))))))
   #+END_SRC
 
   Super agenda
@@ -1053,11 +1051,13 @@
         :config
         (setq
          dired-open-extensions
-         '(("pdf" . "zathura")
+         '(("pdf" . "llpp")
            ("html" . "firefox")
            ("docx" . "wps")
            ("doc" . "wps")
            ("mp4" . "mpv")
+           ("png" . "feh")
+           ("jpg" . "feh")
            ("xlsx" . "et")
            ("xls" . "et")
            ("pptx" . "wpp")
@@ -1140,9 +1140,18 @@
    #+BEGIN_SRC elisp
      (use-package company
        :ensure t
-       :hook ((emacs-lisp-mode merlin-mode) . company-mode)
+       :hook (prog-mode . company-mode)
        :config
        (setq company-idle-delay 0))
+   #+END_SRC
+** docker
+   #+BEGIN_SRC elisp
+     (use-package dockerfile-mode
+       :ensure t
+       :mode "Dockerfile\\'")
+
+     (use-package docker-tramp
+       :ensure t)
    #+END_SRC
 ** ediff
    #+BEGIN_SRC elisp
@@ -1235,7 +1244,11 @@
    #+BEGIN_SRC elisp
      (use-package flycheck
        :ensure t
-       :hook ((sh-mode c-mode) . flycheck-mode))
+       :hook (prog-mode . flycheck-mode))
+     (use-package flycheck-inline
+       :ensure t
+       :after flycheck
+       :hook (flycheck-mode . flycheck-inline-mode))
    #+END_SRC
 ** geiser
    #+BEGIN_SRC elisp
@@ -1648,6 +1661,12 @@
        "s" 'proof-find-theorems
        "l" 'proof-layout-windows)
    #+END_SRC
+** CSV
+   #+BEGIN_SRC elisp
+     (use-package csv-mode
+       :ensure t
+       :mode ("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+   #+END_SRC
 ** Haskell
    #+BEGIN_SRC elisp
      (use-package haskell-mode
@@ -1666,7 +1685,7 @@
          (file-name-directory (shell-command-to-string "agda-mode locate"))))
      (use-package agda2
        :load-path (lambda () (agda-mode-load-path))
-       :mode ("\\.agda\\'" agda2-mode))
+       :mode ("\\.agda\\'" . agda2-mode))
    #+END_SRC
 ** Ocaml
    #+BEGIN_SRC elisp
@@ -1726,6 +1745,18 @@
        (setq python-shell-completion-native-enable nil)
        (when (executable-find "ipython")
          (setq python-shell-interpreter "ipython")))
+   #+END_SRC
+** Rust
+   #+BEGIN_SRC elisp
+     (use-package rust-mode
+       :ensure t
+       :hook (rust-mode . lsp))
+     (use-package cargo
+       :ensure t
+       :hook (rust-mode . cargo-minor-mode))
+     (use-package flycheck-rust
+       :ensure t
+       :hook (flycheck-mode . flycheck-rust-setup))
    #+END_SRC
 ** TeX
    #+BEGIN_SRC elisp

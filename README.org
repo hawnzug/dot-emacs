@@ -1142,7 +1142,11 @@
        :ensure t
        :hook (prog-mode . company-mode)
        :config
-       (setq company-idle-delay 0))
+       (setq company-idle-delay 0)
+       (use-package company-posframe
+         :ensure t
+         :config
+         (company-posframe-mode 1)))
    #+END_SRC
 ** docker
    #+BEGIN_SRC elisp

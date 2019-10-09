@@ -1374,6 +1374,8 @@
        (use-package message
          :config
          (setq message-sendmail-envelope-from 'header)
+         (setq message-citation-line-function 'message-insert-formatted-citation-line)
+         (setq message-citation-line-format "On %a, %b %d %Y at %I:%M %p, %f wrote:\n")
          (setq message-send-mail-function 'message-send-mail-with-sendmail))
        (use-package sendmail
          :config

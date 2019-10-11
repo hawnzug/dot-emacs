@@ -8,3 +8,7 @@ config.el
 /tramp
 /bookmarks
 *.elc
+/org-clock-save.el
+/projectile-bookmarks.eld
+/transient/history.el
+/history

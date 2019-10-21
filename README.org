@@ -8,6 +8,7 @@
   -  [[#use-package][use-package]]
   -  [[#benchmark-init][benchmark-init]]
   -  [[#all-the-icons][all-the-icons]]
+  -  [[#doom-themes][doom-themes]]
   -  [[#generalel][general.el]]
   -  [[#hydra][hydra]]
     -  [[#hydra-global][hydra-global]]
@@ -23,18 +24,22 @@
     -  [[#org-capture][org capture]]
     -  [[#org-clock][org clock]]
     -  [[#org-babel][org babel]]
+    -  [[#org-drill][org drill]]
+    -  [[#org-checklist][org checklist]]
     -  [[#help-functions][Help functions]]
     -  [[#keybindings][Keybindings]]
     -  [[#hydra][Hydra]]
   -  [[#eshell][eshell]]
   -  [[#dired][dired]]
-  -  [[#emms][EMMS]]
   -  [[#packages][packages]]
     -  [[#academic-phrases][academic-phrases]]
     -  [[#alert][alert]]
+    -  [[#anylink][anylink]]
     -  [[#battery][battery]]
     -  [[#company][company]]
+    -  [[#docker][docker]]
     -  [[#ediff][ediff]]
+    -  [[#emacs-libvterm][emacs-libvterm]]
     -  [[#emmet][emmet]]
     -  [[#evil][evil]]
     -  [[#exec-path-from-shell][exec-path-from-shell]]
@@ -51,7 +56,6 @@
     -  [[#keyfreq][keyfreq]]
     -  [[#lsp][lsp]]
     -  [[#magit][magit]]
-    -  [[#notmuch][notmuch]]
     -  [[#projectile][projectile]]
     -  [[#rainbow-delimiters][rainbow-delimiters]]
     -  [[#sublimity][sublimity]]
@@ -60,15 +64,20 @@
     -  [[#which-key][which-key]]
     -  [[#xterm-color][xterm-color]]
   -  [[#languages][languages]]
+    -  [[#prog-mode][prog-mode]]
     -  [[#coq][Coq]]
+    -  [[#csv][CSV]]
     -  [[#haskell][Haskell]]
     -  [[#agda][Agda]]
     -  [[#ocaml][Ocaml]]
+    -  [[#sml][SML]]
     -  [[#cubicaltt][Cubicaltt]]
     -  [[#c][C]]
     -  [[#lua][Lua]]
     -  [[#python][Python]]
+    -  [[#rust][Rust]]
     -  [[#tex][TeX]]
+    -  [[#yaml][YAML]]
   -  [[#help-functions][help functions]]
 
 * init
@@ -169,11 +178,6 @@
     (setenv "MAGICK_OCL_DEVICE" "OFF")
   #+END_SRC
 
-  User full name will appear in mail header (From).
-  #+BEGIN_SRC elisp
-    (setq user-full-name "Zhuyang Wang")
-  #+END_SRC
-
   #+BEGIN_SRC elisp
     (setq password-cache-expiry 1200)
   #+END_SRC
@@ -189,6 +193,7 @@
       (package-install 'use-package))
     (eval-when-compile (require 'use-package))
   #+END_SRC
+
 * benchmark-init
   #+BEGIN_SRC elisp
     (use-package benchmark-init
@@ -196,6 +201,7 @@
       :config
       (add-hook 'after-init-hook 'benchmark-init/deactivate))
   #+END_SRC
+
 * all-the-icons
   #+BEGIN_SRC elisp
     (use-package all-the-icons
@@ -208,6 +214,7 @@
       (add-to-list 'all-the-icons-mode-icon-alist
                    '(coq-mode all-the-icons-fileicon "coq" :face all-the-icons-red)))
   #+END_SRC
+
 * doom-themes
   #+BEGIN_SRC elisp
     (use-package doom-themes
@@ -216,8 +223,10 @@
       (setq doom-themes-enable-bold t)
       (setq doom-themes-enable-italic t)
       (load-theme 'doom-solarized-light t)
-      (doom-themes-org-config))
+      (doom-themes-org-config)
+      )
   #+END_SRC
+
 * general.el
   #+BEGIN_SRC elisp :noweb no-export
     (use-package general
@@ -305,7 +314,7 @@
      ─────────────────────────
      _f_: file      _g_: magit     _E_: eyebrowse  _e_: eshell
      _s_: swiper    _a_: agenda    _w_: window     _v_: vterm
-     _d_: dired     _m_: Email     _B_: buffer     _l_: link
+     _d_: dired                    _B_: buffer     _l_: link
      _r_: ripgrep   _[_: Side      _h_: help       _c_: capture
      _k_: kill      ^ ^            _p_: project    _q_: quit
      _i_: ibuffer   ^ ^            ^ ^             _Q_: Quit
@@ -320,7 +329,6 @@
 
        ("g" magit-status)
        ("a" org-agenda)
-       ("m" notmuch-jump-search)
        ("[" window-toggle-side-windows)
 
        ("e" eshell)
@@ -489,6 +497,7 @@
     (use-package transient
       :ensure magit)
   #+END_SRC
+
 * mode line
   #+BEGIN_SRC elisp
     (use-package doom-modeline
@@ -509,6 +518,7 @@
       :config
       (fancy-battery-mode))
   #+END_SRC
+
 * org
   #+BEGIN_SRC elisp :noweb no-export
     (use-package org
@@ -520,7 +530,6 @@
       :config
       (add-hook 'org-mode-hook
                 (lambda () (setq show-trailing-whitespace t)))
-      (use-package org-notmuch)
       (use-package org-mouse)
       <<org-kill-temp-fontify-buffer>>
       <<org-capture-templates>>
@@ -1036,6 +1045,7 @@
       (add-to-list 'eshell-modules-list 'eshell-tramp))
 
   #+END_SRC
+
 * dired
   #+BEGIN_SRC elisp
     (use-package dired
@@ -1353,142 +1363,6 @@
       "M-;" 'with-editor-finish
       "M-k" 'with-editor-cancel)
    #+END_SRC
-** notmuch
-   #+BEGIN_SRC elisp
-     (use-package notmuch
-       :commands (notmuch notmuch-search notmuch-jump-search)
-       :config
-       (setq mail-host-address "hawnzug.me")
-       (use-package message
-         :config
-         (setq message-sendmail-envelope-from 'header)
-         (setq message-citation-line-function 'message-insert-formatted-citation-line)
-         (setq message-citation-line-format "On %a, %b %d %Y at %I:%M %p, %f wrote:\n")
-         (setq message-send-mail-function 'message-send-mail-with-sendmail))
-       (use-package sendmail
-         :config
-         (setq sendmail-program "/usr/bin/msmtp")
-         (setq mail-specify-envelope-from t)
-         (setq mail-envelope-from 'header))
-       (setq notmuch-fcc-dirs
-             '(("hawnzug@gmail.com" . "personal/sent +sent -unread -inbox")
-               ("wang9163@umn.edu" . "umn/sent +sent -unread -inbox")))
-
-       (setq notmuch-search-oldest-first nil)
-       (setq notmuch-hello-sections
-         (list #'notmuch-hello-insert-header
-               #'notmuch-hello-insert-saved-searches
-               #'notmuch-hello-insert-search
-               #'notmuch-hello-insert-recent-searches
-               #'notmuch-hello-insert-footer))
-       (setq notmuch-hello-thousands-separator "")
-       (setq notmuch-column-control 0.2)
-       (setq mm-text-html-renderer 'gnus-w3m)
-       (setq
-        notmuch-saved-searches
-        '((:name "Inbox" :query "tag:inbox" :key "i")
-          (:name "unread" :query "tag:unread" :key "u")
-          (:name "CSCI 2041" :query "tag:2041" :key "o")
-          (:name "emacs-devel" :query "to:emacs-devel@gnu.org")
-          (:name "Coq Club" :query "to:coq-club@inria.fr")
-          (:name "Org Mode" :query "to:emacs-orgmode@gnu.org")
-          (:name "CSSA" :query "to:umncssa@googlegroups.com")
-          (:name "sent" :query "tag:sent" :key "s")
-          (:name "all mail" :query "*" :key "a")))
-       (setq notmuch-search-result-format
-             '(("date" . "%12s  ")
-               ("count" . "%-7s ")
-               ("authors" . "%-40s  ")
-               ("subject" . "%s ")
-               ("tags" . "(%s)")))
-
-       (evil-set-initial-state 'notmuch-show-mode 'normal)
-       (evil-set-initial-state 'notmuch-search-mode 'normal)
-       (evil-set-initial-state 'notmuch-hello-mode 'normal)
-       (evil-set-initial-state 'notmuch-tree-mode 'normal)
-
-       (general-nmap notmuch-common-keymap
-         "q" 'notmuch-bury-or-kill-this-buffer
-         "s" 'notmuch-search
-         "S" 'notmuch-tree
-         "cc" 'notmuch-mua-new-mail
-         "r" 'notmuch-refresh-this-buffer
-         "g" 'notmuch-refresh-this-buffer
-         "J" 'notmuch-jump-search)
-
-       (general-nmap notmuch-hello-mode-map
-         "RET" 'widget-button-press
-         "TAB" 'widget-forward
-         "S-TAB" 'widget-backward)
-
-       (general-mmap 'notmuch-search-mode-map
-         "a" (lambda (&optional beg end)
-               "Read and archive thread"
-               (interactive (notmuch-interactive-region))
-               (notmuch-search-tag (list "-unread" "-inbox") beg end)
-               (when (eq beg end)
-                 (notmuch-search-next-thread)))
-         "J" 'notmuch-jump-search
-         "K" 'notmuch-tag-jump
-         "S" 'notmuch-search-filter
-         "*" 'notmuch-search-tag-all
-         "cc" 'compose-mail
-         "cr" 'notmuch-search-reply-to-thread-sender
-         "cR" 'notmuch-search-reply-to-thread
-         "-" 'notmuch-search-remove-tag
-         "+" 'notmuch-search-add-tag
-         "RET" 'notmuch-search-show-thread)
-
-       (general-nmap 'notmuch-show-mode-map
-         "cc" 'notmuch-mua-new-mail
-         "cr" 'notmuch-show-reply-sender
-         "cR" 'notmuch-show-reply
-         "cf" 'notmuch-show-forward-message
-         "p" 'notmuch-show-save-attachments
-         "S" 'notmuch-show-filter-thread
-         "H" 'notmuch-show-toggle-visibility-headers
-         "gj" 'notmuch-show-next-open-message
-         "gk" 'notmuch-show-previous-open-message
-         "]]" 'notmuch-show-next-message
-         "[[" 'notmuch-show-previous-message
-         "C-j" 'notmuch-show-next-message
-         "C-k" 'notmuch-show-previous-message
-         "M-j" 'notmuch-show-next-thread-show
-         "M-k" 'notmuch-show-previous-thread-show
-         "*" 'notmuch-show-tag-all
-         "-" 'notmuch-show-remove-tag
-         "+" 'notmuch-show-add-tag
-         "TAB" 'notmuch-show-next-button
-         "S-TAB" 'notmuch-show-previous-button
-         "RET" 'notmuch-show-toggle-message
-         "." 'notmuch-show-part-map)
-
-       (defun notmuch-hello-insert-header ()
-         "Insert the default notmuch-hello header."
-         (let* ((banner "~/Pictures/gmail.png")
-                (spec (create-image banner))
-                (size (image-size spec))
-                (width (car size))
-                (left-margin (max 0 (floor (- (window-width) width) 2))))
-           (widget-insert (make-string left-margin ?\ ))
-           (insert-image spec)
-           (widget-insert "\n")))
-
-       (defun notmuch-hello-insert-saved-searches ()
-         "Insert the saved-searches section."
-         (let ((searches (notmuch-hello-query-counts
-                          (if notmuch-saved-search-sort-function
-                              (funcall notmuch-saved-search-sort-function
-                                       notmuch-saved-searches)
-                            notmuch-saved-searches)
-                          :show-empty-searches notmuch-show-empty-saved-searches)))
-           (when searches
-             (let ((start (point)))
-               (notmuch-hello-insert-buttons searches)
-               (indent-rigidly start (point) notmuch-hello-indent)))))
-
-       )
-   #+END_SRC
 ** projectile
    #+BEGIN_SRC elisp
      (use-package projectile
@@ -1697,9 +1571,7 @@
        :ensure auctex
        :defer t
        :config
-       (setq TeX-auto-save t
-             TeX-PDF-mode t
-             TeX-electric-sub-and-superscript t))
+       (setq TeX-PDF-mode t))
    #+END_SRC
 ** YAML
    #+BEGIN_SRC elisp

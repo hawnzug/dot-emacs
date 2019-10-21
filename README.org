@@ -146,7 +146,7 @@
 
   90 characters one line.
   #+BEGIN_SRC elisp
-    (setq-default fill-column 90)
+    (setq-default fill-column 70)
   #+END_SRC
 
   Use straight single quote in help and messages.
@@ -271,7 +271,6 @@
   #+BEGIN_SRC elisp
     (general-def 'override
       "M-," 'hydra-global/body
-      "M-RET" 'anylink
       "C-/" 'comment-dwim)
   #+END_SRC
 
@@ -1109,12 +1108,6 @@
        :ensure t
        :config
        (setq alert-default-style 'libnotify))
-   #+END_SRC
-** anylink
-   #+BEGIN_SRC elisp
-     (use-package anylink
-       :load-path "~/.emacs.d/packages/anylink"
-       :commands anylink)
    #+END_SRC
 ** battery
    #+BEGIN_SRC elisp

@@ -1408,6 +1408,14 @@
    #+BEGIN_SRC elisp
     (use-package xterm-color :ensure t)
    #+END_SRC
+** yasnippet
+   #+BEGIN_SRC elisp
+     (use-package yasnippet
+       :ensure t
+       :config
+       (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+       (yas-global-mode 1))
+   #+END_SRC
 * languages
 ** prog-mode
    #+BEGIN_SRC elisp

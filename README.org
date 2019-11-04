@@ -1391,6 +1391,20 @@
        :ensure t
        :commands symbol-overlay-put)
    #+END_SRC
+** tramp
+   #+BEGIN_SRC elisp
+     (use-package tramp)
+   #+END_SRC
+** vc-mode
+   #+BEGIN_SRC elisp
+     (use-package vc
+       :config
+       (with-eval-after-load 'tramp
+         (setq vc-ignore-dir-regexp
+               (format "\\(%s\\)\\|\\(%s\\)"
+                       vc-ignore-dir-regexp
+                       tramp-file-name-regexp))))
+   #+END_SRC
 ** web-mode
    #+BEGIN_SRC elisp
      (use-package web-mode

@@ -1548,6 +1548,14 @@
        (setq c-basic-offset 4)
        (setq c-default-style "linux"))
    #+END_SRC
+** Common Lisp
+   #+BEGIN_SRC elisp
+     (use-package slime
+       :ensure t
+       :commands slime
+       :config
+       (setq inferior-lisp-program "clisp"))
+   #+END_SRC
 ** Lua
    #+BEGIN_SRC elisp
      (use-package lua-mode

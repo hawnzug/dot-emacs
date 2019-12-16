@@ -596,9 +596,7 @@
       :after org
       :commands (org-agenda)
       :config
-      (setq org-agenda-files '("~/org/todos.org"
-                               "~/org/notes.org"
-                               "~/org/diary.org"))
+      (setq org-agenda-files '("~/org/notes.org"))
       (setq org-agenda-start-with-follow-mode nil)
       (setq org-agenda-dim-blocked-tasks nil)
       (setq org-agenda-span 'day)
@@ -834,14 +832,6 @@
       ("q" nil)
       ("<escape>" nil))
   #+END_SRC
-** org drill
-   #+BEGIN_SRC elisp
-     (use-package org-drill
-       :after org
-       :config
-       (setq org-drill-learn-fraction 0.35)
-       (setq org-drill-add-random-noise-to-intervals-p t))
-   #+END_SRC
 ** org checklist
    #+BEGIN_SRC elisp
      (use-package org-checklist
@@ -1176,7 +1166,6 @@
        (setq evil-disable-insert-state-bindings t)
        :config
        (evil-mode 1)
-       (setq evil-emacs-state-cursor (list 'box (face-attribute 'default :foreground)))
        (evil-set-initial-state 'dired-mode 'emacs)
        (evil-set-initial-state 'ivy-occur-mode 'emacs)
        (evil-set-initial-state 'org-capture-mode 'insert)

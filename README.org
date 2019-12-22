@@ -1498,6 +1498,44 @@
        :load-path (lambda () (agda-mode-load-path))
        :mode ("\\.agda\\'" . agda2-mode))
    #+END_SRC
+
+   #+BEGIN_SRC elisp
+     (defhydra hydra-agda
+       (:color teal :hint nil :idle 0.5)
+       (concat
+        "     "
+        " Agda mode"
+        "
+
+     ^Goal^        ^General^
+     ──────────
+     _a_: auto     _l_: load
+     _c_: case     _d_: def
+     _r_: refine   _q_: quit
+     _,_: context
+     _._: context
+     _n_: normal
+     _h_: help
+
+     ")
+
+       ("d" agda2-goto-definition-keyboard)
+       ("l" agda2-load)
+       ("a" agda2-autoOne)
+       ("h" agda2-helper-function-type)
+       ("," agda2-goal-and-context)
+       ("." agda2-goal-and-context-and-inferred)
+       ("r" agda2-refine)
+       ("n" agda2-compute-normalised)
+       ("c" agda2-make-case)
+       ("q" agda2-quit)
+       ("<escape>" nil))
+   #+END_SRC
+
+   #+BEGIN_SRC elisp
+     (general-def agda2-mode-map
+       "M-;" 'hydra-agda/body)
+   #+END_SRC
 ** Ocaml
    #+BEGIN_SRC elisp
      (eval-and-compile
@@ -1600,7 +1638,7 @@
   #+BEGIN_SRC elisp
     (defun font-switch-serif ()
       (interactive)
-      (face-remap-add-relative 'default :family "Source Serif Pro"))
+      (face-remap-add-relative 'default :family "EB Garamond 12"))
   #+END_SRC
 
   #+BEGIN_SRC elisp

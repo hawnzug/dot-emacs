@@ -193,7 +193,49 @@
       (package-install 'use-package))
     (eval-when-compile (require 'use-package))
   #+END_SRC
+* help functions
+  #+BEGIN_SRC elisp
+    (defun my:show-trailing-space ()
+      (setq show-trailing-whitespace t))
+  #+END_SRC
 
+  #+BEGIN_SRC elisp
+    (defun my:other-window-or-buffer ()
+      "Switch to other window or buffer"
+      (interactive)
+      (if (one-window-p) (switch-to-buffer (other-buffer)) (select-window (next-window))))
+
+    (defun my:syntax-color-hex ()
+      (interactive)
+      (font-lock-add-keywords
+       nil
+       '(("#[[:xdigit:]]\\{6\\}"
+          (0 (put-text-property
+              (match-beginning 0)
+              (match-end 0)
+              'face (list :background (match-string-no-properties 0)))))))
+      (font-lock-flush))
+
+    (defun my:toggle-line-number ()
+      "Toggle line number between relative and nil."
+      (interactive)
+      (setq display-line-numbers
+        (pcase display-line-numbers
+          ('relative nil)
+          (_ 'relative))))
+  #+END_SRC
+
+  #+BEGIN_SRC elisp
+    (defun my:toggle-transparency ()
+      (interactive)
+      (set-face-font 'fixed-pitch-serif "Iosevka Type Slab-12")
+      (let ((transparency 95)
+            (opacity 100)
+            (old-alpha (frame-parameter nil 'alpha)))
+        (if (and (numberp old-alpha) (< old-alpha opacity))
+            (set-frame-parameter nil 'alpha opacity)
+          (set-frame-parameter nil 'alpha transparency))))
+  #+END_SRC
 * benchmark-init
   #+BEGIN_SRC elisp
     (use-package benchmark-init
@@ -201,7 +243,6 @@
       :config
       (add-hook 'after-init-hook 'benchmark-init/deactivate))
   #+END_SRC
-
 * all-the-icons
   #+BEGIN_SRC elisp
     (use-package all-the-icons
@@ -214,7 +255,6 @@
       (add-to-list 'all-the-icons-mode-icon-alist
                    '(coq-mode all-the-icons-fileicon "coq" :face all-the-icons-red)))
   #+END_SRC
-
 * doom-themes
   #+BEGIN_SRC elisp
     (use-package doom-themes
@@ -490,12 +530,6 @@
        ("q" nil)
        ("<escape>" nil))
    #+END_SRC
-* transient
-  #+BEGIN_SRC elisp
-    (use-package transient
-      :ensure magit)
-  #+END_SRC
-
 * mode line
   #+BEGIN_SRC elisp
     (use-package doom-modeline
@@ -509,12 +543,11 @@
     (use-package org
       :ensure org-plus-contrib
       :defer 4
-      ;; :hook
+      :hook
+      (org-mode . my:show-trailing-space)
       ;; ((org-babel-after-execute . org-redisplay-inline-images))
       ;; (org-agenda-finalize . my:org-agenda-time-grid-spacing))
       :config
-      (add-hook 'org-mode-hook
-                (lambda () (setq show-trailing-whitespace t)))
       (use-package org-mouse)
       <<org-kill-temp-fontify-buffer>>
       <<org-capture-templates>>
@@ -1025,7 +1058,6 @@
   #+BEGIN_SRC elisp
     (use-package dired
       :commands dired
-      :hook (dired-mode . hl-line-mode)
       :config
       (setq dired-recursive-copies t)
       (setq dired-recursive-deletes t)
@@ -1225,8 +1257,7 @@
 ** hl-line-mode
    #+BEGIN_SRC elisp
      (use-package hl-line-mode
-       :hook ((prog-mode . hl-line-mode)
-              (prog-mode . (lambda () (setq-local display-line-numbers 'relative)))))
+       :hook (prog-mode dired-mode LaTeX-mode))
    #+END_SRC
 ** htmlize
    #+BEGIN_SRC elisp
@@ -1406,9 +1437,7 @@
 ** prog-mode
    #+BEGIN_SRC elisp
      (use-package prog-mode
-       :config
-       (add-hook 'prog-mode-hook
-                 (lambda () (setq show-trailing-whitespace t))))
+       :hook (prog-mode . my:show-trailing-space))
    #+END_SRC
 ** Coq
    #+BEGIN_SRC elisp
@@ -1603,6 +1632,7 @@
      (use-package tex
        :ensure auctex
        :defer t
+       :hook (LaTeX-mode . my:show-trailing-space)
        :config
        (setq TeX-PDF-mode t))
    #+END_SRC
@@ -1611,53 +1641,3 @@
      (use-package yaml-mode
        :ensure t)
    #+END_SRC
-* help functions
-  #+BEGIN_SRC elisp
-    (defun my:load-theme ()
-      (interactive)
-      (load-theme 'lowlight t))
-  #+END_SRC
-
-  #+BEGIN_SRC elisp
-    (defun font-switch-serif ()
-      (interactive)
-      (face-remap-add-relative 'default :family "EB Garamond 12"))
-  #+END_SRC
-
-  #+BEGIN_SRC elisp
-    (defun my:other-window-or-buffer ()
-      "Switch to other window or buffer"
-      (interactive)
-      (if (one-window-p) (switch-to-buffer (other-buffer)) (select-window (next-window))))
-
-    (defun my:syntax-color-hex ()
-      (interactive)
-      (font-lock-add-keywords
-       nil
-       '(("#[[:xdigit:]]\\{6\\}"
-          (0 (put-text-property
-              (match-beginning 0)
-              (match-end 0)
-              'face (list :background (match-string-no-properties 0)))))))
-      (font-lock-flush))
-
-    (defun my:toggle-line-number ()
-      "Toggle line number between relative and nil."
-      (interactive)
-      (setq display-line-numbers
-        (pcase display-line-numbers
-          ('relative nil)
-          (_ 'relative))))
-  #+END_SRC
-
-  #+BEGIN_SRC elisp
-    (defun my:toggle-transparency ()
-      (interactive)
-      (set-face-font 'fixed-pitch-serif "Iosevka Type Slab-12")
-      (let ((transparency 95)
-            (opacity 100)
-            (old-alpha (frame-parameter nil 'alpha)))
-        (if (and (numberp old-alpha) (< old-alpha opacity))
-            (set-frame-parameter nil 'alpha opacity)
-          (set-frame-parameter nil 'alpha transparency))))
-  #+END_SRC

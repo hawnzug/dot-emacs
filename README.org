@@ -1078,6 +1078,8 @@
     (general-def 'emacs dired-mode-map
       "j" 'dired-next-line
       "k" 'dired-previous-line
+      "h" 'quit-window
+      "l" 'dired-open-file
       "r" 'dired-toggle-read-only
       "." 'dired-mark-extension
       "n" 'dired-narrow-regexp
@@ -1461,7 +1463,7 @@
    #+BEGIN_SRC elisp
      (general-def 'normal coq-mode-map
        "K" 'my:company-coq-doc-search)
-     (general-mmap coq-mode-map
+     (general-def coq-mode-map
        :prefix "M-;"
        "g" 'company-coq-proof-goto-point
        "d" 'company-coq-doc

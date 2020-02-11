@@ -348,14 +348,13 @@
         " Emacs"
         "
 
-     ^Ivy^          ^View^         ^Hydra^         ^Action^
      ─────────────────────────
-     _f_: file      _g_: magit     _E_: eyebrowse  _e_: eshell
-     _s_: swiper    _a_: agenda    _w_: window     _v_: vterm
-     _d_: dired                    _B_: buffer     _l_: link
-     _r_: ripgrep   _[_: Side      _h_: help       _c_: capture
-     _k_: kill      ^ ^            _p_: project    _q_: quit
-     _i_: ibuffer   ^ ^            ^ ^             _Q_: Quit
+     _f_: file      _g_: magit     _E_: eyebrowse  _q_: quit
+     _s_: swiper    _a_: agenda    _w_: window     _Q_: Quit
+     _d_: dired     _[_: Side      _B_: buffer
+     _r_: ripgrep   _t_: terminal  _h_: help
+     _k_: kill      _e_: eshell    _p_: project
+     _i_: ibuffer   _v_: vterm     _c_: capture
 
      ")
        ("f" counsel-find-file)
@@ -371,6 +370,7 @@
 
        ("e" eshell)
        ("v" vterm)
+       ("t" terminal-here-launch)
        ("l" org-store-link)
        ("c" org-capture)
        ("q" save-buffers-kill-terminal)
@@ -1393,6 +1393,14 @@
      (use-package symbol-overlay
        :ensure t
        :commands symbol-overlay-put)
+   #+END_SRC
+** terminal-here
+   #+BEGIN_SRC elisp
+     (use-package terminal-here
+       :ensure t
+       :config
+       (setq terminal-here-terminal-command
+             '("alacritty")))
    #+END_SRC
 ** tramp
    #+BEGIN_SRC elisp

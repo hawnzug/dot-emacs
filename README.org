@@ -1231,7 +1231,10 @@
    #+BEGIN_SRC elisp
      (use-package flycheck
        :ensure t
-       :hook (prog-mode . flycheck-mode))
+       :hook (prog-mode . flycheck-mode)
+       :config
+       ;; Use lsp instead
+       (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
      (use-package flycheck-inline
        :ensure t
        :after flycheck
@@ -1322,7 +1325,11 @@
    #+END_SRC
 ** lsp
    #+BEGIN_SRC elisp
-     (use-package lsp-mode :ensure t :commands lsp)
+     (use-package lsp-mode
+       :ensure t
+       :commands lsp
+       :config
+       (setq lsp-prefer-flymake nil))
      (use-package lsp-ui :ensure t :commands lsp-ui-mode)
      (use-package company-lsp :ensure t :commands company-lsp)
      (use-package ccls

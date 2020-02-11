@@ -226,7 +226,6 @@
       (doom-themes-org-config)
       )
   #+END_SRC
-
 * general.el
   #+BEGIN_SRC elisp :noweb no-export
     (use-package general
@@ -505,19 +504,6 @@
       :config
       (setq doom-modeline-icon t))
   #+END_SRC
-
-  #+BEGIN_SRC elisp
-    (use-package time
-      :after doom-modeline
-      :config
-      (display-time-mode))
-    (use-package fancy-battery
-      :ensure t
-      :after doom-modeline
-      :config
-      (fancy-battery-mode))
-  #+END_SRC
-
 * org
   #+BEGIN_SRC elisp :noweb no-export
     (use-package org
@@ -1105,19 +1091,7 @@
    #+BEGIN_SRC elisp
      (use-package battery
        :config
-       (defun my:battery-mode-line ()
-         (let ((p (string-to-number (battery-format "%p" (battery-linux-sysfs)))))
-           (concat
-            (my:remove-icon-display
-             (all-the-icons-faicon
-              (cond
-               ((> p 99) "battery-full")
-               ((> p 75) "battery-three-quarters")
-               ((> p 50) "battery-half")
-               ((> p 25) "battery-quarter")
-               ((> p 0)  "battery-empty"))))
-            " "
-            (format "%d%%%%" p)))))
+       (display-battery-mode))
    #+END_SRC
 ** company
    #+BEGIN_SRC elisp

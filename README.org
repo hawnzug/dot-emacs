@@ -851,6 +851,12 @@
       ("q" nil)
       ("<escape>" nil))
   #+END_SRC
+** org id
+   #+BEGIN_SRC elisp
+     (use-package org-id
+       :config
+       (setq org-id-link-to-org-use-id t))
+   #+END_SRC
 ** org checklist
    #+BEGIN_SRC elisp
      (use-package org-checklist

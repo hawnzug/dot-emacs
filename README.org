@@ -1373,6 +1373,11 @@
       "M-;" 'with-editor-finish
       "M-k" 'with-editor-cancel)
    #+END_SRC
+** olivetti
+   #+BEGIN_SRC elisp
+     (use-package olivetti
+       :ensure t)
+   #+END_SRC
 ** projectile
    #+BEGIN_SRC elisp
      (use-package projectile

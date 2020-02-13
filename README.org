@@ -168,11 +168,6 @@
     (window-divider-mode t)
   #+END_SRC
 
-  Load theme.
-  #+BEGIN_SRC elisp :tangle no
-    (load-theme 'lowlight t)
-  #+END_SRC
-
   Avoid crash when open image in Emacs.
   #+BEGIN_SRC elisp
     (setenv "MAGICK_OCL_DEVICE" "OFF")
@@ -345,9 +340,8 @@
        (concat
         "                 "
         (all-the-icons-fileicon "emacs" :height 2 :v-adjust -0.2 :face 'all-the-icons-purple)
-        " Emacs"
+        " Global"
         "
-
      ─────────────────────────
      _f_: file      _g_: magit     _E_: eyebrowse  _q_: quit
      _s_: swiper    _a_: agenda    _w_: window     _Q_: Quit
@@ -355,6 +349,7 @@
      _r_: ripgrep   _t_: terminal  _h_: help
      _k_: kill      _e_: eshell    _p_: project
      _i_: ibuffer   _v_: vterm     _c_: capture
+     _b_: bibtex
 
      ")
        ("f" counsel-find-file)
@@ -363,6 +358,7 @@
        ("r" counsel-rg)
        ("k" kill-buffer)
        ("i" ibuffer)
+       ("b" ivy-bibtex)
 
        ("g" magit-status)
        ("a" org-agenda)
@@ -387,7 +383,7 @@
 ** hydra-window
    #+BEGIN_SRC elisp
      (defhydra hydra-window
-       (:color pink :hint nil :idle 1.0)
+       (:color pink :hint nil)
        (concat
         "            "
         (all-the-icons-material "apps" :height 2 :v-adjust -0.3)
@@ -427,7 +423,7 @@
 ** hydra-buffer
    #+BEGIN_SRC elisp
      (defhydra hydra-buffer
-       (:color teal :hint nil :idle 1.0)
+       (:color teal :hint nil)
        (concat
         (all-the-icons-faicon "clone" :height 2 :v-adjust -0.2)
         " Buffer"
@@ -451,7 +447,7 @@
 ** hydra-projectile
    #+BEGIN_SRC elisp
      (defhydra hydra-projectile
-       (:color teal :hint nil :idle 1.0)
+       (:color teal :hint nil)
        (concat
         "       "
         (all-the-icons-material "dashboard" :height 2 :v-adjust -0.3)
@@ -486,7 +482,7 @@
 ** hydra-eyebrowse
    #+BEGIN_SRC elisp
      (defhydra hydra-eyebrowse
-       (:color teal :hint nil :idle 1.0)
+       (:color teal :hint nil)
        "eyebrowse"
        ("l" eyebrowse-last-window-config "last" :column "Switch")
        ("j" eyebrowse-next-window-config "next" :color red)
@@ -499,7 +495,7 @@
 ** hydra-help
    #+BEGIN_SRC elisp
      (defhydra hydra-help
-       (:color teal :hint nil :idle 1.0)
+       (:color teal :hint nil)
        (concat
         "      "
         (all-the-icons-material "help_outline" :height 2 :v-adjust -0.3)
@@ -1325,6 +1321,18 @@
        (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
        (setq ivy-posframe-border-width 10)
        (ivy-posframe-mode))
+   #+END_SRC
+** ivy-bibtex
+   #+BEGIN_SRC elisp
+     (use-package ivy-bibtex
+       :ensure t
+       :after ivy
+       :config
+       (setq bibtex-completion-bibliography '("~/notes/refs.bib"))
+       (setq bibtex-completion-notes-path "~/notes/notes.org")
+       (setq bibtex-completion-library-path '("~/notes/pdfs"))
+       (add-to-list 'ivy-re-builders-alist
+                    '(ivy-bibtex . ivy--regex-ignore-order)))
    #+END_SRC
 ** keyfreq
    #+BEGIN_SRC elisp

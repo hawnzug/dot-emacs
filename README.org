@@ -1237,9 +1237,13 @@
    #+END_SRC
 ** flycheck
    #+BEGIN_SRC elisp
+     (defun org-src-disable-elisp-checkdoc ()
+       (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
      (use-package flycheck
        :ensure t
-       :hook (prog-mode . flycheck-mode)
+       :hook
+       ((prog-mode . flycheck-mode)
+        (org-src-mode . org-src-disable-elisp-checkdoc))
        :config
        ;; Use lsp instead
        (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))

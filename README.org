@@ -851,7 +851,7 @@
    #+BEGIN_SRC elisp
      (use-package org-id
        :config
-       (setq org-id-link-to-org-use-id t))
+       (setq org-id-link-to-org-use-id 'create-if-interactive))
    #+END_SRC
 ** org checklist
    #+BEGIN_SRC elisp

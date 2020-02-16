@@ -267,24 +267,13 @@
       :ensure t
       :config
       (general-evil-setup)
-      (general-def 'emacs ibuffer-mode-map
-        "M-j" 'ibuffer-forward-filter-group
-        "M-k" 'ibuffer-backward-filter-group
-        "j" 'ibuffer-forward-line
-        "k" 'ibuffer-backward-line)
       (general-def 'override
         "C-=" 'text-scale-increase
         "M-p" 'my:other-window-or-buffer
+        "M-o" 'delete-other-windows
         "M-m" 'ivy-switch-buffer
+        "M-x" 'counsel-M-x
         "C--" 'text-scale-decrease)
-      (general-mmap Info-mode-map
-        "q" 'Info-exit
-        "u" 'Info-up
-        "b" 'Info-history-back
-        "n" 'Info-next
-        "p" 'Info-prev
-        "<tab>" 'Info-next-reference
-        "S-<tab>" 'Info-prev-reference)
       (general-def 'normal help-mode-map
         "q" 'quit-window))
   #+END_SRC
@@ -308,9 +297,17 @@
       "C-/" 'comment-dwim)
   #+END_SRC
 
+  Find references using xref.
+  #+BEGIN_SRC elisp
+    (general-nmap
+      "g d" 'xref-find-definitions
+      "g r" 'xref-find-references
+      "g i" 'counsel-imenu)
+  #+END_SRC
+
   Use space as the leader key for those keybindings which are useful only in normal mode.
   #+BEGIN_SRC elisp
-    (general-mmap                           ;
+    (general-mmap
       :prefix "SPC"
       "" nil
       "a" 'align
@@ -1289,7 +1286,14 @@
    #+END_SRC
 ** info
    #+BEGIN_SRC elisp
-     (use-package info)
+     (general-mmap Info-mode-map
+       "q" 'Info-exit
+       "u" 'Info-up
+       "b" 'Info-history-back
+       "n" 'Info-next
+       "p" 'Info-prev
+       "<tab>" 'Info-next-reference
+       "S-<tab>" 'Info-prev-reference)
    #+END_SRC
 ** ivy
    #+BEGIN_SRC elisp
@@ -1357,10 +1361,6 @@
        (setq lsp-prefer-flymake nil))
      (use-package lsp-ui :ensure t :commands lsp-ui-mode)
      (use-package company-lsp :ensure t :commands company-lsp)
-     (use-package ccls
-       :ensure t
-       :defer t
-       :hook ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp))))
    #+END_SRC
 ** magit
    #+BEGIN_SRC elisp
@@ -1454,6 +1454,15 @@
        :config
        (which-key-mode 1))
    #+END_SRC
+
+   #+BEGIN_SRC elisp
+     (general-nmap lsp-ui-imenu-mode-map
+       "h" 'lsp-ui-imenu--prev-kind
+       "l" 'lsp-ui-imenu--next-kind
+       "q" 'quit-window
+       "o" 'lsp-ui-imenu--view
+       "<return>" 'lsp-ui-imenu--visit)
+   #+END_SRC
 ** xterm-color
    #+BEGIN_SRC elisp
     (use-package xterm-color :ensure t)
@@ -1465,6 +1474,48 @@
        :config
        (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
        (yas-global-mode 1))
+   #+END_SRC
+** xref
+   #+BEGIN_SRC elisp
+     (general-nmap xref--xref-buffer-mode-map
+       "j" 'xref-next-line
+       "k" 'xref-prev-line
+       "q" 'quit-window
+       "o" 'xref-show-location-at-point
+       "<return>" 'xref-goto-xref)
+   #+END_SRC
+** xterm-color
+   #+BEGIN_SRC elisp
+    (use-package xterm-color :ensure t)
+   #+END_SRC
+** yasnippet
+   #+BEGIN_SRC elisp
+     (use-package yasnippet
+       :ensure t
+       :config
+       (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+       (yas-global-mode 1))
+   #+END_SRC
+
+   #+BEGIN_SRC elisp
+     (use-package ivy-rich
+       :ensure t
+       :after ivy
+       :config
+       (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+       (ivy-rich-mode 1))
+     (use-package all-the-icons-ivy-rich
+       :ensure t
+       :after (ivy ivy-rich all-the-icons)
+       :init (all-the-icons-ivy-rich-mode 1))
+   #+END_SRC
+
+   #+BEGIN_SRC elisp
+     (general-def 'emacs ibuffer-mode-map
+       "M-j" 'ibuffer-forward-filter-group
+       "M-k" 'ibuffer-backward-filter-group
+       "j" 'ibuffer-forward-line
+       "k" 'ibuffer-backward-line)
    #+END_SRC
 * languages
 ** prog-mode
@@ -1619,6 +1670,13 @@
        :config
        (setq c-basic-offset 4)
        (setq c-default-style "linux"))
+   #+END_SRC
+
+   #+BEGIN_SRC elisp
+     (use-package ccls
+       :ensure t
+       :defer t
+       :hook ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp))))
    #+END_SRC
 ** Common Lisp
    #+BEGIN_SRC elisp

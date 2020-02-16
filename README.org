@@ -344,8 +344,8 @@
      _s_: swiper    _a_: agenda    _w_: window     _Q_: Quit
      _d_: dired     _[_: Side      _B_: buffer
      _r_: ripgrep   _t_: terminal  _h_: help
-     _k_: kill      _e_: eshell    _p_: project
-     _i_: ibuffer   _v_: vterm     _c_: capture
+     _k_: kill      _e_: eshell    _c_: capture
+     _i_: ibuffer   _v_: vterm
      _b_: bibtex
 
      ")
@@ -373,7 +373,6 @@
        ("w" hydra-window/body)
        ("B" hydra-buffer/body)
        ("h" hydra-help/body)
-       ("p" hydra-projectile/body)
 
        ("<escape>" nil))
    #+END_SRC
@@ -440,41 +439,6 @@
        ("b" ivy-switch-buffer)
        ("q" nil)
        ("<escape>" nil))
-   #+END_SRC
-** hydra-projectile
-   #+BEGIN_SRC elisp
-     (defhydra hydra-projectile
-       (:color teal :hint nil)
-       (concat
-        "       "
-        (all-the-icons-material "dashboard" :height 2 :v-adjust -0.3)
-        " Projectile"
-        "
-
-     ^Switch^            ^Action^
-     ──────────────
-     _p_: project        _c_: compile
-     _b_: buffer         _t_: test
-     _f_: file           _r_: run
-     _d_: dired          _l_: clean
-     _e_: eshell         _x_: remove
-     ^ ^                 _s_: save
-
-     ")
-       ("p" projectile-switch-project)
-       ("b" projectile-switch-to-buffer)
-       ("f" projectile-find-file)
-       ("d" projectile-dired)
-       ("e" projectile-run-eshell)
-       ("c" projectile-compile-project)
-       ("t" projectile-test-project)
-       ("r" projectile-run-project)
-       ("l" projectile-cleanup-known-projects)
-       ("x" projectile-remove-known-project)
-       ("s" projectile-save-project-buffers)
-       ("q" nil)
-       ("<escape>" nil)
-       )
    #+END_SRC
 ** hydra-eyebrowse
    #+BEGIN_SRC elisp
@@ -1232,6 +1196,13 @@
        :config
        (fcitx-aggressive-setup))
    #+END_SRC
+** find-file-in-project
+   #+BEGIN_SRC elisp
+     (use-package find-file-in-project
+       :ensure t
+       :config
+       (setq ffip-use-rust-fd t))
+   #+END_SRC
 ** flycheck
    #+BEGIN_SRC elisp
      (defun org-src-disable-elisp-checkdoc ()
@@ -1383,17 +1354,6 @@
    #+BEGIN_SRC elisp
      (use-package olivetti
        :ensure t)
-   #+END_SRC
-** projectile
-   #+BEGIN_SRC elisp
-     (use-package projectile
-       :ensure t
-       :defer t
-       :config
-       (projectile-mode 1)
-       (setq projectile-sort-order 'recently-active)
-       (setq projectile-switch-project-action #'projectile-dired)
-       (setq projectile-completion-system 'ivy))
    #+END_SRC
 ** rainbow-delimiters
    #+BEGIN_SRC elisp

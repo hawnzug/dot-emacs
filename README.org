@@ -509,7 +509,7 @@
       <<org-kill-temp-fontify-buffer>>
       <<org-capture-templates>>
       <<org-clock-config>>
-      (setcdr (assoc "\\.pdf\\'" org-file-apps) "llpp %s")
+      (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
       (setq org-ellipsis "𝌆")
       (setq org-confirm-babel-evaluate nil)
       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
@@ -1032,8 +1032,7 @@
         :config
         (setq
          dired-open-extensions
-         '(("pdf" . "llpp")
-           ("html" . "firefox")
+         '(("pdf" . "zathura")
            ("docx" . "wps")
            ("doc" . "wps")
            ("mp4" . "mpv")

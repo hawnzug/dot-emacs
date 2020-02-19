@@ -529,8 +529,8 @@
       <<org-kill-temp-fontify-buffer>>
       <<org-capture-templates>>
       (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
-      (setq org-refile-targets '(("~/notes/cache.org" . (:level . 1))))
-      (setq org-archive-location "~/notes/archive.org::")
+      (setq org-refile-targets '(("~/notes/memory.org" . (:level . 1))))
+      (setq org-archive-location "~/notes/trash.org::")
       (setq org-ellipsis "+")
       (setq org-confirm-babel-evaluate nil)
       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
@@ -549,7 +549,7 @@
       :after org
       :commands (org-agenda)
       :config
-      (setq org-agenda-files '("~/notes/cache.org"))
+      (setq org-agenda-files '("~/notes/memory.org"))
       (setq org-agenda-start-with-follow-mode nil)
       (setq org-agenda-dim-blocked-tasks nil)
       (setq org-agenda-span 'day)
@@ -585,7 +585,7 @@
   #+BEGIN_SRC elisp :tangle no
     (add-hook 'org-capture-mode-hook 'evil-insert-state)
     (setq org-capture-templates
-          '(("t" "Todo" entry (file "~/notes/register.org")
+          '(("t" "Todo" entry (file "~/notes/cache.org")
              "* %?"
              :prepend t)))
   #+END_SRC
@@ -1233,7 +1233,7 @@
        :after ivy
        :config
        (setq bibtex-completion-bibliography '("~/notes/refs.bib"))
-       (setq bibtex-completion-notes-path "~/notes/notes.org")
+       (setq bibtex-completion-notes-path "~/notes/drive.org")
        (setq bibtex-completion-library-path '("~/notes/pdfs"))
        (setq bibtex-completion-display-formats
              '((t . "${author:36} ${title:100} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:18}")))

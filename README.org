@@ -176,6 +176,11 @@
   #+BEGIN_SRC elisp
     (setq password-cache-expiry 1200)
   #+END_SRC
+
+  Always select the help window.
+  #+BEGIN_SRC elisp
+    (setq help-window-select t)
+  #+END_SRC
 * use-package
   #+BEGIN_SRC elisp
     (require 'package)
@@ -508,16 +513,11 @@
       (use-package org-mouse)
       <<org-kill-temp-fontify-buffer>>
       <<org-capture-templates>>
-      <<org-clock-config>>
       (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
       (setq org-ellipsis "𝌆")
       (setq org-confirm-babel-evaluate nil)
       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
       (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
-      (setq org-todo-keywords
-            '((sequence "TODO" "NEXT" "|" "DONE")))
-      (setq org-global-properties
-            '(("Effort_ALL". "0:10 0:30 1:00 2:00 3:00 4:00")))
       (setq org-fontify-done-headline t)
       (setq org-log-into-drawer t)
       (setq org-log-done 'time)
@@ -555,10 +555,9 @@
     (use-package org-bullets
       :ensure t
       :after org
+      :hook (org-mode . org-bullets-mode)
       :init
-      (setq org-bullets-bullet-list '("⚫" "⚪" "▪" "▫"))
-      :config
-      (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+      (setq org-bullets-bullet-list '("⚫" "⚪" "▪" "▫")))
 
     (use-package org-tree-slide
       :ensure t
@@ -585,24 +584,8 @@
       (setq org-agenda-overriding-columns-format
             "%25ITEM %10Effort{:} %10CLOCKSUM{:}")
       (setq org-agenda-block-separator ?―)
-      <<org-super-agenda>>
       <<org-agenda-kbd>>
-      <<org-agenda-custom-commands>>
       )
-  #+END_SRC
-
-  Open timestamp in Google Calendar:
-  #+BEGIN_SRC elisp
-    (defun my:org-open-gcal ()
-      (interactive)
-      (let ((timestamp (cadr (org-element-timestamp-parser))))
-        (let ((year (plist-get timestamp :year-start))
-              (month (plist-get timestamp :month-start))
-              (day (plist-get timestamp :day-start)))
-          (browse-url
-           (format
-            "https://calendar.google.com/calendar/b/2/r/day/%d/%d/%d"
-            year month day)))))
   #+END_SRC
 
   Show time grid in org agenda.
@@ -629,41 +612,6 @@
                 (setq colors (cdr colors))
                 (overlay-put ov 'line-height line-height)
                 (overlay-put ov 'line-spacing (1- line-height))))))))
-  #+END_SRC
-
-  #+NAME: org-agenda-custom-commands
-  #+BEGIN_SRC elisp :tangle no
-    (setq org-agenda-custom-commands
-          '(("n" todo "NEXT"
-             ((org-agenda-overriding-header "Next Actions")
-              (org-agenda-files '("~/org/notes.org" "~/org/todos.org"))))))
-  #+END_SRC
-
-  Super agenda
-  #+NAME: org-super-agenda
-  #+BEGIN_SRC elisp :tangle no
-    (use-package org-super-agenda
-      :ensure t
-      :disabled t
-      :after org-agenda
-      :config
-      (org-super-agenda-mode)
-      (setq org-super-agenda-header-separator "")
-      (setq org-super-agenda-groups
-            '((:name "CSCI 2041" :order 2 :category "CSCI2041")
-              (:name "CSCI 5106" :order 3 :category "CSCI5106")
-              (:name "CSCI 5511" :order 4 :category "CSCI5511")
-              (:name "CSCI 8001" :order 5 :category "CSCI8001")
-              (:name "GRAD 5102" :order 6 :category "GRAD5102")
-              (:name "Home" :order 7 :tag "@home")
-              (:name "TODO" :order 90 :anything t)))
-      (general-def org-super-agenda-header-map
-        "c" 'org-agenda-columns
-        "z" 'org-agenda-log-mode
-        "h" 'backward-char
-        "l" 'forward-char
-        "j" 'org-agenda-next-line
-        "k" 'org-agenda-previous-line))
   #+END_SRC
 
   Keybindings
@@ -724,30 +672,6 @@
      "M-w" 'org-capture-refile
      "M-k" 'org-capture-kill)
   #+END_SRC
-** org clock
-   Org clock config.
-   #+NAME: org-clock-config
-   #+BEGIN_SRC elisp :tangle no
-     (org-clock-persistence-insinuate)
-     (setq org-clock-persist t)
-     (setq org-clock-in-resume t)
-     (setq org-clock-persist-query-resume nil)
-     (setq org-clock-clocktable-default-properties
-           '(:maxlevel 4 :block today :scope file :link t))
-   #+END_SRC
-
-   Hydra
-   #+BEGIN_SRC elisp
-     (defhydra hydra-org-clock
-       (:color blue :hint nil :idle 1.0)
-       "org clock"
-       ("g" org-clock-goto "goto")
-       ("i" org-clock-in "in")
-       ("I" org-clock-in-last "in last")
-       ("o" org-clock-out "out")
-       ("c" org-clock-cancel "cancel")
-       ("r" org-clock-report "report"))
-   #+END_SRC
 ** org babel
   Org babel.
   #+BEGIN_SRC elisp
@@ -898,15 +822,14 @@
         " Org mode"
         "
 
-     ^Insert^        ^View^       ^Hydra^    ^Action^
+     ^Insert^        ^View^       ^Action^
      ───────────────────────
-     _s_: schedule   _c_: column  _k_: clock  _r_: refile
-     _d_: deadline   _i_: image   _b_: babel  _o_: open
-     _t_: timestamp  _x_: latex   ^ ^         _w_: refile
-     _l_: link
+     _s_: schedule   _c_: column  _r_: refile
+     _d_: deadline   _i_: image   _o_: open
+     _t_: timestamp  _x_: latex   _w_: refile
+     _l_: link                    _b_: babel
      _L_: link
      _p_: property
-     _e_: effort
 
      ")
        ("s" org-schedule)
@@ -915,20 +838,17 @@
        ("l" org-insert-link)
        ("L" org-insert-last-stored-link)
        ("p" org-set-property)
-       ("e" org-set-effort)
 
        ("c" org-columns)
        ("i" org-toggle-inline-images)
        ("x" org-toggle-latex-fragment)
 
-       ("k" hydra-org-clock/body)
-       ("b" hydra-org-babel/body)
-
        ("r" my:org-refile-to-diary)
        ("o" org-open-at-point)
        ("w" org-refile)
-       ("M-;" org-ctrl-c-ctrl-c)
+       ("b" hydra-org-babel/body)
 
+       ("M-;" org-ctrl-c-ctrl-c)
        ("q" nil)
        ("<escape>" nil))
    #+END_SRC

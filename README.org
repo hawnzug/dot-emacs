@@ -334,10 +334,11 @@
       "t l" 'my:toggle-line-number
       "t t" 'my:toggle-transparency
       "t m" 'my:load-theme
+      "s" 'symbol-overlay-put
+      "o" 'olivetti-mode
       "f" 'avy-goto-char-2
       "w" 'avy-goto-word-1
-      "l" 'avy-goto-line
-      "o" 'symbol-overlay-put)
+      "l" 'avy-goto-line)
   #+END_SRC
 * hydra
   #+BEGIN_SRC elisp :noweb no-export

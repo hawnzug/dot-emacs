@@ -4,81 +4,96 @@
   :PROPERTIES:
   :TOC:      this
   :END:
-  -  [[#init][init]]
-  -  [[#use-package][use-package]]
-  -  [[#benchmark-init][benchmark-init]]
-  -  [[#all-the-icons][all-the-icons]]
-  -  [[#doom-themes][doom-themes]]
-  -  [[#generalel][general.el]]
+-  [[#init][init]]
+-  [[#use-package][use-package]]
+-  [[#help-functions][help functions]]
+-  [[#benchmark-init][benchmark-init]]
+-  [[#all-the-icons][all-the-icons]]
+-  [[#doom-themes][doom-themes]]
+-  [[#generalel][general.el]]
+-  [[#hydra][hydra]]
+  -  [[#hydra-global][hydra-global]]
+  -  [[#hydra-window][hydra-window]]
+  -  [[#hydra-buffer][hydra-buffer]]
+  -  [[#hydra-eyebrowse][hydra-eyebrowse]]
+  -  [[#hydra-help][hydra-help]]
+-  [[#mode-line][mode line]]
+-  [[#org][org]]
+  -  [[#org-agenda][org-agenda]]
+  -  [[#org-capture][org-capture]]
+  -  [[#org-babel][org-babel]]
+  -  [[#org-id][org-id]]
+  -  [[#org-checklist][org-checklist]]
+  -  [[#org-alert][org-alert]]
+  -  [[#org-maketoc][org-maketoc]]
+  -  [[#org-bullets][org-bullets]]
+  -  [[#org-tree-slide][org-tree-slide]]
+  -  [[#helper-functions][helper functions]]
+    -  [[#archive-to-datetree][Archive to datetree]]
+    -  [[#jump-to-source-block-by-name][Jump to source block by name]]
+    -  [[#kill-temporary-fontify-buffers][Kill temporary fontify buffers]]
+    -  [[#show-time-grid-in-org-agenda][Show time grid in org agenda]]
+    -  [[#create-a-capture-frame][Create a capture frame]]
+  -  [[#keybindings][keybindings]]
   -  [[#hydra][hydra]]
-    -  [[#hydra-global][hydra-global]]
-    -  [[#hydra-window][hydra-window]]
-    -  [[#hydra-buffer][hydra-buffer]]
-    -  [[#hydra-projectile][hydra-projectile]]
-    -  [[#hydra-eyebrowse][hydra-eyebrowse]]
-    -  [[#hydra-help][hydra-help]]
-  -  [[#transient][transient]]
-  -  [[#mode-line][mode line]]
-  -  [[#org][org]]
-    -  [[#org-agenda][org agenda]]
-    -  [[#org-capture][org capture]]
-    -  [[#org-clock][org clock]]
-    -  [[#org-babel][org babel]]
-    -  [[#org-drill][org drill]]
-    -  [[#org-checklist][org checklist]]
-    -  [[#help-functions][Help functions]]
-    -  [[#keybindings][Keybindings]]
-    -  [[#hydra][Hydra]]
-  -  [[#eshell][eshell]]
-  -  [[#dired][dired]]
-  -  [[#packages][packages]]
-    -  [[#academic-phrases][academic-phrases]]
-    -  [[#alert][alert]]
-    -  [[#anylink][anylink]]
-    -  [[#battery][battery]]
-    -  [[#company][company]]
-    -  [[#docker][docker]]
-    -  [[#ediff][ediff]]
-    -  [[#emacs-libvterm][emacs-libvterm]]
-    -  [[#emmet][emmet]]
-    -  [[#evil][evil]]
-    -  [[#exec-path-from-shell][exec-path-from-shell]]
-    -  [[#eyebrowse][eyebrowse]]
-    -  [[#fcitx][fcitx]]
-    -  [[#flycheck][flycheck]]
-    -  [[#geiser][geiser]]
-    -  [[#hl-line-mode][hl-line-mode]]
-    -  [[#htmlize][htmlize]]
-    -  [[#ibuffer][ibuffer]]
-    -  [[#imenu-list][imenu-list]]
-    -  [[#info][info]]
-    -  [[#ivy][ivy]]
-    -  [[#keyfreq][keyfreq]]
-    -  [[#lsp][lsp]]
-    -  [[#magit][magit]]
-    -  [[#projectile][projectile]]
-    -  [[#rainbow-delimiters][rainbow-delimiters]]
-    -  [[#sublimity][sublimity]]
-    -  [[#symbol-overlay][symbol-overlay]]
-    -  [[#web-mode][web-mode]]
-    -  [[#which-key][which-key]]
-    -  [[#xterm-color][xterm-color]]
-  -  [[#languages][languages]]
-    -  [[#prog-mode][prog-mode]]
-    -  [[#coq][Coq]]
-    -  [[#csv][CSV]]
-    -  [[#haskell][Haskell]]
-    -  [[#agda][Agda]]
-    -  [[#ocaml][Ocaml]]
-    -  [[#sml][SML]]
-    -  [[#cubicaltt][Cubicaltt]]
-    -  [[#c][C]]
-    -  [[#lua][Lua]]
-    -  [[#python][Python]]
-    -  [[#rust][Rust]]
-    -  [[#tex][TeX]]
-    -  [[#yaml][YAML]]
-  -  [[#help-functions][help functions]]
+-  [[#eshell][eshell]]
+-  [[#dired][dired]]
+-  [[#packages][packages]]
+  -  [[#academic-phrases][academic-phrases]]
+  -  [[#alert][alert]]
+  -  [[#battery][battery]]
+  -  [[#company][company]]
+  -  [[#docker][docker]]
+  -  [[#ediff][ediff]]
+  -  [[#emacs-libvterm][emacs-libvterm]]
+  -  [[#emmet][emmet]]
+  -  [[#evil][evil]]
+  -  [[#exec-path-from-shell][exec-path-from-shell]]
+  -  [[#eyebrowse][eyebrowse]]
+  -  [[#fcitx][fcitx]]
+  -  [[#find-file-in-project][find-file-in-project]]
+  -  [[#flycheck][flycheck]]
+  -  [[#geiser][geiser]]
+  -  [[#hl-line-mode][hl-line-mode]]
+  -  [[#htmlize][htmlize]]
+  -  [[#ibuffer][ibuffer]]
+  -  [[#imenu-list][imenu-list]]
+  -  [[#info][info]]
+  -  [[#ivy][ivy]]
+  -  [[#ivy-bibtex][ivy-bibtex]]
+  -  [[#keyfreq][keyfreq]]
+  -  [[#lsp][lsp]]
+  -  [[#magit][magit]]
+  -  [[#olivetti][olivetti]]
+  -  [[#rainbow-delimiters][rainbow-delimiters]]
+  -  [[#sublimity][sublimity]]
+  -  [[#symbol-overlay][symbol-overlay]]
+  -  [[#terminal-here][terminal-here]]
+  -  [[#tramp][tramp]]
+  -  [[#vc-mode][vc-mode]]
+  -  [[#web-mode][web-mode]]
+  -  [[#which-key][which-key]]
+  -  [[#xterm-color][xterm-color]]
+  -  [[#yasnippet][yasnippet]]
+  -  [[#xref][xref]]
+  -  [[#xterm-color][xterm-color]]
+  -  [[#yasnippet][yasnippet]]
+-  [[#languages][languages]]
+  -  [[#prog-mode][prog-mode]]
+  -  [[#coq][Coq]]
+  -  [[#csv][CSV]]
+  -  [[#haskell][Haskell]]
+  -  [[#agda][Agda]]
+  -  [[#ocaml][Ocaml]]
+  -  [[#sml][SML]]
+  -  [[#cubicaltt][Cubicaltt]]
+  -  [[#c][C]]
+  -  [[#common-lisp][Common Lisp]]
+  -  [[#lua][Lua]]
+  -  [[#python][Python]]
+  -  [[#rust][Rust]]
+  -  [[#tex][TeX]]
+  -  [[#yaml][YAML]]
 
 * init
   Allow large garbage collection threshold when init.
@@ -525,53 +540,14 @@
       (setq org-enforce-todo-checkbox-dependencies t)
       (setq org-footnote-section nil))
   #+END_SRC
-
-  Kill temporary buffers created by ~org-src-font-lock-fontify-block~.
-  #+NAME: org-kill-temp-fontify-buffer
-  #+BEGIN_SRC elisp :tangle no
-    (defun kill-org-src-buffers (&rest args)
-      "Kill temporary buffers created by org-src-font-lock-fontify-block."
-      (dolist (b (buffer-list))
-        (let ((bufname (buffer-name b)))
-          (if (string-match-p (regexp-quote "org-src-fontification") bufname)
-              (kill-buffer b)))))
-    (advice-add 'org-src-font-lock-fontify-block :after #'kill-org-src-buffers)
-  #+END_SRC
-
-  Other org packages
-  #+BEGIN_SRC elisp
-    (use-package org-alert
-      :disabled t
-      :after (org alert)
-      :load-path "~/.emacs.d/packages/org-alert"
-      :config
-      (org-alert-enable))
-
-    (use-package org-make-toc
-      :ensure t
-      :after org
-      :commands (org-make-toc))
-
-    (use-package org-bullets
-      :ensure t
-      :after org
-      :hook (org-mode . org-bullets-mode)
-      :init
-      (setq org-bullets-bullet-list '("⚫" "⚪" "▪" "▫")))
-
-    (use-package org-tree-slide
-      :ensure t
-      :after org
-      :commands (org-tree-slide-mode))
-  #+END_SRC
-** org agenda
+** org-agenda
   Org agenda config.
   #+BEGIN_SRC elisp :noweb no-export
     (use-package org-agenda
       :after org
       :commands (org-agenda)
       :config
-      (setq org-agenda-files '("~/org/notes.org"))
+      (setq org-agenda-files '("~/notes/inbox.org"))
       (setq org-agenda-start-with-follow-mode nil)
       (setq org-agenda-dim-blocked-tasks nil)
       (setq org-agenda-span 'day)
@@ -588,32 +564,6 @@
       )
   #+END_SRC
 
-  Show time grid in org agenda.
-  #+BEGIN_SRC elisp :tangle no
-    (defun my:org-agenda-time-grid-spacing ()
-      "Set different line spacing w.r.t. time duration."
-      (save-excursion
-        (let ((colors (list "#FFF9C4" "#FFF176" "#FFF59D" "#FFEE58"))
-              (pos (point-min))
-              (block-minutes 30)
-              duration)
-          (nconc colors colors)
-          (while (setq pos (next-single-property-change pos 'org-hd-marker))
-            (goto-char pos)
-            (when (and (not (equal pos (point-at-eol)))
-                       (setq duration
-                             (or (org-get-at-bol 'duration)
-                                 (when (equal (org-get-at-bol 'org-hd-marker) org-clock-hd-marker)
-                                   (/ (- (float-time) (float-time org-clock-start-time)) 60)))))
-              (let ((line-height (if (< duration block-minutes) 1.0
-                                   (+ 0.5 (/ duration (* 2.0 block-minutes)))))
-                    (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
-                (overlay-put ov 'face `(:background ,(car colors)))
-                (setq colors (cdr colors))
-                (overlay-put ov 'line-height line-height)
-                (overlay-put ov 'line-spacing (1- line-height))))))))
-  #+END_SRC
-
   Keybindings
   #+NAME: org-agenda-kbd
   #+BEGIN_SRC elisp :tangle no
@@ -627,38 +577,13 @@
       "j" 'org-agenda-next-line
       "k" 'org-agenda-previous-line)
   #+END_SRC
-** org capture
+** org-capture
   Org capture templates.
   #+NAME: org-capture-templates
   #+BEGIN_SRC elisp :tangle no
     (add-hook 'org-capture-mode-hook 'evil-insert-state)
     (setq org-capture-templates
-          '(("t" "Todo" entry (file+headline "~/org/todos.org" "Inbox")
-             "* %?")
-            ("c" "Calendar" entry (file "~/org/schedule.org")
-             "* TODO %?\n  :PROPERTIES:\n  %^{LOCATION}p:calendar-id: wang9163@umn.edu\n  :END:\n:org-gcal:\n%^T\n:END:\n")))
-  #+END_SRC
-
-  #+BEGIN_SRC elisp
-    (defun make-org-capture-frame ()
-      "Create a new frame and run org-capture."
-      (interactive)
-      (defun my:delete-other-windows (&rest args)
-        (setq-local mode-line-format nil)
-        (delete-other-windows))
-      (advice-add 'org-switch-to-buffer-other-window :after
-                  #'my:delete-other-windows)
-      (defun my:capture-after ()
-        (advice-remove 'org-switch-to-buffer-other-window
-                       #'my:delete-other-windows)
-        (delete-frame)
-        (remove-hook 'org-capture-after-finalize-hook #'my:capture-after)
-        (fmakunbound 'my:delete-other-windows)
-        (fmakunbound 'my:capture-after))
-      (add-hook 'org-capture-after-finalize-hook #'my:capture-after)
-      (condition-case nil
-          (org-capture nil "t")
-        ((user-error error) (my:capture-after))))
+          '(("t" "Todo" entry (file "~/notes/inbox.org") "* %?")))
   #+END_SRC
 
   Keybindings
@@ -672,7 +597,7 @@
      "M-w" 'org-capture-refile
      "M-k" 'org-capture-kill)
   #+END_SRC
-** org babel
+** org-babel
   Org babel.
   #+BEGIN_SRC elisp
     (use-package ob-scheme :after org)
@@ -732,64 +657,141 @@
       ("q" nil)
       ("<escape>" nil))
   #+END_SRC
-** org id
+** org-id
    #+BEGIN_SRC elisp
      (use-package org-id
        :config
        (setq org-id-link-to-org-use-id 'create-if-interactive))
    #+END_SRC
-** org checklist
+** org-checklist
    #+BEGIN_SRC elisp
      (use-package org-checklist
        :after org)
    #+END_SRC
-** Help functions
-  I'd like to keep the main org file clean and tiny, but I also want to see an accurate
-  agenda history. However archive or refile don't work for me, so I write this function.
-  It simply moves the current subtree to the diary file according to its CLOSED time.
-  #+BEGIN_SRC elisp
-    (defun my:org-refile-to-diary ()
-      "Refile a subtree to a datetree corresponding to its CLOSED time."
-      (interactive)
-      (let* ((diary-file "~/org/diary.org")
-             (datetree-date (org-entry-get nil "CLOSED" t))
-             (date (org-date-to-gregorian datetree-date)))
-        (save-window-excursion
-          (org-cut-subtree)
-          (find-file diary-file)
-          (org-datetree-find-date-create date)
-          (org-end-of-subtree t)
-          (newline)
-          (org-paste-subtree 4))))
-  #+END_SRC
-
-  I cannot remember why I wrote this function (This is one of the reasons for putting my
-  config in org mode). It might be related to previous refile function, and it seems
-  useful. So I decide not to delete it and hope I will find its usage someday.
-  #+BEGIN_SRC elisp
-    (defun my:org-datetree-find-date-create-subtree ()
-      (interactive)
-      (let ((date (org-date-to-gregorian (org-read-date))))
-       (org-datetree-find-date-create date 'subtree-at-point)))
-  #+END_SRC
-
-  Collect all source block names for ivy. This function is useful when using noweb syntax
-  in source code block.
-  #+BEGIN_SRC elisp
-    (defun my:org-search-src-block-name ()
-      "Search source block name in current file"
-      (interactive)
-      (ivy-read
-       "Code block: "
-       (let (names)
-         (org-babel-map-src-blocks nil
-           (let ((name (nth 4 (org-babel-get-src-block-info))))
-             (push name names)))
-         (seq-filter #'identity names))
-       :require-match t
-       :action #'insert))
-  #+END_SRC
-** Keybindings
+** org-alert
+   #+BEGIN_SRC elisp
+     (use-package org-alert
+       :disabled t
+       :after (org alert)
+       :load-path "~/.emacs.d/packages/org-alert"
+       :config
+       (org-alert-enable))
+   #+END_SRC
+** org-maketoc
+   #+BEGIN_SRC elisp
+     (use-package org-make-toc
+       :ensure t
+       :after org
+       :commands (org-make-toc))
+   #+END_SRC
+** org-bullets
+   #+BEGIN_SRC elisp
+     (use-package org-bullets
+       :ensure t
+       :after org
+       :hook (org-mode . org-bullets-mode)
+       :init
+       (setq org-bullets-bullet-list '("⚫" "⚪" "▪" "▫")))
+   #+END_SRC
+** org-tree-slide
+   #+BEGIN_SRC elisp
+     (use-package org-tree-slide
+       :ensure t
+       :after org
+       :commands (org-tree-slide-mode))
+   #+END_SRC
+** helper functions
+*** Archive to datetree
+    #+BEGIN_SRC elisp
+      (defun my:org-refile-to-diary ()
+        "Refile a subtree to a datetree corresponding to its CLOSED time."
+        (interactive)
+        (let* ((diary-file "~/org/diary.org")
+               (datetree-date (org-entry-get nil "CLOSED" t))
+               (date (org-date-to-gregorian datetree-date)))
+          (save-window-excursion
+            (org-cut-subtree)
+            (find-file diary-file)
+            (org-datetree-find-date-create date)
+            (org-end-of-subtree t)
+            (newline)
+            (org-paste-subtree 4))))
+    #+END_SRC
+*** Jump to source block by name
+    #+BEGIN_SRC elisp
+      (defun my:org-search-src-block-name ()
+        "Search source block name in current file"
+        (interactive)
+        (ivy-read
+         "Code block: "
+         (let (names)
+           (org-babel-map-src-blocks nil
+             (let ((name (nth 4 (org-babel-get-src-block-info))))
+               (push name names)))
+           (seq-filter #'identity names))
+         :require-match t
+         :action #'insert))
+    #+END_SRC
+*** Kill temporary fontify buffers
+    Kill temporary buffers created by ~org-src-font-lock-fontify-block~.
+    #+NAME: org-kill-temp-fontify-buffer
+    #+BEGIN_SRC elisp :tangle no
+      (defun kill-org-src-buffers (&rest args)
+        "Kill temporary buffers created by org-src-font-lock-fontify-block."
+        (dolist (b (buffer-list))
+          (let ((bufname (buffer-name b)))
+            (if (string-match-p (regexp-quote "org-src-fontification") bufname)
+                (kill-buffer b)))))
+      (advice-add 'org-src-font-lock-fontify-block :after #'kill-org-src-buffers)
+    #+END_SRC
+*** Show time grid in org agenda
+    #+BEGIN_SRC elisp :tangle no
+      (defun my:org-agenda-time-grid-spacing ()
+        "Set different line spacing w.r.t. time duration."
+        (save-excursion
+          (let ((colors (list "#FFF9C4" "#FFF176" "#FFF59D" "#FFEE58"))
+                (pos (point-min))
+                (block-minutes 30)
+                duration)
+            (nconc colors colors)
+            (while (setq pos (next-single-property-change pos 'org-hd-marker))
+              (goto-char pos)
+              (when (and (not (equal pos (point-at-eol)))
+                         (setq duration
+                               (or (org-get-at-bol 'duration)
+                                   (when (equal (org-get-at-bol 'org-hd-marker) org-clock-hd-marker)
+                                     (/ (- (float-time) (float-time org-clock-start-time)) 60)))))
+                (let ((line-height (if (< duration block-minutes) 1.0
+                                     (+ 0.5 (/ duration (* 2.0 block-minutes)))))
+                      (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
+                  (overlay-put ov 'face `(:background ,(car colors)))
+                  (setq colors (cdr colors))
+                  (overlay-put ov 'line-height line-height)
+                  (overlay-put ov 'line-spacing (1- line-height))))))))
+    #+END_SRC
+*** Create a capture frame
+    #+BEGIN_SRC elisp
+      (defun make-org-capture-frame ()
+        "Create a new frame and run org-capture."
+        (interactive)
+        (defun my:delete-other-windows (&rest args)
+          (setq-local mode-line-format nil)
+          (delete-other-windows))
+        (advice-add 'org-switch-to-buffer-other-window :after
+                    #'my:delete-other-windows)
+        (defun my:capture-after ()
+          (advice-remove 'org-switch-to-buffer-other-window
+                         #'my:delete-other-windows)
+          (delete-frame)
+          (remove-hook 'org-capture-after-finalize-hook #'my:capture-after)
+          (fmakunbound 'my:delete-other-windows)
+          (fmakunbound 'my:capture-after))
+        (add-hook 'org-capture-after-finalize-hook #'my:capture-after)
+        (condition-case nil
+            (org-capture nil "t")
+          ((user-error error) (my:capture-after))))
+    #+END_SRC
+** keybindings
    #+BEGIN_SRC elisp
      (general-nmap org-mode-map
        "gh" 'outline-up-heading
@@ -812,7 +814,7 @@
      (general-def org-mode-map
        "M-;" 'hydra-org/body)
    #+END_SRC
-** Hydra
+** hydra
    #+BEGIN_SRC elisp
      (defhydra hydra-org
        (:color teal :hint nil :idle 1.0)

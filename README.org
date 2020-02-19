@@ -529,7 +529,9 @@
       <<org-kill-temp-fontify-buffer>>
       <<org-capture-templates>>
       (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
-      (setq org-ellipsis "𝌆")
+      (setq org-refile-targets '(("~/notes/cache.org" . (:level . 1))))
+      (setq org-archive-location "~/notes/archive.org::")
+      (setq org-ellipsis "+")
       (setq org-confirm-babel-evaluate nil)
       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
       (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
@@ -547,7 +549,7 @@
       :after org
       :commands (org-agenda)
       :config
-      (setq org-agenda-files '("~/notes/inbox.org"))
+      (setq org-agenda-files '("~/notes/cache.org"))
       (setq org-agenda-start-with-follow-mode nil)
       (setq org-agenda-dim-blocked-tasks nil)
       (setq org-agenda-span 'day)
@@ -583,7 +585,9 @@
   #+BEGIN_SRC elisp :tangle no
     (add-hook 'org-capture-mode-hook 'evil-insert-state)
     (setq org-capture-templates
-          '(("t" "Todo" entry (file "~/notes/inbox.org") "* %?")))
+          '(("t" "Todo" entry (file "~/notes/register.org")
+             "* %?"
+             :prepend t)))
   #+END_SRC
 
   Keybindings
@@ -819,17 +823,17 @@
      (defhydra hydra-org
        (:color teal :hint nil :idle 1.0)
        (concat
-        "               "
+        "           "
         (all-the-icons-fileicon "org" :height 2 :v-adjust -0.2 :face 'all-the-icons-purple)
         " Org mode"
         "
 
      ^Insert^        ^View^       ^Action^
-     ───────────────────────
-     _s_: schedule   _c_: column  _r_: refile
+     ───────────────────
+     _s_: schedule   _c_: column  _a_: archive
      _d_: deadline   _i_: image   _o_: open
-     _t_: timestamp  _x_: latex   _w_: refile
-     _l_: link                    _b_: babel
+     _t_: timestamp  _x_: latex   _r_: refile
+     _l_: link       ^ ^          _b_: babel
      _L_: link
      _p_: property
 
@@ -845,9 +849,9 @@
        ("i" org-toggle-inline-images)
        ("x" org-toggle-latex-fragment)
 
-       ("r" my:org-refile-to-diary)
+       ("a" org-archive-subtree)
        ("o" org-open-at-point)
-       ("w" org-refile)
+       ("r" org-refile)
        ("b" hydra-org-babel/body)
 
        ("M-;" org-ctrl-c-ctrl-c)

@@ -530,6 +530,9 @@
       <<org-kill-temp-fontify-buffer>>
       <<org-capture-templates>>
       (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
+      (setq org-adapt-indentation nil)
+      (setq org-startup-indented t)
+      (setq org-startup-truncated t)
       (setq org-refile-targets '(("~/notes/memory.org" . (:level . 1))))
       (setq org-archive-location "~/notes/trash.org::")
       (setq org-ellipsis "+")
@@ -552,6 +555,7 @@
       :config
       (setq org-agenda-files '("~/notes/memory.org"))
       (setq org-agenda-start-with-follow-mode nil)
+      (setq org-agenda-follow-indirect t)
       (setq org-agenda-dim-blocked-tasks nil)
       (setq org-agenda-span 'day)
       (setq org-agenda-log-mode-items '(clock))
@@ -1279,7 +1283,10 @@
 ** olivetti
    #+BEGIN_SRC elisp
      (use-package olivetti
-       :ensure t)
+       :ensure t
+       :config
+       (setq olivetti-body-width 90)
+       (setq olivetti-lighter))
    #+END_SRC
 ** rainbow-delimiters
    #+BEGIN_SRC elisp

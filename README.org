@@ -1356,6 +1356,13 @@
        "o" 'lsp-ui-imenu--view
        "<return>" 'lsp-ui-imenu--visit)
    #+END_SRC
+** winner-mode
+   #+BEGIN_SRC elisp
+     (use-package winner
+       :hook
+       (after-init . winner-mode)
+       (ediff-quit . winner-undo))
+   #+END_SRC
 ** xterm-color
    #+BEGIN_SRC elisp
     (use-package xterm-color :ensure t)

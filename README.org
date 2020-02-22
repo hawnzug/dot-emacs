@@ -1285,8 +1285,7 @@
      (use-package olivetti
        :ensure t
        :config
-       (setq olivetti-body-width 90)
-       (setq olivetti-lighter))
+       (setq olivetti-body-width 90))
    #+END_SRC
 ** rainbow-delimiters
    #+BEGIN_SRC elisp

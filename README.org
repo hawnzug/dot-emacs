@@ -1430,6 +1430,14 @@ Use semicolon as the major mode leader key.
        "j" 'ibuffer-forward-line
        "k" 'ibuffer-backward-line)
    #+END_SRC
+
+#+BEGIN_SRC elisp
+  (general-def magit-status-mode-map
+    "j" 'magit-section-forward
+    "k" 'magit-section-backward
+    "n" 'magit-status-jump
+    "p" 'magit-discard)
+#+END_SRC
 * languages
 ** prog-mode
    #+BEGIN_SRC elisp

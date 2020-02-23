@@ -105,6 +105,7 @@
   Disable useless UIs.
   #+BEGIN_SRC elisp
     (setq default-frame-alist '((font . "Iosevka Type Slab 12")))
+    (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend)
     (scroll-bar-mode -1)
     (horizontal-scroll-bar-mode -1)
     (tool-bar-mode -1)
@@ -700,7 +701,7 @@
        :after org
        :hook (org-mode . org-bullets-mode)
        :init
-       (setq org-bullets-bullet-list '("⚫" "⚪" "▪" "▫")))
+       (setq org-bullets-bullet-list '("♦" "♢" "▪" "▫")))
    #+END_SRC
 ** org-tree-slide
    #+BEGIN_SRC elisp
@@ -1143,12 +1144,16 @@
        ((prog-mode . flycheck-mode)
         (org-src-mode . org-src-disable-elisp-checkdoc))
        :config
+       (setq flycheck-display-errors-delay 0)
        ;; Use lsp instead
        (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
-     (use-package flycheck-inline
+     (use-package flycheck-posframe
        :ensure t
        :after flycheck
-       :hook (flycheck-mode . flycheck-inline-mode))
+       :hook (flycheck-mode . flycheck-posframe-mode)
+       :config
+       (setq flycheck-posframe-error-prefix "😡 ")
+       (setq flycheck-posframe-warning-prefix "😨 "))
    #+END_SRC
 ** geiser
    #+BEGIN_SRC elisp
@@ -1260,7 +1265,11 @@
        :commands lsp
        :config
        (setq lsp-prefer-flymake nil))
-     (use-package lsp-ui :ensure t :commands lsp-ui-mode)
+     (use-package lsp-ui
+       :ensure t
+       :commands lsp-ui-mode
+       :config
+       (setq lsp-ui-sideline-show-diagnostics nil))
      (use-package company-lsp :ensure t :commands company-lsp)
    #+END_SRC
 ** magit

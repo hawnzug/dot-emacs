@@ -102,10 +102,17 @@
     (add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold 800000)))
   #+END_SRC
 
-  Disable useless UIs.
+  Font setup.
   #+BEGIN_SRC elisp
     (setq default-frame-alist '((font . "Iosevka Type Slab 12")))
     (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend)
+    (set-face-attribute 'fixed-pitch nil :family "Iosevka Type Slab 12")
+    (set-face-attribute 'fixed-pitch-serif nil :family "Iosevka Type Slab 12")
+    (set-face-attribute 'variable-pitch nil :family "EB Garamond 12")
+  #+END_SRC
+
+  Disable useless UIs.
+  #+BEGIN_SRC elisp
     (scroll-bar-mode -1)
     (horizontal-scroll-bar-mode -1)
     (tool-bar-mode -1)
@@ -209,6 +216,7 @@
       (package-install 'use-package))
     (eval-when-compile (require 'use-package))
   #+END_SRC
+
 * help functions
   #+BEGIN_SRC elisp
     (defun my:show-trailing-space ()
@@ -244,7 +252,6 @@
   #+BEGIN_SRC elisp
     (defun my:toggle-transparency ()
       (interactive)
-      (set-face-font 'fixed-pitch-serif "Iosevka Type Slab-12")
       (let ((transparency 95)
             (opacity 100)
             (old-alpha (frame-parameter nil 'alpha)))
@@ -259,6 +266,7 @@
       :config
       (add-hook 'after-init-hook 'benchmark-init/deactivate))
   #+END_SRC
+
 * all-the-icons
   #+BEGIN_SRC elisp
     (use-package all-the-icons
@@ -271,6 +279,7 @@
       (add-to-list 'all-the-icons-mode-icon-alist
                    '(coq-mode all-the-icons-fileicon "coq" :face all-the-icons-red)))
   #+END_SRC
+
 * doom-themes
   #+BEGIN_SRC elisp
     (use-package doom-themes
@@ -282,6 +291,7 @@
       (doom-themes-org-config)
       )
   #+END_SRC
+
 * general.el
   #+BEGIN_SRC elisp :noweb no-export
     (use-package general
@@ -341,6 +351,7 @@
       "w" 'avy-goto-word-1
       "l" 'avy-goto-line)
   #+END_SRC
+
 * hydra
   #+BEGIN_SRC elisp :noweb no-export
     (use-package hydra
@@ -352,6 +363,7 @@
               :background-color "#f0e9d7"
               :poshandler posframe-poshandler-frame-center)))
   #+END_SRC
+
 ** hydra-global
    #+BEGIN_SRC elisp
      (defhydra hydra-global
@@ -398,6 +410,7 @@
 
        ("<escape>" nil))
    #+END_SRC
+
 ** hydra-window
    #+BEGIN_SRC elisp
      (defhydra hydra-window
@@ -438,6 +451,7 @@
        ("q" nil :color blue)
        ("<escape>" nil :color blue))
    #+END_SRC
+
 ** hydra-buffer
    #+BEGIN_SRC elisp
      (defhydra hydra-buffer
@@ -462,6 +476,7 @@
        ("q" nil)
        ("<escape>" nil))
    #+END_SRC
+
 ** hydra-eyebrowse
    #+BEGIN_SRC elisp
      (defhydra hydra-eyebrowse
@@ -475,6 +490,7 @@
        ("c" eyebrowse-create-window-config "last")
        ("r" eyebrowse-rename-window-config "rename"))
    #+END_SRC
+
 ** hydra-help
    #+BEGIN_SRC elisp
      (defhydra hydra-help
@@ -509,6 +525,7 @@
        ("q" nil)
        ("<escape>" nil))
    #+END_SRC
+
 * mode line
   #+BEGIN_SRC elisp
     (use-package doom-modeline
@@ -517,6 +534,7 @@
       :config
       (setq doom-modeline-icon t))
   #+END_SRC
+
 * org
   #+BEGIN_SRC elisp :noweb no-export
     (use-package org
@@ -536,7 +554,7 @@
       (setq org-startup-truncated t)
       (setq org-refile-targets '(("~/notes/memory.org" . (:level . 1))))
       (setq org-archive-location "~/notes/trash.org::")
-      (setq org-ellipsis "+")
+      (setq org-ellipsis "")
       (setq org-confirm-babel-evaluate nil)
       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
       (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
@@ -547,6 +565,7 @@
       (setq org-enforce-todo-checkbox-dependencies t)
       (setq org-footnote-section nil))
   #+END_SRC
+
 ** org-agenda
   Org agenda config.
   #+BEGIN_SRC elisp :noweb no-export
@@ -585,6 +604,7 @@
       "j" 'org-agenda-next-line
       "k" 'org-agenda-previous-line)
   #+END_SRC
+
 ** org-capture
   Org capture templates.
   #+NAME: org-capture-templates
@@ -607,6 +627,7 @@
      "M-w" 'org-capture-refile
      "M-k" 'org-capture-kill)
   #+END_SRC
+
 ** org-babel
   Org babel.
   #+BEGIN_SRC elisp
@@ -673,11 +694,13 @@
        :config
        (setq org-id-link-to-org-use-id 'create-if-interactive))
    #+END_SRC
+
 ** org-checklist
    #+BEGIN_SRC elisp
      (use-package org-checklist
        :after org)
    #+END_SRC
+
 ** org-alert
    #+BEGIN_SRC elisp
      (use-package org-alert
@@ -687,6 +710,7 @@
        :config
        (org-alert-enable))
    #+END_SRC
+
 ** org-maketoc
    #+BEGIN_SRC elisp
      (use-package org-make-toc
@@ -694,6 +718,7 @@
        :after org
        :commands (org-make-toc))
    #+END_SRC
+
 ** org-bullets
    #+BEGIN_SRC elisp
      (use-package org-bullets
@@ -701,8 +726,9 @@
        :after org
        :hook (org-mode . org-bullets-mode)
        :init
-       (setq org-bullets-bullet-list '("♦" "♢" "▪" "▫")))
+       (setq org-bullets-bullet-list '("⚬")))
    #+END_SRC
+
 ** org-tree-slide
    #+BEGIN_SRC elisp
      (use-package org-tree-slide
@@ -710,6 +736,7 @@
        :after org
        :commands (org-tree-slide-mode))
    #+END_SRC
+
 ** helper functions
 *** Archive to datetree
     #+BEGIN_SRC elisp
@@ -727,6 +754,7 @@
             (newline)
             (org-paste-subtree 4))))
     #+END_SRC
+
 *** Jump to source block by name
     #+BEGIN_SRC elisp
       (defun my:org-search-src-block-name ()
@@ -742,6 +770,7 @@
          :require-match t
          :action #'insert))
     #+END_SRC
+
 *** Kill temporary fontify buffers
     Kill temporary buffers created by ~org-src-font-lock-fontify-block~.
     #+NAME: org-kill-temp-fontify-buffer
@@ -754,6 +783,7 @@
                 (kill-buffer b)))))
       (advice-add 'org-src-font-lock-fontify-block :after #'kill-org-src-buffers)
     #+END_SRC
+
 *** Show time grid in org agenda
     #+BEGIN_SRC elisp :tangle no
       (defun my:org-agenda-time-grid-spacing ()
@@ -779,6 +809,7 @@
                   (overlay-put ov 'line-height line-height)
                   (overlay-put ov 'line-spacing (1- line-height))))))))
     #+END_SRC
+
 *** Create a capture frame
     #+BEGIN_SRC elisp
       (defun make-org-capture-frame ()
@@ -801,6 +832,7 @@
             (org-capture nil "t")
           ((user-error error) (my:capture-after))))
     #+END_SRC
+
 ** keybindings
    #+BEGIN_SRC elisp
      (general-nmap org-mode-map
@@ -824,6 +856,7 @@
      (general-def org-mode-map
        "M-;" 'hydra-org/body)
    #+END_SRC
+
 ** hydra
    #+BEGIN_SRC elisp
      (defhydra hydra-org
@@ -864,6 +897,7 @@
        ("q" nil)
        ("<escape>" nil))
    #+END_SRC
+
 * eshell
   #+BEGIN_SRC elisp
     (defun my:eshell-complete ()
@@ -998,6 +1032,7 @@
       "/" 'dired-goto-file
       "p" 'dired-up-directory)
   #+END_SRC
+
 * packages
 ** academic-phrases
    #+BEGIN_SRC elisp
@@ -1005,6 +1040,7 @@
        :ensure t
        :commands (academic-phrases academic-phrases-by-section))
    #+END_SRC
+
 ** alert
    #+BEGIN_SRC elisp
      (use-package alert
@@ -1013,12 +1049,14 @@
        :config
        (setq alert-default-style 'libnotify))
    #+END_SRC
+
 ** battery
    #+BEGIN_SRC elisp
      (use-package battery
        :config
        (display-battery-mode))
    #+END_SRC
+
 ** company
    #+BEGIN_SRC elisp
      (use-package company
@@ -1031,6 +1069,7 @@
          :config
          (company-posframe-mode 1)))
    #+END_SRC
+
 ** docker
    #+BEGIN_SRC elisp
      (use-package dockerfile-mode
@@ -1040,6 +1079,7 @@
      (use-package docker-tramp
        :ensure t)
    #+END_SRC
+
 ** ediff
    #+BEGIN_SRC elisp
      (use-package ediff
@@ -1048,17 +1088,20 @@
        (setq ediff-split-window-function 'split-window-horizontally)
        (setq ediff-window-setup-function 'ediff-setup-windows-plain))
    #+END_SRC
+
 ** emacs-libvterm
    #+BEGIN_SRC elisp
      (use-package vterm
        :load-path "~/.emacs.d/packages/emacs-libvterm")
    #+END_SRC
+
 ** emmet
    #+BEGIN_SRC elisp
      (use-package emmet-mode
        :ensure t
        :hook web-mode)
    #+END_SRC
+
 ** evil
    #+BEGIN_SRC elisp
      (use-package evil
@@ -1086,6 +1129,7 @@
        :config
        (global-evil-matchit-mode 1))
    #+END_SRC
+
 ** exec-path-from-shell
    #+BEGIN_SRC elisp
      (use-package exec-path-from-shell
@@ -1096,6 +1140,7 @@
        (exec-path-from-shell-copy-env "SSH_AGENT_PID")
        (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
    #+END_SRC
+
 ** eyebrowse
    #+BEGIN_SRC elisp
      (use-package eyebrowse
@@ -1118,6 +1163,7 @@
        "M-8" 'eyebrowse-switch-to-window-config-8
        "M-9" 'eyebrowse-switch-to-window-config-9)
    #+END_SRC
+
 ** fcitx
    #+BEGIN_SRC elisp
      (use-package fcitx
@@ -1127,6 +1173,7 @@
        :config
        (fcitx-aggressive-setup))
    #+END_SRC
+
 ** find-file-in-project
    #+BEGIN_SRC elisp
      (use-package find-file-in-project
@@ -1134,6 +1181,7 @@
        :config
        (setq ffip-use-rust-fd t))
    #+END_SRC
+
 ** flycheck
    #+BEGIN_SRC elisp
      (defun org-src-disable-elisp-checkdoc ()
@@ -1155,6 +1203,7 @@
        (setq flycheck-posframe-error-prefix "😡 ")
        (setq flycheck-posframe-warning-prefix "😨 "))
    #+END_SRC
+
 ** geiser
    #+BEGIN_SRC elisp
      (use-package geiser
@@ -1163,17 +1212,20 @@
        (setq geiser-chez-binary "chez-scheme")
        (setq geiser-default-implementation 'chez))
    #+END_SRC
+
 ** hl-line-mode
    #+BEGIN_SRC elisp
      (use-package hl-line-mode
        :hook (prog-mode dired-mode LaTeX-mode))
    #+END_SRC
+
 ** htmlize
    #+BEGIN_SRC elisp
      (use-package htmlize
        :ensure t
        :commands (htmlize htmlize-file htmlize-region htmlize-buffer))
    #+END_SRC
+
 ** ibuffer
    #+BEGIN_SRC elisp
      (use-package ibuffer
@@ -1184,16 +1236,18 @@
         '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
        (use-package ibuffer-vc :ensure t))
    #+END_SRC
+
 ** imenu-list
    #+BEGIN_SRC elisp
      (use-package imenu-list
        :ensure t
        :commands imenu-list)
    #+END_SRC
+
 ** info
    #+BEGIN_SRC elisp
      (general-mmap Info-mode-map
-       "q" 'Info-exit
+       "q" 'quit-window
        "u" 'Info-up
        "b" 'Info-history-back
        "n" 'Info-next
@@ -1201,6 +1255,7 @@
        "<tab>" 'Info-next-reference
        "S-<tab>" 'Info-prev-reference)
    #+END_SRC
+
 ** ivy
    #+BEGIN_SRC elisp
      (use-package ivy
@@ -1236,6 +1291,7 @@
        (setq ivy-posframe-border-width 10)
        (ivy-posframe-mode))
    #+END_SRC
+
 ** ivy-bibtex
    #+BEGIN_SRC elisp
      (use-package ivy-bibtex
@@ -1250,6 +1306,7 @@
        (add-to-list 'ivy-re-builders-alist
                     '(ivy-bibtex . ivy--regex-ignore-order)))
    #+END_SRC
+
 ** keyfreq
    #+BEGIN_SRC elisp
      (use-package keyfreq
@@ -1258,6 +1315,7 @@
        (keyfreq-mode 1)
        (keyfreq-autosave-mode 1))
    #+END_SRC
+
 ** lsp
    #+BEGIN_SRC elisp
      (use-package lsp-mode
@@ -1272,6 +1330,7 @@
        (setq lsp-ui-sideline-show-diagnostics nil))
      (use-package company-lsp :ensure t :commands company-lsp)
    #+END_SRC
+
 ** magit
    #+BEGIN_SRC elisp
      (use-package magit
@@ -1289,6 +1348,7 @@
       "M-;" 'with-editor-finish
       "M-k" 'with-editor-cancel)
    #+END_SRC
+
 ** olivetti
    #+BEGIN_SRC elisp
      (use-package olivetti
@@ -1296,6 +1356,7 @@
        :config
        (setq olivetti-body-width 90))
    #+END_SRC
+
 ** rainbow-delimiters
    #+BEGIN_SRC elisp
      (use-package rainbow-delimiters
@@ -1303,6 +1364,7 @@
        :ensure t
        :hook ((prog-mode coq-mode) . rainbow-delimiters-mode))
    #+END_SRC
+
 ** sublimity
    #+BEGIN_SRC elisp
      (use-package sublimity
@@ -1314,12 +1376,14 @@
          :config
          (sublimity-map-set-delay nil)))
    #+END_SRC
+
 ** symbol-overlay
    #+BEGIN_SRC elisp
      (use-package symbol-overlay
        :ensure t
        :commands symbol-overlay-put)
    #+END_SRC
+
 ** terminal-here
    #+BEGIN_SRC elisp
      (use-package terminal-here
@@ -1328,10 +1392,12 @@
        (setq terminal-here-terminal-command
              '("alacritty")))
    #+END_SRC
+
 ** tramp
    #+BEGIN_SRC elisp
      (use-package tramp)
    #+END_SRC
+
 ** vc-mode
    #+BEGIN_SRC elisp
      (use-package vc
@@ -1342,12 +1408,14 @@
                        vc-ignore-dir-regexp
                        tramp-file-name-regexp))))
    #+END_SRC
+
 ** web-mode
    #+BEGIN_SRC elisp
      (use-package web-mode
        :mode "\\.html?\\'"
        :ensure t)
    #+END_SRC
+
 ** which-key
    #+BEGIN_SRC elisp
      (use-package which-key
@@ -1364,6 +1432,7 @@
        "o" 'lsp-ui-imenu--view
        "<return>" 'lsp-ui-imenu--visit)
    #+END_SRC
+
 ** winner-mode
    #+BEGIN_SRC elisp
      (use-package winner
@@ -1371,18 +1440,7 @@
        (after-init . winner-mode)
        (ediff-quit . winner-undo))
    #+END_SRC
-** xterm-color
-   #+BEGIN_SRC elisp
-    (use-package xterm-color :ensure t)
-   #+END_SRC
-** yasnippet
-   #+BEGIN_SRC elisp
-     (use-package yasnippet
-       :ensure t
-       :config
-       (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-       (yas-global-mode 1))
-   #+END_SRC
+
 ** xref
    #+BEGIN_SRC elisp
      (general-nmap xref--xref-buffer-mode-map
@@ -1392,10 +1450,12 @@
        "o" 'xref-show-location-at-point
        "<return>" 'xref-goto-xref)
    #+END_SRC
+
 ** xterm-color
    #+BEGIN_SRC elisp
     (use-package xterm-color :ensure t)
    #+END_SRC
+
 ** yasnippet
    #+BEGIN_SRC elisp
      (use-package yasnippet
@@ -1431,6 +1491,7 @@
      (use-package prog-mode
        :hook (prog-mode . my:show-trailing-space))
    #+END_SRC
+
 ** Coq
    #+BEGIN_SRC elisp
      (use-package proof-general
@@ -1482,6 +1543,7 @@
        :ensure t
        :mode ("\\.[Cc][Ss][Vv]\\'" . csv-mode))
    #+END_SRC
+
 ** Haskell
    #+BEGIN_SRC elisp
      (use-package haskell-mode
@@ -1493,6 +1555,7 @@
        :after haskell-mode
        :commands ghcid)
    #+END_SRC
+
 ** Agda
    #+BEGIN_SRC elisp
      (eval-and-compile
@@ -1559,18 +1622,21 @@
        :ensure t
        :defer t)
    #+END_SRC
+
 ** SML
    #+BEGIN_SRC elisp
      (use-package sml-mode
        :ensure t
        :defer t)
    #+END_SRC
+
 ** Cubicaltt
    #+BEGIN_SRC elisp
      (use-package cubicaltt
        :load-path "~/cubicaltt"
        :mode ("\\.ctt$" . cubicaltt-mode))
    #+END_SRC
+
 ** C
    #+BEGIN_SRC elisp
      (use-package cc-mode
@@ -1586,6 +1652,7 @@
        :defer t
        :hook ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp))))
    #+END_SRC
+
 ** Common Lisp
    #+BEGIN_SRC elisp
      (use-package slime
@@ -1594,6 +1661,7 @@
        :config
        (setq inferior-lisp-program "clisp"))
    #+END_SRC
+
 ** Lua
    #+BEGIN_SRC elisp
      (use-package lua-mode
@@ -1603,6 +1671,7 @@
        :config
        (setq lua-indent-level 4))
    #+END_SRC
+
 ** Python
    #+BEGIN_SRC elisp
      (use-package python
@@ -1614,6 +1683,7 @@
        (when (executable-find "ipython")
          (setq python-shell-interpreter "ipython")))
    #+END_SRC
+
 ** Rust
    #+BEGIN_SRC elisp
      (use-package rust-mode
@@ -1626,6 +1696,7 @@
        :ensure t
        :hook (flycheck-mode . flycheck-rust-setup))
    #+END_SRC
+
 ** TeX
    #+BEGIN_SRC elisp
      (use-package tex
@@ -1635,8 +1706,10 @@
        :config
        (setq TeX-PDF-mode t))
    #+END_SRC
+
 ** YAML
    #+BEGIN_SRC elisp
      (use-package yaml-mode
        :ensure t)
    #+END_SRC
+

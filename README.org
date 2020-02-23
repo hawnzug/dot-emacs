@@ -105,10 +105,18 @@
   Font setup.
   #+BEGIN_SRC elisp
     (setq default-frame-alist '((font . "Iosevka Type Slab 12")))
-    (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend)
-    (set-face-attribute 'fixed-pitch nil :family "Iosevka Type Slab 12")
-    (set-face-attribute 'fixed-pitch-serif nil :family "Iosevka Type Slab 12")
-    (set-face-attribute 'variable-pitch nil :family "EB Garamond 12")
+    (defun my:font-setup ()
+      (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend)
+      (set-face-font 'fixed-pitch "Iosevka Type Slab 12")
+      (set-face-font 'fixed-pitch-serif "Iosevka Type Slab 12")
+      (set-face-font 'variable-pitch "EB Garamond 12"))
+    (defun my:font-setup-hook (frame)
+      "Setup the font, then remove the hook."
+      (select-frame frame)
+      (my:font-setup)
+      (remove-hook 'after-make-frame-functions 'my:font-setup-hook))
+    (add-hook 'after-make-frame-functions 'my:font-setup-hook nil)
+    (my:font-setup)
   #+END_SRC
 
   Disable useless UIs.
@@ -204,6 +212,7 @@
   #+BEGIN_SRC elisp
     (setq help-window-select t)
   #+END_SRC
+
 * use-package
   #+BEGIN_SRC elisp
     (require 'package)
@@ -1183,26 +1192,30 @@
    #+END_SRC
 
 ** flycheck
-   #+BEGIN_SRC elisp
-     (defun org-src-disable-elisp-checkdoc ()
-       (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
-     (use-package flycheck
-       :ensure t
-       :hook
-       ((prog-mode . flycheck-mode)
-        (org-src-mode . org-src-disable-elisp-checkdoc))
-       :config
-       (setq flycheck-display-errors-delay 0)
-       ;; Use lsp instead
-       (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
-     (use-package flycheck-posframe
-       :ensure t
-       :after flycheck
-       :hook (flycheck-mode . flycheck-posframe-mode)
-       :config
-       (setq flycheck-posframe-error-prefix "😡 ")
-       (setq flycheck-posframe-warning-prefix "😨 "))
-   #+END_SRC
+#+BEGIN_SRC elisp
+  (defun org-src-disable-elisp-checkdoc ()
+    (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
+  (use-package flycheck
+    :ensure t
+    :hook
+    ((prog-mode . flycheck-mode)
+     (org-src-mode . org-src-disable-elisp-checkdoc))
+    :config
+    (setq flycheck-display-errors-delay 0)
+    ;; Use lsp instead
+    (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
+#+END_SRC
+
+*** flycheck-posframe
+#+BEGIN_SRC elisp
+  (use-package flycheck-posframe
+    :ensure t
+    :after flycheck
+    :hook (flycheck-mode . flycheck-posframe-mode)
+    :config
+    (setq flycheck-posframe-error-prefix "😡 ")
+    (setq flycheck-posframe-warning-prefix "😨 "))
+#+END_SRC
 
 ** geiser
    #+BEGIN_SRC elisp

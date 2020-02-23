@@ -1276,6 +1276,15 @@ Use semicolon as the major mode leader key.
      (use-package company-lsp :ensure t :commands company-lsp)
    #+END_SRC
 
+   #+BEGIN_SRC elisp
+     (general-nmap lsp-ui-imenu-mode-map
+       "h" 'lsp-ui-imenu--prev-kind
+       "l" 'lsp-ui-imenu--next-kind
+       "q" 'quit-window
+       "o" 'lsp-ui-imenu--view
+       "<return>" 'lsp-ui-imenu--visit)
+   #+END_SRC
+
 ** magit
    #+BEGIN_SRC elisp
      (use-package magit
@@ -1366,17 +1375,21 @@ Use semicolon as the major mode leader key.
      (use-package which-key
        :ensure t
        :config
+       (setq which-key-max-display-columns 3)
+       (setq which-key-add-column-padding 2)
+       (setq which-key-idle-delay 0)
        (which-key-mode 1))
    #+END_SRC
 
-   #+BEGIN_SRC elisp
-     (general-nmap lsp-ui-imenu-mode-map
-       "h" 'lsp-ui-imenu--prev-kind
-       "l" 'lsp-ui-imenu--next-kind
-       "q" 'quit-window
-       "o" 'lsp-ui-imenu--view
-       "<return>" 'lsp-ui-imenu--visit)
-   #+END_SRC
+#+BEGIN_SRC elisp
+  (use-package which-key-posframe
+    :ensure t
+    :config
+    (setq which-key-posframe-border-width 10)
+    (set-face-attribute 'which-key-posframe-border nil :background "#f0e9d7")
+    (set-face-attribute 'which-key-posframe nil :background "#f0e9d7")
+    (which-key-posframe-mode))
+#+END_SRC
 
 ** winner-mode
    #+BEGIN_SRC elisp

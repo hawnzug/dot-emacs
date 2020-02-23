@@ -268,6 +268,7 @@
             (set-frame-parameter nil 'alpha opacity)
           (set-frame-parameter nil 'alpha transparency))))
   #+END_SRC
+
 * benchmark-init
   #+BEGIN_SRC elisp
     (use-package benchmark-init
@@ -318,6 +319,38 @@
         "q" 'quit-window))
   #+END_SRC
 
+Use comma as the global leader key.
+#+BEGIN_SRC elisp
+  (general-def 'override
+    :prefix "M-,"
+    "f" 'counsel-find-file
+    "s" 'swiper
+    "d" 'dired
+    "r" 'counsel-rg
+    "k" 'kill-buffer
+    "i" 'ibuffer
+    "b" 'ivy-bibtex
+    "g" 'magit-status
+    "a" 'org-agenda
+    "[" 'window-toggle-side-windows
+    "e" 'eshell
+    "v" 'vterm
+    "t" 'terminal-here-launch
+    "l" 'org-store-link
+    "c" 'org-capture
+    "q" 'save-buffers-kill-terminal
+    "Q" 'save-buffers-kill-emacs
+    "E" 'hydra-eyebrowse/body
+    "w" 'hydra-window/body
+    "B" 'hydra-buffer/body)
+#+END_SRC
+
+Use semicolon as the major mode leader key.
+#+BEGIN_SRC elisp
+  (general-create-definer major-def
+    :prefix "M-;")
+#+END_SRC
+
   Use Esc to quit minibuffer, which is previously C-g.
   #+BEGIN_SRC elisp
     (general-def '(minibuffer-local-map
@@ -330,11 +363,10 @@
       [escape] 'minibuffer-keyboard-quit)
   #+END_SRC
 
-  Use comma as the global leader key. It is supported in any mode and evil state.
   #+BEGIN_SRC elisp
     (general-def 'override
-      "M-," 'hydra-global/body
-      "C-/" 'comment-dwim)
+      "C-/" 'comment-dwim
+      "M-;" nil)
   #+END_SRC
 
   Find references using xref.
@@ -372,53 +404,6 @@
               :background-color "#f0e9d7"
               :poshandler posframe-poshandler-frame-center)))
   #+END_SRC
-
-** hydra-global
-   #+BEGIN_SRC elisp
-     (defhydra hydra-global
-       (:color teal :hint nil :idle 1.0)
-       (concat
-        "                 "
-        (all-the-icons-fileicon "emacs" :height 2 :v-adjust -0.2 :face 'all-the-icons-purple)
-        " Global"
-        "
-     ─────────────────────────
-     _f_: file      _g_: magit     _E_: eyebrowse  _q_: quit
-     _s_: swiper    _a_: agenda    _w_: window     _Q_: Quit
-     _d_: dired     _[_: Side      _B_: buffer
-     _r_: ripgrep   _t_: terminal  _h_: help
-     _k_: kill      _e_: eshell    _c_: capture
-     _i_: ibuffer   _v_: vterm
-     _b_: bibtex
-
-     ")
-       ("f" counsel-find-file)
-       ("s" swiper)
-       ("d" dired)
-       ("r" counsel-rg)
-       ("k" kill-buffer)
-       ("i" ibuffer)
-       ("b" ivy-bibtex)
-
-       ("g" magit-status)
-       ("a" org-agenda)
-       ("[" window-toggle-side-windows)
-
-       ("e" eshell)
-       ("v" vterm)
-       ("t" terminal-here-launch)
-       ("l" org-store-link)
-       ("c" org-capture)
-       ("q" save-buffers-kill-terminal)
-       ("Q" save-buffers-kill-emacs)
-
-       ("E" hydra-eyebrowse/body)
-       ("w" hydra-window/body)
-       ("B" hydra-buffer/body)
-       ("h" hydra-help/body)
-
-       ("<escape>" nil))
-   #+END_SRC
 
 ** hydra-window
    #+BEGIN_SRC elisp
@@ -498,41 +483,6 @@
        ("d" eyebrowse-close-window-config "delete" :column "Modify")
        ("c" eyebrowse-create-window-config "last")
        ("r" eyebrowse-rename-window-config "rename"))
-   #+END_SRC
-
-** hydra-help
-   #+BEGIN_SRC elisp
-     (defhydra hydra-help
-       (:color teal :hint nil)
-       (concat
-        "      "
-        (all-the-icons-material "help_outline" :height 2 :v-adjust -0.3)
-        " Help"
-        "
-
-     ^Describe^         ^Info^
-     ─────────────
-     _f_: function      _i_: info
-     _F_: face          _n_: news
-     _m_: mode          _w_: woman
-     _v_: variable
-     _b_: binding
-     _k_: key
-     _c_: char
-
-     ")
-       ("f" describe-function)
-       ("v" describe-variable)
-       ("m" describe-mode)
-       ("F" counsel-describe-face)
-       ("b" counsel-descbinds)
-       ("k" describe-key)
-       ("c" describe-char)
-       ("i" info)
-       ("n" view-emacs-news)
-       ("w" woman)
-       ("q" nil)
-       ("<escape>" nil))
    #+END_SRC
 
 * mode line
@@ -862,50 +812,25 @@
        "M-J" 'org-shiftmetadown
        "M-K" 'org-shiftmetaup
        "M-L" 'org-shiftmetaright)
-     (general-def org-mode-map
-       "M-;" 'hydra-org/body)
    #+END_SRC
 
-** hydra
-   #+BEGIN_SRC elisp
-     (defhydra hydra-org
-       (:color teal :hint nil :idle 1.0)
-       (concat
-        "           "
-        (all-the-icons-fileicon "org" :height 2 :v-adjust -0.2 :face 'all-the-icons-purple)
-        " Org mode"
-        "
-
-     ^Insert^        ^View^       ^Action^
-     ───────────────────
-     _s_: schedule   _c_: column  _a_: archive
-     _d_: deadline   _i_: image   _o_: open
-     _t_: timestamp  _x_: latex   _r_: refile
-     _l_: link       ^ ^          _b_: babel
-     _L_: link
-     _p_: property
-
-     ")
-       ("s" org-schedule)
-       ("d" org-deadline)
-       ("t" org-time-stamp)
-       ("l" org-insert-link)
-       ("L" org-insert-last-stored-link)
-       ("p" org-set-property)
-
-       ("c" org-columns)
-       ("i" org-toggle-inline-images)
-       ("x" org-toggle-latex-fragment)
-
-       ("a" org-archive-subtree)
-       ("o" org-open-at-point)
-       ("r" org-refile)
-       ("b" hydra-org-babel/body)
-
-       ("M-;" org-ctrl-c-ctrl-c)
-       ("q" nil)
-       ("<escape>" nil))
-   #+END_SRC
+#+BEGIN_SRC elisp
+  (major-def org-mode-map
+    "s" 'org-schedule
+    "d" 'org-deadline
+    "t" 'org-time-stamp
+    "l" 'org-insert-link
+    "L" 'org-insert-last-stored-link
+    "p" 'org-set-property
+    "c" 'org-columns
+    "i" 'org-toggle-inline-images
+    "x" 'org-toggle-latex-fragment
+    "a" 'org-archive-subtree
+    "o" 'org-open-at-point
+    "r" 'org-refile
+    "b" 'hydra-org-babel/body
+    "M-;" 'org-ctrl-c-ctrl-c)
+#+END_SRC
 
 * eshell
   #+BEGIN_SRC elisp
@@ -1204,6 +1129,13 @@
     (setq flycheck-display-errors-delay 0)
     ;; Use lsp instead
     (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (major-def flycheck-mode-map
+    "e" '(nil :wk "flycheck")
+    "e j" '(flycheck-next-error :wk "next error")
+    "e k" '(flycheck-previous-error :wk "previous error"))
 #+END_SRC
 
 *** flycheck-posframe
@@ -1539,17 +1471,17 @@
    #+BEGIN_SRC elisp
      (general-def 'normal coq-mode-map
        "K" 'my:company-coq-doc-search)
-     (general-def coq-mode-map
-       :prefix "M-;"
-       "g" 'company-coq-proof-goto-point
-       "d" 'company-coq-doc
-       "e" 'proof-shell-exit
-       "c" 'proof-interrupt-process
-       "p" 'proof-prf
+     (major-def coq-mode-map
+       "g" '(company-coq-proof-goto-point :wk "goto")
+       "d" '(company-coq-doc :wk "doc")
+       "q" '(proof-shell-exit :wk "exit")
+       "c" '(proof-interrupt-process :wk "abort")
+       "p" '(proof-prf :wk "goal")
        "u" 'proof-undo-last-successful-command
        "s" 'proof-find-theorems
        "l" 'proof-layout-windows)
    #+END_SRC
+
 ** CSV
    #+BEGIN_SRC elisp
      (use-package csv-mode
@@ -1579,43 +1511,20 @@
        :mode ("\\.agda\\'" . agda2-mode))
    #+END_SRC
 
-   #+BEGIN_SRC elisp
-     (defhydra hydra-agda
-       (:color teal :hint nil :idle 0.5)
-       (concat
-        "     "
-        " Agda mode"
-        "
+#+BEGIN_SRC elisp
+  (major-def agda2-mode-map
+    "d" 'agda2-goto-definition-keyboard
+    "l" 'agda2-load
+    "a" 'agda2-autoOne
+    "h" 'agda2-helper-function-type
+    "," 'agda2-goal-and-context
+    "." 'agda2-goal-and-context-and-inferred
+    "r" 'agda2-refine
+    "n" 'agda2-compute-normalised
+    "c" 'agda2-make-case
+    "q" 'agda2-quit)
+#+END_SRC
 
-     ^Goal^        ^General^
-     ──────────
-     _a_: auto     _l_: load
-     _c_: case     _d_: def
-     _r_: refine   _q_: quit
-     _,_: context
-     _._: context
-     _n_: normal
-     _h_: help
-
-     ")
-
-       ("d" agda2-goto-definition-keyboard)
-       ("l" agda2-load)
-       ("a" agda2-autoOne)
-       ("h" agda2-helper-function-type)
-       ("," agda2-goal-and-context)
-       ("." agda2-goal-and-context-and-inferred)
-       ("r" agda2-refine)
-       ("n" agda2-compute-normalised)
-       ("c" agda2-make-case)
-       ("q" agda2-quit)
-       ("<escape>" nil))
-   #+END_SRC
-
-   #+BEGIN_SRC elisp
-     (general-def agda2-mode-map
-       "M-;" 'hydra-agda/body)
-   #+END_SRC
 ** Ocaml
    #+BEGIN_SRC elisp
      (eval-and-compile

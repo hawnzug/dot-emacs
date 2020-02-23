@@ -269,14 +269,6 @@
           (set-frame-parameter nil 'alpha transparency))))
   #+END_SRC
 
-* benchmark-init
-  #+BEGIN_SRC elisp
-    (use-package benchmark-init
-      :ensure t
-      :config
-      (add-hook 'after-init-hook 'benchmark-init/deactivate))
-  #+END_SRC
-
 * all-the-icons
   #+BEGIN_SRC elisp
     (use-package all-the-icons
@@ -1317,18 +1309,6 @@ Use semicolon as the major mode leader key.
        :disabled t
        :ensure t
        :hook ((prog-mode coq-mode) . rainbow-delimiters-mode))
-   #+END_SRC
-
-** sublimity
-   #+BEGIN_SRC elisp
-     (use-package sublimity
-       :disabled t
-       :ensure t
-       :config
-       (use-package sublimity-scroll)
-       (use-package sublimity-map
-         :config
-         (sublimity-map-set-delay nil)))
    #+END_SRC
 
 ** symbol-overlay

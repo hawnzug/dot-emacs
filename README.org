@@ -358,17 +358,16 @@ Use semicolon as the major mode leader key.
     :global-prefix "M-;")
 #+END_SRC
 
-  Use Esc to quit minibuffer, which is previously C-g.
-  #+BEGIN_SRC elisp
-    (general-def '(minibuffer-local-map
-                   minibuffer-local-ns-map
-                   minibuffer-local-completion-map
-                   minibuffer-local-must-match-map
-                   minibuffer-local-isearch-map
-                   dired-narrow-map
-                   ivy-minibuffer-map)
-      [escape] 'minibuffer-keyboard-quit)
-  #+END_SRC
+Use Esc to quit minibuffer, which is previously C-g.
+#+BEGIN_SRC elisp
+  (general-def '(minibuffer-local-map
+                 minibuffer-local-ns-map
+                 minibuffer-local-completion-map
+                 minibuffer-local-must-match-map
+                 minibuffer-local-isearch-map
+                 ivy-minibuffer-map)
+    [escape] 'minibuffer-keyboard-quit)
+#+END_SRC
 
   #+BEGIN_SRC elisp
     (general-def 'override
@@ -399,6 +398,52 @@ Use semicolon as the major mode leader key.
       "w" 'avy-goto-word-1
       "l" 'avy-goto-line)
   #+END_SRC
+
+* evil
+#+BEGIN_SRC elisp
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-abbrev-expand-on-insert-exit nil)
+    (setq evil-disable-insert-state-bindings t)
+    :config
+    (evil-mode 1)
+    (evil-set-initial-state 'ivy-occur-mode 'emacs)
+    (evil-set-initial-state 'org-capture-mode 'insert)
+    (evil-set-initial-state 'vterm-mode 'insert)
+    (evil-set-initial-state 'wdired-mode 'normal))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (general-def 'motion ";" nil "," nil)
+  (general-def 'normal "x" nil "X" nil "s" nil "S" nil)
+  (general-def 'motion
+    :prefix "x"
+    "l" 'evil-avy-goto-line
+    "f" 'evil-avy-goto-char-in-line
+    "c" 'evil-avy-goto-char-2
+    "w" 'evil-avy-goto-word-1)
+#+END_SRC
+
+** evil-surround
+#+BEGIN_SRC elisp
+  (use-package evil-surround
+    :ensure t
+    :after evil
+    :defer 2
+    :config
+    (global-evil-surround-mode 1))
+#+END_SRC
+
+** evil-matchit
+#+BEGIN_SRC elisp
+  (use-package evil-matchit
+    :ensure t
+    :after evil
+    :defer 2
+    :config
+    (global-evil-matchit-mode 1))
+#+END_SRC
 
 * hydra
   #+BEGIN_SRC elisp :noweb no-export
@@ -928,53 +973,71 @@ Use semicolon as the major mode leader key.
   #+END_SRC
 
 * dired
-  #+BEGIN_SRC elisp
-    (use-package dired
-      :commands dired
+#+BEGIN_SRC elisp :noweb no-export
+  (use-package dired
+    :commands dired
+    :hook ((dired-mode . dired-omit-mode)
+           (dired-mode . dired-hide-details-mode))
+    :config
+    (setq dired-dwim-target t)
+    (setq dired-recursive-copies 'always)
+    (setq dired-recursive-deletes 'always)
+    (setq dired-listing-switches "-alhG --group-directories-first")
+    (setq dired-isearch-filenames 'dwim)
+    <<dired-kbd>>
+    (use-package dired-open
+      :ensure t
       :config
-      (setq dired-recursive-copies t)
-      (setq dired-recursive-deletes t)
-      (setq dired-dwim-target t)
-      (setq dired-listing-switches "-alhG --group-directories-first")
-      (setq dired-isearch-filenames 'dwim)
-      (use-package dired-open
-        :ensure t
-        :config
-        (setq
-         dired-open-extensions
-         '(("pdf" . "zathura")
-           ("docx" . "wps")
-           ("doc" . "wps")
-           ("mp4" . "mpv")
-           ("png" . "feh")
-           ("jpg" . "feh")
-           ("xlsx" . "et")
-           ("xls" . "et")
-           ("pptx" . "wpp")
-           ("ppt" . "wpp"))))
-      (use-package dired-collapse
-        :disabled t
-        :ensure t
-        :hook (dired-mode . dired-collapse-mode))
-      (use-package all-the-icons-dired
-        :ensure t
-        :after all-the-icons
-        :hook (dired-mode . all-the-icons-dired-mode))
-      (use-package dired-narrow :ensure t))
-  #+END_SRC
+      (setq dired-open-extensions
+            '(("pdf" . "zathura")
+              ("mp4" . "mpv")
+              ("png" . "feh")
+              ("jpg" . "feh")))))
+#+END_SRC
 
-  Keybindings
-  #+BEGIN_SRC elisp
-    (general-def 'emacs dired-mode-map
-      "j" 'dired-next-line
-      "k" 'dired-previous-line
-      "h" 'dired-up-directory
-      "l" 'dired-open-file
-      "r" 'dired-toggle-read-only
-      "." 'dired-mark-extension
-      "n" 'dired-narrow-regexp
-      "/" 'dired-goto-file)
-  #+END_SRC
+#+BEGIN_SRC elisp
+  (use-package all-the-icons-dired
+    :after dired
+    :hook (dired-mode . all-the-icons-dired-mode))
+#+END_SRC
+
+Keybindings
+#+NAME: dired-kbd
+#+BEGIN_SRC elisp :tangle no
+  (general-def dired-mode-map
+    "g" nil)
+  (general-def 'normal dired-mode-map
+    "/" 'dired-goto-file
+    "+" 'dired-create-directory
+    "c" 'dired-do-rename
+    "d" 'dired-flag-file-deletion
+    "e" 'ediff
+    "f" 'dired-mark
+    "h" 'dired-up-directory
+    "i" 'dired-toggle-read-only
+    "j" 'dired-next-line
+    "k" 'dired-previous-line
+    "l" 'dired-open-file
+    "m" 'nil
+    "m ." 'dired-mark-extension
+    "m d" 'dired-mark-directories
+    "m r" 'dired-mark-files-containing-regexp
+    "m t" 'dired-toggle-marks
+    "m k" 'dired-do-kill-lines
+    "n" 'dired-narrow-regexp
+    "p" 'dired-do-copy
+    "q" 'quit-window
+    "r" 'revert-buffer
+    "s" 'dired-sort-toggle-or-edit
+    "t" 'terminal-here-launch
+    "u" 'dired-unmark
+    "U" 'dired-unmark-all-marks
+    "v o" 'dired-omit-mode
+    "v d" 'dired-hide-details-mode
+    "v i" 'all-the-icons-dired-mode
+    "x" 'dired-do-flagged-delete
+    "z" 'dired-do-compress)
+#+END_SRC
 
 * packages
 ** academic-phrases
@@ -1050,53 +1113,6 @@ Use semicolon as the major mode leader key.
        :ensure t
        :hook web-mode)
    #+END_SRC
-
-** evil
-#+BEGIN_SRC elisp
-  (use-package evil
-    :ensure t
-    :init
-    (setq evil-want-abbrev-expand-on-insert-exit nil)
-    (setq evil-disable-insert-state-bindings t)
-    :config
-    (evil-mode 1)
-    (evil-set-initial-state 'dired-mode 'emacs)
-    (evil-set-initial-state 'ivy-occur-mode 'emacs)
-    (evil-set-initial-state 'org-capture-mode 'insert)
-    (evil-set-initial-state 'vterm-mode 'insert)
-    (evil-set-initial-state 'wdired-mode 'normal))
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (general-def 'motion ";" nil "," nil)
-  (general-def 'normal "x" nil "X" nil "s" nil "S" nil)
-  (general-def 'motion
-    :prefix "x"
-    "l" 'evil-avy-goto-line
-    "f" 'evil-avy-goto-char-in-line
-    "c" 'evil-avy-goto-char-2
-    "w" 'evil-avy-goto-word-1)
-#+END_SRC
-
-*** evil-surround
-#+BEGIN_SRC elisp
-  (use-package evil-surround
-    :ensure t
-    :after evil
-    :defer 2
-    :config
-    (global-evil-surround-mode 1))
-#+END_SRC
-
-*** evil-matchit
-#+BEGIN_SRC elisp
-  (use-package evil-matchit
-    :ensure t
-    :after evil
-    :defer 2
-    :config
-    (global-evil-matchit-mode 1))
-#+END_SRC
 
 ** exec-path-from-shell
    #+BEGIN_SRC elisp
@@ -1354,7 +1370,9 @@ Use semicolon as the major mode leader key.
    #+BEGIN_SRC elisp
      (use-package olivetti
        :ensure t
-       :hook (org-mode . olivetti-mode)
+       :hook
+       ((org-mode . olivetti-mode)
+        (dired-mode . olivetti-mode))
        :config
        (setq olivetti-body-width 90))
    #+END_SRC

@@ -1201,15 +1201,23 @@ Use semicolon as the major mode leader key.
    #+END_SRC
 
 ** ibuffer
-   #+BEGIN_SRC elisp
-     (use-package ibuffer
-       :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
-       :config
-       (setq
-        ibuffer-formats
-        '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
-       (use-package ibuffer-vc :ensure t))
-   #+END_SRC
+#+BEGIN_SRC elisp
+  (use-package ibuffer
+    :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
+    :config
+    (setq
+     ibuffer-formats
+     '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
+    (use-package ibuffer-vc :ensure t))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (general-def 'emacs ibuffer-mode-map
+    "M-j" 'ibuffer-forward-filter-group
+    "M-k" 'ibuffer-backward-filter-group
+    "j" 'ibuffer-forward-line
+    "k" 'ibuffer-backward-line)
+#+END_SRC
 
 ** imenu-list
    #+BEGIN_SRC elisp
@@ -1329,10 +1337,19 @@ Use semicolon as the major mode leader key.
       "k" 'with-editor-cancel)
    #+END_SRC
 
+#+BEGIN_SRC elisp
+  (general-def magit-status-mode-map
+    "j" 'magit-section-forward
+    "k" 'magit-section-backward
+    "n" 'magit-status-jump
+    "p" 'magit-discard)
+#+END_SRC
+
 ** olivetti
    #+BEGIN_SRC elisp
      (use-package olivetti
        :ensure t
+       :hook (org-mode . olivetti-mode)
        :config
        (setq olivetti-body-width 90))
    #+END_SRC
@@ -1434,42 +1451,14 @@ Use semicolon as the major mode leader key.
    #+END_SRC
 
 ** yasnippet
-   #+BEGIN_SRC elisp
-     (use-package yasnippet
-       :ensure t
-       :config
-       (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
-       (yas-global-mode 1))
-   #+END_SRC
-
-   #+BEGIN_SRC elisp
-     (use-package ivy-rich
-       :ensure t
-       :after ivy
-       :config
-       (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-       (ivy-rich-mode 1))
-     (use-package all-the-icons-ivy-rich
-       :ensure t
-       :after (ivy ivy-rich all-the-icons)
-       :init (all-the-icons-ivy-rich-mode 1))
-   #+END_SRC
-
-   #+BEGIN_SRC elisp
-     (general-def 'emacs ibuffer-mode-map
-       "M-j" 'ibuffer-forward-filter-group
-       "M-k" 'ibuffer-backward-filter-group
-       "j" 'ibuffer-forward-line
-       "k" 'ibuffer-backward-line)
-   #+END_SRC
-
 #+BEGIN_SRC elisp
-  (general-def magit-status-mode-map
-    "j" 'magit-section-forward
-    "k" 'magit-section-backward
-    "n" 'magit-status-jump
-    "p" 'magit-discard)
+  (use-package yasnippet
+    :ensure t
+    :config
+    (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+    (yas-global-mode 1))
 #+END_SRC
+
 * languages
 ** prog-mode
    #+BEGIN_SRC elisp

@@ -341,6 +341,7 @@ Use comma as the global leader key.
 Use semicolon as the major mode leader key.
 #+BEGIN_SRC elisp
   (general-create-definer major-def
+    :states '(motion normal insert emacs)
     :prefix ";"
     :global-prefix "M-;")
 #+END_SRC

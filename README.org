@@ -103,12 +103,17 @@
 
   Font setup.
   #+BEGIN_SRC elisp
-    (setq default-frame-alist '((font . "Iosevka Type Slab 12")))
     (defun my:font-setup ()
+      (let ((primary-font
+             (concat
+              "Iosevka Type Slab "
+              (pcase (cddr (frame-monitor-attribute 'geometry))
+                ('(3840 2160) "24") (else "12")))))
       (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend)
-      (set-face-font 'fixed-pitch "Iosevka Type Slab 12")
-      (set-face-font 'fixed-pitch-serif "Iosevka Type Slab 12")
-      (set-face-font 'variable-pitch "EB Garamond 12"))
+      (set-face-font 'default primary-font)
+      (set-face-font 'fixed-pitch primary-font)
+      (set-face-font 'fixed-pitch-serif primary-font)
+      (set-face-font 'variable-pitch primary-font)))
     (defun my:font-setup-hook (frame)
       "Setup the font, then remove the hook."
       (select-frame frame)

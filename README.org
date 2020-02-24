@@ -7,16 +7,13 @@
 -  [[#init][init]]
 -  [[#use-package][use-package]]
 -  [[#help-functions][help functions]]
--  [[#benchmark-init][benchmark-init]]
 -  [[#all-the-icons][all-the-icons]]
 -  [[#doom-themes][doom-themes]]
 -  [[#generalel][general.el]]
 -  [[#hydra][hydra]]
-  -  [[#hydra-global][hydra-global]]
   -  [[#hydra-window][hydra-window]]
   -  [[#hydra-buffer][hydra-buffer]]
   -  [[#hydra-eyebrowse][hydra-eyebrowse]]
-  -  [[#hydra-help][hydra-help]]
 -  [[#mode-line][mode line]]
 -  [[#org][org]]
   -  [[#org-agenda][org-agenda]]
@@ -35,12 +32,12 @@
     -  [[#show-time-grid-in-org-agenda][Show time grid in org agenda]]
     -  [[#create-a-capture-frame][Create a capture frame]]
   -  [[#keybindings][keybindings]]
-  -  [[#hydra][hydra]]
 -  [[#eshell][eshell]]
 -  [[#dired][dired]]
 -  [[#packages][packages]]
   -  [[#academic-phrases][academic-phrases]]
   -  [[#alert][alert]]
+  -  [[#avy][avy]]
   -  [[#battery][battery]]
   -  [[#company][company]]
   -  [[#docker][docker]]
@@ -48,11 +45,14 @@
   -  [[#emacs-libvterm][emacs-libvterm]]
   -  [[#emmet][emmet]]
   -  [[#evil][evil]]
+    -  [[#evil-surround][evil-surround]]
+    -  [[#evil-matchit][evil-matchit]]
   -  [[#exec-path-from-shell][exec-path-from-shell]]
   -  [[#eyebrowse][eyebrowse]]
   -  [[#fcitx][fcitx]]
   -  [[#find-file-in-project][find-file-in-project]]
   -  [[#flycheck][flycheck]]
+    -  [[#flycheck-posframe][flycheck-posframe]]
   -  [[#geiser][geiser]]
   -  [[#hl-line-mode][hl-line-mode]]
   -  [[#htmlize][htmlize]]
@@ -66,15 +66,13 @@
   -  [[#magit][magit]]
   -  [[#olivetti][olivetti]]
   -  [[#rainbow-delimiters][rainbow-delimiters]]
-  -  [[#sublimity][sublimity]]
   -  [[#symbol-overlay][symbol-overlay]]
   -  [[#terminal-here][terminal-here]]
   -  [[#tramp][tramp]]
   -  [[#vc-mode][vc-mode]]
   -  [[#web-mode][web-mode]]
   -  [[#which-key][which-key]]
-  -  [[#xterm-color][xterm-color]]
-  -  [[#yasnippet][yasnippet]]
+  -  [[#winner-mode][winner-mode]]
   -  [[#xref][xref]]
   -  [[#xterm-color][xterm-color]]
   -  [[#yasnippet][yasnippet]]
@@ -313,8 +311,10 @@
 
 Use comma as the global leader key.
 #+BEGIN_SRC elisp
-  (general-def 'override
-    :prefix "M-,"
+  (general-def
+    '(motion normal insert emacs)
+    :prefix ","
+    :global-prefix "M-,"
     "f" 'counsel-find-file
     "s" 'swiper
     "d" 'dired
@@ -340,7 +340,8 @@ Use comma as the global leader key.
 Use semicolon as the major mode leader key.
 #+BEGIN_SRC elisp
   (general-create-definer major-def
-    :prefix "M-;")
+    :prefix ";"
+    :global-prefix "M-;")
 #+END_SRC
 
   Use Esc to quit minibuffer, which is previously C-g.
@@ -500,6 +501,7 @@ Use semicolon as the major mode leader key.
       <<org-kill-temp-fontify-buffer>>
       <<org-capture-templates>>
       (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
+      (setq org-tags-column 0)
       (setq org-adapt-indentation nil)
       (setq org-startup-indented t)
       (setq org-startup-truncated t)
@@ -571,12 +573,13 @@ Use semicolon as the major mode leader key.
   #+BEGIN_SRC elisp
     (general-define-key
      :definer 'minor-mode
-     :states '(motion visual normal insert emacs)
+     :states '(motion normal insert emacs)
      :keymaps 'org-capture-mode
-     :prefix "M-;"
-     "M-;" 'org-capture-finalize
-     "M-w" 'org-capture-refile
-     "M-k" 'org-capture-kill)
+     :prefix ";"
+     :global-prefix "M-;"
+     ";" 'org-capture-finalize
+     "w" 'org-capture-refile
+     "k" 'org-capture-kill)
   #+END_SRC
 
 ** org-babel
@@ -602,11 +605,12 @@ Use semicolon as the major mode leader key.
   #+BEGIN_SRC elisp
     (general-define-key
      :definer 'minor-mode
-     :states '(motion visual normal insert emacs)
+     :states '(motion normal insert emacs)
      :keymaps 'org-src-mode
-     :prefix "M-;"
-     "M-;" 'org-edit-src-exit
-     "M-k" 'org-edit-src-abort)
+     :prefix ";"
+     :global-prefix "M-;"
+     ";" 'org-edit-src-exit
+     "k" 'org-edit-src-abort)
   #+END_SRC
 
   Hydra
@@ -821,7 +825,7 @@ Use semicolon as the major mode leader key.
     "o" 'org-open-at-point
     "r" 'org-refile
     "b" 'hydra-org-babel/body
-    "M-;" 'org-ctrl-c-ctrl-c)
+    ";" 'org-ctrl-c-ctrl-c)
 #+END_SRC
 
 * eshell
@@ -976,6 +980,12 @@ Use semicolon as the major mode leader key.
        (setq alert-default-style 'libnotify))
    #+END_SRC
 
+** avy
+#+BEGIN_SRC elisp
+  (use-package avy
+    :ensure t)
+#+END_SRC
+
 ** battery
    #+BEGIN_SRC elisp
      (use-package battery
@@ -1029,32 +1039,51 @@ Use semicolon as the major mode leader key.
    #+END_SRC
 
 ** evil
-   #+BEGIN_SRC elisp
-     (use-package evil
-       :ensure t
-       :init
-       (setq evil-want-abbrev-expand-on-insert-exit nil)
-       (setq evil-disable-insert-state-bindings t)
-       :config
-       (evil-mode 1)
-       (evil-set-initial-state 'dired-mode 'emacs)
-       (evil-set-initial-state 'ivy-occur-mode 'emacs)
-       (evil-set-initial-state 'org-capture-mode 'insert)
-       (evil-set-initial-state 'vterm-mode 'insert)
-       (evil-set-initial-state 'wdired-mode 'normal))
-     (use-package evil-surround
-       :ensure t
-       :after evil
-       :defer 2
-       :config
-       (global-evil-surround-mode 1))
-     (use-package evil-matchit
-       :ensure t
-       :after evil
-       :defer 2
-       :config
-       (global-evil-matchit-mode 1))
-   #+END_SRC
+#+BEGIN_SRC elisp
+  (use-package evil
+    :ensure t
+    :init
+    (setq evil-want-abbrev-expand-on-insert-exit nil)
+    (setq evil-disable-insert-state-bindings t)
+    :config
+    (evil-mode 1)
+    (evil-set-initial-state 'dired-mode 'emacs)
+    (evil-set-initial-state 'ivy-occur-mode 'emacs)
+    (evil-set-initial-state 'org-capture-mode 'insert)
+    (evil-set-initial-state 'vterm-mode 'insert)
+    (evil-set-initial-state 'wdired-mode 'normal))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (general-def 'motion ";" nil "," nil)
+  (general-def 'normal "x" nil "X" nil "s" nil "S" nil)
+  (general-def 'motion
+    :prefix "x"
+    "l" 'evil-avy-goto-line
+    "f" 'evil-avy-goto-char-in-line
+    "c" 'evil-avy-goto-char-2
+    "w" 'evil-avy-goto-word-1)
+#+END_SRC
+
+*** evil-surround
+#+BEGIN_SRC elisp
+  (use-package evil-surround
+    :ensure t
+    :after evil
+    :defer 2
+    :config
+    (global-evil-surround-mode 1))
+#+END_SRC
+
+*** evil-matchit
+#+BEGIN_SRC elisp
+  (use-package evil-matchit
+    :ensure t
+    :after evil
+    :defer 2
+    :config
+    (global-evil-matchit-mode 1))
+#+END_SRC
 
 ** exec-path-from-shell
    #+BEGIN_SRC elisp
@@ -1215,10 +1244,6 @@ Use semicolon as the major mode leader key.
        :after (all-the-icons ivy)
        :config
        (all-the-icons-ivy-setup))
-     (use-package avy
-       :ensure t
-       :after ivy)
-
      (use-package ivy-posframe
        :ensure t
        :after ivy
@@ -1288,11 +1313,12 @@ Use semicolon as the major mode leader key.
    #+BEGIN_SRC elisp
      (general-define-key
       :definer 'minor-mode
-      :states '(motion visual normal insert emacs)
+      :states '(motion normal insert emacs)
       :keymaps 'git-commit-mode
-      :prefix "M-;"
-      "M-;" 'with-editor-finish
-      "M-k" 'with-editor-cancel)
+      :prefix ";"
+      :global-prefix "M-;"
+      ";" 'with-editor-finish
+      "k" 'with-editor-cancel)
    #+END_SRC
 
 ** olivetti

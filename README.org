@@ -71,6 +71,7 @@
   -  [[#tramp][tramp]]
   -  [[#vc-mode][vc-mode]]
   -  [[#web-mode][web-mode]]
+  -  [[#wgrep][wgrep]]
   -  [[#which-key][which-key]]
   -  [[#winner-mode][winner-mode]]
   -  [[#xref][xref]]
@@ -1375,6 +1376,11 @@ Use semicolon as the major mode leader key.
        :mode "\\.html?\\'"
        :ensure t)
    #+END_SRC
+
+** wgrep
+#+BEGIN_SRC elisp
+  (use-package wgrep :ensure t)
+#+END_SRC
 
 ** which-key
    #+BEGIN_SRC elisp

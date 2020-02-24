@@ -956,13 +956,12 @@ Use semicolon as the major mode leader key.
     (general-def 'emacs dired-mode-map
       "j" 'dired-next-line
       "k" 'dired-previous-line
-      "h" 'quit-window
+      "h" 'dired-up-directory
       "l" 'dired-open-file
       "r" 'dired-toggle-read-only
       "." 'dired-mark-extension
       "n" 'dired-narrow-regexp
-      "/" 'dired-goto-file
-      "p" 'dired-up-directory)
+      "/" 'dired-goto-file)
   #+END_SRC
 
 * packages

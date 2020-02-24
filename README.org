@@ -161,6 +161,8 @@
   #+BEGIN_SRC elisp
     (setq trash-directory "~/Trash")
     (setq delete-by-moving-to-trash t)
+    (defun system-move-file-to-trash (filename)
+      (shell-command (concat "trash " (shell-quote-argument filename))))
   #+END_SRC
 
   Tab.
@@ -174,9 +176,10 @@
     (setq-default truncate-lines t)
   #+END_SRC
 
-  90 characters one line.
+  80 characters one line.
   #+BEGIN_SRC elisp
-    (setq-default fill-column 70)
+    (setq-default fill-column 80)
+    (setq sentence-end-double-space nil)
   #+END_SRC
 
   Use straight single quote in help and messages.
@@ -331,6 +334,10 @@ Use comma as the global leader key.
     "t" 'terminal-here-launch
     "l" 'org-store-link
     "c" 'org-capture
+    "n" '(nil :wk "narrow")
+    "n s" 'org-narrow-to-subtree
+    "n n" 'narrow-to-region
+    "n w" 'widen
     "q" 'save-buffers-kill-terminal
     "Q" 'save-buffers-kill-emacs
     "E" 'hydra-eyebrowse/body

@@ -307,7 +307,7 @@
       :ensure t
       :config
       (general-evil-setup)
-      (general-def 'override
+      (general-def
         "C-=" 'text-scale-increase
         "M-p" 'my:other-window-or-buffer
         "M-o" 'delete-other-windows
@@ -454,7 +454,7 @@ Use Esc to quit minibuffer, which is previously C-g.
       (setq hydra-posframe-show-params
             '(:internal-border-width 10
               :background-color "#f0e9d7"
-              :poshandler posframe-poshandler-frame-center)))
+              :poshandler posframe-poshandler-frame-top-center)))
   #+END_SRC
 
 ** hydra-window

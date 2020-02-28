@@ -10,6 +10,9 @@
 -  [[#all-the-icons][all-the-icons]]
 -  [[#doom-themes][doom-themes]]
 -  [[#generalel][general.el]]
+-  [[#evil][evil]]
+  -  [[#evil-surround][evil-surround]]
+  -  [[#evil-matchit][evil-matchit]]
 -  [[#hydra][hydra]]
   -  [[#hydra-window][hydra-window]]
   -  [[#hydra-buffer][hydra-buffer]]
@@ -44,9 +47,6 @@
   -  [[#ediff][ediff]]
   -  [[#emacs-libvterm][emacs-libvterm]]
   -  [[#emmet][emmet]]
-  -  [[#evil][evil]]
-    -  [[#evil-surround][evil-surround]]
-    -  [[#evil-matchit][evil-matchit]]
   -  [[#exec-path-from-shell][exec-path-from-shell]]
   -  [[#eyebrowse][eyebrowse]]
   -  [[#fcitx][fcitx]]
@@ -87,7 +87,6 @@
   -  [[#sml][SML]]
   -  [[#cubicaltt][Cubicaltt]]
   -  [[#c][C]]
-  -  [[#common-lisp][Common Lisp]]
   -  [[#lua][Lua]]
   -  [[#python][Python]]
   -  [[#rust][Rust]]
@@ -144,6 +143,11 @@
   #+BEGIN_SRC elisp
     (show-paren-mode 1)
   #+END_SRC
+
+Blink!
+#+BEGIN_SRC elisp
+  (blink-cursor-mode)
+#+END_SRC
 
   Automatically close parenthesis/brackets/...
   #+BEGIN_SRC elisp
@@ -391,7 +395,7 @@ Use Esc to quit minibuffer, which is previously C-g.
       "a" 'align
       "t l" 'my:toggle-line-number
       "t t" 'my:toggle-transparency
-      "t m" 'my:load-theme
+      "t m" 'hide-mode-line-mode
       "s" 'symbol-overlay-put
       "o" 'olivetti-mode
       "f" 'avy-goto-char-2
@@ -553,7 +557,7 @@ Use Esc to quit minibuffer, which is previously C-g.
       :defer 4
       :hook
       (org-mode . my:show-trailing-space)
-      ;; ((org-babel-after-execute . org-redisplay-inline-images))
+      ((org-babel-after-execute . org-redisplay-inline-images))
       ;; (org-agenda-finalize . my:org-agenda-time-grid-spacing))
       :config
       (use-package org-mouse)
@@ -1199,13 +1203,12 @@ Keybindings
     (setq flycheck-posframe-warning-prefix "😨 "))
 #+END_SRC
 
-** geiser
+** hide-mode-line
    #+BEGIN_SRC elisp
-     (use-package geiser
+     (use-package hide-mode-line
        :ensure t
-       :config
-       (setq geiser-chez-binary "chez-scheme")
-       (setq geiser-default-implementation 'chez))
+       :hook
+       ((org-mode org-agenda-mode magit-mode dired-mode) . hide-mode-line-mode))
    #+END_SRC
 
 ** hl-line-mode
@@ -1625,25 +1628,6 @@ Keybindings
        :ensure t
        :defer t
        :hook ((c-mode c++-mode objc-mode) . (lambda () (require 'ccls) (lsp))))
-   #+END_SRC
-
-** Common Lisp
-   #+BEGIN_SRC elisp
-     (use-package slime
-       :ensure t
-       :commands slime
-       :config
-       (setq inferior-lisp-program "clisp"))
-   #+END_SRC
-
-** Lua
-   #+BEGIN_SRC elisp
-     (use-package lua-mode
-       :ensure t
-       :mode "\\.lua$"
-       :interpreter "lua"
-       :config
-       (setq lua-indent-level 4))
    #+END_SRC
 
 ** Python

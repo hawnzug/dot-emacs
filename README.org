@@ -1547,8 +1547,13 @@ Keybindings
 ** Haskell
    #+BEGIN_SRC elisp
      (use-package haskell-mode
-       :load-path "~/.emacs.d/packages/haskell-mode"
-       :mode "\\.hs\\'")
+       :ensure t)
+
+     (use-package dante
+       :ensure t
+       :after haskell-mode
+       :commands 'dante-mode
+       :hook (haskell-mode . dante-mode))
 
      (use-package ghcid
        :load-path "~/.emacs.d/packages/ghcid"

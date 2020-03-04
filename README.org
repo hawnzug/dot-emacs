@@ -454,7 +454,7 @@ Use Esc to quit minibuffer, which is previously C-g.
     (use-package hydra
       :ensure t
       :config
-      (setq hydra-hint-display-type 'posframe)
+      ;; (setq hydra-hint-display-type 'posframe)
       (setq hydra-posframe-show-params
             '(:internal-border-width 10
               :background-color "#f0e9d7"
@@ -1082,6 +1082,7 @@ Keybindings
        (setq company-idle-delay 0)
        (use-package company-posframe
          :ensure t
+         :disabled t
          :config
          (company-posframe-mode 1)))
    #+END_SRC
@@ -1196,6 +1197,7 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package flycheck-posframe
     :ensure t
+    :disabled t
     :after flycheck
     :hook (flycheck-mode . flycheck-posframe-mode)
     :config
@@ -1286,6 +1288,7 @@ Keybindings
        (all-the-icons-ivy-setup))
      (use-package ivy-posframe
        :ensure t
+       :disabled t
        :after ivy
        :config
        (setq ivy-height 20)
@@ -1446,6 +1449,7 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package which-key-posframe
     :ensure t
+    :disabled t
     :config
     (setq which-key-posframe-border-width 10)
     (set-face-attribute 'which-key-posframe-border nil :background "#f0e9d7")
@@ -1495,7 +1499,6 @@ Keybindings
 ** Coq
    #+BEGIN_SRC elisp
      (use-package proof-general
-       :mode ("\\.v\\'" . coq-mode)
        :ensure t
        :config
        (setq proof-splash-enable nil))
@@ -1553,7 +1556,9 @@ Keybindings
        :ensure t
        :after haskell-mode
        :commands 'dante-mode
-       :hook (haskell-mode . dante-mode))
+       :hook (haskell-mode . dante-mode)
+       :init
+       (setq dante-tap-type-time 0))
 
      (use-package ghcid
        :load-path "~/.emacs.d/packages/ghcid"

@@ -300,7 +300,7 @@ Blink!
       :config
       (setq doom-themes-enable-bold t)
       (setq doom-themes-enable-italic t)
-      (load-theme 'doom-solarized-light t)
+      (load-theme 'doom-acario-light t)
       (doom-themes-org-config)
       )
   #+END_SRC
@@ -545,9 +545,11 @@ Use Esc to quit minibuffer, which is previously C-g.
   #+BEGIN_SRC elisp
     (use-package doom-modeline
       :ensure t
+      :disabled t
       :hook (after-init . doom-modeline-mode)
       :config
       (setq doom-modeline-icon t))
+    (setq-default mode-line-format nil)
   #+END_SRC
 
 * org
@@ -706,6 +708,7 @@ Use Esc to quit minibuffer, which is previously C-g.
       ("q" nil)
       ("<escape>" nil))
   #+END_SRC
+
 ** org-id
    #+BEGIN_SRC elisp
      (use-package org-id
@@ -1209,6 +1212,7 @@ Keybindings
    #+BEGIN_SRC elisp
      (use-package hide-mode-line
        :ensure t
+       :disabled t
        :hook
        ((org-mode org-agenda-mode magit-mode dired-mode) . hide-mode-line-mode))
    #+END_SRC

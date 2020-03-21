@@ -226,6 +226,11 @@ Blink!
     (setq help-window-select t)
   #+END_SRC
 
+For lsp mode
+#+BEGIN_SRC elisp
+  (setq read-process-output-max (* 1024 1024))
+#+END_SRC
+
 * use-package
   #+BEGIN_SRC elisp
     (require 'package)
@@ -1084,6 +1089,7 @@ Keybindings
        :ensure t
        :hook (prog-mode . company-mode)
        :config
+       (setq company-minimum-prefix-length 2)
        (setq company-idle-delay 0)
        (use-package company-posframe
          :ensure t
@@ -1333,7 +1339,7 @@ Keybindings
        :ensure t
        :commands lsp
        :config
-       (setq lsp-prefer-flymake nil))
+       (setq lsp-diagnostic-package :flycheck))
      (use-package lsp-ui
        :ensure t
        :commands lsp-ui-mode

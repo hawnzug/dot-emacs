@@ -484,7 +484,7 @@ Use Esc to quit minibuffer, which is previously C-g.
      _k_: up        _L_: right     _-_: - h       _v_: vsplit
      _h_: left      _J_: bottom    _>_: + w       _d_: delete
      _l_: right     _K_: top       _<_: - w       _o_: only
-     _n_: next      ^ ^            _=_: equal
+     _n_: next
 
      ")
        ("j" evil-window-down)
@@ -500,7 +500,6 @@ Use Esc to quit minibuffer, which is previously C-g.
        ("-" evil-window-decrease-height)
        (">" evil-window-increase-width)
        ("<" evil-window-decrease-width)
-       ("=" evil-balance-window)
        ("s" evil-window-split)
        ("v" evil-window-vsplit)
        ("d" evil-window-delete :color blue)
@@ -609,8 +608,6 @@ Use Esc to quit minibuffer, which is previously C-g.
       (setq org-agenda-remove-tags t)
       (setq org-agenda-todo-ignore-with-date nil)
       (setq org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
-      (setq org-agenda-overriding-columns-format
-            "%25ITEM %10Effort{:} %10CLOCKSUM{:}")
       (setq org-agenda-block-separator ?―)
       <<org-agenda-kbd>>
       )
@@ -839,27 +836,28 @@ Use Esc to quit minibuffer, which is previously C-g.
     #+END_SRC
 
 *** Create a capture frame
-    #+BEGIN_SRC elisp
+#+BEGIN_SRC elisp
+      (defun my:delete-other-windows (&rest args)
+        (setq-local mode-line-format nil)
+        (delete-other-windows))
+      (advice-add 'org-switch-to-buffer-other-window :after
+                  #'my:delete-other-windows)
+      (defun my:capture-after ()
+        (advice-remove 'org-switch-to-buffer-other-window
+                       #'my:delete-other-windows)
+        (delete-frame)
+        (remove-hook 'org-capture-after-finalize-hook #'my:capture-after)
+        ;; (fmakunbound 'my:delete-other-windows)
+        ;; (fmakunbound 'my:capture-after)
+        )
       (defun make-org-capture-frame ()
         "Create a new frame and run org-capture."
         (interactive)
-        (defun my:delete-other-windows (&rest args)
-          (setq-local mode-line-format nil)
-          (delete-other-windows))
-        (advice-add 'org-switch-to-buffer-other-window :after
-                    #'my:delete-other-windows)
-        (defun my:capture-after ()
-          (advice-remove 'org-switch-to-buffer-other-window
-                         #'my:delete-other-windows)
-          (delete-frame)
-          (remove-hook 'org-capture-after-finalize-hook #'my:capture-after)
-          (fmakunbound 'my:delete-other-windows)
-          (fmakunbound 'my:capture-after))
         (add-hook 'org-capture-after-finalize-hook #'my:capture-after)
         (condition-case nil
             (org-capture nil "t")
           ((user-error error) (my:capture-after))))
-    #+END_SRC
+#+END_SRC
 
 ** keybindings
    #+BEGIN_SRC elisp
@@ -902,7 +900,7 @@ Use Esc to quit minibuffer, which is previously C-g.
 #+END_SRC
 
 * eshell
-  #+BEGIN_SRC elisp
+  #+BEGIN_SRC elisp :tangle no
     (defun my:eshell-complete ()
       (interactive)
       (pcomplete-std-complete))
@@ -1391,7 +1389,7 @@ Keybindings
        :hook
        ((org-mode . olivetti-mode)
         (dired-mode . olivetti-mode))
-       :config
+       :init
        (setq olivetti-body-width 90))
    #+END_SRC
 

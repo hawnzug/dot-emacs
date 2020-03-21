@@ -208,7 +208,7 @@ Blink!
   #+BEGIN_SRC elisp
     (setq window-divider-default-right-width 1)
     (setq window-divider-default-bottom-width 1)
-    ; (setq window-divider-default-places t)
+    (setq window-divider-default-places t)
     (window-divider-mode t)
   #+END_SRC
 
@@ -1561,23 +1561,26 @@ Keybindings
    #+END_SRC
 
 ** Haskell
-   #+BEGIN_SRC elisp
-     (use-package haskell-mode
-       :ensure t)
+#+BEGIN_SRC elisp
+  (use-package haskell-mode
+    :ensure t)
 
-     (use-package dante
-       :ensure t
-       :after haskell-mode
-       :commands 'dante-mode
-       :hook (haskell-mode . dante-mode)
-       :init
-       (setq dante-tap-type-time 0))
+  (use-package dante
+    :ensure t
+    :after haskell-mode
+    :commands 'dante-mode
+    :hook (haskell-mode . dante-mode)
+    :init
+    (setq dante-tap-type-time 0))
+#+END_SRC
 
-     (use-package ghcid
-       :load-path "~/.emacs.d/packages/ghcid"
-       :after haskell-mode
-       :commands ghcid)
-   #+END_SRC
+#+BEGIN_SRC elisp
+  (major-def dante-mode-map
+    "r" 'dante-restart
+    "i" 'dante-info
+    "t" 'dante-type-at
+    ";" 'dante-eval-block)
+#+END_SRC
 
 ** Agda
    #+BEGIN_SRC elisp

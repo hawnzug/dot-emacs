@@ -105,10 +105,11 @@
     (defun my:font-setup ()
       (let ((primary-font
              (concat
-              "Iosevka Type Slab "
+              "Iosevka Curly Slab "
               (pcase (cddr (frame-monitor-attribute 'geometry))
-                ('(3840 2160) "24") (else "12")))))
-      (set-fontset-font t 'unicode "Noto Color Emoji" nil 'prepend)
+                ('(3840 2160) "12") (else "12")))))
+      (set-fontset-font t 'unicode "Noto Color Emoji")
+      (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
       (set-face-font 'default primary-font)
       (set-face-font 'fixed-pitch primary-font)
       (set-face-font 'fixed-pitch-serif primary-font)
@@ -118,6 +119,7 @@
       (select-frame frame)
       (my:font-setup)
       (remove-hook 'after-make-frame-functions 'my:font-setup-hook))
+    (setq inhibit-compacting-font-caches t)
     (add-hook 'after-make-frame-functions 'my:font-setup-hook nil)
     (my:font-setup)
   #+END_SRC
@@ -572,7 +574,7 @@ Use Esc to quit minibuffer, which is previously C-g.
       (setq org-startup-truncated t)
       (setq org-refile-targets '(("~/notes/memory.org" . (:level . 1))))
       (setq org-archive-location "~/notes/trash.org::")
-      (setq org-ellipsis "")
+      (setq org-ellipsis "⌄")
       (setq org-confirm-babel-evaluate nil)
       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
       (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))

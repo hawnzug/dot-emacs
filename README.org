@@ -667,7 +667,7 @@ Use Esc to quit minibuffer, which is previously C-g.
       (advice-add 'ob-babel-execute:ipython :around 'ob-ipython-auto-configure-kernels))
     (use-package ob-metapost
       :commands org-babel-execute:metapost
-      :load-path "~/.emacs.d/packages/ob-metapost")
+      :load-path "~/.config/emacs/packages/ob-metapost")
   #+END_SRC
 
   Keybindings
@@ -731,7 +731,7 @@ Use Esc to quit minibuffer, which is previously C-g.
      (use-package org-alert
        :disabled t
        :after (org alert)
-       :load-path "~/.emacs.d/packages/org-alert"
+       :load-path "~/.config/emacs/packages/org-alert"
        :config
        (org-alert-enable))
    #+END_SRC
@@ -1118,7 +1118,7 @@ Keybindings
 ** emacs-libvterm
    #+BEGIN_SRC elisp
      (use-package vterm
-       :load-path "~/.emacs.d/packages/emacs-libvterm")
+       :load-path "~/.config/emacs/packages/emacs-libvterm")
    #+END_SRC
 
 ** emmet
@@ -1498,7 +1498,7 @@ Keybindings
   (use-package yasnippet
     :ensure t
     :config
-    (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+    (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
     (yas-global-mode 1))
 #+END_SRC
 

@@ -1325,15 +1325,6 @@ Keybindings
                  '(ivy-bibtex . ivy--regex-ignore-order)))
 #+END_SRC
 
-** keyfreq
-   #+BEGIN_SRC elisp
-     (use-package keyfreq
-       :ensure t
-       :config
-       (keyfreq-mode 1)
-       (keyfreq-autosave-mode 1))
-   #+END_SRC
-
 ** lsp
    #+BEGIN_SRC elisp
      (use-package lsp-mode

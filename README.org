@@ -994,7 +994,7 @@ Use Esc to quit minibuffer, which is previously C-g.
     (setq dired-dwim-target t)
     (setq dired-recursive-copies 'always)
     (setq dired-recursive-deletes 'always)
-    (setq dired-listing-switches "-alhG --group-directories-first")
+    (setq dired-listing-switches "-alhvG --group-directories-first")
     (setq dired-isearch-filenames 'dwim)
     <<dired-kbd>>
     (use-package dired-open
@@ -1002,12 +1002,13 @@ Use Esc to quit minibuffer, which is previously C-g.
       :config
       (setq dired-open-extensions
             '(("pdf" . "zathura")
+              ("html" . "firefox")
               ("mp4" . "mpv")
               ("png" . "feh")
               ("jpg" . "feh")))))
 #+END_SRC
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package all-the-icons-dired
     :after dired
     :hook (dired-mode . all-the-icons-dired-mode))

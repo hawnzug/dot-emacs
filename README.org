@@ -576,8 +576,7 @@ Use Esc to quit minibuffer, which is previously C-g.
       (setq org-adapt-indentation nil)
       (setq org-startup-indented t)
       (setq org-startup-truncated t)
-      (setq org-refile-targets '(("~/notes/memory.org" . (:level . 1))))
-      (setq org-archive-location "~/notes/trash.org::")
+      (setq org-archive-location "~/org/trash.org::")
       (setq org-ellipsis "⌄")
       (setq org-confirm-babel-evaluate nil)
       (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
@@ -597,7 +596,7 @@ Use Esc to quit minibuffer, which is previously C-g.
       :after org
       :commands (org-agenda)
       :config
-      (setq org-agenda-files '("~/notes/memory.org"))
+      (setq org-agenda-files '("~/org/orz.org"))
       (setq org-agenda-start-with-follow-mode nil)
       (setq org-agenda-follow-indirect t)
       (setq org-agenda-dim-blocked-tasks nil)
@@ -633,7 +632,7 @@ Use Esc to quit minibuffer, which is previously C-g.
   #+BEGIN_SRC elisp :tangle no
     (add-hook 'org-capture-mode-hook 'evil-insert-state)
     (setq org-capture-templates
-          '(("t" "Todo" entry (file "~/notes/cache.org")
+          '(("t" "Todo" entry (file+headline "~/org/orz.org" "0")
              "* %?"
              :prepend t)))
   #+END_SRC
@@ -1331,9 +1330,9 @@ Keybindings
     :ensure t
     :after ivy
     :config
-    (setq bibtex-completion-bibliography '("~/notes/refs.bib"))
-    (setq bibtex-completion-notes-path "~/notes/drive.org")
-    (setq bibtex-completion-library-path '("~/notes/pdfs"))
+    (setq bibtex-completion-bibliography '("~/org/refs.bib"))
+    (setq bibtex-completion-notes-path "~/org/orz.org")
+    (setq bibtex-completion-library-path '("~/org/pdfs"))
     (setq bibtex-completion-display-formats
           '((t . "${author:36} ${title:100} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:18}")))
     (defun my:ivy-bibtex-open-pdf (file)

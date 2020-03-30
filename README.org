@@ -1208,33 +1208,6 @@ Keybindings
        (setq ffip-use-rust-fd t))
    #+END_SRC
 
-** flycheck
-#+BEGIN_SRC elisp
-  (defun org-src-disable-elisp-checkdoc ()
-    (setq-local flycheck-disabled-checkers '(emacs-lisp-checkdoc)))
-  (use-package flycheck
-    :ensure t
-    :hook
-    ((prog-mode . flycheck-mode)
-     (org-src-mode . org-src-disable-elisp-checkdoc))
-    :config
-    (setq flycheck-display-errors-delay 0)
-    ;; Use lsp instead
-    (setq-default flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc)))
-#+END_SRC
-
-*** flycheck-posframe
-#+BEGIN_SRC elisp
-  (use-package flycheck-posframe
-    :ensure t
-    :disabled t
-    :after flycheck
-    :hook (flycheck-mode . flycheck-posframe-mode)
-    :config
-    (setq flycheck-posframe-error-prefix "😡 ")
-    (setq flycheck-posframe-warning-prefix "😨 "))
-#+END_SRC
-
 ** hide-mode-line
    #+BEGIN_SRC elisp
      (use-package hide-mode-line
@@ -1686,19 +1659,6 @@ Keybindings
        (setq python-shell-completion-native-enable nil)
        (when (executable-find "ipython")
          (setq python-shell-interpreter "ipython")))
-   #+END_SRC
-
-** Rust
-   #+BEGIN_SRC elisp
-     (use-package rust-mode
-       :ensure t
-       :hook (rust-mode . lsp))
-     (use-package cargo
-       :ensure t
-       :hook (rust-mode . cargo-minor-mode))
-     (use-package flycheck-rust
-       :ensure t
-       :hook (flycheck-mode . flycheck-rust-setup))
    #+END_SRC
 
 ** TeX

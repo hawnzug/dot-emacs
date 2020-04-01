@@ -1362,13 +1362,6 @@ Keybindings
       "k" 'with-editor-cancel)
    #+END_SRC
 
-#+BEGIN_SRC elisp
-  (general-def magit-status-mode-map
-    "j" 'magit-section-forward
-    "k" 'magit-section-backward
-    "n" 'magit-status-jump
-    "p" 'magit-discard)
-#+END_SRC
 
 ** markdown
 #+BEGIN_SRC elisp

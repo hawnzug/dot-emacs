@@ -603,13 +603,11 @@ Use Esc to quit minibuffer, which is previously C-g.
       (setq org-agenda-files '("~/org/orz.org"))
       (setq org-agenda-start-with-follow-mode nil)
       (setq org-agenda-follow-indirect t)
-      (setq org-agenda-dim-blocked-tasks nil)
+      (setq org-agenda-dim-blocked-tasks 'invisible)
       (setq org-agenda-span 'day)
       (setq org-agenda-log-mode-items '(clock))
       (setq org-agenda-use-time-grid nil)
       (setq org-agenda-skip-deadline-if-done t)
-      (setq org-agenda-remove-tags t)
-      (setq org-agenda-todo-ignore-with-date nil)
       (setq org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
       (setq org-agenda-block-separator ?―)
       <<org-agenda-kbd>>
@@ -767,7 +765,7 @@ Use Esc to quit minibuffer, which is previously C-g.
 
 ** helper functions
 *** Archive to datetree
-    #+BEGIN_SRC elisp
+    #+BEGIN_SRC elisp :tangle no
       (defun my:org-refile-to-diary ()
         "Refile a subtree to a datetree corresponding to its CLOSED time."
         (interactive)
@@ -839,7 +837,7 @@ Use Esc to quit minibuffer, which is previously C-g.
     #+END_SRC
 
 *** Create a capture frame
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
       (defun my:delete-other-windows (&rest args)
         (setq-local mode-line-format nil)
         (delete-other-windows))
@@ -860,6 +858,15 @@ Use Esc to quit minibuffer, which is previously C-g.
         (condition-case nil
             (org-capture nil "t")
           ((user-error error) (my:capture-after))))
+#+END_SRC
+
+*** Search link backwards
+#+BEGIN_SRC elisp
+  (defun my:org-agenda-current-id ()
+    "Search references of the current ID"
+    (interactive)
+    (let ((org-agenda-start-with-follow-mode t))
+      (org-search-view nil (concat "id:" (org-id-get)) nil)))
 #+END_SRC
 
 ** keybindings
@@ -886,11 +893,12 @@ Use Esc to quit minibuffer, which is previously C-g.
 
 #+BEGIN_SRC elisp
   (major-def org-mode-map
-    "s" 'org-schedule
-    "d" 'org-deadline
-    "t" 'org-time-stamp
+    "t" nil
+    "t d" 'org-deadline
+    "t s" 'org-schedule
+    "t t" 'org-time-stamp
     "l" 'org-insert-link
-    "L" 'org-insert-last-stored-link
+    "s" 'my:org-agenda-current-id
     "p" 'org-set-property
     "c" 'org-columns
     "i" 'org-toggle-inline-images
@@ -1034,7 +1042,7 @@ Keybindings
     "j" 'dired-next-line
     "k" 'dired-previous-line
     "l" 'dired-open-file
-    "m" 'nil
+    "m" nil
     "m ." 'dired-mark-extension
     "m d" 'dired-mark-directories
     "m r" 'dired-mark-files-containing-regexp

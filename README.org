@@ -1199,14 +1199,15 @@ Keybindings
    #+END_SRC
 
 ** fcitx
-   #+BEGIN_SRC elisp
-     (use-package fcitx
-       :if (executable-find "fcitx-remote")
-       :ensure t
-       :defer 2
-       :config
-       (fcitx-aggressive-setup))
-   #+END_SRC
+#+BEGIN_SRC elisp
+  (use-package fcitx
+    :if (executable-find "fcitx5-remote")
+    :ensure t
+    :defer 2
+    :config
+    (setq fcitx-remote-command "fcitx5-remote")
+    (fcitx-aggressive-setup))
+#+END_SRC
 
 ** find-file-in-project
    #+BEGIN_SRC elisp
@@ -1316,7 +1317,7 @@ Keybindings
     :after ivy
     :config
     (setq bibtex-completion-bibliography '("~/org/refs.bib"))
-    (setq bibtex-completion-notes-path "~/org/orz.org")
+    (setq bibtex-completion-notes-path "~/org/read.org")
     (setq bibtex-completion-library-path '("~/org/pdfs"))
     (setq bibtex-completion-display-formats
           '((t . "${author:36} ${title:100} ${year:4} ${=has-pdf=:1}${=has-note=:1} ${=type=:18}")))
@@ -1369,7 +1370,6 @@ Keybindings
       ";" 'with-editor-finish
       "k" 'with-editor-cancel)
    #+END_SRC
-
 
 ** markdown
 #+BEGIN_SRC elisp

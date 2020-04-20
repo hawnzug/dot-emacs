@@ -421,6 +421,7 @@ Use Esc to quit minibuffer, which is previously C-g.
     :init
     (setq evil-want-abbrev-expand-on-insert-exit nil)
     (setq evil-disable-insert-state-bindings t)
+    (setq evil-respect-visual-line-mode t)
     :config
     (evil-mode 1)
     (evil-set-initial-state 'ivy-occur-mode 'emacs)
@@ -1663,14 +1664,18 @@ Keybindings
    #+END_SRC
 
 ** TeX
-   #+BEGIN_SRC elisp
-     (use-package tex
-       :ensure auctex
-       :defer t
-       :hook (LaTeX-mode . my:show-trailing-space)
-       :config
-       (setq TeX-PDF-mode t))
-   #+END_SRC
+#+BEGIN_SRC elisp
+  (use-package tex
+    :ensure auctex
+    :defer t
+    :hook
+    ((LaTeX-mode . my:show-trailing-space)
+     (LaTeX-mode . TeX-source-correlate-mode)
+     (LaTeX-mode . TeX-PDF-mode))
+    :config
+    (setq font-latex-fontify-script nil)
+    (setq TeX-view-program-selection '((output-pdf "Zathura"))))
+#+END_SRC
 
 ** YAML
    #+BEGIN_SRC elisp

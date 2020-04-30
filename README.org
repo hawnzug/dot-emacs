@@ -750,6 +750,7 @@ Use Esc to quit minibuffer, which is previously C-g.
    #+BEGIN_SRC elisp
      (use-package org-bullets
        :ensure t
+       :disabled t
        :after org
        :hook (org-mode . org-bullets-mode)
        :init

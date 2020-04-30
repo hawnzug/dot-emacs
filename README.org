@@ -1286,6 +1286,7 @@ Keybindings
        :config
        (ivy-mode 1)
        (use-package ivy-hydra :ensure t)
+       (setq ivy-height 25)
        (setq ivy-use-virtual-buffers t)
        (setq ivy-count-format "(%d/%d) ")
        (setq ivy-re-builders-alist '((t . ivy--regex-plus))))
@@ -1303,12 +1304,9 @@ Keybindings
        (all-the-icons-ivy-setup))
      (use-package ivy-posframe
        :ensure t
-       :disabled t
        :after ivy
        :config
-       (setq ivy-height 20)
        (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
-       (setq ivy-posframe-border-width 10)
        (ivy-posframe-mode))
    #+END_SRC
 

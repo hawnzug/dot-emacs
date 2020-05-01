@@ -570,8 +570,7 @@ Use Esc to quit minibuffer, which is previously C-g.
       :defer 4
       :hook
       (org-mode . my:show-trailing-space)
-      ((org-babel-after-execute . org-redisplay-inline-images))
-      ;; (org-agenda-finalize . my:org-agenda-time-grid-spacing))
+      (org-babel-after-execute . org-redisplay-inline-images)
       :config
       (use-package org-mouse)
       <<org-kill-temp-fontify-buffer>>
@@ -600,9 +599,12 @@ Use Esc to quit minibuffer, which is previously C-g.
     (use-package org-agenda
       :after org
       :commands (org-agenda)
+      :hook
+      (org-agenda-finalize . my:org-agenda-time-grid-spacing)
       :config
-      (setq org-agenda-files '("~/org/orz.org"))
+      (setq org-agenda-files '("~/org/orz.org" "~/org/diary.org"))
       (setq org-agenda-start-with-follow-mode nil)
+      (setq org-agenda-start-with-log-mode t)
       (setq org-agenda-follow-indirect t)
       (setq org-agenda-dim-blocked-tasks 'invisible)
       (setq org-agenda-span 'day)
@@ -767,7 +769,7 @@ Use Esc to quit minibuffer, which is previously C-g.
 
 ** helper functions
 *** Archive to datetree
-    #+BEGIN_SRC elisp :tangle no
+    #+BEGIN_SRC elisp
       (defun my:org-refile-to-diary ()
         "Refile a subtree to a datetree corresponding to its CLOSED time."
         (interactive)
@@ -813,20 +815,21 @@ Use Esc to quit minibuffer, which is previously C-g.
     #+END_SRC
 
 *** Show time grid in org agenda
-    #+BEGIN_SRC elisp :tangle no
+    #+BEGIN_SRC elisp
       (defun my:org-agenda-time-grid-spacing ()
         "Set different line spacing w.r.t. time duration."
+        (interactive)
         (save-excursion
           (let ((colors (list "#FFF9C4" "#FFF176" "#FFF59D" "#FFEE58"))
                 (pos (point-min))
-                (block-minutes 30)
+                (block-minutes 20)
                 duration)
             (nconc colors colors)
             (while (setq pos (next-single-property-change pos 'org-hd-marker))
               (goto-char pos)
               (when (and (not (equal pos (point-at-eol)))
                          (setq duration
-                               (or (org-get-at-bol 'duration)
+                               (or (mod (org-get-at-bol 'duration) 1440)
                                    (when (equal (org-get-at-bol 'org-hd-marker) org-clock-hd-marker)
                                      (/ (- (float-time) (float-time org-clock-start-time)) 60)))))
                 (let ((line-height (if (< duration block-minutes) 1.0
@@ -837,6 +840,10 @@ Use Esc to quit minibuffer, which is previously C-g.
                   (overlay-put ov 'line-height line-height)
                   (overlay-put ov 'line-spacing (1- line-height))))))))
     #+END_SRC
+
+#+BEGIN_SRC elisp
+(add-hook 'org-agenda-finalize-hook #'my:org-agenda-time-grid-spacing)
+#+END_SRC
 
 *** Create a capture frame
 #+BEGIN_SRC elisp :tangle no
@@ -899,15 +906,17 @@ Use Esc to quit minibuffer, which is previously C-g.
     "t d" 'org-deadline
     "t s" 'org-schedule
     "t t" 'org-time-stamp
+    "t i" 'org-clock-in
+    "t o" 'org-clock-out
     "l" 'org-insert-link
     "s" 'my:org-agenda-current-id
     "p" 'org-set-property
     "c" 'org-columns
     "i" 'org-toggle-inline-images
     "x" 'org-toggle-latex-fragment
-    "a" 'org-archive-subtree
+    ;; "a" 'org-archive-subtree
     "o" 'org-open-at-point
-    "r" 'org-refile
+    "r" 'my:org-refile-to-diary
     "b" 'hydra-org-babel/body
     ";" 'org-ctrl-c-ctrl-c)
 #+END_SRC

@@ -6,7 +6,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(magit-delta eglot haskell-mode hide-mode-line wgrep which-key-posframe find-file-in-project olivetti ivy-bibtex terminal-here company-posframe docker-tramp dockerfile-mode csv-mode doom-themes doom-modeline yaml-mode sml-mode org-plus-contrib imenu-list tuareg web-mode emmet-mode keyfreq org-tree-slide academic-phrases org-make-toc exec-path-from-shell xterm-color ivy-posframe avy fcitx ibuffer-vc dired-open symbol-overlay htmlize evil-matchit alert proof-general ivy-hydra general auctex eshell-z esh-autosuggest org-bullets ob-ipython ccls all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package))
+   '(lua-mode hl-todo magit-delta eglot haskell-mode hide-mode-line wgrep which-key-posframe find-file-in-project olivetti ivy-bibtex terminal-here company-posframe docker-tramp dockerfile-mode csv-mode doom-themes doom-modeline yaml-mode sml-mode org-plus-contrib imenu-list tuareg web-mode emmet-mode keyfreq org-tree-slide academic-phrases org-make-toc exec-path-from-shell xterm-color ivy-posframe avy fcitx ibuffer-vc dired-open symbol-overlay htmlize evil-matchit alert proof-general ivy-hydra general auctex eshell-z esh-autosuggest org-bullets ob-ipython ccls all-the-icons-ivy counsel hydra which-key rainbow-delimiters evil-surround evil magit eyebrowse company-coq company use-package))
  '(safe-local-variable-values
    '((auto-save-visited-interval . 0)
      (dired-omit-extensions ".vo" ".vok" ".vos" ".aux" ".glob")

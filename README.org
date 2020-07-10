@@ -432,7 +432,14 @@ Use Esc to quit minibuffer, which is previously C-g.
 
 #+BEGIN_SRC elisp
   (general-def 'motion ";" nil "," nil)
-  (general-def 'normal "x" nil "X" nil "s" nil "S" nil)
+  (general-def 'normal
+    "x" nil
+    "X" nil
+    "s" nil
+    "S" nil
+    "u" 'undo-only
+    "U" 'undo
+    "C-r" 'undo-redo)
   (general-def 'motion
     :prefix "x"
     "l" 'evil-avy-goto-line

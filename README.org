@@ -1173,10 +1173,10 @@ Keybindings
 #+END_SRC
 
 ** emacs-libvterm
-   #+BEGIN_SRC elisp
-     (use-package vterm
-       :load-path "~/.config/emacs/packages/emacs-libvterm")
-   #+END_SRC
+#+BEGIN_SRC elisp
+  (use-package vterm
+    :ensure t)
+#+END_SRC
 
 ** emmet
    #+BEGIN_SRC elisp

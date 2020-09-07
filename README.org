@@ -191,6 +191,12 @@ Blink!
     (setq-default truncate-lines t)
   #+END_SRC
 
+Better word wrap for CJK
+#+BEGIN_SRC elisp
+  (setq word-wrap-by-category t)
+  (load "kinsoku.el")
+#+END_SRC
+
   80 characters one line.
   #+BEGIN_SRC elisp
     (setq-default fill-column 80)

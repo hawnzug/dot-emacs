@@ -403,7 +403,6 @@ Use comma as the global leader key.
     "n w" 'widen
     "q" 'save-buffers-kill-terminal
     "Q" 'save-buffers-kill-emacs
-    "E" 'hydra-eyebrowse/body
     "w" 'hydra-window/body
     "B" 'hydra-buffer/body)
 #+END_SRC
@@ -586,20 +585,6 @@ Use Esc to quit minibuffer, which is previously C-g.
        ("b" ivy-switch-buffer)
        ("q" nil)
        ("<escape>" nil))
-   #+END_SRC
-
-** hydra-eyebrowse
-   #+BEGIN_SRC elisp
-     (defhydra hydra-eyebrowse
-       (:color teal :hint nil)
-       "eyebrowse"
-       ("l" eyebrowse-last-window-config "last" :column "Switch")
-       ("j" eyebrowse-next-window-config "next" :color red)
-       ("k" eyebrowse-prev-window-config "prev" :color red)
-       ("s" eyebrowse-switch-to-window-config "switch")
-       ("d" eyebrowse-close-window-config "delete" :column "Modify")
-       ("c" eyebrowse-create-window-config "last")
-       ("r" eyebrowse-rename-window-config "rename"))
    #+END_SRC
 
 * mode line
@@ -860,29 +845,6 @@ Keybindings
        (setq exec-path-from-shell-check-startup-files nil)
        (exec-path-from-shell-copy-env "SSH_AGENT_PID")
        (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
-   #+END_SRC
-
-** eyebrowse
-   #+BEGIN_SRC elisp
-     (use-package eyebrowse
-       :ensure t
-       :config
-       (eyebrowse-mode t))
-   #+END_SRC
-
-   Keybindings
-   #+BEGIN_SRC elisp
-     (general-def 'override
-       "M-0" 'eyebrowse-switch-to-window-config-0
-       "M-1" 'eyebrowse-switch-to-window-config-1
-       "M-2" 'eyebrowse-switch-to-window-config-2
-       "M-3" 'eyebrowse-switch-to-window-config-3
-       "M-4" 'eyebrowse-switch-to-window-config-4
-       "M-5" 'eyebrowse-switch-to-window-config-5
-       "M-6" 'eyebrowse-switch-to-window-config-6
-       "M-7" 'eyebrowse-switch-to-window-config-7
-       "M-8" 'eyebrowse-switch-to-window-config-8
-       "M-9" 'eyebrowse-switch-to-window-config-9)
    #+END_SRC
 
 ** fcitx

@@ -590,6 +590,7 @@ Use Esc to quit minibuffer, which is previously C-g.
     (setq org-adapt-indentation nil)
     (setq org-startup-indented t)
     (setq org-startup-truncated t)
+    (setq org-hide-emphasis-markers t)
     (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
     (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
     (setq org-footnote-section nil))

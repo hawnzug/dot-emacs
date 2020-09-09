@@ -614,366 +614,89 @@ Use Esc to quit minibuffer, which is previously C-g.
   #+END_SRC
 
 * org
-  #+BEGIN_SRC elisp :noweb no-export
-    (use-package org
-      :ensure org-plus-contrib
-      :defer 4
-      :hook
-      (org-mode . my:show-trailing-space)
-      (org-babel-after-execute . org-redisplay-inline-images)
-      :config
-      (use-package org-mouse)
-      <<org-kill-temp-fontify-buffer>>
-      <<org-capture-templates>>
-      (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
-      (setq org-tags-column 0)
-      (setq org-adapt-indentation nil)
-      (setq org-startup-indented t)
-      (setq org-startup-truncated t)
-      (setq org-archive-location "~/org/trash.org::")
-      (setq org-ellipsis "⌄")
-      (setq org-confirm-babel-evaluate nil)
-      (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
-      (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
-      (setq org-fontify-done-headline t)
-      (setq org-log-into-drawer t)
-      (setq org-log-done 'time)
-      (setq org-enforce-todo-dependencies t)
-      (setq org-enforce-todo-checkbox-dependencies t)
-      (setq org-footnote-section nil))
-  #+END_SRC
-
-** org-agenda
-  Org agenda config.
-  #+BEGIN_SRC elisp :noweb no-export
-    (use-package org-agenda
-      :after org
-      :commands (org-agenda)
-      :hook
-      (org-agenda-finalize . my:org-agenda-time-grid-spacing)
-      :config
-      (setq org-agenda-files '("~/org/orz.org" "~/org/diary.org"))
-      (setq org-agenda-start-with-follow-mode nil)
-      (setq org-agenda-start-with-log-mode t)
-      (setq org-agenda-follow-indirect t)
-      (setq org-agenda-dim-blocked-tasks 'invisible)
-      (setq org-agenda-span 'day)
-      (setq org-agenda-log-mode-items '(clock))
-      (setq org-agenda-use-time-grid nil)
-      (setq org-agenda-skip-deadline-if-done t)
-      (setq org-agenda-skip-deadline-prewarning-if-scheduled 'pre-scheduled)
-      (setq org-agenda-block-separator ?―)
-      <<org-agenda-kbd>>
-      )
-  #+END_SRC
-
-  Keybindings
-  #+NAME: org-agenda-kbd
-  #+BEGIN_SRC elisp :tangle no
-    (general-def org-agenda-mode-map
-      "S" 'org-agenda-schedule
-      "D" 'org-agenda-deadline
-      "c" 'org-agenda-columns
-      "z" 'org-agenda-log-mode
-      "h" 'backward-char
-      "l" 'forward-char
-      "j" 'org-agenda-next-line
-      "k" 'org-agenda-previous-line)
-  #+END_SRC
-
-** org-capture
-  Org capture templates.
-  #+NAME: org-capture-templates
-  #+BEGIN_SRC elisp :tangle no
-    (add-hook 'org-capture-mode-hook 'evil-insert-state)
-    (setq org-capture-templates
-          '(("t" "Todo" entry (file+headline "~/org/orz.org" "0")
-             "* %?"
-             :prepend t)))
-  #+END_SRC
-
-  Keybindings
-  #+BEGIN_SRC elisp
-    (general-define-key
-     :definer 'minor-mode
-     :states '(motion normal insert emacs)
-     :keymaps 'org-capture-mode
-     :prefix ";"
-     :global-prefix "M-;"
-     ";" 'org-capture-finalize
-     "w" 'org-capture-refile
-     "k" 'org-capture-kill)
-  #+END_SRC
-
-** org-babel
-  Org babel.
-  #+BEGIN_SRC elisp
-    (use-package ob-scheme :after org)
-    (use-package ob-python :after org)
-    (use-package ob-shell :after org)
-    (use-package ob-latex :after org)
-    (use-package ob-ipython
-      :ensure t
-      :after org
-      :config
-      (setq ob-ipython-resources-dir "~/obipy-resources/")
-      (remove-hook 'org-mode-hook 'ob-ipython-auto-configure-kernels)
-      (advice-add 'ob-babel-execute:ipython :around 'ob-ipython-auto-configure-kernels))
-    (use-package ob-metapost
-      :commands org-babel-execute:metapost
-      :load-path "~/.config/emacs/packages/ob-metapost")
-  #+END_SRC
-
-  Keybindings
-  #+BEGIN_SRC elisp
-    (general-define-key
-     :definer 'minor-mode
-     :states '(motion normal insert emacs)
-     :keymaps 'org-src-mode
-     :prefix ";"
-     :global-prefix "M-;"
-     ";" 'org-edit-src-exit
-     "k" 'org-edit-src-abort)
-  #+END_SRC
-
-  Hydra
-  #+BEGIN_SRC elisp
-    (defhydra hydra-org-babel
-      (:color teal :hint nil :idle 1.0)
-      (concat
-       "  "
-       (all-the-icons-fileicon "org" :height 2 :v-adjust -0.2 :face 'all-the-icons-purple)
-       " Org babel"
-       "
-
-    ^Move^      ^Action^
-    ──────────
-    _j_: next   _e_: edit
-    _k_: prev   _t_: tangle
-    _h_: head   _r_: result
-    _g_: goto
-
-    ")
-      ("j" org-babel-next-src-block :color red)
-      ("k" org-babel-previous-src-block :color red)
-      ("h" org-babel-goto-src-block-head)
-      ("g" org-babel-goto-named-src-block)
-
-      ("e" org-edit-src-code)
-      ("t" org-babel-tangle)
-      ("r" org-babel-open-src-block-result)
-
-      ("q" nil)
-      ("<escape>" nil))
-  #+END_SRC
-
-** org-id
-   #+BEGIN_SRC elisp
-     (use-package org-id
-       :config
-       (setq org-id-link-to-org-use-id 'create-if-interactive))
-   #+END_SRC
-
-** org-checklist
-   #+BEGIN_SRC elisp
-     (use-package org-checklist
-       :after org)
-   #+END_SRC
-
-** org-alert
-   #+BEGIN_SRC elisp
-     (use-package org-alert
-       :disabled t
-       :after (org alert)
-       :load-path "~/.config/emacs/packages/org-alert"
-       :config
-       (org-alert-enable))
-   #+END_SRC
-
-** org-maketoc
-   #+BEGIN_SRC elisp
-     (use-package org-make-toc
-       :ensure t
-       :after org
-       :commands (org-make-toc))
-   #+END_SRC
-
-** org-bullets
-   #+BEGIN_SRC elisp
-     (use-package org-bullets
-       :ensure t
-       :disabled t
-       :after org
-       :hook (org-mode . org-bullets-mode)
-       :init
-       (setq org-bullets-bullet-list '("⚬")))
-   #+END_SRC
-
-** org-tree-slide
-   #+BEGIN_SRC elisp
-     (use-package org-tree-slide
-       :ensure t
-       :after org
-       :commands (org-tree-slide-mode))
-   #+END_SRC
-
-** helper functions
-*** Archive to datetree
-    #+BEGIN_SRC elisp
-      (defun my:org-refile-to-diary ()
-        "Refile a subtree to a datetree corresponding to its CLOSED time."
-        (interactive)
-        (let* ((diary-file "~/org/diary.org")
-               (datetree-date (org-entry-get nil "CLOSED" t))
-               (date (org-date-to-gregorian datetree-date)))
-          (save-window-excursion
-            (org-cut-subtree)
-            (find-file diary-file)
-            (org-datetree-find-date-create date)
-            (org-end-of-subtree t)
-            (newline)
-            (org-paste-subtree 4))))
-    #+END_SRC
-
-*** Jump to source block by name
-    #+BEGIN_SRC elisp
-      (defun my:org-search-src-block-name ()
-        "Search source block name in current file"
-        (interactive)
-        (ivy-read
-         "Code block: "
-         (let (names)
-           (org-babel-map-src-blocks nil
-             (let ((name (nth 4 (org-babel-get-src-block-info))))
-               (push name names)))
-           (seq-filter #'identity names))
-         :require-match t
-         :action #'insert))
-    #+END_SRC
-
-*** Kill temporary fontify buffers
-    Kill temporary buffers created by ~org-src-font-lock-fontify-block~.
-    #+NAME: org-kill-temp-fontify-buffer
-    #+BEGIN_SRC elisp :tangle no
-      (defun kill-org-src-buffers (&rest args)
-        "Kill temporary buffers created by org-src-font-lock-fontify-block."
-        (dolist (b (buffer-list))
-          (let ((bufname (buffer-name b)))
-            (if (string-match-p (regexp-quote "org-src-fontification") bufname)
-                (kill-buffer b)))))
-      (advice-add 'org-src-font-lock-fontify-block :after #'kill-org-src-buffers)
-    #+END_SRC
-
-*** Show time grid in org agenda
-    #+BEGIN_SRC elisp
-      (defun my:org-agenda-time-grid-spacing ()
-        "Set different line spacing w.r.t. time duration."
-        (interactive)
-        (save-excursion
-          (let ((colors (list "#FFF9C4" "#FFF176" "#FFF59D" "#FFEE58"))
-                (pos (point-min))
-                (block-minutes 20)
-                duration)
-            (nconc colors colors)
-            (while (setq pos (next-single-property-change pos 'org-hd-marker))
-              (goto-char pos)
-              (when (and (not (equal pos (point-at-eol)))
-                         (setq duration
-                               ;; When the ending time is the next day, duration can be negative
-                               (or (mod (org-get-at-bol 'duration) 1440)
-                                   ;; If it is the currently clocked entry
-                                   (when (equal (org-get-at-bol 'org-hd-marker) org-clock-hd-marker)
-                                     (/ (- (float-time) (float-time org-clock-start-time)) 60)))))
-                ;; line-height = 1 + line-spacing
-                (let ((line-height (if (< duration block-minutes) 1.0
-                                     (+ 0.5 (/ duration (* 2.0 block-minutes)))))
-                      (ov (make-overlay (point-at-bol) (1+ (point-at-eol)))))
-                  (overlay-put ov 'face `(:background ,(car colors)))
-                  (setq colors (cdr colors))
-                  (overlay-put ov 'line-height line-height)
-                  (overlay-put ov 'line-spacing (1- line-height))))))))
-    #+END_SRC
-
-#+BEGIN_SRC elisp
-(add-hook 'org-agenda-finalize-hook #'my:org-agenda-time-grid-spacing)
+#+BEGIN_SRC elisp :noweb no-export
+  (use-package org
+    :ensure org-plus-contrib
+    :defer 4
+    :hook
+    (org-mode . my:show-trailing-space)
+    (org-babel-after-execute . org-redisplay-inline-images)
+    :config
+    (use-package org-mouse)
+    <<org-kill-temp-fontify-buffer>>
+    (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
+    (setq org-adapt-indentation nil)
+    (setq org-startup-indented t)
+    (setq org-startup-truncated t)
+    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
+    (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
+    (setq org-footnote-section nil))
 #+END_SRC
 
-*** Create a capture frame
+Kill temporary buffers created by ~org-src-font-lock-fontify-block~.
+#+NAME: org-kill-temp-fontify-buffer
 #+BEGIN_SRC elisp :tangle no
-      (defun my:delete-other-windows (&rest args)
-        (setq-local mode-line-format nil)
-        (delete-other-windows))
-      (advice-add 'org-switch-to-buffer-other-window :after
-                  #'my:delete-other-windows)
-      (defun my:capture-after ()
-        (advice-remove 'org-switch-to-buffer-other-window
-                       #'my:delete-other-windows)
-        (delete-frame)
-        (remove-hook 'org-capture-after-finalize-hook #'my:capture-after)
-        ;; (fmakunbound 'my:delete-other-windows)
-        ;; (fmakunbound 'my:capture-after)
-        )
-      (defun make-org-capture-frame ()
-        "Create a new frame and run org-capture."
-        (interactive)
-        (add-hook 'org-capture-after-finalize-hook #'my:capture-after)
-        (condition-case nil
-            (org-capture nil "t")
-          ((user-error error) (my:capture-after))))
+  (defun kill-org-src-buffers (&rest args)
+    "Kill temporary buffers created by org-src-font-lock-fontify-block."
+    (dolist (b (buffer-list))
+      (let ((bufname (buffer-name b)))
+        (if (string-match-p (regexp-quote "org-src-fontification") bufname)
+            (kill-buffer b)))))
+  (advice-add 'org-src-font-lock-fontify-block :after #'kill-org-src-buffers)
 #+END_SRC
 
-*** Search link backwards
+org-id
 #+BEGIN_SRC elisp
-  (defun my:org-agenda-current-id ()
-    "Search references of the current ID"
-    (interactive)
-    (let ((org-agenda-start-with-follow-mode t))
-      (org-search-view nil (concat "id:" (org-id-get)) nil)))
+  (use-package org-id
+    :config
+    (setq org-id-link-to-org-use-id 'create-if-interactive))
 #+END_SRC
 
-** keybindings
-   #+BEGIN_SRC elisp
-     (general-nmap org-mode-map
-       "gh" 'outline-up-heading
-       "gj" 'org-forward-heading-same-level
-       "gk" 'org-backward-heading-same-level
-       "gl" 'outline-next-visible-heading
-       "gt" 'counsel-org-goto
-       "<" 'org-metaleft
-       ">" 'org-metaright
-       "t" 'org-todo)
-     (general-def org-mode-map
-       "M-h" 'org-metaleft
-       "M-j" 'org-metadown
-       "M-k" 'org-metaup
-       "M-l" 'org-metaright
-       "M-H" 'org-shiftmetaleft
-       "M-J" 'org-shiftmetadown
-       "M-K" 'org-shiftmetaup
-       "M-L" 'org-shiftmetaright)
-   #+END_SRC
+org-checklist
+#+BEGIN_SRC elisp
+  (use-package org-checklist
+    :after org)
+#+END_SRC
+
+org-maketoc
+#+BEGIN_SRC elisp
+  (use-package org-make-toc
+    :ensure t
+    :after org
+    :commands (org-make-toc))
+#+END_SRC
+
+keybindings
+#+BEGIN_SRC elisp
+  (general-nmap org-mode-map
+    "gh" 'outline-up-heading
+    "gj" 'org-forward-heading-same-level
+    "gk" 'org-backward-heading-same-level
+    "gl" 'outline-next-visible-heading
+    "gt" 'counsel-org-goto
+    "<" 'org-metaleft
+    ">" 'org-metaright
+    "t" 'org-todo)
+  (general-def org-mode-map
+    "M-h" 'org-metaleft
+    "M-j" 'org-metadown
+    "M-k" 'org-metaup
+    "M-l" 'org-metaright
+    "M-H" 'org-shiftmetaleft
+    "M-J" 'org-shiftmetadown
+    "M-K" 'org-shiftmetaup
+    "M-L" 'org-shiftmetaright)
+#+END_SRC
 
 #+BEGIN_SRC elisp
   (major-def org-mode-map
-    "t" nil
-    "t d" 'org-deadline
-    "t s" 'org-schedule
-    "t t" 'org-time-stamp
-    "c" nil
-    "c i" 'org-clock-in
-    "c o" 'org-clock-out
+    "t" 'org-time-stamp
     "l" 'org-insert-link
-    "s" 'my:org-agenda-current-id
-    "p" 'org-set-property
     "i" 'org-toggle-inline-images
     "x" 'org-toggle-latex-fragment
-    ;; "a" 'org-archive-subtree
     "o" 'org-open-at-point
-    "r" 'my:org-refile-to-diary
-    "b" 'hydra-org-babel/body
     ";" 'org-ctrl-c-ctrl-c)
 #+END_SRC
-
 * eshell
   #+BEGIN_SRC elisp :tangle no
     (defun my:eshell-complete ()

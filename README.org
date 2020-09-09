@@ -766,13 +766,6 @@ Keybindings
 #+END_SRC
 
 * packages
-** academic-phrases
-   #+BEGIN_SRC elisp
-     (use-package academic-phrases
-       :ensure t
-       :commands (academic-phrases academic-phrases-by-section))
-   #+END_SRC
-
 ** alert
    #+BEGIN_SRC elisp
      (use-package alert
@@ -787,13 +780,6 @@ Keybindings
   (use-package avy
     :ensure t)
 #+END_SRC
-
-** battery
-   #+BEGIN_SRC elisp
-     (use-package battery
-       :config
-       (display-battery-mode))
-   #+END_SRC
 
 ** company
    #+BEGIN_SRC elisp
@@ -865,13 +851,6 @@ Keybindings
     :hook (vterm-mode . evil-collection-vterm-escape-stay))
 #+END_SRC
 
-** emmet
-   #+BEGIN_SRC elisp
-     (use-package emmet-mode
-       :ensure t
-       :hook web-mode)
-   #+END_SRC
-
 ** exec-path-from-shell
    #+BEGIN_SRC elisp
      (use-package exec-path-from-shell
@@ -923,15 +902,6 @@ Keybindings
        :ensure t
        :config
        (setq ffip-use-rust-fd t))
-   #+END_SRC
-
-** hide-mode-line
-   #+BEGIN_SRC elisp
-     (use-package hide-mode-line
-       :ensure t
-       :disabled t
-       :hook
-       ((org-mode org-agenda-mode magit-mode dired-mode) . hide-mode-line-mode))
    #+END_SRC
 
 ** hl-line-mode
@@ -1113,14 +1083,6 @@ Keybindings
     (setq olivetti-body-width 90))
 #+END_SRC
 
-** rainbow-delimiters
-   #+BEGIN_SRC elisp
-     (use-package rainbow-delimiters
-       :disabled t
-       :ensure t
-       :hook ((prog-mode coq-mode) . rainbow-delimiters-mode))
-   #+END_SRC
-
 ** symbol-overlay
    #+BEGIN_SRC elisp
      (use-package symbol-overlay
@@ -1151,13 +1113,6 @@ Keybindings
                (format "\\(%s\\)\\|\\(%s\\)"
                        vc-ignore-dir-regexp
                        tramp-file-name-regexp))))
-   #+END_SRC
-
-** web-mode
-   #+BEGIN_SRC elisp
-     (use-package web-mode
-       :mode "\\.html?\\'"
-       :ensure t)
    #+END_SRC
 
 ** wgrep
@@ -1203,11 +1158,6 @@ Keybindings
        "q" 'quit-window
        "o" 'xref-show-location-at-point
        "<return>" 'xref-goto-xref)
-   #+END_SRC
-
-** xterm-color
-   #+BEGIN_SRC elisp
-    (use-package xterm-color :ensure t)
    #+END_SRC
 
 ** yasnippet

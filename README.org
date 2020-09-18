@@ -225,6 +225,7 @@ For lsp mode
     ;;                          ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
     (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
     (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
+    (add-to-list 'package-archives '("ublt" . "https://elpa.ubolonton.org/packages/")) ;; tree-sitter
     (unless (package-installed-p 'use-package)
       (package-refresh-contents)
       (package-install 'use-package))
@@ -266,7 +267,7 @@ For lsp mode
   #+BEGIN_SRC elisp
     (defun my:toggle-transparency ()
       (interactive)
-      (let ((transparency 95)
+      (let ((transparency 90)
             (opacity 100)
             (old-alpha (frame-parameter nil 'alpha)))
         (if (and (numberp old-alpha) (< old-alpha opacity))
@@ -342,10 +343,9 @@ For lsp mode
       :ensure t
       :config
       (general-evil-setup)
-      (general-def
+      (general-def 'override
         "C-=" 'text-scale-increase
         "M-p" 'my:other-window-or-buffer
-        "M-o" 'delete-other-windows
         "M-m" 'ivy-switch-buffer
         "M-x" 'counsel-M-x
         "C--" 'text-scale-decrease)
@@ -791,6 +791,9 @@ Keybindings
     :ensure t
     :defer t
     :config
+    (add-to-list
+     'eglot-server-programs
+     '(js-mode . ("typescript-language-server" "--stdio")))
     (major-def eglot-mode-map
       "e" '(nil :wk "eglot")
       "e a" 'eglot-code-actions
@@ -1116,6 +1119,17 @@ Keybindings
        :hook (prog-mode . my:show-trailing-space))
    #+END_SRC
 
+** tree-sitter
+#+BEGIN_SRC elisp
+  (use-package tree-sitter
+    :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package tree-sitter-langs
+    :ensure t)
+#+END_SRC
+
 ** Coq
    #+BEGIN_SRC elisp
      (use-package proof-general
@@ -1250,33 +1264,6 @@ Keybindings
      (use-package cubicaltt
        :load-path "~/cubicaltt"
        :mode ("\\.ctt$" . cubicaltt-mode))
-   #+END_SRC
-
-** C
-#+BEGIN_SRC elisp
-     (use-package cc-mode
-       :commands c-mode
-       :config
-       (setq c-basic-offset 4)
-       (setq c-default-style "linux"))
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (use-package ccls
-    :ensure t
-    :defer t)
-#+END_SRC
-
-** Python
-   #+BEGIN_SRC elisp
-     (use-package python
-       :defer t
-       :config
-       (setq python-indent-offset 4)
-       (setq python-indent-guess-indent-offset-verbose nil)
-       (setq python-shell-completion-native-enable nil)
-       (when (executable-find "ipython")
-         (setq python-shell-interpreter "ipython")))
    #+END_SRC
 
 ** TeX

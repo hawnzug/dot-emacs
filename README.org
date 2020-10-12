@@ -298,6 +298,7 @@ For lsp mode
     (load-theme 'doom-acario-light t)
     (doom-themes-org-config)
     (doom-themes-set-faces nil
+      '(secondary-selection :background "light yellow")
       '(org-level-1 :inherit 'default)
       '(org-level-2 :inherit 'default)
       '(org-level-3 :inherit 'default)
@@ -307,34 +308,6 @@ For lsp mode
       '(org-level-7 :inherit 'default)
       '(org-level-8 :inherit 'default))
     )
-#+END_SRC
-
-#+BEGIN_SRC elisp :tangle no
-  (use-package modus-operandi-theme
-    :init
-    ;; NOTE: Everything is disabled by default.
-    (setq modus-operandi-theme-slanted-constructs t
-          modus-operandi-theme-bold-constructs t
-          modus-operandi-theme-fringes nil ; {nil,'subtle,'intense}
-          modus-operandi-theme-3d-modeline nil
-          modus-operandi-theme-faint-syntax nil
-          modus-operandi-theme-intense-hl-line nil
-          modus-operandi-theme-intense-paren-match t
-          modus-operandi-theme-prompts 'subtle ; {nil,'subtle,'intense}
-          modus-operandi-theme-completions 'moderate ; {nil,'moderate,'opinionated}
-          modus-operandi-theme-diffs nil ; {nil,'desaturated,'fg-only}
-          modus-operandi-theme-org-blocks 'greyscale ; {nil,'greyscale,'rainbow}
-          modus-operandi-theme-variable-pitch-headings t
-          modus-operandi-theme-rainbow-headings nil
-          modus-operandi-theme-section-headings nil
-          modus-operandi-theme-scale-headings nil
-          modus-operandi-theme-scale-1 1.05
-          modus-operandi-theme-scale-2 1.1
-          modus-operandi-theme-scale-3 1.15
-          modus-operandi-theme-scale-4 1.2
-          modus-operandi-theme-scale-5 1.3)
-    :config
-    (load-theme 'modus-operandi t))
 #+END_SRC
 
 * general.el
@@ -566,15 +539,15 @@ Use Esc to quit minibuffer, which is previously C-g.
    #+END_SRC
 
 * mode line
-  #+BEGIN_SRC elisp
-    (use-package doom-modeline
-      :ensure t
-      :disabled t
-      :hook (after-init . doom-modeline-mode)
-      :config
-      (setq doom-modeline-icon t))
-    (setq-default mode-line-format nil)
-  #+END_SRC
+#+BEGIN_SRC elisp :tangle no
+  (use-package doom-modeline
+    :ensure t
+    :disabled t
+    :hook (after-init . doom-modeline-mode)
+    :config
+    (setq doom-modeline-icon t))
+  (setq-default mode-line-format nil)
+#+END_SRC
 
 * org
 #+BEGIN_SRC elisp :noweb no-export
@@ -596,18 +569,6 @@ Use Esc to quit minibuffer, which is previously C-g.
     (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
     (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
     (setq org-footnote-section nil))
-#+END_SRC
-
-Kill temporary buffers created by ~org-src-font-lock-fontify-block~.
-#+NAME: org-kill-temp-fontify-buffer
-#+BEGIN_SRC elisp :tangle no
-  (defun kill-org-src-buffers (&rest args)
-    "Kill temporary buffers created by org-src-font-lock-fontify-block."
-    (dolist (b (buffer-list))
-      (let ((bufname (buffer-name b)))
-        (if (string-match-p (regexp-quote "org-src-fontification") bufname)
-            (kill-buffer b)))))
-  (advice-add 'org-src-font-lock-fontify-block :after #'kill-org-src-buffers)
 #+END_SRC
 
 org-id

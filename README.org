@@ -84,7 +84,7 @@
              (concat
               "Iosevka Curly Slab "
               (pcase (cddr (frame-monitor-attribute 'geometry))
-                ('(3840 2160) "12") (else "12")))))
+                ('(3840 2160) "14") (else "14")))))
       (set-fontset-font t 'unicode "Noto Color Emoji")
       (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
       (set-fontset-font t 'han "Source Han Sans CN")
@@ -94,7 +94,7 @@
       (set-face-font 'default primary-font)
       (set-face-font 'fixed-pitch primary-font)
       (set-face-font 'fixed-pitch-serif primary-font)
-      (set-face-font 'variable-pitch "Merriweather 12")))
+      (set-face-font 'variable-pitch "Merriweather 14")))
     (defun my:font-setup-hook (frame)
       "Setup the font, then remove the hook."
       (select-frame frame)
@@ -443,7 +443,8 @@ Use Esc to quit minibuffer, which is previously C-g.
     (setq evil-respect-visual-line-mode t)
     :config
     (evil-mode 1)
-    (evil-set-initial-state 'ivy-occur-mode 'emacs)
+    (evil-set-initial-state 'ivy-occur-mode 'normal)
+    (evil-set-initial-state 'ivy-occur-grep-mode 'normal)
     (evil-set-initial-state 'org-capture-mode 'insert)
     (evil-set-initial-state 'vterm-mode 'insert)
     (evil-set-initial-state 'wdired-mode 'normal))
@@ -585,6 +586,7 @@ Use Esc to quit minibuffer, which is previously C-g.
     (org-babel-after-execute . org-redisplay-inline-images)
     :config
     (use-package org-mouse)
+    (use-package ob-shell)
     <<org-kill-temp-fontify-buffer>>
     (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
     (setq org-adapt-indentation nil)

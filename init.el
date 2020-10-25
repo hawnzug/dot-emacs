@@ -11,16 +11,3 @@
    '((auto-save-visited-interval . 0)
      (dired-omit-extensions ".vo" ".vok" ".vos" ".aux" ".glob")
      (org-babel-use-quick-and-dirty-noweb-expansion . t))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(org-level-1 ((t (:inherit default))))
- '(org-level-2 ((t (:inherit default))))
- '(org-level-3 ((t (:inherit default))))
- '(org-level-4 ((t (:inherit default))))
- '(org-level-5 ((t (:inherit default))))
- '(org-level-6 ((t (:inherit default))))
- '(org-level-7 ((t (:inherit default))))
- '(org-level-8 ((t (:inherit default)))))

@@ -83,14 +83,15 @@ Disable modeline
 #+END_SRC
 
 
-  Font setup.
-  #+BEGIN_SRC elisp
-    (defun my:font-setup ()
-      (let ((primary-font
-             (concat
-              "Iosevka Curly Slab "
-              (pcase (cddr (frame-monitor-attribute 'geometry))
-                ('(3840 2160) "14") (else "14")))))
+Font setup.
+#+BEGIN_SRC elisp
+  (defun my:font-setup ()
+    (let ((primary-font
+           (concat
+            "Iosevka Curly Slab "
+            (pcase (cddr (frame-monitor-attribute 'geometry))
+              ('(3840 2160) "18")
+              (else "18")))))
       (set-fontset-font t 'unicode "Noto Color Emoji")
       (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
       (set-fontset-font t 'han "Source Han Sans CN")
@@ -100,44 +101,31 @@ Disable modeline
       (set-face-font 'default primary-font)
       (set-face-font 'fixed-pitch primary-font)
       (set-face-font 'fixed-pitch-serif primary-font)
-      (set-face-font 'variable-pitch "Merriweather 14")))
-    (defun my:font-setup-hook (frame)
-      "Setup the font, then remove the hook."
-      (select-frame frame)
-      (my:font-setup)
-      (remove-hook 'after-make-frame-functions 'my:font-setup-hook))
-    (setq inhibit-compacting-font-caches t)
-    (add-hook 'after-make-frame-functions 'my:font-setup-hook nil)
+      (set-face-font 'variable-pitch "Merriweather 18")))
+  (defun my:font-setup-hook (frame)
+    "Setup the font, then remove the hook."
+    (select-frame frame)
     (my:font-setup)
-  #+END_SRC
+    (remove-hook 'after-make-frame-functions 'my:font-setup-hook))
+  (setq inhibit-compacting-font-caches t)
+  (add-hook 'after-make-frame-functions 'my:font-setup-hook nil)
+  (my:font-setup)
+#+END_SRC
 
 Ligature
 #+BEGIN_SRC elisp
-  (let ((ligatures `((?-  . ,(regexp-opt '("-|" "-~" "---" "-<<" "-<" "--" "->" "->>" "-->")))
-                     (?/  . ,(regexp-opt '("/**" "/*" "///" "/=" "/==" "/>" "//")))
-                     (?*  . ,(regexp-opt '("*>" "***" "*/")))
+  (let ((ligatures `((?-  . ,(regexp-opt '("->" "->>" "-->")))
+                     (?*  . ,(regexp-opt '("*>")))
                      (?<  . ,(regexp-opt '("<-" "<<-" "<=>" "<=" "<|" "<||" "<|||::=" "<|>" "<:" "<>" "<-<"
                                            "<<<" "<==" "<<=" "<=<" "<==>" "<-|" "<<" "<~>" "<=|" "<~~" "<~"
                                            "<$>" "<$" "<+>" "<+" "</>" "</" "<*" "<*>" "<->" "<!--")))
                      (?:  . ,(regexp-opt '(":>" ":<" ":::" "::" ":?" ":?>" ":=")))
-                     (?=  . ,(regexp-opt '("=>>" "==>" "=/=" "=!=" "=>" "===" "=:=" "==")))
+                     (?=  . ,(regexp-opt '("==>" "=>" "===" "=:=" "==")))
                      (?!  . ,(regexp-opt '("!==" "!!" "!=")))
-                     (?>  . ,(regexp-opt '(">]" ">:" ">>-" ">>=" ">=>" ">>>" ">-" ">=")))
-                     (?&  . ,(regexp-opt '("&&&" "&&")))
-                     (?|  . ,(regexp-opt '("|||>" "||>" "|>" "|]" "|}" "|=>" "|->" "|=" "||-" "|-" "||=" "||")))
-                     (?.  . ,(regexp-opt '(".." ".?" ".=" ".-" "..<" "...")))
-                     (?+  . ,(regexp-opt '("+++" "+>" "++")))
-                     (?\[ . ,(regexp-opt '("[||]" "[<" "[|")))
-                     (?\{ . ,(regexp-opt '("{|")))
-                     (?\? . ,(regexp-opt '("??" "?." "?=" "?:")))
-                     (?#  . ,(regexp-opt '("####" "###" "#[" "#{" "#=" "#!" "#:" "#_(" "#_" "#?" "#(" "##")))
-                     (?\; . ,(regexp-opt '(";;")))
-                     (?_  . ,(regexp-opt '("_|_" "__")))
-                     (?\\ . ,(regexp-opt '("\\" "\\/")))
-                     (?~  . ,(regexp-opt '("~~" "~~>" "~>" "~=" "~-" "~@")))
-                     (?$  . ,(regexp-opt '("$>")))
-                     (?^  . ,(regexp-opt '("^=")))
-                     (?\] . ,(regexp-opt '("]#"))))))
+                     (?>  . ,(regexp-opt '(">=")))
+                     (?|  . ,(regexp-opt '("|||>" "||>" "|>" "|=>")))
+                     (?+  . ,(regexp-opt '("+++" "++")))
+                     (?~  . ,(regexp-opt '("~~>" "~>"))))))
     (dolist (char-regexp ligatures)
       (set-char-table-range composition-function-table (car char-regexp)
                             `([,(cdr char-regexp) 0 font-shape-gstring]))))
@@ -290,7 +278,7 @@ For lsp mode
           (0 (put-text-property
               (match-beginning 0)
               (match-end 0)
-              'face (list :foreground (match-string-no-properties 0)))))))
+              'face (list :background (match-string-no-properties 0)))))))
       (font-lock-flush))
 
     (defun my:toggle-line-number ()

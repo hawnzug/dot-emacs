@@ -46,6 +46,7 @@
   - [[#magit][magit]]
   - [[#markdown][markdown]]
   - [[#olivetti][olivetti]]
+  - [[#strokes][strokes]]
   - [[#symbol-overlay][symbol-overlay]]
   - [[#terminal-here][terminal-here]]
   - [[#tramp][tramp]]
@@ -57,6 +58,7 @@
   - [[#yasnippet][yasnippet]]
 - [[#languages][languages]]
   - [[#prog-mode][prog-mode]]
+  - [[#tree-sitter][tree-sitter]]
   - [[#coq][Coq]]
   - [[#csv][CSV]]
   - [[#haskell][Haskell]]
@@ -65,8 +67,6 @@
   - [[#ocaml][Ocaml]]
   - [[#sml][SML]]
   - [[#cubicaltt][Cubicaltt]]
-  - [[#c][C]]
-  - [[#python][Python]]
   - [[#tex][TeX]]
   - [[#yaml][YAML]]
 :END:
@@ -90,8 +90,8 @@ Font setup.
            (concat
             "Iosevka Curly Slab "
             (pcase (cddr (frame-monitor-attribute 'geometry))
-              ('(3840 2160) "18")
-              (else "18")))))
+              ('(3840 2160) "16")
+              (else "16")))))
       (set-fontset-font t 'unicode "Noto Color Emoji")
       (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
       (set-fontset-font t 'han "Source Han Sans CN")
@@ -101,7 +101,7 @@ Font setup.
       (set-face-font 'default primary-font)
       (set-face-font 'fixed-pitch primary-font)
       (set-face-font 'fixed-pitch-serif primary-font)
-      (set-face-font 'variable-pitch "Merriweather 18")))
+      (set-face-font 'variable-pitch "Merriweather 16")))
   (defun my:font-setup-hook (frame)
     "Setup the font, then remove the hook."
     (select-frame frame)
@@ -198,6 +198,11 @@ Better word wrap for CJK
 #+BEGIN_SRC elisp
   (setq word-wrap-by-category t)
   (load "kinsoku.el")
+#+END_SRC
+
+Split window threshold (Split window vertically by default)
+#+BEGIN_SRC elisp
+  (setq split-width-threshold 80)
 #+END_SRC
 
   80 characters one line.
@@ -748,6 +753,16 @@ Keybindings
     :ensure t)
 #+END_SRC
 
+** comint
+#+BEGIN_SRC elisp
+  (use-package comint)
+  (general-def comint-mode-map
+    "M-n" nil
+    "M-p" nil
+    "M-k" 'comint-previous-input
+    "M-j" 'comint-next-input)
+#+END_SRC
+
 ** company
    #+BEGIN_SRC elisp
      (use-package company
@@ -1030,6 +1045,13 @@ Keybindings
     (setq olivetti-body-width 90))
 #+END_SRC
 
+** strokes
+#+BEGIN_SRC elisp
+  (use-package strokes)
+  (general-def strokes-mode-map
+    "<down-mouse-3>" 'strokes-do-stroke)
+#+END_SRC
+
 ** symbol-overlay
    #+BEGIN_SRC elisp
      (use-package symbol-overlay
@@ -1263,6 +1285,13 @@ Keybindings
        :defer t)
    #+END_SRC
 
+** Prolog
+#+BEGIN_SRC elisp
+  (use-package prolog
+    :mode ("\\.pl\\'" . prolog-mode)
+    :init
+    (setq prolog-system 'swi))
+#+END_SRC
 ** Cubicaltt
    #+BEGIN_SRC elisp
      (use-package cubicaltt

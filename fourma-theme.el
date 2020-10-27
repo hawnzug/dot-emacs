@@ -30,6 +30,9 @@
  '(font-lock-warning-face ((t (:inherit (warning)))))
  '(fringe ((t (:background "white"))))
 
+ ;; org
+ '(org-block ((t nil)))
+
  ;; LaTeX
  '(font-latex-sedate-face ((t (:inherit (font-lock-keyword-face)))))
  '(font-latex-string-face ((t (:inherit (font-lock-string-face)))))
@@ -40,7 +43,6 @@
  '(dired-directory ((t (:weight bold))))
 
  ;; which-key
- '(which-key-separator-face ((t nil)))
- )
+ '(which-key-separator-face ((t nil))))
 
 (provide-theme 'fourma)

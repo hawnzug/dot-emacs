@@ -11,7 +11,7 @@
 - [[#use-package][use-package]]
 - [[#help-functions][help functions]]
 - [[#all-the-icons][all-the-icons]]
-- [[#doom-themes][doom-themes]]
+- [[#theme][theme]]
 - [[#generalel][general.el]]
 - [[#evil][evil]]
   - [[#evil-surround][evil-surround]]
@@ -19,12 +19,12 @@
 - [[#hydra][hydra]]
   - [[#hydra-window][hydra-window]]
   - [[#hydra-buffer][hydra-buffer]]
-- [[#mode-line][mode line]]
 - [[#org][org]]
 - [[#dired][dired]]
 - [[#packages][packages]]
   - [[#alert][alert]]
   - [[#avy][avy]]
+  - [[#comint][comint]]
   - [[#company][company]]
   - [[#docker][docker]]
   - [[#ediff][ediff]]
@@ -66,22 +66,23 @@
   - [[#agda][Agda]]
   - [[#ocaml][Ocaml]]
   - [[#sml][SML]]
+  - [[#prolog][Prolog]]
   - [[#cubicaltt][Cubicaltt]]
   - [[#tex][TeX]]
   - [[#yaml][YAML]]
 :END:
 * init
 Allow large garbage collection threshold when init.
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle early-init.el
   (setq gc-cons-threshold 64000000)
   (add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold 800000)))
+  (setq package-enable-at-startup nil)
 #+END_SRC
 
 Disable modeline
 #+BEGIN_SRC elisp
   (setq-default mode-line-format nil)
 #+END_SRC
-
 
 Font setup.
 #+BEGIN_SRC elisp
@@ -250,17 +251,23 @@ For lsp mode
 #+END_SRC
 
 * use-package
-#+BEGIN_SRC elisp
-  (require 'package)
-  ;; (setq package-archives '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-  ;;                          ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+#+BEGIN_SRC elisp :tangle no
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
   (add-to-list 'package-archives '("ublt" . "https://elpa.ubolonton.org/packages/")) ;; tree-sitter
+  (setq package-archives '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+                           ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+  (require 'package)
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
     (package-install 'use-package))
-  (eval-when-compile (require 'use-package))
+  (require 'use-package)
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (let ((default-directory "~/.config/emacs/elpa"))
+    (normal-top-level-add-subdirs-to-load-path))
+  (require 'use-package)
 #+END_SRC
 
 * help functions
@@ -323,6 +330,7 @@ For lsp mode
 #+BEGIN_SRC elisp
   (load-theme 'fourma t)
 #+END_SRC
+
 * general.el
 #+BEGIN_SRC elisp :noweb no-export
   (use-package general
@@ -631,6 +639,7 @@ keybindings
    "e" 'org-edit-src-exit
    "k" 'org-edit-src-abort)
 #+END_SRC
+
 * dired
 #+BEGIN_SRC elisp :noweb no-export
   (use-package dired
@@ -717,7 +726,6 @@ Keybindings
 
 ** comint
 #+BEGIN_SRC elisp
-  (use-package comint)
   (general-def comint-mode-map
     "M-n" nil
     "M-p" nil
@@ -795,6 +803,7 @@ Keybindings
     (setq-local evil-move-cursor-back nil))
   (use-package vterm
     :ensure t
+    :commands (vterm)
     :hook (vterm-mode . evil-collection-vterm-escape-stay))
 #+END_SRC
 
@@ -824,14 +833,9 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package find-file-in-project
     :ensure t
+    :commands (find-file-in-project)
     :config
     (setq ffip-use-rust-fd t))
-#+END_SRC
-
-** hl-line-mode
-#+BEGIN_SRC elisp
-  (use-package hl-line-mode
-    :hook (prog-mode dired-mode LaTeX-mode))
 #+END_SRC
 
 ** hl-todo
@@ -851,6 +855,7 @@ Keybindings
 ** ibuffer
 #+BEGIN_SRC elisp
   (use-package ibuffer
+    :commands (ibuffer)
     :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
     :config
     (setq
@@ -903,7 +908,8 @@ Keybindings
     :after ivy)
   (use-package counsel
     :ensure t
-    :after swiper)
+    :commands (counsel-M-x)
+    :after ivy)
   (use-package all-the-icons-ivy
     :ensure t
     :after (all-the-icons ivy)
@@ -921,6 +927,7 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package ivy-bibtex
     :ensure t
+    :commands ivy-bibtex
     :after ivy
     :config
     (setq bibtex-completion-bibliography '("~/research/refs.bib"))
@@ -964,8 +971,8 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package magit
     :ensure t
-    :hook (git-commit-mode . evil-insert-state)
-    :defer 6)
+    :commands (magit-status)
+    :hook (git-commit-mode . evil-insert-state))
 #+END_SRC
 
 #+BEGIN_SRC elisp
@@ -996,20 +1003,10 @@ Keybindings
            ("\\.markdown\\'" . markdown-mode)))
 #+END_SRC
 
-** olivetti
-#+BEGIN_SRC elisp :tangle no
-  (use-package olivetti
-    :ensure t
-    :hook
-    ((org-mode . olivetti-mode)
-     (dired-mode . olivetti-mode))
-    :init
-    (setq olivetti-body-width 90))
-#+END_SRC
-
 ** strokes
 #+BEGIN_SRC elisp
-  (use-package strokes)
+  (use-package strokes
+    :commands (strokes-do-stroke))
   (general-def strokes-mode-map
     "<down-mouse-3>" 'strokes-do-stroke)
 #+END_SRC
@@ -1025,6 +1022,7 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package terminal-here
     :ensure t
+    :commands (terminal-here-launch)
     :config
     (setq terminal-here-terminal-command
           '("alacritty")))
@@ -1110,18 +1108,21 @@ Keybindings
 ** tree-sitter
 #+BEGIN_SRC elisp
   (use-package tree-sitter
-    :ensure t)
+    :ensure t
+    :commands (tree-sitter-hl-mode))
 #+END_SRC
 
 #+BEGIN_SRC elisp
   (use-package tree-sitter-langs
-    :ensure t)
+    :ensure t
+    :after tree-sitter)
 #+END_SRC
 
 ** Coq
 #+BEGIN_SRC elisp
   (use-package proof-general
     :ensure t
+    :mode ("\\.v\\'" . coq-mode)
     :config
     (setq proof-splash-enable nil))
   (use-package company-coq
@@ -1172,7 +1173,8 @@ Keybindings
 ** Haskell
 #+BEGIN_SRC elisp
   (use-package haskell-mode
-    :ensure t)
+    :ensure t
+    :mode "\\.hs\\'")
 #+END_SRC
 
 #+BEGIN_SRC elisp :tangle no
@@ -1193,7 +1195,8 @@ Keybindings
 ** Lua
 #+BEGIN_SRC elisp
   (use-package lua-mode
-    :ensure t)
+    :ensure t
+    :mode "\\.lua\\'")
 #+END_SRC
 
 ** Agda
@@ -1254,6 +1257,7 @@ Keybindings
     :init
     (setq prolog-system 'swi))
 #+END_SRC
+
 ** Cubicaltt
 #+BEGIN_SRC elisp
   (use-package cubicaltt
@@ -1265,7 +1269,7 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package tex
     :ensure auctex
-    :defer t
+    :mode ("\\.tex\\'" . LaTeX-mode)
     :hook
     ((LaTeX-mode . my:show-trailing-space)
      (LaTeX-mode . TeX-source-correlate-mode)
@@ -1279,6 +1283,7 @@ Keybindings
 ** YAML
 #+BEGIN_SRC elisp
   (use-package yaml-mode
-    :ensure t)
+    :ensure t
+    :mode "\\.yaml\\'")
 #+END_SRC
 

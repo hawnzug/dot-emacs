@@ -15,14 +15,15 @@
 - [[#evil][evil]]
   - [[#evil-surround][evil-surround]]
   - [[#evil-matchit][evil-matchit]]
-- [[#hydra][hydra]]
 - [[#org][org]]
 - [[#dired][dired]]
 - [[#packages][packages]]
   - [[#alert][alert]]
   - [[#avy][avy]]
+  - [[#bookmark][bookmark]]
   - [[#comint][comint]]
   - [[#company][company]]
+  - [[#counsel][counsel]]
   - [[#docker][docker]]
   - [[#ediff][ediff]]
   - [[#eldoc][eldoc]]
@@ -31,6 +32,7 @@
   - [[#exec-path-from-shell][exec-path-from-shell]]
   - [[#fcitx][fcitx]]
   - [[#find-file-in-project][find-file-in-project]]
+  - [[#help-mode][help-mode]]
   - [[#hl-todo][hl-todo]]
   - [[#htmlize][htmlize]]
   - [[#ibuffer][ibuffer]]
@@ -41,7 +43,9 @@
   - [[#lsp][lsp]]
   - [[#magit][magit]]
   - [[#markdown][markdown]]
+  - [[#newcomment][newcomment]]
   - [[#strokes][strokes]]
+  - [[#swiper][swiper]]
   - [[#symbol-overlay][symbol-overlay]]
   - [[#terminal-here][terminal-here]]
   - [[#tramp][tramp]]
@@ -339,39 +343,14 @@ Use semicolon as the major mode leader key.
   (general-def 'override
     "C-=" 'text-scale-adjust
     "C--" 'text-scale-adjust
-    "M-p" 'my:other-window-or-buffer
-    "M-m" 'counsel-switch-buffer
-    "M-x" 'counsel-M-x
-    "M-;" nil
-    "C-/" 'comment-dwim)
+    "M-p" 'my:other-window-or-buffer)
 #+END_SRC
 
 #+BEGIN_SRC elisp
   (my:global-def
     "" nil
-    "f" 'counsel-find-file
-    "s" 'swiper
-    "d" 'dired
-    "r" 'counsel-rg
-    "k" 'kill-buffer
-    "i" 'ibuffer
-    "b" 'ivy-bibtex
-    "g" 'magit-status
-    "a" 'org-agenda
-    "[" 'window-toggle-side-windows
-    "e" 'eshell
-    "v" 'vterm
-    "t" 'terminal-here-launch
-    "l" 'org-store-link
-    "c" 'org-capture
-    "n" '(nil :wk "narrow")
-    "n s" 'org-narrow-to-subtree
-    "n n" 'narrow-to-region
-    "n w" 'widen
     "q" 'save-buffers-kill-terminal
-    "Q" 'save-buffers-kill-emacs
-    "w" 'hydra-window/body
-    "B" 'hydra-buffer/body)
+    "Q" 'save-buffers-kill-emacs)
 #+END_SRC
 
 Use Esc to quit minibuffer, which is previously C-g.
@@ -389,8 +368,7 @@ Find references using xref.
 #+BEGIN_SRC elisp
   (general-def 'normal
     "g d" 'xref-find-definitions
-    "g r" 'xref-find-references
-    "g i" 'counsel-imenu)
+    "g r" 'xref-find-references)
 #+END_SRC
 
 Use space as the leader key for those keybindings which are useful only in normal mode.
@@ -401,9 +379,7 @@ Use space as the leader key for those keybindings which are useful only in norma
     "a" 'align
     "t l" 'my:toggle-line-number
     "t t" 'my:toggle-transparency
-    "t m" 'hide-mode-line-mode
     "s" 'symbol-overlay-put
-    "o" 'olivetti-mode
     "f" 'avy-goto-char-2
     "w" 'avy-goto-word-1
     "l" 'avy-goto-line)
@@ -444,6 +420,27 @@ Use space as the leader key for those keybindings which are useful only in norma
     "w" 'evil-avy-goto-word-1)
 #+END_SRC
 
+#+BEGIN_SRC elisp :noweb no-export
+  (my:global-def
+    "w j" 'evil-window-down
+    "w k" 'evil-window-up
+    "w h" 'evil-window-left
+    "w l" 'evil-window-right
+    "w n" 'evil-window-next
+    "w H" 'evil-window-move-far-left
+    "w L" 'evil-window-move-far-right
+    "w J" 'evil-window-move-very-bottom
+    "w K" 'evil-window-move-very-top
+    "w +" 'evil-window-increase-height
+    "w -" 'evil-window-decrease-height
+    "w >" 'evil-window-increase-width
+    "w <" 'evil-window-decrease-width
+    "w s" 'evil-window-split
+    "w v" 'evil-window-vsplit
+    "w d" 'evil-window-delete
+    "w o" 'delete-other-windows)
+#+END_SRC
+
 ** evil-surround
 #+BEGIN_SRC elisp
   (use-package evil-surround
@@ -462,50 +459,6 @@ Use space as the leader key for those keybindings which are useful only in norma
     :defer 2
     :config
     (global-evil-matchit-mode 1))
-#+END_SRC
-
-* hydra
-#+BEGIN_SRC elisp :noweb no-export
-  (use-package hydra
-    :ensure t
-    :defer 2
-    :config
-    (defhydra hydra-window
-      (:color pink :hint nil)
-      (concat
-       "            "
-       " Window Management"
-       "
-
-  ^Move^         ^Swap^         ^Size^         ^Action^
-  ─────────────────────────
-  _j_: down      _H_: left      _+_: + h       _s_: split
-  _k_: up        _L_: right     _-_: - h       _v_: vsplit
-  _h_: left      _J_: bottom    _>_: + w       _d_: delete
-  _l_: right     _K_: top       _<_: - w       _o_: only
-  _n_: next
-
-  ")
-      ("j" evil-window-down)
-      ("k" evil-window-up)
-      ("h" evil-window-left)
-      ("l" evil-window-right)
-      ("n" evil-window-next :color blue)
-      ("H" evil-window-move-far-left)
-      ("L" evil-window-move-far-right)
-      ("J" evil-window-move-very-bottom)
-      ("K" evil-window-move-very-top)
-      ("+" evil-window-increase-height)
-      ("-" evil-window-decrease-height)
-      (">" evil-window-increase-width)
-      ("<" evil-window-decrease-width)
-      ("s" evil-window-split)
-      ("v" evil-window-vsplit)
-      ("d" evil-window-delete :color blue)
-      ("o" delete-other-windows :color blue)
-      ("q" nil :color blue)
-      ("<escape>" nil :color blue))
-    )
 #+END_SRC
 
 * org
@@ -709,6 +662,21 @@ Keybindings
       (company-posframe-mode 1)))
 #+END_SRC
 
+** counsel
+#+BEGIN_SRC elisp
+  (use-package counsel
+    :ensure t
+    :general
+    ('override
+      "M-m" 'counsel-switch-buffer
+      "M-x" 'counsel-M-x)
+    ('normal
+     "g i" 'counsel-imenu)
+    (my:global-def
+      "f" 'counsel-find-file
+      "r" 'counsel-rg))
+#+END_SRC
+
 ** docker
 #+BEGIN_SRC elisp
   (use-package dockerfile-mode
@@ -761,7 +729,8 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package vterm
     :ensure t
-    :commands (vterm vterm-other-window)
+    :general
+    (my:global-def "v" 'vterm)
     :config
     (defun evil-collection-vterm-escape-stay ()
       "Go back to normal state but don't move cursor backwards.
@@ -828,21 +797,19 @@ Keybindings
 ** ibuffer
 #+BEGIN_SRC elisp
   (use-package ibuffer
-    :commands (ibuffer)
     :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
+    :general
+    (my:global-def "i" 'ibuffer)
+    ('emacs ibuffer-mode-map
+      "M-j" 'ibuffer-forward-filter-group
+      "M-k" 'ibuffer-backward-filter-group
+      "j" 'ibuffer-forward-line
+      "k" 'ibuffer-backward-line)
     :config
     (setq
      ibuffer-formats
      '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
     (use-package ibuffer-vc :ensure t))
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (general-def 'emacs ibuffer-mode-map
-    "M-j" 'ibuffer-forward-filter-group
-    "M-k" 'ibuffer-backward-filter-group
-    "j" 'ibuffer-forward-line
-    "k" 'ibuffer-backward-line)
 #+END_SRC
 
 ** imenu-list
@@ -876,12 +843,6 @@ Keybindings
     (setq ivy-use-virtual-buffers t)
     (setq ivy-count-format "(%d/%d) ")
     (setq ivy-re-builders-alist '((t . ivy--regex-plus))))
-  (use-package swiper
-    :commands swiper
-    :ensure t)
-  (use-package counsel
-    :ensure t
-    :commands (counsel-M-x counsel-find-file counsel-switch-buffer))
 #+END_SRC
 
 #+BEGIN_SRC elisp
@@ -902,7 +863,9 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package ivy-bibtex
     :ensure t
-    :commands ivy-bibtex
+    :general
+    (my:global-def
+      "b" 'ivy-bibtex)
     :config
     (setq bibtex-completion-bibliography '("~/research/refs.bib"))
     (setq bibtex-completion-notes-path "~/research/readings.org")
@@ -946,7 +909,8 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package magit
     :ensure t
-    :commands (magit-status)
+    :general
+    (my:global-def "g" 'magit-status)
     :hook (git-commit-mode . evil-insert-state))
 #+END_SRC
 
@@ -978,12 +942,29 @@ Keybindings
            ("\\.markdown\\'" . markdown-mode)))
 #+END_SRC
 
+** newcomment
+#+BEGIN_SRC elisp
+  (use-package newcomment
+    :general
+    ('override
+     "M-;" nil
+     "C-/" 'comment-dwim))
+#+END_SRC
+
 ** strokes
 #+BEGIN_SRC elisp
   (use-package strokes
     :commands (strokes-do-stroke))
   (general-def strokes-mode-map
     "<down-mouse-3>" 'strokes-do-stroke)
+#+END_SRC
+
+** swiper
+#+BEGIN_SRC elisp
+  (use-package swiper
+    :ensure t
+    :general
+    (my:global-def "s" 'swiper))
 #+END_SRC
 
 ** symbol-overlay
@@ -997,7 +978,8 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package terminal-here
     :ensure t
-    :commands (terminal-here-launch)
+    :general
+    (my:global-def "t" 'terminal-here-launch)
     :config
     (setq terminal-here-terminal-command
           '("alacritty")))

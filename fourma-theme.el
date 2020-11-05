@@ -7,7 +7,7 @@
  '(cursor ((t (:background "black"))))
  '(fixed-pitch ((t (:family "Iosevka Curly Slab"))))
  '(variable-pitch ((t (:family "Merriweather"))))
- '(highlight ((t (:background "grey"))))
+ '(highlight ((t (:background "#FFAAAA"))))
  '(hl-line ((t nil)))
  '(region ((t (:background "Skyblue1"))))
  '(warning ((t (:background "#FF6666"))))
@@ -29,6 +29,7 @@
  '(font-lock-variable-name-face ((t nil)))
  '(font-lock-warning-face ((t (:inherit (warning)))))
  '(fringe ((t (:background "white"))))
+ '(minibuffer-prompt ((t (:weight bold))))
 
  ;; org
  '(org-block ((t nil)))
@@ -41,6 +42,12 @@
 
  ;; Dired
  '(dired-directory ((t (:weight bold))))
+
+ ;; ivy
+ '(ivy-current-match ((t (:background "#FFAAAA"))))
+
+ ;; ivy-posframe
+ '(ivy-posframe-border ((t (:background "black"))))
 
  ;; which-key
  '(which-key-separator-face ((t nil))))

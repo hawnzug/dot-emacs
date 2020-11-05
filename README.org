@@ -1,5 +1,5 @@
-# -*- org-babel-use-quick-and-dirty-noweb-expansion: t; -*-
 #+PROPERTY: header-args:elisp :tangle config.el :results output silent
+# -*- org-babel-use-quick-and-dirty-noweb-expansion: t; -*-
 * Contents
 :PROPERTIES:
 :TOC:      :include all
@@ -10,15 +10,12 @@
 - [[#init][init]]
 - [[#use-package][use-package]]
 - [[#help-functions][help functions]]
-- [[#all-the-icons][all-the-icons]]
 - [[#theme][theme]]
 - [[#generalel][general.el]]
 - [[#evil][evil]]
   - [[#evil-surround][evil-surround]]
   - [[#evil-matchit][evil-matchit]]
 - [[#hydra][hydra]]
-  - [[#hydra-window][hydra-window]]
-  - [[#hydra-buffer][hydra-buffer]]
 - [[#org][org]]
 - [[#dired][dired]]
 - [[#packages][packages]]
@@ -34,7 +31,6 @@
   - [[#exec-path-from-shell][exec-path-from-shell]]
   - [[#fcitx][fcitx]]
   - [[#find-file-in-project][find-file-in-project]]
-  - [[#hl-line-mode][hl-line-mode]]
   - [[#hl-todo][hl-todo]]
   - [[#htmlize][htmlize]]
   - [[#ibuffer][ibuffer]]
@@ -45,7 +41,6 @@
   - [[#lsp][lsp]]
   - [[#magit][magit]]
   - [[#markdown][markdown]]
-  - [[#olivetti][olivetti]]
   - [[#strokes][strokes]]
   - [[#symbol-overlay][symbol-overlay]]
   - [[#terminal-here][terminal-here]]
@@ -57,6 +52,7 @@
   - [[#xref][xref]]
   - [[#yasnippet][yasnippet]]
 - [[#languages][languages]]
+  - [[#cc-mode][cc-mode]]
   - [[#prog-mode][prog-mode]]
   - [[#tree-sitter][tree-sitter]]
   - [[#coq][Coq]]
@@ -255,8 +251,8 @@ For lsp mode
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
   (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
   (add-to-list 'package-archives '("ublt" . "https://elpa.ubolonton.org/packages/")) ;; tree-sitter
-  (setq package-archives '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-                           ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
+  ;; (setq package-archives '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
+  ;;                          ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
   (require 'package)
   (unless (package-installed-p 'use-package)
     (package-refresh-contents)
@@ -313,19 +309,6 @@ For lsp mode
         (set-frame-parameter nil 'alpha transparency))))
 #+END_SRC
 
-* all-the-icons
-#+BEGIN_SRC elisp
-  (use-package all-the-icons
-    :ensure t
-    :config
-    (add-to-list 'all-the-icons-mode-icon-alist
-                 '(latex-mode all-the-icons-fileicon "tex" :face all-the-icons-lred))
-    (add-to-list 'all-the-icons-icon-alist
-                 '("\\.v" all-the-icons-fileicon "coq" :face all-the-icons-red))
-    (add-to-list 'all-the-icons-mode-icon-alist
-                 '(coq-mode all-the-icons-fileicon "coq" :face all-the-icons-red)))
-#+END_SRC
-
 * theme
 #+BEGIN_SRC elisp
   (load-theme 'fourma t)
@@ -333,26 +316,39 @@ For lsp mode
 
 * general.el
 #+BEGIN_SRC elisp :noweb no-export
-  (use-package general
-    :ensure t
-    :config
-    (general-evil-setup)
-    (general-def 'override
-      "C-=" 'text-scale-increase
-      "M-p" 'my:other-window-or-buffer
-      "M-m" 'ivy-switch-buffer
-      "M-x" 'counsel-M-x
-      "C--" 'text-scale-decrease)
-    (general-def 'normal help-mode-map
-      "q" 'quit-window))
+  (use-package general :ensure t)
 #+END_SRC
 
 Use comma as the global leader key.
 #+BEGIN_SRC elisp
-  (general-def
-    '(motion normal insert emacs)
+  (general-create-definer my:global-def
+    :states '(motion normal insert emacs)
     :prefix ","
-    :global-prefix "M-,"
+    :global-prefix "M-,")
+#+END_SRC
+
+Use semicolon as the major mode leader key.
+#+BEGIN_SRC elisp
+  (general-create-definer my:major-def
+    :states '(motion normal insert emacs)
+    :prefix ";"
+    :global-prefix "M-;")
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (general-def 'override
+    "C-=" 'text-scale-adjust
+    "C--" 'text-scale-adjust
+    "M-p" 'my:other-window-or-buffer
+    "M-m" 'counsel-switch-buffer
+    "M-x" 'counsel-M-x
+    "M-;" nil
+    "C-/" 'comment-dwim)
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (my:global-def
+    "" nil
     "f" 'counsel-find-file
     "s" 'swiper
     "d" 'dired
@@ -378,14 +374,6 @@ Use comma as the global leader key.
     "B" 'hydra-buffer/body)
 #+END_SRC
 
-Use semicolon as the major mode leader key.
-#+BEGIN_SRC elisp
-  (general-create-definer major-def
-    :states '(motion normal insert emacs)
-    :prefix ";"
-    :global-prefix "M-;")
-#+END_SRC
-
 Use Esc to quit minibuffer, which is previously C-g.
 #+BEGIN_SRC elisp
   (general-def '(minibuffer-local-map
@@ -397,15 +385,9 @@ Use Esc to quit minibuffer, which is previously C-g.
     [escape] 'minibuffer-keyboard-quit)
 #+END_SRC
 
-#+BEGIN_SRC elisp
-  (general-def 'override
-    "C-/" 'comment-dwim
-    "M-;" nil)
-#+END_SRC
-
 Find references using xref.
 #+BEGIN_SRC elisp
-  (general-nmap
+  (general-def 'normal
     "g d" 'xref-find-definitions
     "g r" 'xref-find-references
     "g i" 'counsel-imenu)
@@ -413,7 +395,7 @@ Find references using xref.
 
 Use space as the leader key for those keybindings which are useful only in normal mode.
 #+BEGIN_SRC elisp
-  (general-mmap
+  (general-def 'motion
     :prefix "SPC"
     "" nil
     "a" 'align
@@ -485,18 +467,15 @@ Use space as the leader key for those keybindings which are useful only in norma
 * hydra
 #+BEGIN_SRC elisp :noweb no-export
   (use-package hydra
-    :ensure t)
-#+END_SRC
-
-** hydra-window
-#+BEGIN_SRC elisp
-  (defhydra hydra-window
-    (:color pink :hint nil)
-    (concat
-     "            "
-     (all-the-icons-material "apps" :height 2 :v-adjust -0.3)
-     " Window Management"
-     "
+    :ensure t
+    :defer 2
+    :config
+    (defhydra hydra-window
+      (:color pink :hint nil)
+      (concat
+       "            "
+       " Window Management"
+       "
 
   ^Move^         ^Swap^         ^Size^         ^Action^
   ─────────────────────────
@@ -507,50 +486,26 @@ Use space as the leader key for those keybindings which are useful only in norma
   _n_: next
 
   ")
-    ("j" evil-window-down)
-    ("k" evil-window-up)
-    ("h" evil-window-left)
-    ("l" evil-window-right)
-    ("n" evil-window-next :color blue)
-    ("H" evil-window-move-far-left)
-    ("L" evil-window-move-far-right)
-    ("J" evil-window-move-very-bottom)
-    ("K" evil-window-move-very-top)
-    ("+" evil-window-increase-height)
-    ("-" evil-window-decrease-height)
-    (">" evil-window-increase-width)
-    ("<" evil-window-decrease-width)
-    ("s" evil-window-split)
-    ("v" evil-window-vsplit)
-    ("d" evil-window-delete :color blue)
-    ("o" delete-other-windows :color blue)
-    ("q" nil :color blue)
-    ("<escape>" nil :color blue))
-#+END_SRC
-
-** hydra-buffer
-#+BEGIN_SRC elisp
-  (defhydra hydra-buffer
-    (:color teal :hint nil)
-    (concat
-     (all-the-icons-faicon "clone" :height 2 :v-adjust -0.2)
-     " Buffer"
-     "
-
-  ^Action^
-  ─────
-  _j_: next
-  _k_: previous
-  _d_: delete
-  _b_: switch
-
-  ")
-    ("j" evil-next-buffer :color red)
-    ("k" evil-prev-buffer :color red)
-    ("d" evil-delete-buffer)
-    ("b" ivy-switch-buffer)
-    ("q" nil)
-    ("<escape>" nil))
+      ("j" evil-window-down)
+      ("k" evil-window-up)
+      ("h" evil-window-left)
+      ("l" evil-window-right)
+      ("n" evil-window-next :color blue)
+      ("H" evil-window-move-far-left)
+      ("L" evil-window-move-far-right)
+      ("J" evil-window-move-very-bottom)
+      ("K" evil-window-move-very-top)
+      ("+" evil-window-increase-height)
+      ("-" evil-window-decrease-height)
+      (">" evil-window-increase-width)
+      ("<" evil-window-decrease-width)
+      ("s" evil-window-split)
+      ("v" evil-window-vsplit)
+      ("d" evil-window-delete :color blue)
+      ("o" delete-other-windows :color blue)
+      ("q" nil :color blue)
+      ("<escape>" nil :color blue))
+    )
 #+END_SRC
 
 * org
@@ -598,7 +553,7 @@ org-maketoc
 
 keybindings
 #+BEGIN_SRC elisp
-  (general-nmap org-mode-map
+  (general-def 'normal org-mode-map
     "gh" 'outline-up-heading
     "gj" 'org-forward-heading-same-level
     "gk" 'org-backward-heading-same-level
@@ -619,7 +574,7 @@ keybindings
 #+END_SRC
 
 #+BEGIN_SRC elisp
-  (major-def org-mode-map
+  (my:major-def org-mode-map
     "e" 'org-edit-special
     "t" 'org-time-stamp
     "l" 'org-insert-link
@@ -652,7 +607,6 @@ keybindings
     (setq dired-recursive-deletes 'always)
     (setq dired-listing-switches "-alhvG --group-directories-first")
     (setq dired-isearch-filenames 'dwim)
-    <<dired-kbd>>
     (use-package dired-open
       :ensure t
       :config
@@ -661,51 +615,48 @@ keybindings
               ("html" . "firefox")
               ("mp4" . "mpv")
               ("png" . "feh")
-              ("jpg" . "feh")))))
-#+END_SRC
-
-#+BEGIN_SRC elisp :tangle no
-  (use-package all-the-icons-dired
-    :after dired
-    :hook (dired-mode . all-the-icons-dired-mode))
+              ("jpg" . "feh"))))
+    :general
+    (dired-mode-map
+      "g" nil)
+    ('normal dired-mode-map
+      "/" 'dired-goto-file
+      "+" 'dired-create-directory
+      "c" 'dired-do-copy
+      "d" 'dired-flag-file-deletion
+      "e" 'ediff
+      "f" 'dired-mark
+      "h" 'dired-up-directory
+      "i" 'dired-toggle-read-only
+      "j" 'dired-next-line
+      "k" 'dired-previous-line
+      "l" 'dired-open-file
+      "n" 'dired-narrow-regexp
+      "q" 'quit-window
+      "r" 'dired-do-rename
+      "r" 'revert-buffer
+      "s" 'dired-sort-toggle-or-edit
+      "t" 'terminal-here-launch
+      "u" 'dired-unmark
+      "U" 'dired-unmark-all-marks
+      "x" 'dired-do-flagged-delete
+      "z" 'dired-do-compress
+      "m" nil
+      "m ." 'dired-mark-extension
+      "m d" 'dired-mark-directories
+      "m r" 'dired-mark-files-containing-regexp
+      "m t" 'dired-toggle-marks
+      "m k" 'dired-do-kill-lines
+      "v" nil
+      "v o" 'dired-omit-mode
+      "v d" 'dired-hide-details-mode
+      "v i" 'all-the-icons-dired-mode
+      ))
 #+END_SRC
 
 Keybindings
 #+NAME: dired-kbd
 #+BEGIN_SRC elisp :tangle no
-  (general-def dired-mode-map
-    "g" nil)
-  (general-def 'normal dired-mode-map
-    "/" 'dired-goto-file
-    "+" 'dired-create-directory
-    "c" 'dired-do-rename
-    "d" 'dired-flag-file-deletion
-    "e" 'ediff
-    "f" 'dired-mark
-    "h" 'dired-up-directory
-    "i" 'dired-toggle-read-only
-    "j" 'dired-next-line
-    "k" 'dired-previous-line
-    "l" 'dired-open-file
-    "m" nil
-    "m ." 'dired-mark-extension
-    "m d" 'dired-mark-directories
-    "m r" 'dired-mark-files-containing-regexp
-    "m t" 'dired-toggle-marks
-    "m k" 'dired-do-kill-lines
-    "n" 'dired-narrow-regexp
-    "p" 'dired-do-copy
-    "q" 'quit-window
-    "r" 'revert-buffer
-    "s" 'dired-sort-toggle-or-edit
-    "t" 'terminal-here-launch
-    "u" 'dired-unmark
-    "U" 'dired-unmark-all-marks
-    "v o" 'dired-omit-mode
-    "v d" 'dired-hide-details-mode
-    "v i" 'all-the-icons-dired-mode
-    "x" 'dired-do-flagged-delete
-    "z" 'dired-do-compress)
 #+END_SRC
 
 * packages
@@ -721,16 +672,26 @@ Keybindings
 ** avy
 #+BEGIN_SRC elisp
   (use-package avy
-    :ensure t)
+    :ensure t
+    :commands (avy-goto-char-2 avy-goto-line avy-goto-word-1))
+#+END_SRC
+
+** bookmark
+#+BEGIN_SRC elisp
+  (use-package bookmark
+    :commands (bookmark-set bookmark-jump))
 #+END_SRC
 
 ** comint
 #+BEGIN_SRC elisp
-  (general-def comint-mode-map
-    "M-n" nil
-    "M-p" nil
-    "M-k" 'comint-previous-input
-    "M-j" 'comint-next-input)
+  (use-package comint
+    :defer t
+    :config
+    (general-def comint-mode-map
+      "M-n" nil
+      "M-p" nil
+      "M-k" 'comint-previous-input
+      "M-j" 'comint-next-input))
 #+END_SRC
 
 ** company
@@ -755,13 +716,14 @@ Keybindings
     :mode "Dockerfile\\'")
 
   (use-package docker-tramp
-    :ensure t)
+    :ensure t
+    :after tramp)
 #+END_SRC
 
 ** ediff
 #+BEGIN_SRC elisp
   (use-package ediff
-    :defer
+    :commands ediff
     :config
     (setq ediff-split-window-function 'split-window-horizontally)
     (setq ediff-window-setup-function 'ediff-setup-windows-plain))
@@ -770,6 +732,7 @@ Keybindings
 ** eldoc
 #+BEGIN_SRC elisp
   (use-package eldoc
+    :defer t
     :config
     (setq eldoc-idle-delay 0))
 #+END_SRC
@@ -778,33 +741,34 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package eglot
     :ensure t
-    :defer t
+    :commands eglot
     :config
     (add-to-list
      'eglot-server-programs
      '(js-mode . ("typescript-language-server" "--stdio")))
-    (major-def eglot-mode-map
+    (my:major-def eglot-mode-map
       "e" '(nil :wk "eglot")
       "e a" 'eglot-code-actions
       "e c" 'eglot-reconnect
       "e f" 'eglot-format
       "e q" 'eglot-shutdown
       "e r" 'eglot-rename)
-    (general-nmap eglot-mode-map
+    (general-def 'normal eglot-mode-map
       "K" 'eglot-help-at-point))
 #+END_SRC
 
 ** emacs-libvterm
 #+BEGIN_SRC elisp
-  (defun evil-collection-vterm-escape-stay ()
-    "Go back to normal state but don't move cursor backwards.
-  Moving cursor backwards is the default vim behavior but
-  it is not appropriate in some cases like terminals."
-    (setq-local evil-move-cursor-back nil))
   (use-package vterm
     :ensure t
-    :commands (vterm)
-    :hook (vterm-mode . evil-collection-vterm-escape-stay))
+    :commands (vterm vterm-other-window)
+    :config
+    (defun evil-collection-vterm-escape-stay ()
+      "Go back to normal state but don't move cursor backwards.
+  Moving cursor backwards is the default vim behavior but
+  it is not appropriate in some cases like terminals."
+      (setq-local evil-move-cursor-back nil))
+    (add-hook 'vterm-mode-hook 'evil-collection-vterm-escape-stay))
 #+END_SRC
 
 ** exec-path-from-shell
@@ -836,6 +800,15 @@ Keybindings
     :commands (find-file-in-project)
     :config
     (setq ffip-use-rust-fd t))
+#+END_SRC
+
+** help-mode
+#+BEGIN_SRC elisp
+  (use-package help-mode
+    :defer t
+    :general
+    ('normal help-mode-map
+     "q" 'quit-window))
 #+END_SRC
 
 ** hl-todo
@@ -881,7 +854,7 @@ Keybindings
 
 ** info
 #+BEGIN_SRC elisp
-  (general-mmap Info-mode-map
+  (general-def 'motion Info-mode-map
     "q" 'quit-window
     "u" 'Info-up
     "b" 'Info-history-back
@@ -895,6 +868,7 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package ivy
     :ensure t
+    :defer t
     :config
     (ivy-mode 1)
     (use-package ivy-hydra :ensure t)
@@ -904,22 +878,23 @@ Keybindings
     (setq ivy-re-builders-alist '((t . ivy--regex-plus))))
   (use-package swiper
     :commands swiper
-    :ensure t
-    :after ivy)
+    :ensure t)
   (use-package counsel
     :ensure t
-    :commands (counsel-M-x)
-    :after ivy)
-  (use-package all-the-icons-ivy
-    :ensure t
-    :after (all-the-icons ivy)
-    :config
-    (all-the-icons-ivy-setup))
+    :commands (counsel-M-x counsel-find-file counsel-switch-buffer))
+#+END_SRC
+
+#+BEGIN_SRC elisp
   (use-package ivy-posframe
     :ensure t
     :after ivy
     :config
-    (setq ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-center)))
+    (setq ivy-posframe-display-functions-alist
+          '((t . ivy-posframe-display-at-frame-top-center)))
+    (setq ivy-posframe-border-width 2)
+    (setq ivy-posframe-parameters
+          '((left-fringe . 16)
+            (right-fringe . 16)))
     (ivy-posframe-mode))
 #+END_SRC
 
@@ -928,7 +903,6 @@ Keybindings
   (use-package ivy-bibtex
     :ensure t
     :commands ivy-bibtex
-    :after ivy
     :config
     (setq bibtex-completion-bibliography '("~/research/refs.bib"))
     (setq bibtex-completion-notes-path "~/research/readings.org")
@@ -936,6 +910,7 @@ Keybindings
     (setq bibtex-completion-library-path '("~/Documents/"))
     (setq bibtex-completion-display-formats
           '((t . "${author:32} ${title:64} ${year:4} ${=has-pdf=:1}${=has-note=:1}")))
+    (require 'async)
     (defun my:ivy-bibtex-open-pdf (file)
       (async-start-process "bibtex-pdf" "xdg-open" nil file))
     (setq bibtex-completion-pdf-open-function 'my:ivy-bibtex-open-pdf)
@@ -959,7 +934,7 @@ Keybindings
 #+END_SRC
 
 #+BEGIN_SRC elisp :tangle no
-  (general-nmap lsp-ui-imenu-mode-map
+  (general-def 'normal lsp-ui-imenu-mode-map
     "h" 'lsp-ui-imenu--prev-kind
     "l" 'lsp-ui-imenu--next-kind
     "q" 'quit-window
@@ -1030,12 +1005,14 @@ Keybindings
 
 ** tramp
 #+BEGIN_SRC elisp
-  (use-package tramp)
+  (use-package tramp
+    :defer t)
 #+END_SRC
 
 ** vc-mode
 #+BEGIN_SRC elisp
   (use-package vc
+    :defer t
     :config
     (with-eval-after-load 'tramp
       (setq vc-ignore-dir-regexp
@@ -1046,7 +1023,9 @@ Keybindings
 
 ** wgrep
 #+BEGIN_SRC elisp
-  (use-package wgrep :ensure t)
+  (use-package wgrep
+    :ensure t
+    :defer t)
 #+END_SRC
 
 ** which-key
@@ -1081,7 +1060,7 @@ Keybindings
 
 ** xref
 #+BEGIN_SRC elisp
-  (general-nmap xref--xref-buffer-mode-map
+  (general-def 'normal xref--xref-buffer-mode-map
     "j" 'xref-next-line
     "k" 'xref-prev-line
     "q" 'quit-window
@@ -1099,9 +1078,16 @@ Keybindings
 #+END_SRC
 
 * languages
+** cc-mode
+#+BEGIN_SRC elisp
+  (use-package cc-mode
+    :config
+    (setq c-basic-offset 4))
+#+END_SRC
 ** prog-mode
 #+BEGIN_SRC elisp
   (use-package prog-mode
+    :defer t
     :hook (prog-mode . my:show-trailing-space))
 #+END_SRC
 
@@ -1152,7 +1138,7 @@ Keybindings
 #+BEGIN_SRC elisp
   (general-def 'normal coq-mode-map
     "K" 'my:company-coq-doc-search)
-  (major-def coq-mode-map
+  (my:major-def coq-mode-map
     "g" '(company-coq-proof-goto-point :wk "goto")
     "d" '(company-coq-doc :wk "doc")
     "q" '(proof-shell-exit :wk "exit")
@@ -1185,7 +1171,7 @@ Keybindings
     :hook (haskell-mode . dante-mode)
     :init
     (setq dante-tap-type-time 0))
-  (major-def dante-mode-map
+  (my:major-def dante-mode-map
     "r" 'dante-restart
     "i" 'dante-info
     "t" 'dante-type-at
@@ -1210,7 +1196,7 @@ Keybindings
 #+END_SRC
 
 #+BEGIN_SRC elisp
-  (major-def agda2-mode-map
+  (my:major-def agda2-mode-map
     "d" 'agda2-goto-definition-keyboard
     "l" 'agda2-load
     "a" 'agda2-autoOne
@@ -1247,7 +1233,7 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package sml-mode
     :ensure t
-    :defer t)
+    :mode "\\.sml\\'")
 #+END_SRC
 
 ** Prolog
@@ -1267,9 +1253,9 @@ Keybindings
 
 ** TeX
 #+BEGIN_SRC elisp
-  (use-package tex
+  (use-package tex-site
     :ensure auctex
-    :mode ("\\.tex\\'" . LaTeX-mode)
+    :mode ("\\.tex\\'" . TeX-latex-mode)
     :hook
     ((LaTeX-mode . my:show-trailing-space)
      (LaTeX-mode . TeX-source-correlate-mode)
@@ -1278,6 +1264,12 @@ Keybindings
     (setq font-latex-fontify-sectioning 'color)
     (setq font-latex-fontify-script nil)
     (setq TeX-view-program-selection '((output-pdf "Zathura"))))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package cdlatex
+    :ensure t
+    :hook (LaTeX-mode . cdlatex-mode))
 #+END_SRC
 
 ** YAML

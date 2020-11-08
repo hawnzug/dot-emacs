@@ -95,10 +95,12 @@ Font setup.
               (else "16")))))
       (set-fontset-font t 'unicode "Noto Color Emoji")
       (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
-      (set-fontset-font t 'han "Source Han Sans CN")
+      (set-fontset-font t 'han "FZFW ZhuZi GuDianS LMC")
       (set-fontset-font t 'han "Source Han Serif CN" nil 'append)
-      (set-fontset-font t 'cjk-misc "Source Han Sans CN")
+      (set-fontset-font t 'cjk-misc "FZFW ZhuZi GuDianS LMC")
       (set-fontset-font t 'cjk-misc "Source Han Serif CN" nil 'append)
+      (set-fontset-font t 'chinese-gbk "FZFW ZhuZi GuDianS LMC")
+      (set-fontset-font t 'chinese-gbk "Source Han Serif CN" nil 'append)
       (set-face-font 'default primary-font)
       (set-face-font 'fixed-pitch primary-font)
       (set-face-font 'fixed-pitch-serif primary-font)
@@ -108,6 +110,7 @@ Font setup.
     (select-frame frame)
     (my:font-setup)
     (remove-hook 'after-make-frame-functions 'my:font-setup-hook))
+  (setq use-default-font-for-symbols nil)
   (setq inhibit-compacting-font-caches t)
   (add-hook 'after-make-frame-functions 'my:font-setup-hook nil)
   (my:font-setup)
@@ -1263,6 +1266,7 @@ Keybindings
     (setq cdlatex-env-alist
           '(("equation*"
              "\\begin{equation*}\nAUTOLABEL\n?\n\\end{equation*}\n" nil)))
+    (setq cdlatex-paired-parens "$([{")
     (setq cdlatex-command-alist
           '(("equ*" "Insert an EQUATION* environment" ""
              cdlatex-environment ("equation*") t nil))))

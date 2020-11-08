@@ -373,7 +373,7 @@ Find references using xref.
 
 Use space as the leader key for those keybindings which are useful only in normal mode.
 #+BEGIN_SRC elisp
-  (general-def 'motion
+  (general-def 'normal
     :prefix "SPC"
     "" nil
     "a" 'align
@@ -390,6 +390,7 @@ Use space as the leader key for those keybindings which are useful only in norma
   (use-package evil
     :ensure t
     :init
+    (setq evil-want-keybinding nil)
     (setq evil-want-abbrev-expand-on-insert-exit nil)
     (setq evil-disable-insert-state-bindings t)
     (setq evil-respect-visual-line-mode t)
@@ -549,9 +550,8 @@ keybindings
 #+END_SRC
 
 * dired
-#+BEGIN_SRC elisp :noweb no-export
+#+BEGIN_SRC elisp
   (use-package dired
-    :commands dired
     :hook ((dired-mode . dired-omit-mode)
            (dired-mode . dired-hide-details-mode))
     :config
@@ -570,8 +570,6 @@ keybindings
               ("png" . "feh")
               ("jpg" . "feh"))))
     :general
-    (dired-mode-map
-      "g" nil)
     ('normal dired-mode-map
       "/" 'dired-goto-file
       "+" 'dired-create-directory
@@ -579,6 +577,7 @@ keybindings
       "d" 'dired-flag-file-deletion
       "e" 'ediff
       "f" 'dired-mark
+      "g" 'revert-buffer
       "h" 'dired-up-directory
       "i" 'dired-toggle-read-only
       "j" 'dired-next-line
@@ -587,7 +586,6 @@ keybindings
       "n" 'dired-narrow-regexp
       "q" 'quit-window
       "r" 'dired-do-rename
-      "r" 'revert-buffer
       "s" 'dired-sort-toggle-or-edit
       "t" 'terminal-here-launch
       "u" 'dired-unmark
@@ -603,8 +601,7 @@ keybindings
       "v" nil
       "v o" 'dired-omit-mode
       "v d" 'dired-hide-details-mode
-      "v i" 'all-the-icons-dired-mode
-      ))
+      "v i" 'all-the-icons-dired-mode))
 #+END_SRC
 
 Keybindings
@@ -632,7 +629,11 @@ Keybindings
 ** bookmark
 #+BEGIN_SRC elisp
   (use-package bookmark
-    :commands (bookmark-set bookmark-jump))
+    :general
+    (my:global-def
+      "m" '(:ignore t :which-key "bookmark")
+      "m s" 'bookmark-set
+      "m j" 'bookmark-jump))
 #+END_SRC
 
 ** comint
@@ -1015,7 +1016,6 @@ Keybindings
   (use-package which-key
     :ensure t
     :config
-    (setq which-key-max-display-columns 3)
     (setq which-key-add-column-padding 2)
     (setq which-key-idle-delay 0)
     (which-key-mode 1))
@@ -1251,7 +1251,14 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package cdlatex
     :ensure t
-    :hook (LaTeX-mode . cdlatex-mode))
+    :hook (LaTeX-mode . cdlatex-mode)
+    :config
+    (setq cdlatex-env-alist
+          '(("equation*"
+             "\\begin{equation*}\nAUTOLABEL\n?\n\\end{equation*}\n" nil)))
+    (setq cdlatex-command-alist
+          '(("equ*" "Insert an EQUATION* environment" ""
+             cdlatex-environment ("equation*") t nil))))
 #+END_SRC
 
 ** YAML

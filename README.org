@@ -1160,6 +1160,13 @@ Keybindings
     ";" 'dante-eval-block)
 #+END_SRC
 
+** HTML
+#+BEGIN_SRC elisp
+  (use-package emmet-mode
+    :ensure t
+    :hook (sgml-mode css-mode))
+#+END_SRC
+
 ** Lua
 #+BEGIN_SRC elisp
   (use-package lua-mode

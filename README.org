@@ -101,10 +101,10 @@ Font setup.
       (set-fontset-font t 'cjk-misc "Source Han Serif CN" nil 'append)
       (set-fontset-font t 'chinese-gbk "FZFW ZhuZi GuDianS LMC")
       (set-fontset-font t 'chinese-gbk "Source Han Serif CN" nil 'append)
-      (set-face-font 'default primary-font)
+      (set-face-font 'default "Linux Libertine 20")
       (set-face-font 'fixed-pitch primary-font)
       (set-face-font 'fixed-pitch-serif primary-font)
-      (set-face-font 'variable-pitch "Merriweather 16")))
+      (set-face-font 'variable-pitch "Linux Libertine 20")))
   (defun my:font-setup-hook (frame)
     "Setup the font, then remove the hook."
     (select-frame frame)
@@ -590,7 +590,6 @@ keybindings
       "q" 'quit-window
       "r" 'dired-do-rename
       "s" 'dired-sort-toggle-or-edit
-      "t" 'terminal-here-launch
       "u" 'dired-unmark
       "U" 'dired-unmark-all-marks
       "x" 'dired-do-flagged-delete
@@ -661,8 +660,8 @@ Keybindings
     (setq company-idle-delay 0)
     (use-package company-posframe
       :ensure t
-      :disabled t
       :config
+      (setq company-posframe-font "Iosevka Curly Slab 16")
       (company-posframe-mode 1)))
 #+END_SRC
 

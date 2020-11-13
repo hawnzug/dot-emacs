@@ -13,3 +13,5 @@ config.el
 /transient/history.el
 /history
 /eln-cache/
+/early-init.el
+/test-config.el

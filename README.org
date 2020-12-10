@@ -101,7 +101,7 @@ Font setup.
       (set-fontset-font t 'cjk-misc "Source Han Serif CN" nil 'append)
       (set-fontset-font t 'chinese-gbk "FZFW ZhuZi GuDianS LMC")
       (set-fontset-font t 'chinese-gbk "Source Han Serif CN" nil 'append)
-      (set-face-font 'default "Linux Libertine 20")
+      (set-face-font 'default primary-font)
       (set-face-font 'fixed-pitch primary-font)
       (set-face-font 'fixed-pitch-serif primary-font)
       (set-face-font 'variable-pitch "Linux Libertine 20")))
@@ -765,6 +765,13 @@ Keybindings
     (fcitx-aggressive-setup))
 #+END_SRC
 
+** flycheck
+#+BEGIN_SRC elisp
+  (use-package flycheck
+    :ensure t
+    :commands (flycheck-mode))
+#+END_SRC
+
 ** find-file-in-project
 #+BEGIN_SRC elisp
   (use-package find-file-in-project
@@ -884,8 +891,8 @@ Keybindings
                  '(ivy-bibtex . ivy--regex-ignore-order)))
 #+END_SRC
 
-** lsp
-#+BEGIN_SRC elisp :tangle no
+** lsp-mode
+#+BEGIN_SRC elisp
   (use-package lsp-mode
     :ensure t
     :commands lsp
@@ -896,7 +903,6 @@ Keybindings
     :commands lsp-ui-mode
     :config
     (setq lsp-ui-sideline-show-diagnostics nil))
-  (use-package company-lsp :ensure t :commands company-lsp)
 #+END_SRC
 
 #+BEGIN_SRC elisp :tangle no
@@ -1233,6 +1239,13 @@ Keybindings
     :mode ("\\.pl\\'" . prolog-mode)
     :init
     (setq prolog-system 'swi))
+#+END_SRC
+
+** Python
+#+BEGIN_SRC elisp
+  (use-package lsp-pyright
+    :ensure t
+    :hook (python-mode . (lambda () (require 'lsp-pyright) (lsp))))
 #+END_SRC
 
 ** Cubicaltt

@@ -717,6 +717,9 @@ Keybindings
     (add-to-list
      'eglot-server-programs
      '(js-mode . ("typescript-language-server" "--stdio")))
+    (add-to-list
+     'eglot-server-programs
+     '(python-mode . ("pyright-langserver" "--stdio")))
     (my:major-def eglot-mode-map
       "e" '(nil :wk "eglot")
       "e a" 'eglot-code-actions
@@ -765,13 +768,6 @@ Keybindings
     (fcitx-aggressive-setup))
 #+END_SRC
 
-** flycheck
-#+BEGIN_SRC elisp
-  (use-package flycheck
-    :ensure t
-    :commands (flycheck-mode))
-#+END_SRC
-
 ** find-file-in-project
 #+BEGIN_SRC elisp
   (use-package find-file-in-project
@@ -779,6 +775,21 @@ Keybindings
     :commands (find-file-in-project)
     :config
     (setq ffip-use-rust-fd t))
+#+END_SRC
+
+** project.el
+#+BEGIN_SRC elisp
+  (use-package project
+    :config
+    (defun my:find-project-root (dir)
+      "Try to locate a project root."
+      (when (locate-dominating-file
+             dir
+             (lambda (d)
+               (seq-some (lambda (name) (file-exists-p (expand-file-name name d)))
+                         '(".python-version"))))
+        (cons 'transient dir)))
+    (add-hook 'project-find-functions 'my:find-project-root nil nil))
 #+END_SRC
 
 ** help-mode
@@ -889,29 +900,6 @@ Keybindings
     (setq bibtex-completion-pdf-open-function 'my:ivy-bibtex-open-pdf)
     (add-to-list 'ivy-re-builders-alist
                  '(ivy-bibtex . ivy--regex-ignore-order)))
-#+END_SRC
-
-** lsp-mode
-#+BEGIN_SRC elisp
-  (use-package lsp-mode
-    :ensure t
-    :commands lsp
-    :config
-    (setq lsp-diagnostic-package :flycheck))
-  (use-package lsp-ui
-    :ensure t
-    :commands lsp-ui-mode
-    :config
-    (setq lsp-ui-sideline-show-diagnostics nil))
-#+END_SRC
-
-#+BEGIN_SRC elisp :tangle no
-  (general-def 'normal lsp-ui-imenu-mode-map
-    "h" 'lsp-ui-imenu--prev-kind
-    "l" 'lsp-ui-imenu--next-kind
-    "q" 'quit-window
-    "o" 'lsp-ui-imenu--view
-    "<return>" 'lsp-ui-imenu--visit)
 #+END_SRC
 
 ** magit
@@ -1239,13 +1227,6 @@ Keybindings
     :mode ("\\.pl\\'" . prolog-mode)
     :init
     (setq prolog-system 'swi))
-#+END_SRC
-
-** Python
-#+BEGIN_SRC elisp
-  (use-package lsp-pyright
-    :ensure t
-    :hook (python-mode . (lambda () (require 'lsp-pyright) (lsp))))
 #+END_SRC
 
 ** Cubicaltt

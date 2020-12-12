@@ -705,7 +705,7 @@ Keybindings
   (use-package eldoc
     :defer t
     :config
-    (setq eldoc-idle-delay 0))
+    (setq eldoc-idle-delay 0.5))
 #+END_SRC
 
 ** eglot
@@ -714,6 +714,11 @@ Keybindings
     :ensure t
     :commands eglot
     :config
+    (setq eglot-stay-out-of '(flymake))
+    (add-hook 'eglot-managed-mode-hook
+              (lambda ()
+                (add-hook 'flymake-diagnostic-functions
+                          'eglot-flymake-backend nil t)))
     (add-to-list
      'eglot-server-programs
      '(js-mode . ("typescript-language-server" "--stdio")))
@@ -1227,6 +1232,14 @@ Keybindings
     :mode ("\\.pl\\'" . prolog-mode)
     :init
     (setq prolog-system 'swi))
+#+END_SRC
+
+** Python
+#+BEGIN_SRC elisp
+  (use-package python
+    :mode ("\\.py\\'" . python-mode)
+    :config
+    (setq python-flymake-command '("flake8" "-")))
 #+END_SRC
 
 ** Cubicaltt

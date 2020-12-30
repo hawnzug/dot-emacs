@@ -120,13 +120,12 @@ Ligature
 #+BEGIN_SRC elisp
   (let ((ligatures `((?-  . ,(regexp-opt '("->" "->>" "-->")))
                      (?*  . ,(regexp-opt '("*>")))
-                     (?<  . ,(regexp-opt '("<-" "<<-" "<=>" "<=" "<|" "<||" "<|||::=" "<|>" "<:" "<>" "<-<"
+                     (?<  . ,(regexp-opt '("<-" "<<-" "<=>" "<|" "<||" "<|||::=" "<|>" "<:" "<>" "<-<"
                                            "<<<" "<==" "<<=" "<=<" "<==>" "<-|" "<<" "<~>" "<=|" "<~~" "<~"
                                            "<$>" "<$" "<+>" "<+" "</>" "</" "<*" "<*>" "<->" "<!--")))
                      (?:  . ,(regexp-opt '(":>" ":<" ":::" "::" ":?" ":?>" ":=")))
                      (?=  . ,(regexp-opt '("==>" "=>" "===" "=:=" "==")))
                      (?!  . ,(regexp-opt '("!==" "!!" "!=")))
-                     (?>  . ,(regexp-opt '(">=")))
                      (?|  . ,(regexp-opt '("|||>" "||>" "|>" "|=>")))
                      (?+  . ,(regexp-opt '("+++" "++")))
                      (?~  . ,(regexp-opt '("~~>" "~>"))))))
@@ -270,6 +269,7 @@ For lsp mode
 #+BEGIN_SRC elisp
   (let ((default-directory "~/.config/emacs/elpa"))
     (normal-top-level-add-subdirs-to-load-path))
+  (add-to-list 'load-path "~/.config/emacs/packages")
   (require 'use-package)
 #+END_SRC
 
@@ -725,6 +725,9 @@ Keybindings
     (add-to-list
      'eglot-server-programs
      '(python-mode . ("pyright-langserver" "--stdio")))
+    (add-to-list
+     'eglot-server-programs
+     '(haskell-mode . ("haskell-language-server-wrapper" "--lsp")))
     (my:major-def eglot-mode-map
       "e" '(nil :wk "eglot")
       "e a" 'eglot-code-actions
@@ -1144,21 +1147,6 @@ Keybindings
   (use-package haskell-mode
     :ensure t
     :mode "\\.hs\\'")
-#+END_SRC
-
-#+BEGIN_SRC elisp :tangle no
-  (use-package dante
-    :ensure t
-    :after haskell-mode
-    :commands 'dante-mode
-    :hook (haskell-mode . dante-mode)
-    :init
-    (setq dante-tap-type-time 0))
-  (my:major-def dante-mode-map
-    "r" 'dante-restart
-    "i" 'dante-info
-    "t" 'dante-type-at
-    ";" 'dante-eval-block)
 #+END_SRC
 
 ** HTML

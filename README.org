@@ -345,8 +345,7 @@ Use semicolon as the major mode leader key.
 #+BEGIN_SRC elisp
   (general-def 'override
     "C-=" 'text-scale-adjust
-    "C--" 'text-scale-adjust
-    "M-p" 'my:other-window-or-buffer)
+    "C--" 'text-scale-adjust)
 #+END_SRC
 
 #+BEGIN_SRC elisp
@@ -374,20 +373,6 @@ Find references using xref.
     "g r" 'xref-find-references)
 #+END_SRC
 
-Use space as the leader key for those keybindings which are useful only in normal mode.
-#+BEGIN_SRC elisp
-  (general-def 'normal
-    :prefix "SPC"
-    "" nil
-    "a" 'align
-    "t l" 'my:toggle-line-number
-    "t t" 'my:toggle-transparency
-    "s" 'symbol-overlay-put
-    "f" 'avy-goto-char-2
-    "w" 'avy-goto-word-1
-    "l" 'avy-goto-line)
-#+END_SRC
-
 * evil
 #+BEGIN_SRC elisp
   (use-package evil
@@ -409,6 +394,7 @@ Use space as the leader key for those keybindings which are useful only in norma
 #+BEGIN_SRC elisp
   (general-def 'motion ";" nil "," nil)
   (general-def 'normal
+    "/" 'swiper
     "x" nil
     "X" nil
     "s" nil
@@ -417,32 +403,11 @@ Use space as the leader key for those keybindings which are useful only in norma
     "U" 'undo
     "C-r" 'undo-redo)
   (general-def 'motion
-    :prefix "x"
+    :prefix "s"
     "l" 'evil-avy-goto-line
     "f" 'evil-avy-goto-char-in-line
     "c" 'evil-avy-goto-char-2
     "w" 'evil-avy-goto-word-1)
-#+END_SRC
-
-#+BEGIN_SRC elisp :noweb no-export
-  (my:global-def
-    "w j" 'evil-window-down
-    "w k" 'evil-window-up
-    "w h" 'evil-window-left
-    "w l" 'evil-window-right
-    "w n" 'evil-window-next
-    "w H" 'evil-window-move-far-left
-    "w L" 'evil-window-move-far-right
-    "w J" 'evil-window-move-very-bottom
-    "w K" 'evil-window-move-very-top
-    "w +" 'evil-window-increase-height
-    "w -" 'evil-window-decrease-height
-    "w >" 'evil-window-increase-width
-    "w <" 'evil-window-decrease-width
-    "w s" 'evil-window-split
-    "w v" 'evil-window-vsplit
-    "w d" 'evil-window-delete
-    "w o" 'delete-other-windows)
 #+END_SRC
 
 ** evil-surround
@@ -968,8 +933,7 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package swiper
     :ensure t
-    :general
-    (my:global-def "s" 'swiper))
+    :commands swiper)
 #+END_SRC
 
 ** symbol-overlay

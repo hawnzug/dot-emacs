@@ -455,6 +455,7 @@ Find references using xref.
 org-id
 #+BEGIN_SRC elisp
   (use-package org-id
+    :after org
     :config
     (setq org-id-link-to-org-use-id 'create-if-interactive))
 #+END_SRC
@@ -520,6 +521,7 @@ keybindings
 * dired
 #+BEGIN_SRC elisp
   (use-package dired
+    :commands dired
     :hook ((dired-mode . dired-omit-mode)
            (dired-mode . dired-hide-details-mode))
     :config
@@ -569,11 +571,6 @@ keybindings
       "v o" 'dired-omit-mode
       "v d" 'dired-hide-details-mode
       "v i" 'all-the-icons-dired-mode))
-#+END_SRC
-
-Keybindings
-#+NAME: dired-kbd
-#+BEGIN_SRC elisp :tangle no
 #+END_SRC
 
 * packages
@@ -753,6 +750,7 @@ Keybindings
 ** project.el
 #+BEGIN_SRC elisp
   (use-package project
+    :defer t
     :config
     (defun my:find-project-root (dir)
       "Try to locate a project root."
@@ -989,17 +987,6 @@ Keybindings
     (which-key-mode 1))
 #+END_SRC
 
-#+BEGIN_SRC elisp :tangle no
-  (use-package which-key-posframe
-    :ensure t
-    :disabled t
-    :config
-    (setq which-key-posframe-border-width 10)
-    (set-face-attribute 'which-key-posframe-border nil :background "#f0e9d7")
-    (set-face-attribute 'which-key-posframe nil :background "#f0e9d7")
-    (which-key-posframe-mode))
-#+END_SRC
-
 ** winner-mode
 #+BEGIN_SRC elisp
   (use-package winner
@@ -1016,15 +1003,6 @@ Keybindings
     "q" 'quit-window
     "o" 'xref-show-location-at-point
     "<return>" 'xref-goto-xref)
-#+END_SRC
-
-** yasnippet
-#+BEGIN_SRC elisp
-  (use-package yasnippet
-    :ensure t
-    :config
-    (setq yas-snippet-dirs '("~/.config/emacs/snippets"))
-    (yas-global-mode 1))
 #+END_SRC
 
 * languages

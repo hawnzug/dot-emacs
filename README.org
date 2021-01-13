@@ -1185,6 +1185,13 @@ Keybindings
     :mode ("\\.ctt$" . cubicaltt-mode))
 #+END_SRC
 
+** Shell
+#+BEGIN_SRC elisp
+  (use-package flymake-shellcheck
+    :ensure t
+    :hook (sh-mode . flymake-shellcheck-load))
+#+END_SRC
+
 ** TeX
 #+BEGIN_SRC elisp
   (use-package tex-site

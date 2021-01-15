@@ -750,6 +750,18 @@ keybindings
     (setq ffip-use-rust-fd t))
 #+END_SRC
 
+** flymake
+#+BEGIN_SRC elisp
+  (use-package flymake
+    :defer t
+    :general
+    ('normal flymake-mode-map
+      "x" nil
+      "x j" 'flymake-goto-next-error
+      "x k" 'flymake-goto-prev-error
+      "x x" 'flymake-show-diagnostics-buffer))
+#+END_SRC
+
 ** project.el
 #+BEGIN_SRC elisp
   (use-package project

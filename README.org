@@ -667,7 +667,10 @@ keybindings
   (use-package eldoc
     :defer t
     :config
-    (setq eldoc-idle-delay 0.5))
+    (setq eldoc-idle-delay 0.2)
+    (setq eldoc-echo-area-use-multiline-p nil)
+    (setq eldoc-echo-area-display-truncation-message nil)
+    (setq eldoc-echo-area-prefer-doc-buffer t))
 #+END_SRC
 
 ** eglot
@@ -911,8 +914,10 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package markdown-mode
     :ensure t
+    :commands (gfm-view-mode markdown-view-mode)
     :mode (("README\\.md\\'" . gfm-mode)
            ("\\.md\\'" . markdown-mode)
+           ("\\.mkd\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode)))
 #+END_SRC
 
@@ -1094,7 +1099,9 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package haskell-mode
     :ensure t
-    :mode "\\.hs\\'")
+    :mode "\\.hs\\'"
+    :config
+    (require 'haskell))
 #+END_SRC
 
 ** HTML

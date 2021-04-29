@@ -1198,7 +1198,10 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package sml-mode
     :ensure t
-    :mode "\\.sml\\'")
+    :mode "\\.sml\\'"
+    :config
+    (setq sml-indent-level 4)
+    (setq sml-indent-args 2))
 #+END_SRC
 
 ** Prolog

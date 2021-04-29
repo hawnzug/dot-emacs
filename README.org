@@ -427,6 +427,53 @@ Find references using xref.
     (global-evil-matchit-mode 1))
 #+END_SRC
 
+* completion
+** vertico
+#+BEGIN_SRC elisp
+  (use-package vertico
+    :ensure t
+    :config
+    (vertico-mode))
+#+END_SRC
+
+** orderless
+#+BEGIN_SRC elisp
+  (use-package orderless
+    :ensure t
+    :init
+    (setq completion-styles '(orderless))
+    (setq completion-category-defaults nil)
+    (setq completion-category-overrides nil))
+#+END_SRC
+
+** marginalia
+#+BEGIN_SRC elisp
+  (use-package marginalia
+    :ensure t
+    :config
+    (marginalia-mode))
+#+END_SRC
+
+** consult
+#+BEGIN_SRC elisp
+  (use-package consult
+    :ensure t)
+#+END_SRC
+
+** embark
+#+BEGIN_SRC elisp
+  (use-package embark
+    :ensure t
+    :general
+    ("C-S-a" 'embark-act))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package embark-consult
+    :ensure t
+    :after (embark consult))
+#+END_SRC
+
 * EAF
 #+BEGIN_SRC elisp :tangle no
   (use-package eaf

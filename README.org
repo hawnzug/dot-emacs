@@ -15,6 +15,7 @@
 - [[#evil][evil]]
   - [[#evil-surround][evil-surround]]
   - [[#evil-matchit][evil-matchit]]
+- [[#eaf][EAF]]
 - [[#org][org]]
 - [[#dired][dired]]
 - [[#packages][packages]]
@@ -23,7 +24,6 @@
   - [[#bookmark][bookmark]]
   - [[#comint][comint]]
   - [[#company][company]]
-  - [[#counsel][counsel]]
   - [[#docker][docker]]
   - [[#ediff][ediff]]
   - [[#eldoc][eldoc]]
@@ -32,20 +32,19 @@
   - [[#exec-path-from-shell][exec-path-from-shell]]
   - [[#fcitx][fcitx]]
   - [[#find-file-in-project][find-file-in-project]]
+  - [[#flymake][flymake]]
+  - [[#projectel][project.el]]
   - [[#help-mode][help-mode]]
   - [[#hl-todo][hl-todo]]
   - [[#htmlize][htmlize]]
   - [[#ibuffer][ibuffer]]
   - [[#imenu-list][imenu-list]]
   - [[#info][info]]
-  - [[#ivy][ivy]]
   - [[#ivy-bibtex][ivy-bibtex]]
-  - [[#lsp][lsp]]
   - [[#magit][magit]]
   - [[#markdown][markdown]]
   - [[#newcomment][newcomment]]
   - [[#strokes][strokes]]
-  - [[#swiper][swiper]]
   - [[#symbol-overlay][symbol-overlay]]
   - [[#terminal-here][terminal-here]]
   - [[#tramp][tramp]]
@@ -54,7 +53,6 @@
   - [[#which-key][which-key]]
   - [[#winner-mode][winner-mode]]
   - [[#xref][xref]]
-  - [[#yasnippet][yasnippet]]
 - [[#languages][languages]]
   - [[#cc-mode][cc-mode]]
   - [[#prog-mode][prog-mode]]
@@ -62,12 +60,15 @@
   - [[#coq][Coq]]
   - [[#csv][CSV]]
   - [[#haskell][Haskell]]
+  - [[#html][HTML]]
   - [[#lua][Lua]]
   - [[#agda][Agda]]
   - [[#ocaml][Ocaml]]
   - [[#sml][SML]]
   - [[#prolog][Prolog]]
+  - [[#python][Python]]
   - [[#cubicaltt][Cubicaltt]]
+  - [[#shell][Shell]]
   - [[#tex][TeX]]
   - [[#yaml][YAML]]
 :END:
@@ -361,8 +362,7 @@ Use Esc to quit minibuffer, which is previously C-g.
                  minibuffer-local-ns-map
                  minibuffer-local-completion-map
                  minibuffer-local-must-match-map
-                 minibuffer-local-isearch-map
-                 ivy-minibuffer-map)
+                 minibuffer-local-isearch-map)
     [escape] 'minibuffer-keyboard-quit)
 #+END_SRC
 
@@ -384,8 +384,6 @@ Find references using xref.
     (setq evil-respect-visual-line-mode t)
     :config
     (evil-mode 1)
-    (evil-set-initial-state 'ivy-occur-mode 'normal)
-    (evil-set-initial-state 'ivy-occur-grep-mode 'normal)
     (evil-set-initial-state 'org-capture-mode 'insert)
     (evil-set-initial-state 'vterm-mode 'insert)
     (evil-set-initial-state 'wdired-mode 'normal))
@@ -394,7 +392,6 @@ Find references using xref.
 #+BEGIN_SRC elisp
   (general-def 'motion ";" nil "," nil)
   (general-def 'normal
-    "/" 'swiper
     "x" nil
     "X" nil
     "s" nil
@@ -500,7 +497,6 @@ keybindings
     "gj" 'org-forward-heading-same-level
     "gk" 'org-backward-heading-same-level
     "gl" 'outline-next-visible-heading
-    "gt" 'counsel-org-goto
     "<" 'org-metaleft
     ">" 'org-metaright
     "t" 'org-todo)
@@ -644,21 +640,6 @@ keybindings
       :config
       (setq company-posframe-font "Iosevka Curly Slab 16")
       (company-posframe-mode 1)))
-#+END_SRC
-
-** counsel
-#+BEGIN_SRC elisp
-  (use-package counsel
-    :ensure t
-    :general
-    ('override
-      "M-m" 'counsel-switch-buffer
-      "M-x" 'counsel-M-x)
-    ('normal
-     "g i" 'counsel-imenu)
-    (my:global-def
-      "f" 'counsel-find-file
-      "r" 'counsel-rg))
 #+END_SRC
 
 ** docker
@@ -857,42 +838,8 @@ keybindings
     "S-<tab>" 'Info-prev-reference)
 #+END_SRC
 
-** ivy
-#+BEGIN_SRC elisp
-  (use-package ivy
-    :ensure t
-    :defer t
-    :config
-    (ivy-mode 1)
-    (use-package ivy-hydra :ensure t)
-    (setq ivy-height 25)
-    (setq ivy-use-virtual-buffers t)
-    (setq ivy-count-format "(%d/%d) ")
-    (setq ivy-re-builders-alist '((t . ivy--regex-plus))))
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (use-package ivy-posframe
-    :ensure t
-    :after ivy
-    :config
-    (setq ivy-posframe-display-functions-alist
-          '((t . ivy-posframe-display-at-frame-center)))
-    (defun my:ivy-posframe-get-size ()
-      "Set the ivy-posframe size according to the current frame."
-      (let ((height (or ivy-posframe-height (or ivy-height 10)))
-            (width (min (or ivy-posframe-width 200) (round (* .75 (frame-width))))))
-        (list :height height :width width :min-height height :min-width width)))
-    (setq ivy-posframe-size-function 'my:ivy-posframe-get-size)
-    (setq ivy-posframe-border-width 2)
-    (setq ivy-posframe-parameters
-          '((left-fringe . 16)
-            (right-fringe . 16)))
-    (ivy-posframe-mode))
-#+END_SRC
-
 ** ivy-bibtex
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package ivy-bibtex
     :ensure t
     :general
@@ -967,13 +914,6 @@ keybindings
     :commands (strokes-do-stroke))
   (general-def strokes-mode-map
     "<down-mouse-3>" 'strokes-do-stroke)
-#+END_SRC
-
-** swiper
-#+BEGIN_SRC elisp
-  (use-package swiper
-    :ensure t
-    :commands swiper)
 #+END_SRC
 
 ** symbol-overlay

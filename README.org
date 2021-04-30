@@ -645,11 +645,43 @@ keybindings
     (setq alert-default-style 'libnotify))
 #+END_SRC
 
+** async
+#+BEGIN_SRC elisp
+  (use-package async
+    :ensure t
+    :defer t)
+#+END_SRC
+
 ** avy
 #+BEGIN_SRC elisp
   (use-package avy
     :ensure t
     :commands (avy-goto-char-2 avy-goto-line avy-goto-word-1))
+#+END_SRC
+
+** bibtex
+#+BEGIN_SRC elisp
+  (use-package bibtex-completion
+    :ensure t
+    :defer t
+    :config
+    (setq bibtex-completion-bibliography '("~/org/refs.bib"))
+    (setq bibtex-completion-notes-path "~/org/readings.org")
+    (setq bibtex-completion-pdf-field "file")
+    (setq bibtex-completion-library-path '("~/Documents/"))
+    (defun my:bibtex-open-pdf (file)
+      (require 'async)
+      (async-start-process "bibtex-pdf" "zathura" nil file))
+    (setq bibtex-completion-pdf-open-function 'my:bibtex-open-pdf))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package bibtex-actions
+    :ensure t
+    :commands (bibtex-actions-open)
+    :config
+    (with-eval-after-load 'embark
+      (add-to-list 'embark-keymap-alist '(bibtex . bibtex-actions-map))))
 #+END_SRC
 
 ** bookmark
@@ -883,28 +915,6 @@ keybindings
     "p" 'Info-prev
     "<tab>" 'Info-next-reference
     "S-<tab>" 'Info-prev-reference)
-#+END_SRC
-
-** ivy-bibtex
-#+BEGIN_SRC elisp :tangle no
-  (use-package ivy-bibtex
-    :ensure t
-    :general
-    (my:global-def
-      "b" 'ivy-bibtex)
-    :config
-    (setq bibtex-completion-bibliography '("~/org/refs.bib"))
-    (setq bibtex-completion-notes-path "~/org/readings.org")
-    (setq bibtex-completion-pdf-field "file")
-    (setq bibtex-completion-library-path '("~/Documents/"))
-    (setq bibtex-completion-display-formats
-          '((t . "${author:32} ${title:80} ${year:4}")))
-    (defun my:ivy-bibtex-open-pdf (file)
-      (require 'async)
-      (async-start-process "bibtex-pdf" "zathura" nil file))
-    (setq bibtex-completion-pdf-open-function 'my:ivy-bibtex-open-pdf)
-    (add-to-list 'ivy-re-builders-alist
-                 '(ivy-bibtex . ivy--regex-ignore-order)))
 #+END_SRC
 
 ** magit

@@ -9,6 +9,7 @@
 - [[#contents][Contents]]
 - [[#init][init]]
 - [[#use-package][use-package]]
+- [[#native-compilation][native compilation]]
 - [[#help-functions][help functions]]
 - [[#theme][theme]]
 - [[#generalel][general.el]]
@@ -278,6 +279,13 @@ For lsp mode
     (normal-top-level-add-subdirs-to-load-path))
   (add-to-list 'load-path "~/.config/emacs/packages")
   (require 'use-package)
+#+END_SRC
+
+* native compilation
+#+BEGIN_SRC elisp
+  (use-package comp
+    :config
+    (setq comp-deferred-compilation-deny-list '("bibtex-actions.el")))
 #+END_SRC
 
 * help functions

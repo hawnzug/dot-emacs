@@ -347,29 +347,13 @@ Use semicolon as the major mode leader key.
     :states '(motion normal insert emacs)
     :prefix ";"
     :global-prefix "M-;")
+  (my:global-def "" nil)
 #+END_SRC
 
 #+BEGIN_SRC elisp
   (general-def 'override
     "C-=" 'text-scale-adjust
     "C--" 'text-scale-adjust)
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (my:global-def
-    "" nil
-    "q" 'save-buffers-kill-terminal
-    "Q" 'save-buffers-kill-emacs)
-#+END_SRC
-
-Use Esc to quit minibuffer, which is previously C-g.
-#+BEGIN_SRC elisp
-  (general-def '(minibuffer-local-map
-                 minibuffer-local-ns-map
-                 minibuffer-local-completion-map
-                 minibuffer-local-must-match-map
-                 minibuffer-local-isearch-map)
-    [escape] 'minibuffer-keyboard-quit)
 #+END_SRC
 
 Find references using xref.

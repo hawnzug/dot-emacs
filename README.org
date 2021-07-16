@@ -285,6 +285,7 @@ For lsp mode
 #+BEGIN_SRC elisp
   (use-package comp
     :config
+    (setq native-comp-async-report-warnings-errors 'silent)
     (setq comp-deferred-compilation-deny-list '("bibtex-actions.el")))
 #+END_SRC
 

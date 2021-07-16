@@ -391,6 +391,7 @@ Find references using xref.
 #+BEGIN_SRC elisp
   (general-def 'motion ";" nil "," nil)
   (general-def 'normal
+    "C-." nil
     "x" nil
     "X" nil
     "s" nil
@@ -464,7 +465,8 @@ Find references using xref.
   (use-package embark
     :ensure t
     :general
-    ("C-S-a" 'embark-act))
+    (:keymaps 'override
+     "C-." 'embark-act))
 #+END_SRC
 
 #+BEGIN_SRC elisp

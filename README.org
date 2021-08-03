@@ -1246,6 +1246,14 @@ Keybindings
     (setq TeX-view-program-selection '((output-pdf "Zathura"))))
 #+END_SRC
 
+#+BEGIN_SRC elisp
+  (use-package auctex-latexmk
+    :ensure t
+    :after tex-site
+    :config
+    (auctex-latexmk-setup))
+#+END_SRC
+
 ** YAML
 #+BEGIN_SRC elisp
   (use-package yaml-mode

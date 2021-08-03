@@ -775,12 +775,10 @@ keybindings
       "K" 'eglot-help-at-point))
 #+END_SRC
 
-** emacs-libvterm
+** vterm
 #+BEGIN_SRC elisp
   (use-package vterm
     :ensure t
-    :general
-    (my:global-def "v" 'vterm)
     :config
     (defun evil-collection-vterm-escape-stay ()
       "Go back to normal state but don't move cursor backwards.
@@ -788,6 +786,16 @@ keybindings
   it is not appropriate in some cases like terminals."
       (setq-local evil-move-cursor-back nil))
     (add-hook 'vterm-mode-hook 'evil-collection-vterm-escape-stay))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package vterm-toggle
+    :ensure t
+    :after vterm
+    :general
+    (my:global-def "v" 'vterm-toggle)
+    :config
+    (setq vterm-toggle-scope 'project))
 #+END_SRC
 
 ** exec-path-from-shell

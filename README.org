@@ -672,7 +672,18 @@ keybindings
     (my:global-def
       "m" '(:ignore t :which-key "bookmark")
       "m s" 'bookmark-set
-      "m j" 'bookmark-jump))
+      "m j" 'bookmark-jump)
+    :config
+    (setq bookmark-fontify nil))
+#+END_SRC
+
+** burly
+#+BEGIN_SRC elisp
+  (use-package burly
+    :ensure t
+    :commands
+    (burly-bookmark-windows
+     burly-open-bookmark))
 #+END_SRC
 
 ** comint

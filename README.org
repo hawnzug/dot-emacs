@@ -261,19 +261,6 @@ For lsp mode
 #+END_SRC
 
 * use-package
-#+BEGIN_SRC elisp :tangle no
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
-  (add-to-list 'package-archives '("ublt" . "https://elpa.ubolonton.org/packages/")) ;; tree-sitter
-  ;; (setq package-archives '(("gnu"   . "https://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")
-  ;;                          ("melpa" . "https://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")))
-  (require 'package)
-  (unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
-  (require 'use-package)
-#+END_SRC
-
 #+BEGIN_SRC elisp
   (setq package-user-dir "~/.config/emacs/elpa")
   (let ((default-directory package-user-dir))
@@ -282,7 +269,7 @@ For lsp mode
 #+END_SRC
 
 #+BEGIN_SRC elisp
-  (with-eval-after-load "info"
+  (with-eval-after-load 'info
     (info-initialize)
     (dolist (dir (directory-files package-user-dir))
       (let ((fdir (concat (file-name-as-directory package-user-dir) dir)))
@@ -290,6 +277,13 @@ For lsp mode
                     (not (file-directory-p fdir))
                     (not (file-exists-p (concat (file-name-as-directory fdir) "dir"))))
           (add-to-list 'Info-directory-list fdir)))))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (with-eval-after-load 'package
+    (add-to-list 'package-archives '("ublt" . "https://elpa.ubolonton.org/packages/")) ;; tree-sitter
+    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+    (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t))
 #+END_SRC
 
 * native compilation

@@ -275,10 +275,21 @@ For lsp mode
 #+END_SRC
 
 #+BEGIN_SRC elisp
-  (let ((default-directory "~/.config/emacs/elpa"))
+  (setq package-user-dir "~/.config/emacs/elpa")
+  (let ((default-directory package-user-dir))
     (normal-top-level-add-subdirs-to-load-path))
-  (add-to-list 'load-path "~/.config/emacs/packages")
   (require 'use-package)
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (with-eval-after-load "info"
+    (info-initialize)
+    (dolist (dir (directory-files package-user-dir))
+      (let ((fdir (concat (file-name-as-directory package-user-dir) dir)))
+        (unless (or (member dir '("." ".." "archives" "gnupg"))
+                    (not (file-directory-p fdir))
+                    (not (file-exists-p (concat (file-name-as-directory fdir) "dir"))))
+          (add-to-list 'Info-directory-list fdir)))))
 #+END_SRC
 
 * native compilation

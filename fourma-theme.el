@@ -43,11 +43,11 @@
  ;; Dired
  '(dired-directory ((t (:weight bold))))
 
- ;; ivy
- '(ivy-current-match ((t (:background "#FFAAAA"))))
+ ;; Haskell
+ '(haskell-constructor-face ((t nil)))
 
- ;; ivy-posframe
- '(ivy-posframe-border ((t (:background "black"))))
+ ;; eglot
+ '(eglot-highlight-symbol-face ((t (:inherit (region)))))
 
  ;; which-key
  '(which-key-separator-face ((t nil))))

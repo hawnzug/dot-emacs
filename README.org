@@ -87,11 +87,6 @@ Allow large garbage collection threshold when init.
   (setq package-enable-at-startup nil)
 #+END_SRC
 
-Disable modeline
-#+BEGIN_SRC elisp
-  (setq-default mode-line-format nil)
-#+END_SRC
-
 Font setup.
 #+BEGIN_SRC elisp
   (defun my:font-setup ()
@@ -348,9 +343,18 @@ For lsp mode
     (setq modus-themes-org-blocks 'gray-background)
     (setq modus-themes-headings
           '((t . (monochrome overline background))))
-    (modus-themes-load-themes)
     :config
     (modus-themes-load-operandi))
+#+END_SRC
+
+* mode line
+#+BEGIN_SRC elisp
+  (use-package hide-mode-line
+    :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (column-number-mode)
 #+END_SRC
 
 * general.el

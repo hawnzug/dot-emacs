@@ -462,7 +462,13 @@ Find references using xref.
 ** consult
 #+BEGIN_SRC elisp
   (use-package consult
-    :ensure t)
+    :ensure t
+    :general
+    (my:global-def
+      "b" 'consult-buffer
+      "s" 'consult-line
+      "r" 'consult-ripgrep
+      "o" 'consult-outline))
 #+END_SRC
 
 ** embark
@@ -890,7 +896,6 @@ keybindings
   (use-package ibuffer
     :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
     :general
-    (my:global-def "i" 'ibuffer)
     ('emacs ibuffer-mode-map
       "M-j" 'ibuffer-forward-filter-group
       "M-k" 'ibuffer-backward-filter-group

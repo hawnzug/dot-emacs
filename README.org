@@ -492,7 +492,7 @@ Find references using xref.
     :ensure t
     :general
     (:keymaps 'override
-     "C-." 'embark-act))
+     "M-o" 'embark-act))
 #+END_SRC
 
 #+BEGIN_SRC elisp
@@ -709,6 +709,7 @@ keybindings
     :ensure t
     :commands
     (burly-bookmark-windows
+     burly-bookmark-handler
      burly-open-bookmark))
 #+END_SRC
 
@@ -805,6 +806,7 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package vterm
     :ensure t
+    :defer t
     :config
     (defun evil-collection-vterm-escape-stay ()
       "Go back to normal state but don't move cursor backwards.
@@ -817,7 +819,6 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package vterm-toggle
     :ensure t
-    :after vterm
     :general
     (my:global-def "v" 'vterm-toggle)
     :config
@@ -1073,9 +1074,13 @@ keybindings
 ** cc-mode
 #+BEGIN_SRC elisp
   (use-package cc-mode
+    :mode
+    (("\\.c\\'" . c-mode)
+     ("\\.h\\'" . c-or-c++-mode))
     :config
     (setq c-basic-offset 4))
 #+END_SRC
+
 ** prog-mode
 #+BEGIN_SRC elisp
   (use-package prog-mode

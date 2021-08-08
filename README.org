@@ -347,6 +347,20 @@ For lsp mode
     (modus-themes-load-operandi))
 #+END_SRC
 
+#+BEGIN_SRC elisp :tangle no
+  (use-package lab-themes
+    :ensure t
+    :config
+    (lab-themes-load-style 'light))
+#+END_SRC
+
+#+BEGIN_SRC elisp :tangle no
+  (use-package flucui-themes
+    :ensure t
+    :config
+    (flucui-themes-load-style 'light))
+#+END_SRC
+
 * mode line
 #+BEGIN_SRC elisp
   (use-package hide-mode-line
@@ -358,7 +372,7 @@ For lsp mode
 #+END_SRC
 
 * general.el
-#+BEGIN_SRC elisp :noweb no-export
+#+BEGIN_SRC elisp
   (use-package general :ensure t)
 #+END_SRC
 

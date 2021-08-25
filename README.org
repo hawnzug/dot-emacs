@@ -380,17 +380,23 @@ Use comma as the global leader key.
 #+BEGIN_SRC elisp
   (general-create-definer my:global-def
     :states '(motion normal insert emacs)
-    :prefix ","
-    :global-prefix "M-,")
+    :prefix ";"
+    :global-prefix "M-;")
+  (my:global-def "" nil)
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (my:global-def
+    "f" 'find-file
+    "o" 'other-window)
 #+END_SRC
 
 Use semicolon as the major mode leader key.
 #+BEGIN_SRC elisp
   (general-create-definer my:major-def
     :states '(motion normal insert emacs)
-    :prefix ";"
-    :global-prefix "M-;")
-  (my:global-def "" nil)
+    :prefix ","
+    :global-prefix "M-,")
 #+END_SRC
 
 #+BEGIN_SRC elisp
@@ -497,7 +503,7 @@ Find references using xref.
       "b" 'consult-buffer
       "s" 'consult-line
       "r" 'consult-ripgrep
-      "o" 'consult-outline))
+      "j" 'consult-outline))
 #+END_SRC
 
 ** embark
@@ -587,7 +593,7 @@ keybindings
     "i" 'org-toggle-inline-images
     "x" 'org-toggle-latex-fragment
     "o" 'org-open-at-point
-    ";" 'org-ctrl-c-ctrl-c)
+    "," 'org-ctrl-c-ctrl-c)
 #+END_SRC
 
 #+BEGIN_SRC elisp

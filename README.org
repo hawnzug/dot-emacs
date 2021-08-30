@@ -626,6 +626,7 @@ keybindings
             '(("pdf" . "zathura")
               ("html" . "firefox")
               ("mp4" . "mpv")
+              ("ts" . "mpv")
               ("png" . "feh")
               ("jpg" . "feh"))))
     :general
@@ -796,6 +797,8 @@ keybindings
   (use-package eglot
     :ensure t
     :commands eglot
+    :custom-face
+    (eglot-highlight-symbol-face ((t (:inherit (highlight)))))
     :config
     (setq eglot-stay-out-of '(flymake))
     (add-hook 'eglot-managed-mode-hook

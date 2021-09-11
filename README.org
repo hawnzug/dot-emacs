@@ -522,7 +522,7 @@ Find references using xref.
 #+END_SRC
 
 * org
-#+BEGIN_SRC elisp :noweb no-export
+#+BEGIN_SRC elisp
   (use-package org
     :ensure org-plus-contrib
     :defer 4
@@ -532,8 +532,13 @@ Find references using xref.
     :config
     (use-package org-mouse)
     (use-package ob-shell)
-    <<org-kill-temp-fontify-buffer>>
     (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
+    (setq org-agenda-files '("~/org/todo.org"))
+    (setq org-agenda-todo-list-sublevels nil)
+    (setq org-refile-targets
+          '((org-agenda-files . (:maxlevel . 1))))
+    (setq org-refile-use-outline-path nil)
+    (setq org-reverse-note-order t)
     (setq org-adapt-indentation nil)
     (setq org-startup-indented t)
     (setq org-startup-truncated t)
@@ -601,8 +606,8 @@ keybindings
    :definer 'minor-mode
    :states '(motion normal insert emacs)
    :keymaps 'org-src-mode
-   :prefix ";"
-   :global-prefix "M-;"
+   :prefix ","
+   :global-prefix "M-,"
    "e" 'org-edit-src-exit
    "k" 'org-edit-src-abort)
 #+END_SRC

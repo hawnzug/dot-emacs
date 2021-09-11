@@ -90,19 +90,15 @@ Allow large garbage collection threshold when init.
 Font setup.
 #+BEGIN_SRC elisp
   (defun my:font-setup ()
-    (let ((primary-font
-           (concat
-            "Iosevka Curly Slab "
-            (pcase (cddr (frame-monitor-attribute 'geometry))
-              ('(3840 2160) "16")
-              (else "16")))))
-      (set-fontset-font t 'unicode "Noto Color Emoji")
+    (let ((primary-font "Iosevka Curly Slab 16"))
+      (set-fontset-font t 'unicode "Iosevka Curly Slab")
+      (set-fontset-font t 'unicode "Noto Color Emoji" nil 'append)
       (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
-      (set-fontset-font t 'han "FZFW ZhuZi GuDianS LMC")
+      (set-fontset-font t 'han "Iosevka Curly Slab")
       (set-fontset-font t 'han "Source Han Serif CN" nil 'append)
-      (set-fontset-font t 'cjk-misc "FZFW ZhuZi GuDianS LMC")
+      (set-fontset-font t 'cjk-misc "Iosevka Curly Slab")
       (set-fontset-font t 'cjk-misc "Source Han Serif CN" nil 'append)
-      (set-fontset-font t 'chinese-gbk "FZFW ZhuZi GuDianS LMC")
+      (set-fontset-font t 'chinese-gbk "Iosevka Curly Slab")
       (set-fontset-font t 'chinese-gbk "Source Han Serif CN" nil 'append)
       (set-face-font 'default primary-font)
       (set-face-font 'fixed-pitch primary-font)

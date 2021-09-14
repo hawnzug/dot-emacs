@@ -963,6 +963,7 @@ keybindings
     "b" 'Info-history-back
     "n" 'Info-next
     "p" 'Info-prev
+    "<return>" 'Info-follow-nearest-node
     "<tab>" 'Info-next-reference
     "S-<tab>" 'Info-prev-reference)
 #+END_SRC

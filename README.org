@@ -525,10 +525,15 @@ Find references using xref.
     :hook
     (org-mode . my:show-trailing-space)
     (org-babel-after-execute . org-redisplay-inline-images)
+    :general
+    (my:global-def "a" 'org-agenda)
     :config
     (use-package org-mouse)
     (use-package ob-shell)
     (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
+    (setq org-todo-keywords
+          '((sequence "TODO" "|" "DONE")
+            (sequence "WAIT" "LATER" "|")))
     (setq org-agenda-files '("~/org/todo.org"))
     (setq org-agenda-todo-list-sublevels nil)
     (setq org-refile-targets

@@ -339,6 +339,7 @@ For lsp mode
     (setq modus-themes-org-blocks 'gray-background)
     (setq modus-themes-headings
           '((t . (monochrome overline background))))
+    (setq modus-themes-mode-line '(accented))
     :config
     (modus-themes-load-operandi))
 #+END_SRC
@@ -365,6 +366,16 @@ For lsp mode
 
 #+BEGIN_SRC elisp
   (column-number-mode)
+#+END_SRC
+
+** moody
+#+BEGIN_SRC elisp :tangle no
+  (use-package moody
+    :ensure t
+    :config
+    (setq x-underline-at-descent-line t)
+    (moody-replace-mode-line-buffer-identification)
+    (moody-replace-vc-mode))
 #+END_SRC
 
 * general.el

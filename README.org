@@ -1012,6 +1012,9 @@ keybindings
   (use-package markdown-mode
     :ensure t
     :commands (gfm-view-mode markdown-view-mode)
+    :general
+    ('normal markdown-mode-map
+      "<tab>" 'markdown-cycle)
     :mode (("README\\.md\\'" . gfm-mode)
            ("\\.md\\'" . markdown-mode)
            ("\\.mkd\\'" . markdown-mode)

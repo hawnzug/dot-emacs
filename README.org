@@ -435,7 +435,6 @@ Find references using xref.
 #+END_SRC
 
 #+BEGIN_SRC elisp
-  (general-def 'motion ";" nil "," nil)
   (general-def 'normal
     "C-." nil
     "X" nil
@@ -995,9 +994,9 @@ keybindings
    :definer 'minor-mode
    :states '(motion normal insert emacs)
    :keymaps 'git-commit-mode
-   :prefix ";"
-   :global-prefix "M-;"
-   ";" 'with-editor-finish
+   :prefix ","
+   :global-prefix "M-,"
+   "," 'with-editor-finish
    "k" 'with-editor-cancel)
 #+END_SRC
 

@@ -386,9 +386,8 @@ For lsp mode
 Use comma as the global leader key.
 #+BEGIN_SRC elisp
   (general-create-definer my:global-def
-    :states '(motion normal insert emacs)
-    :prefix ";"
-    :global-prefix "M-;")
+    :states '(motion normal)
+    :prefix "x")
   (my:global-def "" nil)
 #+END_SRC
 
@@ -439,7 +438,6 @@ Find references using xref.
   (general-def 'motion ";" nil "," nil)
   (general-def 'normal
     "C-." nil
-    "x" nil
     "X" nil
     "s" nil
     "S" nil
@@ -666,7 +664,6 @@ keybindings
       "s" 'dired-sort-toggle-or-edit
       "u" 'dired-unmark
       "U" 'dired-unmark-all-marks
-      "x" 'dired-do-flagged-delete
       "z" 'dired-do-compress
       "m" nil
       "m ." 'dired-mark-extension
@@ -895,18 +892,20 @@ keybindings
       "<tab>" 'forward-button
       "<S-tab>" 'backward-button
       "<return>" 'flymake-goto-diagnostic
-      "<space>" 'flymake-show-diagnostic)
-    ('normal flymake-mode-map
-      "x" nil
-      "x j" 'flymake-goto-next-error
-      "x k" 'flymake-goto-prev-error
-      "x x" 'flymake-show-diagnostics-buffer))
+      "<space>" 'flymake-show-diagnostic))
 #+END_SRC
 
 ** project.el
 #+BEGIN_SRC elisp
   (use-package project
     :defer t
+    :general
+    (my:global-def
+      "p" nil
+      "p p" 'project-switch-project
+      "p f" 'project-find-file
+      "p b" 'project-switch-to-buffer
+      "p d" 'project-dired)
     :config
     (defun my:find-project-root (dir)
       "Try to locate a project root."

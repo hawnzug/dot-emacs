@@ -819,13 +819,6 @@ keybindings
     (add-to-list
      'eglot-server-programs
      '(python-mode . ("pyright-langserver" "--stdio")))
-    (my:major-def eglot-mode-map
-      "e" '(nil :wk "eglot")
-      "e a" 'eglot-code-actions
-      "e c" 'eglot-reconnect
-      "e f" 'eglot-format
-      "e q" 'eglot-shutdown
-      "e r" 'eglot-rename)
     (general-def 'normal eglot-mode-map
       "K" 'eglot-help-at-point))
 #+END_SRC

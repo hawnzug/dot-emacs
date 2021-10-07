@@ -742,7 +742,7 @@ keybindings
 #+END_SRC
 
 ** burly
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package burly
     :ensure t
     :commands

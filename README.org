@@ -720,7 +720,9 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package bibtex-actions
     :ensure t
-    :commands (bibtex-actions-open)
+    :general
+    (my:global-def
+      "d" 'bibtex-actions-open)
     :config
     (with-eval-after-load 'embark
       (add-to-list 'embark-keymap-alist '(bibtex . bibtex-actions-map))))

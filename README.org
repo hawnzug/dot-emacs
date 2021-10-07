@@ -890,6 +890,12 @@ keybindings
   (use-package flymake
     :defer t
     :general
+    ('normal flymake-diagnostics-buffer-mode-map
+      "q" 'quit-window
+      "<tab>" 'forward-button
+      "<S-tab>" 'backward-button
+      "<return>" 'flymake-goto-diagnostic
+      "<space>" 'flymake-show-diagnostic)
     ('normal flymake-mode-map
       "x" nil
       "x j" 'flymake-goto-next-error

@@ -650,6 +650,7 @@ keybindings
       "+" 'dired-create-directory
       "c" 'dired-do-copy
       "d" 'dired-flag-file-deletion
+      "D" 'dired-do-flagged-delete
       "e" 'ediff
       "f" 'dired-mark
       "g" 'revert-buffer

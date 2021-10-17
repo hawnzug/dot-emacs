@@ -986,8 +986,9 @@ keybindings
   (use-package magit-delta
     :ensure t
     :after magit
+    :hook (magit-mode . magit-delta-mode)
     :config
-    (magit-delta-mode))
+    (add-to-list 'magit-delta-delta-args "--max-line-length=2048"))
 #+END_SRC
 
 #+BEGIN_SRC elisp

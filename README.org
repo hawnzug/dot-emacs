@@ -443,12 +443,6 @@ Find references using xref.
     "u" 'undo-only
     "U" 'undo
     "C-r" 'undo-redo)
-  (general-def 'motion
-    :prefix "s"
-    "l" 'evil-avy-goto-line
-    "f" 'evil-avy-goto-char-in-line
-    "c" 'evil-avy-goto-char-2
-    "w" 'evil-avy-goto-word-1)
 #+END_SRC
 
 ** evil-surround
@@ -699,7 +693,9 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package avy
     :ensure t
-    :commands (avy-goto-char-2 avy-goto-line avy-goto-word-1))
+    :general
+    ('motion
+     "s" 'avy-goto-char-timer))
 #+END_SRC
 
 ** bibtex

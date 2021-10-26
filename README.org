@@ -516,7 +516,7 @@ Find references using xref.
 #+BEGIN_SRC elisp
   (use-package embark-consult
     :ensure t
-    :after (embark consult))
+    :after embark)
 #+END_SRC
 
 * org
@@ -628,16 +628,6 @@ keybindings
     (setq dired-recursive-deletes 'always)
     (setq dired-listing-switches "-alhvG --group-directories-first")
     (setq dired-isearch-filenames 'dwim)
-    (use-package dired-open
-      :ensure t
-      :config
-      (setq dired-open-extensions
-            '(("pdf" . "zathura")
-              ("html" . "firefox")
-              ("mp4" . "mpv")
-              ("ts" . "mpv")
-              ("png" . "feh")
-              ("jpg" . "feh"))))
     :general
     ('normal dired-mode-map
       "/" 'dired-goto-file
@@ -652,7 +642,7 @@ keybindings
       "i" 'dired-toggle-read-only
       "j" 'dired-next-line
       "k" 'dired-previous-line
-      "l" 'dired-open-file
+      "l" 'dired-find-file
       "n" 'dired-narrow-regexp
       "q" 'quit-window
       "r" 'dired-do-rename

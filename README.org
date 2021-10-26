@@ -502,6 +502,23 @@ Find references using xref.
       "s" 'consult-line
       "r" 'consult-ripgrep
       "j" 'consult-outline))
+  (use-package consult-xref
+    :after (xref consult)
+    :config
+    (setq xref-show-xrefs-function #'consult-xref))
+  (use-package consult-org
+    :after org
+    :commands (consult-org-heading))
+  (use-package consult-imenu
+    :after imenu
+    :commands (consult-imenu))
+  (use-package consult-flymake
+    :after flymake
+    :commands (consult-flymake))
+  (use-package consult-register
+    :commands (consult-register
+               consult-register-load
+               consult-register-store))
 #+END_SRC
 
 ** embark

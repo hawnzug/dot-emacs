@@ -411,13 +411,6 @@ Use semicolon as the major mode leader key.
     "C--" 'text-scale-adjust)
 #+END_SRC
 
-Find references using xref.
-#+BEGIN_SRC elisp
-  (general-def 'normal
-    "g d" 'xref-find-definitions
-    "g r" 'xref-find-references)
-#+END_SRC
-
 * evil
 #+BEGIN_SRC elisp
   (use-package evil
@@ -1107,12 +1100,18 @@ keybindings
 
 ** xref
 #+BEGIN_SRC elisp
-  (general-def 'normal xref--xref-buffer-mode-map
-    "j" 'xref-next-line
-    "k" 'xref-prev-line
-    "q" 'quit-window
-    "o" 'xref-show-location-at-point
-    "<return>" 'xref-goto-xref)
+  (use-package xref
+    :general
+    ('normal
+     "g d" 'xref-find-definitions
+     "g r" 'xref-find-references)
+    :config
+    (general-def 'normal xref--xref-buffer-mode-map
+      "j" 'xref-next-line
+      "k" 'xref-prev-line
+      "q" 'quit-window
+      "o" 'xref-show-location-at-point
+      "<return>" 'xref-goto-xref))
 #+END_SRC
 
 * languages

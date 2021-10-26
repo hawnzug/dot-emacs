@@ -79,7 +79,7 @@
   - [[#tex][TeX]]
   - [[#yaml][YAML]]
 :END:
-* init
+* early init
 Allow large garbage collection threshold when init.
 #+BEGIN_SRC elisp :tangle early-init.el
   (setq gc-cons-threshold 64000000)
@@ -87,6 +87,16 @@ Allow large garbage collection threshold when init.
   (setq package-enable-at-startup nil)
 #+END_SRC
 
+Disable useless UIs.
+#+BEGIN_SRC elisp :tangle early-init.el
+  (scroll-bar-mode -1)
+  (horizontal-scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (tooltip-mode -1)
+  (menu-bar-mode -1)
+#+END_SRC
+
+* init
 Font setup.
 #+BEGIN_SRC elisp
   (defun my:font-setup ()
@@ -131,15 +141,6 @@ Ligature
     (dolist (char-regexp ligatures)
       (set-char-table-range composition-function-table (car char-regexp)
                             `([,(cdr char-regexp) 0 font-shape-gstring]))))
-#+END_SRC
-
-Disable useless UIs.
-#+BEGIN_SRC elisp
-  (scroll-bar-mode -1)
-  (horizontal-scroll-bar-mode -1)
-  (tool-bar-mode -1)
-  (tooltip-mode -1)
-  (menu-bar-mode -1)
 #+END_SRC
 
 Quiet startup
@@ -976,6 +977,7 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package magit
     :ensure t
+    :defer 5
     :general
     (my:global-def "g" 'magit-status)
     :hook (git-commit-mode . evil-insert-state))

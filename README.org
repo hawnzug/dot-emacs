@@ -148,6 +148,7 @@ Quiet startup
   (setq inhibit-startup-message t)
   (setq inhibit-startup-echo-area-message t)
   (setq initial-scratch-message nil)
+  (setq initial-major-mode 'fundamental-mode)
 #+END_SRC
 
 Show paren pair.
@@ -289,6 +290,7 @@ For lsp mode
 #+BEGIN_SRC elisp
   (defun my:show-trailing-space ()
     (setq show-trailing-whitespace t))
+  (add-hook 'prog-mode-hook #'my:show-trailing-space)
 #+END_SRC
 
 #+BEGIN_SRC elisp
@@ -1123,13 +1125,6 @@ keybindings
      ("\\.h\\'" . c-or-c++-mode))
     :config
     (setq c-basic-offset 4))
-#+END_SRC
-
-** prog-mode
-#+BEGIN_SRC elisp
-  (use-package prog-mode
-    :defer t
-    :hook (prog-mode . my:show-trailing-space))
 #+END_SRC
 
 ** tree-sitter

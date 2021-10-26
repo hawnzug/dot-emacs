@@ -1022,6 +1022,13 @@ keybindings
      "C-/" 'comment-dwim))
 #+END_SRC
 
+** recentf
+#+BEGIN_SRC elisp
+  (use-package recentf
+    :config
+    (recentf-mode))
+#+END_SRC
+
 ** strokes
 #+BEGIN_SRC elisp
   (use-package strokes

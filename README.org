@@ -363,12 +363,19 @@ For lsp mode
 
 * mode line
 #+BEGIN_SRC elisp
-  (use-package hide-mode-line
-    :ensure t)
+  (column-number-mode)
+  (setq my:mode-line-format mode-line-format)
+  (defun my:echo-mode-line ()
+    (interactive)
+    (message (format-mode-line my:mode-line-format)))
 #+END_SRC
 
 #+BEGIN_SRC elisp
-  (column-number-mode)
+  (use-package hide-mode-line
+    :ensure t
+    :config
+    (setq hide-mode-line-excluded-modes nil)
+    (global-hide-mode-line-mode))
 #+END_SRC
 
 ** moody
@@ -412,6 +419,7 @@ Use semicolon as the major mode leader key.
   (general-def 'override
     "C-=" 'text-scale-adjust
     "C--" 'text-scale-adjust)
+  (general-def "M-m" 'my:echo-mode-line)
 #+END_SRC
 
 * evil

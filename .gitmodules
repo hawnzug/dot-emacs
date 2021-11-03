@@ -1,0 +1,3 @@
+[submodule "packages/consult-bibtex"]
+	path = packages/consult-bibtex
+	url = git@github.com:mohkale/consult-bibtex.git

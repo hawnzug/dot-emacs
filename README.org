@@ -1055,6 +1055,38 @@ keybindings
     (recentf-mode))
 #+END_SRC
 
+** snippets
+#+BEGIN_SRC elisp
+  (use-package yasnippet
+    :ensure t
+    :hook (LaTeX-mode . yas-minor-mode))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package aas
+    :ensure t
+    :hook (org-mode . aas-activate-for-major-mode)
+    :config
+    (aas-set-snippets 'org-mode
+      "bsrc" (lambda () (interactive)
+                 (insert "#+BEGIN_SRC elisp\n#+END_SRC")
+                 (org-edit-special))))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package laas
+    :ensure t
+    :hook (LaTeX-mode . laas-mode)
+    :config
+    (require 'yasnippet)
+    (aas-set-snippets 'laas-mode
+      :cond #'texmathp
+      "Sum" (lambda () (interactive)
+              (yas-expand-snippet "\\sum_{$1}^{$2} $0"))
+      "//" (lambda () (interactive)
+             (yas-expand-snippet "\\frac{$1}{$2}$0"))))
+#+END_SRC
+
 ** strokes
 #+BEGIN_SRC elisp
   (use-package strokes

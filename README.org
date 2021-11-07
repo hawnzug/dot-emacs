@@ -333,6 +333,10 @@ For lsp mode
 
 * theme
 #+BEGIN_SRC elisp
+  (load-theme 'fourma)
+#+END_SRC
+
+#+BEGIN_SRC elisp :tangle no
   (use-package modus-themes
     :ensure t
     :init
@@ -835,8 +839,6 @@ keybindings
   (use-package eglot
     :ensure t
     :commands eglot
-    :custom-face
-    (eglot-highlight-symbol-face ((t (:inherit (highlight)))))
     :config
     (add-to-list
      'eglot-server-programs

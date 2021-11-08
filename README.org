@@ -828,6 +828,13 @@ keybindings
     (setq ediff-window-setup-function 'ediff-setup-windows-plain))
 #+END_SRC
 
+** elcord
+#+BEGIN_SRC elisp
+  (use-package elcord
+    :ensure t
+    :commands elcord-mode)
+#+END_SRC
+
 ** eldoc
 #+BEGIN_SRC elisp
   (use-package eldoc

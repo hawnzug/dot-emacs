@@ -832,7 +832,9 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package elcord
     :ensure t
-    :commands elcord-mode)
+    :defer 10
+    :config
+    (elcord-mode))
 #+END_SRC
 
 ** eldoc

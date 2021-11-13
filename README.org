@@ -338,7 +338,7 @@ For lsp mode
 
 * theme
 #+BEGIN_SRC elisp
-  (load-theme 'fourma)
+  (load-theme 'fourma t)
 #+END_SRC
 
 #+BEGIN_SRC elisp :tangle no
@@ -1100,7 +1100,7 @@ keybindings
       :cond #'texmathp
       "Sum" (lambda () (interactive)
               (yas-expand-snippet "\\sum_{$1}^{$2} $0"))
-      "//" (lambda () (interactive)
+      "fc/" (lambda () (interactive)
              (yas-expand-snippet "\\frac{$1}{$2}$0"))))
 #+END_SRC
 

@@ -865,7 +865,8 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package vterm
     :ensure t
-    :defer t
+    :general
+    (my:global-def "v" 'vterm)
     :config
     (defun evil-collection-vterm-escape-stay ()
       "Go back to normal state but don't move cursor backwards.
@@ -875,7 +876,7 @@ keybindings
     (add-hook 'vterm-mode-hook 'evil-collection-vterm-escape-stay))
 #+END_SRC
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package vterm-toggle
     :ensure t
     :general

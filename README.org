@@ -728,6 +728,7 @@ keybindings
     (setq bibtex-completion-bibliography '("~/org/refs.bib"))
     (setq bibtex-completion-notes-path "~/org/readings.org")
     (setq bibtex-completion-pdf-field "file")
+    (setq bibtex-completion-notes-template-one-file "\n* ${title}\n:PROPERTIES:\n:Custom_ID: ${=key=}\n:END:\n")
     (setq bibtex-completion-pdf-open-function #'my:bibtex-open-pdf)
     (setq bibtex-completion-library-path '("~/Documents/")))
 #+END_SRC

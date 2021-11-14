@@ -56,6 +56,19 @@
  ;; Haskell
  '(haskell-constructor-face ((t nil)))
 
+ ;; Agda
+ '(agda2-highlight-module-face ((t (:background "#F4F4F4"))))
+ '(agda2-highlight-keyword-face ((t (:slant italic))))
+ '(agda2-highlight-symbol-face ((t (:foreground "#555555" :weight light))))
+ '(agda2-highlight-primitive-face ((t nil)))
+ '(agda2-highlight-primitive-type-face ((t nil)))
+ '(agda2-highlight-number-face ((t nil)))
+ '(agda2-highlight-bound-variable-face ((t (:background "#FFF4F4"))))
+ '(agda2-highlight-datatype-face ((t (:background "#F4F4FF"))))
+ '(agda2-highlight-function-face ((t (:inherit (agda2-highlight-datatype-face)))))
+ '(agda2-highlight-operator-face ((t (:inherit (agda2-highlight-datatype-face)))))
+ '(agda2-highlight-inductive-constructor-face ((t (:inherit (agda2-highlight-datatype-face)))))
+
  ;; eglot
  '(eglot-highlight-symbol-face ((t (:inherit (region)))))
 

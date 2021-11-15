@@ -7,7 +7,7 @@
  '(fixed-pitch ((t (:family "Iosevka Curly Slab"))))
  '(variable-pitch ((t (:family "Iosevka Curly Slab"))))
  '(cursor ((t (:background "black"))))
- '(highlight ((t (:background "#FFAAAA"))))
+ '(highlight ((t (:background "#FEB6A6"))))
  '(hl-line ((t nil)))
  '(region ((t (:background "#84AEE3"))))
  '(warning ((t (:background "#FF6666"))))
@@ -15,7 +15,7 @@
  '(trailing-whitespace ((t (:background "red"))))
  '(font-lock-builtin-face ((t (:slant italic))))
  '(font-lock-comment-delimiter-face ((t (:inherit (font-lock-comment-face)))))
- '(font-lock-comment-face ((t (:background "#AAF0D1"))))
+ '(font-lock-comment-face ((t (:background "#AAF0B1"))))
  '(font-lock-constant-face ((t nil)))
  '(font-lock-doc-face ((t (:inherit (font-lock-comment-face)))))
  '(font-lock-function-name-face ((t nil)))
@@ -30,6 +30,7 @@
  '(font-lock-warning-face ((t (:inherit (warning)))))
  '(fringe ((t (:background "white"))))
  '(minibuffer-prompt ((t (:weight bold))))
+ '(link ((t (:underline t :foreground "#0070CE"))))
 
  ;; outline
  '(outline-1 ((t nil)))
@@ -43,6 +44,7 @@
 
  ;; org
  '(org-block ((t nil)))
+ '(org-drawer ((t (:foreground "#BBBBBB"))))
 
  ;; LaTeX
  '(font-latex-sedate-face ((t (:inherit (font-lock-keyword-face)))))
@@ -55,10 +57,12 @@
 
  ;; Haskell
  '(haskell-constructor-face ((t nil)))
+ '(haskell-keyword-face ((t (:family "Monoflow"))))
+ '(haskell-pragma-face ((t (:family "Monoflow"))))
 
  ;; Agda
- '(agda2-highlight-module-face ((t (:background "#F4F4F4"))))
- '(agda2-highlight-keyword-face ((t (:slant italic))))
+ '(agda2-highlight-module-face ((t nil)))
+ '(agda2-highlight-keyword-face ((t (:family "Monoflow"))))
  '(agda2-highlight-symbol-face ((t (:foreground "#555555" :weight light))))
  '(agda2-highlight-primitive-face ((t nil)))
  '(agda2-highlight-primitive-type-face ((t nil)))

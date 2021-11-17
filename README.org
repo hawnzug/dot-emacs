@@ -828,6 +828,7 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package elcord
     :ensure t
+    :if (executable-find "discord")
     :defer 10
     :config
     (elcord-mode))

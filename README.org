@@ -562,7 +562,7 @@ Use semicolon as the major mode leader key.
     :config
     (use-package org-mouse)
     (use-package ob-shell)
-    (setcdr (assoc "\\.pdf\\'" org-file-apps) "zathura %s")
+    (add-to-list 'org-file-apps '(t . "xdg-open %s") t)
     (setq org-refile-targets
           '(("~/org/readings.org" . (:maxlevel . 2))))
     (setq org-refile-use-outline-path nil)

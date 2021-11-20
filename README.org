@@ -1201,6 +1201,7 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package tree-sitter
     :ensure t
+    :hook ((html-mode) . tree-sitter-hl-mode)
     :commands (tree-sitter-hl-mode))
 #+END_SRC
 
@@ -1273,6 +1274,20 @@ Keybindings
 #+END_SRC
 
 ** HTML
+#+BEGIN_SRC elisp
+  (defun my:html-mode-face-remap ()
+    (face-remap-set-base
+     'tree-sitter-hl-face:attribute
+     :foreground "#AAAAAA")
+    (face-remap-set-base
+     'tree-sitter-hl-face:punctuation.bracket
+     :foreground "#DDDDDD")
+    (face-remap-add-relative
+     'tree-sitter-hl-face:tag
+     :foreground "#AAAAAA"))
+  (add-hook 'html-mode-hook 'my:html-mode-face-remap)
+#+END_SRC
+
 #+BEGIN_SRC elisp
   (use-package emmet-mode
     :ensure t

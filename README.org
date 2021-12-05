@@ -1080,11 +1080,24 @@ keybindings
   (use-package aas
     :ensure t
     :hook (org-mode . aas-activate-for-major-mode)
+    :hook (agda2-mode . aas-activate-for-major-mode)
     :config
     (aas-set-snippets 'org-mode
       "bsrc" (lambda () (interactive)
                  (insert "#+BEGIN_SRC elisp\n#+END_SRC")
-                 (org-edit-special))))
+                 (org-edit-special)))
+    (aas-set-snippets 'agda2-mode
+      :cond #'my:agda-auto-script-condition
+      "0" "₀"
+      "1" "₁"
+      "2" "₂"
+      "3" "₃"
+      "4" "₄"
+      "5" "₅"
+      "6" "₆"
+      "7" "₇"
+      "8" "₈"
+      "9" "₉"))
 #+END_SRC
 
 #+BEGIN_SRC elisp

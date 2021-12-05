@@ -1062,6 +1062,16 @@ keybindings
      "C-/" 'comment-dwim))
 #+END_SRC
 
+** outline
+#+BEGIN_SRC elisp
+  (use-package outline
+    :hook (agda2-mode . outline-minor-mode))
+  (add-hook 'outline-minor-mode-hook #'evil-normalize-keymaps)
+  (general-def 'motion outline-minor-mode-map
+    "<tab>" 'outline-cycle
+    "S-<iso-lefttab>" 'outline-cycle-buffer)
+#+END_SRC
+
 ** recentf
 #+BEGIN_SRC elisp
   (use-package recentf
@@ -1112,6 +1122,12 @@ keybindings
               (yas-expand-snippet "\\sum_{$1}^{$2} $0"))
       "fc/" (lambda () (interactive)
              (yas-expand-snippet "\\frac{$1}{$2}$0"))))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (defun my:agda-auto-script-condition ()
+    "Condition used for auto-sub/superscript snippets."
+    (not (or (bobp) (= (1- (point)) (point-min)) (eq ?\s (char-before)))))
 #+END_SRC
 
 ** strokes
@@ -1321,7 +1337,9 @@ Keybindings
       (file-name-directory (shell-command-to-string "agda-mode locate"))))
   (use-package agda2
     :load-path (lambda () (agda-mode-load-path))
-    :mode ("\\.agda\\'" . agda2-mode))
+    :mode ("\\.agda\\'" . agda2-mode)
+    :config
+    (setq outline-regexp "-- #+"))
 #+END_SRC
 
 #+BEGIN_SRC elisp

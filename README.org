@@ -1098,6 +1098,7 @@ keybindings
                  (org-edit-special)))
     (aas-set-snippets 'agda2-mode
       :cond #'my:agda-auto-script-condition
+      "'" "′"
       "0" "₀"
       "1" "₁"
       "2" "₂"

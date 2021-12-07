@@ -372,14 +372,6 @@ For lsp mode
 
 * mode line
 #+BEGIN_SRC elisp
-  (column-number-mode)
-  (setq my:mode-line-format mode-line-format)
-  (defun my:echo-mode-line ()
-    (interactive)
-    (message (format-mode-line my:mode-line-format)))
-#+END_SRC
-
-#+BEGIN_SRC elisp
   (use-package hide-mode-line
     :ensure t
     :config
@@ -420,15 +412,14 @@ Use semicolon as the major mode leader key.
 #+BEGIN_SRC elisp
   (general-create-definer my:major-def
     :states '(motion normal insert emacs)
-    :prefix ","
-    :global-prefix "M-,")
+    :prefix "m"
+    :global-prefix "M-m")
 #+END_SRC
 
 #+BEGIN_SRC elisp
   (general-def 'override
     "C-=" 'text-scale-adjust
     "C--" 'text-scale-adjust)
-  (general-def "M-m" 'my:echo-mode-line)
 #+END_SRC
 
 * evil
@@ -450,6 +441,7 @@ Use semicolon as the major mode leader key.
 #+BEGIN_SRC elisp
   (general-def 'normal
     "C-." nil
+    "m" nil
     "X" nil
     "s" nil
     "S" nil
@@ -622,12 +614,13 @@ keybindings
 #+BEGIN_SRC elisp
   (my:major-def org-mode-map
     "e" 'org-edit-special
+    "v t" 'org-babel-tangle
     "t" 'org-time-stamp
     "l" 'org-insert-link
     "i" 'org-toggle-inline-images
     "x" 'org-toggle-latex-fragment
     "o" 'org-open-at-point
-    "," 'org-ctrl-c-ctrl-c)
+    "m" 'org-ctrl-c-ctrl-c)
 #+END_SRC
 
 #+BEGIN_SRC elisp
@@ -635,8 +628,8 @@ keybindings
    :definer 'minor-mode
    :states '(motion normal insert emacs)
    :keymaps 'org-src-mode
-   :prefix ","
-   :global-prefix "M-,"
+   :prefix "m"
+   :global-prefix "M-m"
    "e" 'org-edit-src-exit
    "k" 'org-edit-src-abort)
 #+END_SRC
@@ -1040,9 +1033,9 @@ keybindings
    :definer 'minor-mode
    :states '(motion normal insert emacs)
    :keymaps 'git-commit-mode
-   :prefix ","
-   :global-prefix "M-,"
-   "," 'with-editor-finish
+   :prefix "m"
+   :global-prefix "M-m"
+   "m" 'with-editor-finish
    "k" 'with-editor-cancel)
 #+END_SRC
 

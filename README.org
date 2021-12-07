@@ -804,6 +804,13 @@ keybindings
       (company-posframe-mode 1)))
 #+END_SRC
 
+** demo-it
+#+BEGIN_SRC elisp
+  (use-package demo-it
+    :ensure t
+    :defer t)
+#+END_SRC
+
 ** docker
 #+BEGIN_SRC elisp
   (use-package dockerfile-mode

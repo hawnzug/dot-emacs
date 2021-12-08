@@ -443,6 +443,7 @@ Use semicolon as the major mode leader key.
     "C-." nil
     "m" nil
     "X" nil
+    "r" nil
     "s" nil
     "S" nil
     "u" 'undo-only
@@ -615,6 +616,8 @@ keybindings
   (my:major-def org-mode-map
     "e" 'org-edit-special
     "v t" 'org-babel-tangle
+    "v j" 'org-babel-next-src-block
+    "v k" 'org-babel-previous-src-block
     "t" 'org-time-stamp
     "l" 'org-insert-link
     "i" 'org-toggle-inline-images
@@ -630,7 +633,7 @@ keybindings
    :keymaps 'org-src-mode
    :prefix "m"
    :global-prefix "M-m"
-   "e" 'org-edit-src-exit
+   "m" 'org-edit-src-exit
    "k" 'org-edit-src-abort)
 #+END_SRC
 
@@ -703,7 +706,9 @@ keybindings
     :ensure t
     :general
     ('motion
-     "s" 'avy-goto-char-timer))
+     "r" 'avy-goto-char-timer)
+    :config
+    (setq avy-timeout-seconds 0.3))
 #+END_SRC
 
 ** bibtex
@@ -1345,16 +1350,24 @@ Keybindings
 
 #+BEGIN_SRC elisp
   (my:major-def agda2-mode-map
+    "a" 'agda2-auto-maybe-all
+    "c" 'agda2-make-case
     "d" 'agda2-goto-definition-keyboard
-    "l" 'agda2-load
-    "a" 'agda2-autoOne
     "h" 'agda2-helper-function-type
-    "," 'agda2-goal-and-context
-    "." 'agda2-goal-and-context-and-inferred
+    "j" 'agda2-next-goal
+    "k" 'agda2-previous-goal
+    "l" 'agda2-load
     "r" 'agda2-refine
     "n" 'agda2-compute-normalised
-    "c" 'agda2-make-case
-    "q" 'agda2-quit)
+    "s" 'agda2-solve-maybe-all
+    "w" 'agda2-why-in-scope-maybe-toplevel
+    "z" 'agda2-search-about-toplevel
+    "," 'agda2-goal-and-context
+    "." 'agda2-goal-and-context-and-inferred
+    ";" 'agda2-goal-and-context-and-checked
+    "x h" 'agda2-display-implicit-arguments
+    "x r" 'agda2-restart
+    "x q" 'agda2-quit)
 #+END_SRC
 
 ** Ocaml

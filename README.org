@@ -1445,12 +1445,18 @@ Keybindings
     (setq TeX-view-program-selection '((output-pdf "Zathura"))))
 #+END_SRC
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package auctex-latexmk
     :ensure t
     :after tex-site
     :config
     (auctex-latexmk-setup))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package cdlatex
+    :ensure t
+    :hook (LaTeX-mode . cdlatex-mode))
 #+END_SRC
 
 ** YAML

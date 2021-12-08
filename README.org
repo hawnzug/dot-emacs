@@ -478,6 +478,15 @@ Use semicolon as the major mode leader key.
     (global-evil-matchit-mode 1))
 #+END_SRC
 
+** evil-motion-trainer
+#+BEGIN_SRC elisp
+  (use-package evil-motion-trainer
+    :load-path "~/.config/emacs/packages/evil-motion-trainer"
+    :after evil
+    :config
+    (global-evil-motion-trainer-mode 1))
+#+END_SRC
+
 * completion
 ** vertico
 #+BEGIN_SRC elisp

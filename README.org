@@ -456,8 +456,16 @@ Use semicolon as the major mode leader key.
   (use-package evil-surround
     :ensure t
     :after evil
-    :defer 2
     :config
+    (setq-default
+     evil-surround-pairs-alist
+     (push '(?c . ("{" . "}")) evil-surround-pairs-alist))
+    (general-def 'normal evil-surround-mode-map
+      "s" 'evil-surround-region
+      "S" 'evil-Surround-region)
+    (general-def 'visual evil-surround-mode-map
+      "s" 'evil-surround-region
+      "S" 'evil-Surround-region)
     (global-evil-surround-mode 1))
 #+END_SRC
 
@@ -466,7 +474,6 @@ Use semicolon as the major mode leader key.
   (use-package evil-matchit
     :ensure t
     :after evil
-    :defer 2
     :config
     (global-evil-matchit-mode 1))
 #+END_SRC
@@ -1456,7 +1463,9 @@ Keybindings
 #+BEGIN_SRC elisp
   (use-package cdlatex
     :ensure t
-    :hook (LaTeX-mode . cdlatex-mode))
+    :hook (LaTeX-mode . cdlatex-mode)
+    :init
+    (setq cdlatex-takeover-parenthesis nil))
 #+END_SRC
 
 ** YAML

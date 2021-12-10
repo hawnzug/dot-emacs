@@ -487,6 +487,18 @@ Use semicolon as the major mode leader key.
     (global-evil-motion-trainer-mode 1))
 #+END_SRC
 
+** evil inherit input method in minibuffer
+#+BEGIN_SRC elisp
+  (defun my:inherit-input-method ()
+    "Inherit input method from evil"
+    (let (input-method-activate-hook
+          input-method-deactivate-hook)
+      (when-let ((im (with-minibuffer-selected-window evil-input-method)))
+        (activate-input-method im))))
+
+  (add-hook 'minibuffer-setup-hook #'my:inherit-input-method)
+#+END_SRC
+
 * completion
 ** vertico
 #+BEGIN_SRC elisp
@@ -1374,7 +1386,7 @@ Keybindings
     "k" 'agda2-previous-goal
     "l" 'agda2-load
     "r" 'agda2-refine
-    "n" 'agda2-compute-normalised
+    "n" 'agda2-compute-normalised-maybe-toplevel
     "s" 'agda2-solve-maybe-all
     "w" 'agda2-why-in-scope-maybe-toplevel
     "z" 'agda2-search-about-toplevel

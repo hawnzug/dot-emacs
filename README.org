@@ -1112,10 +1112,23 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
   (use-package flypy-re
     :load-path "~/.config/emacs/packages/flypy-re"
     :config
+    ;; orderless
     (with-eval-after-load 'orderless
       (defun completion--regex-pinyin (str)
         (orderless-regexp (flypy-re-build-regexp str)))
-      (add-to-list 'orderless-matching-styles 'completion--regex-pinyin)))
+      (add-to-list 'orderless-matching-styles 'completion--regex-pinyin))
+    ;; avy: overload avy-goto-char-timer
+    (with-eval-after-load 'avy
+      (defun avy-goto-char-timer (&optional arg)
+        "Read one or many consecutive chars and jump to the first one.
+  The window scope is determined by `avy-all-windows' (ARG negates it)."
+        (interactive "P")
+        (let ((avy-all-windows (if arg
+                                   (not avy-all-windows)
+                                 avy-all-windows)))
+          (avy-with avy-goto-char-timer
+                    (setq avy--old-cands (avy--read-candidates #'flypy-re-build-regexp))
+                    (avy-process avy--old-cands))))))
 #+END_SRC
 
 ** recentf

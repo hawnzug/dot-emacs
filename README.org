@@ -1105,6 +1105,19 @@ keybindings
     "S-<iso-lefttab>" 'outline-cycle-buffer)
 #+END_SRC
 
+** flypy-re
+Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
+
+#+BEGIN_SRC elisp
+  (use-package flypy-re
+    :load-path "~/.config/emacs/packages/flypy-re"
+    :config
+    (with-eval-after-load 'orderless
+      (defun completion--regex-pinyin (str)
+        (orderless-regexp (flypy-re-build-regexp str)))
+      (add-to-list 'orderless-matching-styles 'completion--regex-pinyin)))
+#+END_SRC
+
 ** recentf
 #+BEGIN_SRC elisp
   (use-package recentf

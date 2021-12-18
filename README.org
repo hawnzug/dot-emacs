@@ -110,11 +110,14 @@ Font setup.
       (set-fontset-font t 'unicode "Noto Color Emoji" nil 'append)
       (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
       (set-fontset-font t 'han "Iosevka Curly Slab")
-      (set-fontset-font t 'han "Source Han Serif CN 14" nil 'append)
+      (set-fontset-font t 'han "FZNewShuSong-Z10S" nil 'append)
+      (set-fontset-font t 'han "Source Han Sans CN 14" nil 'append)
       (set-fontset-font t 'cjk-misc "Iosevka Curly Slab")
-      (set-fontset-font t 'cjk-misc "Source Han Serif CN 14" nil 'append)
+      (set-fontset-font t 'cjk-misc "FZNewShuSong-Z10S" nil 'append)
+      (set-fontset-font t 'cjk-misc "Source Han Sans CN 14" nil 'append)
       (set-fontset-font t 'chinese-gbk "Iosevka Curly Slab")
-      (set-fontset-font t 'chinese-gbk "Source Han Serif CN 14" nil 'append)
+      (set-fontset-font t 'chinese-gbk "FZNewShuSong-Z10S" nil 'append)
+      (set-fontset-font t 'chinese-gbk "Source Han Sans CN 14" nil 'append)
       (set-face-font 'default primary-font)
       (set-face-font 'fixed-pitch primary-font)
       (set-face-font 'fixed-pitch-serif primary-font)
@@ -741,16 +744,13 @@ keybindings
 
 ** bibtex
 #+BEGIN_SRC elisp
-  (defun my:bibtex-open-pdf (file)
-    (require 'async)
-    (async-start-process "bibtex-pdf" "zathura" nil file))
-#+END_SRC
-
-#+BEGIN_SRC elisp
   (use-package bibtex-completion
     :ensure t
     :defer t
     :config
+    (defun my:bibtex-open-pdf (file)
+      (require 'async)
+      (async-start-process "bibtex-pdf" "zathura" nil file))
     (setq bibtex-completion-bibliography '("~/org/refs.bib"))
     (setq bibtex-completion-notes-path "~/org/readings.org")
     (setq bibtex-completion-pdf-field "file")
@@ -1155,6 +1155,10 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
       "bsrc" (lambda () (interactive)
                  (insert "#+BEGIN_SRC elisp\n#+END_SRC")
                  (org-edit-special)))
+
+    (defun my:agda-auto-script-condition ()
+      "Condition used for auto-sub/superscript snippets."
+      (not (or (bobp) (= (1- (point)) (point-min)) (eq ?\s (char-before)))))
     (aas-set-snippets 'agda2-mode
       :cond #'my:agda-auto-script-condition
       "'" "′"
@@ -1185,9 +1189,6 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 #+END_SRC
 
 #+BEGIN_SRC elisp
-  (defun my:agda-auto-script-condition ()
-    "Condition used for auto-sub/superscript snippets."
-    (not (or (bobp) (= (1- (point)) (point-min)) (eq ?\s (char-before)))))
 #+END_SRC
 
 ** strokes
@@ -1364,17 +1365,20 @@ Keybindings
 
 ** HTML
 #+BEGIN_SRC elisp
-  (defun my:html-mode-face-remap ()
-    (face-remap-set-base
-     'tree-sitter-hl-face:attribute
-     :foreground "#AAAAAA")
-    (face-remap-set-base
-     'tree-sitter-hl-face:punctuation.bracket
-     :foreground "#DDDDDD")
-    (face-remap-add-relative
-     'tree-sitter-hl-face:tag
-     :foreground "#AAAAAA"))
-  (add-hook 'html-mode-hook 'my:html-mode-face-remap)
+  (use-package sgml-mode
+    :mode ("\\.html\\'" . html-mode)
+    :config
+    (defun my:html-mode-face-remap ()
+      (face-remap-set-base
+       'tree-sitter-hl-face:attribute
+       :foreground "#AAAAAA")
+      (face-remap-set-base
+       'tree-sitter-hl-face:punctuation.bracket
+       :foreground "#DDDDDD")
+      (face-remap-add-relative
+       'tree-sitter-hl-face:tag
+       :foreground "#AAAAAA"))
+    (add-hook 'html-mode-hook 'my:html-mode-face-remap))
 #+END_SRC
 
 #+BEGIN_SRC elisp

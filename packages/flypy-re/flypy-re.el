@@ -421,7 +421,7 @@
              (if (and (>= second ?a) (<= second ?z))
                  (if first
                      (if-let ((chars (cdr (assoc (string first second) flypy-re--char-table))))
-                         (prog1 (format "\\(%c%c\\|[%s]\\)" first second chars)
+                         (prog1 (format "\\(?:%c%c\\|[%s]\\)" first second chars)
                            (setq first nil))
                        (prog1 (string first)
                          (setq first second)))

@@ -819,7 +819,8 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package company
     :ensure t
-    :hook (prog-mode . company-mode)
+    :hook
+    ((LaTeX-mode prog-mode) . company-mode)
     :config
     (setq company-minimum-prefix-length 2)
     (setq company-idle-delay 0)
@@ -1488,16 +1489,15 @@ Keybindings
     :hook (sh-mode . flymake-shellcheck-load))
 #+END_SRC
 
-** TeX
+** LaTeX
 #+BEGIN_SRC elisp
   (use-package tex-site
     :ensure auctex
     :mode ("\\.tex\\'" . TeX-latex-mode)
-    :hook
-    ((LaTeX-mode . my:show-trailing-space)
-     (LaTeX-mode . TeX-source-correlate-mode)
-     (LaTeX-mode . TeX-PDF-mode))
     :config
+    (add-hook 'LaTeX-mode-hook 'my:show-trailing-space)
+    (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
+    (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)
     (setq font-latex-fontify-sectioning 'color)
     (setq font-latex-fontify-script nil)
     (setq TeX-view-program-selection '((output-pdf "Zathura"))))

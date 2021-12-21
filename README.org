@@ -516,7 +516,9 @@ Use semicolon as the major mode leader key.
   (use-package orderless
     :ensure t
     :init
-    (setq completion-styles '(orderless))
+    (defun my:orderless-in-minibuffer ()
+      (setq-local completion-styles '(orderless)))
+    (add-hook 'minibuffer-setup-hook 'my:orderless-in-minibuffer)
     (setq completion-category-defaults nil)
     (setq completion-category-overrides nil))
 #+END_SRC

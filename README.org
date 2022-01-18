@@ -623,6 +623,14 @@ org-maketoc
     :commands (org-make-toc))
 #+END_SRC
 
+#+BEGIN_SRC elisp
+  (use-package org-superstar
+    :ensure t
+    :hook (org-mode . org-superstar-mode)
+    :config
+    (setq org-superstar-headline-bullets-list '("•")))
+#+END_SRC
+
 keybindings
 #+BEGIN_SRC elisp
   (general-def 'normal org-mode-map
@@ -1101,7 +1109,7 @@ keybindings
 ** outline
 #+BEGIN_SRC elisp
   (use-package outline
-    :hook (agda2-mode . outline-minor-mode))
+    :hook ((LaTeX-mode agda2-mode) . outline-minor-mode))
   (add-hook 'outline-minor-mode-hook #'evil-normalize-keymaps)
   (general-def 'motion outline-minor-mode-map
     "<tab>" 'outline-cycle

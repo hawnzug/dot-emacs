@@ -1441,22 +1441,33 @@ Keybindings
 
 ** Ocaml
 #+BEGIN_SRC elisp
+  (use-package tuareg
+    :ensure t
+    :mode ("\\.ml[ip]?\\'" . tuareg-mode)
+    :defer t)
+#+END_SRC
+
+#+BEGIN_SRC elisp
   (eval-and-compile
-    (defun merlin-mode-load-path ()
+    (defun opam-emacs-load-path ()
       (expand-file-name
        "share/emacs/site-lisp"
        (file-name-directory
-        (shell-command-to-string "opam config var share")))))
+        (shell-command-to-string "opam var share")))))
+#+END_SRC
+
+#+BEGIN_SRC elisp
   (use-package merlin
-    :load-path (lambda () (merlin-mode-load-path))
+    :load-path (lambda () (opam-emacs-load-path))
     :hook
     (tuareg-mode . merlin-mode))
 #+END_SRC
 
 #+BEGIN_SRC elisp
-  (use-package tuareg
-    :ensure t
-    :defer t)
+  (use-package utop
+    :load-path (lambda () (opam-emacs-load-path))
+    :hook
+    (tuareg-mode . utop-minor-mode))
 #+END_SRC
 
 ** SML

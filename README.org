@@ -602,6 +602,46 @@ Use semicolon as the major mode leader key.
     (setq org-footnote-section nil))
 #+END_SRC
 
+#+BEGIN_SRC elisp
+  (defun my:org-export-all ()
+    "https://emacs.stackexchange.com/a/2260/21752
+  Export all subtrees that are *not* tagged with :noexport: to
+  separate files.
+
+  Note that subtrees must have the :EXPORT_FILE_NAME: property set
+  to a unique value for this to work properly."
+    (interactive)
+    (let ((org-html-doctype "html5")
+          (org-html-html5-fancy t)
+          (org-html-postamble nil)
+          (org-html-head-include-default-style nil)
+          (org-preview-latex-image-directory "~/org/sols/build/images/"))
+      (save-excursion
+        (org-map-entries
+         (lambda ()
+           (org-set-property
+            "EXPORT_FILE_NAME"
+            (concat "build/" (org-id-get-create)))
+           (org-html-export-to-html nil t))
+         "-noexport"
+         'file))))
+
+  (defun my:org-export-html-hook (backend)
+    "Resolve all id links to html files"
+    (goto-char (point-min))
+    (while (eq t (org-next-link))
+      (let ((link (org-element-context (org-element-at-point))))
+        (when (string= (org-element-property :type link) "id")
+          (let ((id (org-element-property :path link))
+                (beg (org-element-property :begin link))
+                (end (org-element-property :contents-begin link)))
+            (delete-region (1+ beg) (1- end))
+            (goto-char (1+ beg))
+            (insert "[file:" id ".html]"))))))
+
+  (add-hook 'org-export-before-parsing-hook #'my:org-export-html-hook)
+#+END_SRC
+
 org-id
 #+BEGIN_SRC elisp
   (use-package org-id

@@ -615,7 +615,8 @@ Use semicolon as the major mode leader key.
           (org-html-html5-fancy t)
           (org-html-postamble nil)
           (org-html-head-include-default-style nil)
-          (org-preview-latex-image-directory "~/org/sols/build/images/"))
+          (org-html-mathjax-template "")
+          (org-preview-latex-image-directory "~/org/build/images/"))
       (save-excursion
         (org-map-entries
          (lambda ()
@@ -699,10 +700,10 @@ keybindings
     "v t" 'org-babel-tangle
     "v j" 'org-babel-next-src-block
     "v k" 'org-babel-previous-src-block
-    "t" 'org-time-stamp
-    "l" 'org-insert-link
-    "i" 'org-toggle-inline-images
-    "x" 'org-toggle-latex-fragment
+    "t i" 'org-toggle-inline-images
+    "t l" 'org-toggle-latex-fragment
+    "l s" 'org-store-link
+    "l i" 'org-insert-last-stored-link
     "o" 'org-open-at-point
     "m" 'org-ctrl-c-ctrl-c)
 #+END_SRC

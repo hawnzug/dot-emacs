@@ -283,8 +283,7 @@ For lsp mode
 #+BEGIN_SRC elisp
   (with-eval-after-load 'package
     (add-to-list 'package-archives '("ublt" . "https://elpa.ubolonton.org/packages/")) ;; tree-sitter
-    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-    (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t))
+    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
 #+END_SRC
 
 * native compilation
@@ -578,8 +577,8 @@ Use semicolon as the major mode leader key.
 * org
 #+BEGIN_SRC elisp
   (use-package org
-    :ensure org-plus-contrib
     :defer 4
+    :mode ("\\.org\\'" . org-mode)
     :hook
     (org-mode . my:show-trailing-space)
     (org-babel-after-execute . org-redisplay-inline-images)

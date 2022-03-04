@@ -7,15 +7,15 @@
  '(fixed-pitch ((t (:family "Iosevka Curly Slab"))))
  '(variable-pitch ((t (:family "Iosevka Curly Slab"))))
  '(cursor ((t (:background "black"))))
- '(highlight ((t (:background "#FEB6A6"))))
+ '(highlight ((t (:background "#feb3b6"))))
  '(hl-line ((t nil)))
- '(region ((t (:background "#84AEE3"))))
+ '(region ((t (:background "#a0cced"))))
  '(warning ((t (:background "#FF6666"))))
  '(secondary-selection ((t (:background "light yellow"))))
  '(trailing-whitespace ((t (:background "red"))))
  '(font-lock-builtin-face ((t (:slant italic))))
  '(font-lock-comment-delimiter-face ((t (:inherit (font-lock-comment-face)))))
- '(font-lock-comment-face ((t (:background "#AAF0B1"))))
+ '(font-lock-comment-face ((t (:background "#9ed3b0"))))
  '(font-lock-constant-face ((t nil)))
  '(font-lock-doc-face ((t (:inherit (font-lock-comment-face)))))
  '(font-lock-function-name-face ((t nil)))
@@ -49,7 +49,7 @@
  ;; LaTeX
  '(font-latex-sedate-face ((t (:inherit (font-lock-keyword-face)))))
  '(font-latex-string-face ((t (:inherit (font-lock-string-face)))))
- '(font-latex-math-face ((t (:background "#FFF0FF"))))
+ '(font-latex-math-face ((t nil)))
  '(font-latex-script-char-face ((t nil)))
 
  ;; Dired

@@ -917,9 +917,7 @@ keybindings
   (use-package elcord
     :ensure t
     :if (executable-find "discord")
-    :defer 10
-    :config
-    (elcord-mode))
+    :commands elcord-mode)
 #+END_SRC
 
 ** eldoc

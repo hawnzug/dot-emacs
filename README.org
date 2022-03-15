@@ -949,12 +949,24 @@ keybindings
   (use-package eglot
     :ensure t
     :commands eglot
+    :init
+    (add-hook 'eglot-managed-mode-hook #'evil-normalize-keymaps)
     :config
-    (add-to-list
-     'eglot-server-programs
-     '(python-mode . ("pyright-langserver" "--stdio")))
     (general-def 'normal eglot-mode-map
-      "K" 'eglot-help-at-point))
+      "K" 'eglot-help-at-point)
+    (my:global-def eglot-mode-map
+      "e r" 'eglot-rename
+      "e f" 'eglot-format
+      "e a" 'eglot-code-actions))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package consult-eglot
+    :ensure t
+    :after (consult eglot)
+    :general
+    (my:global-def eglot-mode-map
+      "e s" 'consult-eglot-symbols))
 #+END_SRC
 
 ** vterm

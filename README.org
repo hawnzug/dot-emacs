@@ -928,10 +928,20 @@ keybindings
   (use-package eldoc
     :defer t
     :config
-    (setq eldoc-idle-delay 0.2)
-    (setq eldoc-echo-area-use-multiline-p nil)
+    (setq eldoc-idle-delay 0)
+    (setq eldoc-echo-area-use-multiline-p t)
     (setq eldoc-echo-area-display-truncation-message nil)
     (setq eldoc-echo-area-prefer-doc-buffer t))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package eldoc-box
+    :ensure t
+    :hook
+    (eldoc-mode . eldoc-box-hover-at-point-mode)
+    :config
+    (setq eldoc-box-max-pixel-width 3000)
+    (setq eldoc-box-max-pixel-height 2000))
 #+END_SRC
 
 ** eglot

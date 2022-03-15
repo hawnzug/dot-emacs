@@ -1456,6 +1456,21 @@ Keybindings
     :hook (sgml-mode css-mode))
 #+END_SRC
 
+** Typescript
+
+#+BEGIN_SRC elisp
+  (use-package typescript-mode
+    :ensure t
+    :mode ("\\.ts\\'" . typescript-mode))
+#+END_SRC
+
+** JSON
+#+BEGIN_SRC elisp
+  (use-package json-mode
+    :ensure t
+    :mode "\\.json\\'")
+#+END_SRC
+
 ** Lua
 #+BEGIN_SRC elisp
   (use-package lua-mode

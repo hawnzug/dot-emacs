@@ -1022,7 +1022,10 @@ keybindings
       "<tab>" 'forward-button
       "<S-tab>" 'backward-button
       "<return>" 'flymake-goto-diagnostic
-      "<space>" 'flymake-show-diagnostic))
+      "<space>" 'flymake-show-diagnostic)
+    ('normal flymake-mode-map
+      "M-j" 'flymake-goto-next-error
+      "M-k" 'flymake-goto-next-error))
 #+END_SRC
 
 ** project.el

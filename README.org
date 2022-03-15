@@ -543,17 +543,20 @@ Use semicolon as the major mode leader key.
       "b" 'consult-buffer
       "s" 'consult-line
       "r" 'consult-ripgrep
-      "j" 'consult-outline))
+      "h" 'consult-outline))
   (use-package consult-xref
     :after (xref consult)
     :config
     (setq xref-show-xrefs-function #'consult-xref))
   (use-package consult-org
     :after org
-    :commands (consult-org-heading))
+    :general
+    (my:global-def org-mode-map
+      "h" 'consult-org-heading))
   (use-package consult-imenu
-    :after imenu
-    :commands (consult-imenu))
+    :general
+    (my:global-def
+      "i" 'consult-imenu))
   (use-package consult-flymake
     :after flymake
     :commands (consult-flymake))

@@ -3,29 +3,26 @@
 
 (custom-theme-set-faces
  'fourma
- '(default ((t (:family "Iosevka Curly Slab"))))
- '(fixed-pitch ((t (:family "Iosevka Curly Slab"))))
- '(variable-pitch ((t (:family "Iosevka Curly Slab"))))
  '(cursor ((t (:background "black"))))
- '(highlight ((t (:background "#feb3b6"))))
+ '(highlight ((t (:background "#add9ff"))))
  '(hl-line ((t nil)))
- '(region ((t (:background "#a0cced"))))
+ '(region ((t (:background "#add9ff"))))
  '(warning ((t (:background "#FF6666"))))
  '(secondary-selection ((t (:background "light yellow"))))
  '(trailing-whitespace ((t (:background "red"))))
  '(font-lock-builtin-face ((t (:slant italic))))
  '(font-lock-comment-delimiter-face ((t (:inherit (font-lock-comment-face)))))
- '(font-lock-comment-face ((t (:background "#9ed3b0"))))
+ '(font-lock-comment-face ((t (:background "#c1eec1"))))
  '(font-lock-constant-face ((t nil)))
  '(font-lock-doc-face ((t (:inherit (font-lock-comment-face)))))
  '(font-lock-function-name-face ((t nil)))
- '(font-lock-keyword-face ((t nil)))
+ '(font-lock-keyword-face ((t (:slant italic))))
  '(font-lock-negation-char-face ((t nil)))
  '(font-lock-preprocessor-face ((t (:inherit (font-lock-builtin-face)))))
- '(font-lock-regexp-grouping-backslash ((t (:inherit (bold)))))
- '(font-lock-regexp-grouping-construct ((t (:inherit (bold)))))
+ '(font-lock-regexp-grouping-backslash ((t nil)))
+ '(font-lock-regexp-grouping-construct ((t nil)))
  '(font-lock-string-face ((t nil)))
- '(font-lock-type-face ((t (:weight bold))))
+ '(font-lock-type-face ((t nil)))
  '(font-lock-variable-name-face ((t nil)))
  '(font-lock-warning-face ((t (:inherit (warning)))))
  '(fringe ((t (:background "white"))))
@@ -45,6 +42,7 @@
  ;; org
  '(org-block ((t nil)))
  '(org-drawer ((t (:foreground "#BBBBBB"))))
+ '(org-todo ((t (:background "#ff7073"))))
 
  ;; LaTeX
  '(font-latex-sedate-face ((t (:inherit (font-lock-keyword-face)))))
@@ -54,6 +52,14 @@
 
  ;; Dired
  '(dired-directory ((t (:weight bold))))
+
+ ;; Company
+ '(company-tooltip ((t (:background "#f0f0f0"))))
+ '(company-tooltip-selection ((t (:inherit region))))
+ '(company-tooltip-common ((t (:foreground "#707070"))))
+ '(company-tooltip-annotation ((t (:foreground "#999999"))))
+ '(company-tooltip-scrollbar-thumb ((t (:background "#666666"))))
+ '(company-tooltip-scrollbar-track ((t (:background "#f6f6f6"))))
 
  ;; Haskell
  '(haskell-constructor-face ((t nil)))

@@ -772,6 +772,12 @@ keybindings
       "v i" 'all-the-icons-dired-mode))
 #+END_SRC
 
+** dirvish
+#+BEGIN_SRC elisp
+  (use-package dirvish
+    :ensure t)
+#+END_SRC
+
 * packages
 ** alert
 #+BEGIN_SRC elisp

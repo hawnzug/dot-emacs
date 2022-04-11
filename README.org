@@ -126,7 +126,7 @@ Font setup.
       (set-face-font 'default primary-font)
       (set-face-font 'fixed-pitch primary-font)
       (set-face-font 'fixed-pitch-serif primary-font)
-      (set-face-font 'variable-pitch "Linux Libertine 20")))
+      (set-face-font 'variable-pitch "Recursive Sans Casual Static 16")))
   (defun my:font-setup-hook (frame)
     "Setup the font, then remove the hook."
     (select-frame frame)
@@ -588,6 +588,7 @@ Use semicolon as the major mode leader key.
     :defer 4
     :mode ("\\.org\\'" . org-mode)
     :hook
+    (org-mode . variable-pitch-mode)
     (org-mode . my:show-trailing-space)
     (org-babel-after-execute . org-redisplay-inline-images)
     :general

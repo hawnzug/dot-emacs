@@ -40,9 +40,9 @@
  '(outline-8 ((t nil)))
 
  ;; org
- '(org-block ((t nil)))
  '(org-drawer ((t (:foreground "#BBBBBB"))))
  '(org-todo ((t (:background "#ff7073"))))
+ '(org-block ((t (:inherit fixed-pitch))))
 
  ;; LaTeX
  '(font-latex-sedate-face ((t (:inherit (font-lock-keyword-face)))))

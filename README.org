@@ -816,7 +816,9 @@ keybindings
     (defun my:bibtex-open-pdf (file)
       (require 'async)
       (async-start-process "bibtex-pdf" "zathura" nil file))
-    (setq bibtex-completion-bibliography '("~/org/refs.bib"))
+    (setq bibtex-completion-bibliography
+          '("~/org/refs.bib"
+            "~/org/incomplete.bib"))
     (setq bibtex-completion-notes-path "~/org/readings.org")
     (setq bibtex-completion-pdf-field "file")
     (setq bibtex-completion-notes-template-one-file "\n* ${title}\n:PROPERTIES:\n:Custom_ID: ${=key=}\n:END:\n")

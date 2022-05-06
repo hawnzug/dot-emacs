@@ -623,7 +623,7 @@ Use semicolon as the major mode leader key.
           (org-html-html5-fancy t)
           (org-html-postamble nil)
           (org-html-head-include-default-style nil)
-          (org-html-mathjax-template "")
+          ;; (org-html-mathjax-template "")
           (org-preview-latex-image-directory "~/org/build/images/"))
       (save-excursion
         (org-map-entries

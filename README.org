@@ -106,7 +106,7 @@ Font setup.
 #+BEGIN_SRC elisp
   (defun my:font-setup ()
     (let ( ;; (primary-font "Iosevka Curly Slab 16")
-          (primary-font "Rec Mono Duotone 16"))
+          (primary-font "Rec Mono Duotone 14"))
       (set-fontset-font t 'unicode "Iosevka Curly Slab")
       (set-fontset-font t 'unicode "Noto Color Emoji" nil 'append)
       (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
@@ -126,7 +126,7 @@ Font setup.
       (set-face-font 'default primary-font)
       (set-face-font 'fixed-pitch primary-font)
       (set-face-font 'fixed-pitch-serif primary-font)
-      (set-face-font 'variable-pitch "Recursive Sans Casual Static 16")))
+      (set-face-font 'variable-pitch "Recursive Sans Casual Static 14")))
   (defun my:font-setup-hook (frame)
     "Setup the font, then remove the hook."
     (select-frame frame)

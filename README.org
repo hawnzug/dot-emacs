@@ -520,11 +520,33 @@ Use semicolon as the major mode leader key.
   (use-package orderless
     :ensure t
     :init
-    (defun my:orderless-in-minibuffer ()
-      (setq-local completion-styles '(orderless)))
-    (add-hook 'minibuffer-setup-hook 'my:orderless-in-minibuffer)
+    ;; (defun my:orderless-in-minibuffer ()
+    ;;   (setq-local completion-styles '(orderless)))
+    ;; (add-hook 'minibuffer-setup-hook
+    ;;           'my:orderless-in-minibuffer)
+    (setq completion-styles '(orderless basic))
     (setq completion-category-defaults nil)
-    (setq completion-category-overrides nil))
+    (setq completion-category-overrides
+          '((file (styles . (partial-completion))))))
+#+END_SRC
+
+** corfu
+#+BEGIN_SRC elisp
+  (use-package corfu
+    :ensure t
+    :config
+    (setq corfu-auto t)
+    (setq corfu-quit-no-match 'separator)
+    (global-corfu-mode))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package emacs
+    :init
+    (setq completion-cycle-threshold 3)
+    (setq read-extended-command-predicate
+          #'command-completion-default-include-p)
+    (setq tab-always-indent 'complete))
 #+END_SRC
 
 ** marginalia
@@ -883,7 +905,7 @@ keybindings
 #+END_SRC
 
 ** company
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package company
     :ensure t
     :hook

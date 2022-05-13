@@ -495,7 +495,7 @@ Use semicolon as the major mode leader key.
 #+END_SRC
 
 ** evil inherit input method in minibuffer
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (defun my:inherit-input-method ()
     "Inherit input method from evil"
     (let (input-method-activate-hook
@@ -536,7 +536,6 @@ Use semicolon as the major mode leader key.
     :ensure t
     :config
     (setq corfu-auto t)
-    (setq corfu-quit-no-match 'separator)
     (global-corfu-mode))
 #+END_SRC
 

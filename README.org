@@ -1163,6 +1163,13 @@ keybindings
     "S-<tab>" 'Info-prev-reference)
 #+END_SRC
 
+** jieba
+#+BEGIN_SRC elisp
+  (use-package jieba
+    :load-path "~/.config/emacs/packages/jieba.el"
+    :commands jieba-mode)
+#+END_SRC
+
 ** magit
 #+BEGIN_SRC elisp
   (use-package magit

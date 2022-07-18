@@ -548,6 +548,15 @@ Use semicolon as the major mode leader key.
     (setq tab-always-indent 'complete))
 #+END_SRC
 
+** cape
+
+#+BEGIN_SRC elisp
+  (use-package cape
+    :ensure t
+    :init
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev))
+#+END_SRC
+
 ** marginalia
 #+BEGIN_SRC elisp
   (use-package marginalia

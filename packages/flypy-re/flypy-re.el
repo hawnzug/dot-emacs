@@ -431,7 +431,7 @@
                                         (string first second)
                                       (string second)))
                  (setq first nil))))
-           str)))
+           str "")))
     (if first (concat exp (string first)) exp)))
 
 (provide 'flypy-re)

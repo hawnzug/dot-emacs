@@ -690,7 +690,7 @@ org-id
 #+END_SRC
 
 org-checklist
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package org-checklist
     :after org)
 #+END_SRC

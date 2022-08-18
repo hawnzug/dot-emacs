@@ -126,7 +126,8 @@ Font setup.
       (set-face-font 'default primary-font)
       (set-face-font 'fixed-pitch primary-font)
       (set-face-font 'fixed-pitch-serif primary-font)
-      (set-face-font 'variable-pitch "Recursive Sans Casual Static 14")))
+      ;; (set-face-font 'variable-pitch "Recursive Sans Casual Static 14")
+      (set-face-font 'variable-pitch "Alegreya 14")))
   (defun my:font-setup-hook (frame)
     "Setup the font, then remove the hook."
     (select-frame frame)
@@ -1221,6 +1222,16 @@ keybindings
     ('override
      "M-;" nil
      "C-/" 'comment-dwim))
+#+END_SRC
+
+** olivetti
+#+BEGIN_SRC elisp
+  (use-package olivetti
+    :ensure t
+    :commands olivetti-mode
+    :config
+    (setq olivetti-body-width 0.4)
+    (setq olivetti-minimum-body-width 72))
 #+END_SRC
 
 ** outline

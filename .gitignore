@@ -15,3 +15,4 @@ config.el
 /eln-cache/
 /early-init.el
 /test-config.el
+/xenops/

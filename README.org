@@ -1683,6 +1683,12 @@ Keybindings
     (setq cdlatex-takeover-parenthesis nil))
 #+END_SRC
 
+#+BEGIN_SRC elisp
+  (use-package xenops
+    :hook (LaTeX-mode . xenops-mode)
+    :ensure t)
+#+END_SRC
+
 ** YAML
 #+BEGIN_SRC elisp
   (use-package yaml-mode

@@ -3,7 +3,7 @@
 
 (custom-theme-set-faces
  'fourma
- '(cursor ((t (:background "black"))))
+ '(cursor ((t (:background "#009b7c"))))
  '(highlight ((t (:background "#add9ff"))))
  '(hl-line ((t nil)))
  '(region ((t (:background "#add9ff"))))
@@ -21,7 +21,7 @@
  '(font-lock-preprocessor-face ((t (:inherit (font-lock-builtin-face)))))
  '(font-lock-regexp-grouping-backslash ((t nil)))
  '(font-lock-regexp-grouping-construct ((t nil)))
- '(font-lock-string-face ((t nil)))
+ '(font-lock-string-face ((t (:foreground "#A244C9"))))
  '(font-lock-type-face ((t nil)))
  '(font-lock-variable-name-face ((t nil)))
  '(font-lock-warning-face ((t (:inherit (warning)))))
@@ -42,7 +42,9 @@
  ;; org
  '(org-drawer ((t (:foreground "#BBBBBB"))))
  '(org-todo ((t (:background "#ff7073"))))
+ '(org-date ((t (:inherit fixed-pitch :underline t :foreground "#6F7408"))))
  '(org-block ((t (:inherit fixed-pitch))))
+ '(org-verbatim ((t (:inherit fixed-pitch :foreground "#008223"))))
 
  ;; LaTeX
  '(font-latex-sedate-face ((t (:inherit (font-lock-keyword-face)))))
@@ -51,7 +53,7 @@
  '(font-latex-script-char-face ((t nil)))
 
  ;; Dired
- '(dired-directory ((t (:weight bold))))
+ '(dired-directory ((t (:weight bold :foreground "#268bd2"))))
 
  ;; Company
  '(company-tooltip ((t (:background "#f0f0f0"))))

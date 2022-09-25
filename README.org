@@ -524,6 +524,18 @@ Use semicolon as the major mode leader key.
     (vertico-mode))
 #+END_SRC
 
+vertico-directory
+#+BEGIN_SRC elisp
+  (use-package vertico-directory
+    :after vertico
+    :general
+    (vertico-map
+     "RET" 'vertico-directory-enter
+     "DEL" 'vertico-directory-delete-char
+     "M-DEL" 'vertico-directory-delete-word)
+    :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+#+END_SRC
+
 ** orderless
 #+BEGIN_SRC elisp
   (use-package orderless

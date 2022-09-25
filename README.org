@@ -85,6 +85,11 @@
   - [[#yaml][YAML]]
 :END:
 * early init
+Credit: [[https://www.reddit.com/r/emacs/comments/xjyuni/comment/ipbbvkn][/r/xjyuni]]
+#+BEGIN_SRC elisp :tangle early-init.el
+  (setq frame-inhibit-implied-resize t)
+#+END_SRC
+
 Allow large garbage collection threshold when init.
 #+BEGIN_SRC elisp :tangle early-init.el
   (setq gc-cons-threshold 64000000)

@@ -1191,6 +1191,20 @@ keybindings
     :commands jieba-mode)
 #+END_SRC
 
+** ledger-mode
+#+BEGIN_SRC elisp
+  (use-package ledger-mode
+    :ensure t
+    :mode "\\.journal\\'"
+    :commands ledger-mode
+    :config
+    (setq ledger-binary-path "ledger.sh")
+    (setq ledger-mode-should-check-version nil)
+    (setq ledger-report-links-in-register nil)
+    (setq ledger-report-auto-width nil)
+    (setq ledger-report-use-native-highlighting nil))
+#+END_SRC
+
 ** magit
 #+BEGIN_SRC elisp
   (use-package magit

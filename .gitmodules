@@ -7,3 +7,6 @@
 [submodule "jieba.el"]
 	path = packages/jieba.el
 	url = git@github.com:cireu/jieba.el.git
+[submodule "packages/scihub.el"]
+	path = packages/scihub.el
+	url = git@github.com:emacs-pe/scihub.el.git

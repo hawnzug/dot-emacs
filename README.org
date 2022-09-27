@@ -1311,6 +1311,16 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     (recentf-mode))
 #+END_SRC
 
+** scihub
+#+BEGIN_SRC elisp
+  (use-package scihub
+    :load-path "~/.config/emacs/packages/scihub.el"
+    :defer t
+    :config
+    (setq scihub-download-directory "~/Documents/")
+    (setq scihub-open-after-download nil))
+#+END_SRC
+
 ** snippets
 #+BEGIN_SRC elisp
   (use-package yasnippet

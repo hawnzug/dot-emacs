@@ -889,6 +889,30 @@ keybindings
                    '(bibtex-completion . consult-bibtex-embark-map))))
 #+END_SRC
 
+#+BEGIN_SRC elisp
+  (use-package emacs
+    :after bibtex
+    :config
+    (defun my:bibtex-insert-download-by-doi (doi)
+      (require 'biblio)
+      (require 'scihub)
+      (interactive "sDOI: " bibtex-mode)
+      (let ((biblio-synchronous t)
+            (biblio-bibtex-use-autokey t)
+            title)
+        (insert "\n")
+        (biblio-doi-insert-bibtex doi)
+        (bibtex-beginning-of-entry)
+        (setq title (bibtex-text-in-field "title"))
+        (bibtex-beginning-first-field)
+        (bibtex-make-field
+         (list "file" nil (concat title ".pdf") nil))
+        (scihub doi
+                (file-name-concat
+                 (car bibtex-completion-library-path)
+                 (concat title ".pdf"))))))
+#+END_SRC
+
 #+BEGIN_SRC elisp :tangle no
   (use-package citar
     :ensure t

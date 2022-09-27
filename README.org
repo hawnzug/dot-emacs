@@ -346,10 +346,10 @@ For lsp mode
     (interactive)
     (let ((transparency 90)
           (opacity 100)
-          (old-alpha (frame-parameter nil 'alpha-background)))
+          (old-alpha (frame-parameter nil 'alpha)))
       (if (and (numberp old-alpha) (< old-alpha opacity))
-          (set-frame-parameter nil 'alpha-background opacity)
-        (set-frame-parameter nil 'alpha-background transparency))))
+          (set-frame-parameter nil 'alpha opacity)
+        (set-frame-parameter nil 'alpha transparency))))
 #+END_SRC
 
 * theme

@@ -41,9 +41,12 @@
 
  ;; org
  '(org-drawer ((t (:foreground "#BBBBBB"))))
- '(org-todo ((t (:background "#ff7073"))))
+ '(org-todo ((t (:inherit fixed-pitch :background "#ff7073"))))
  '(org-date ((t (:inherit fixed-pitch :underline t :foreground "#6F7408"))))
  '(org-block ((t (:inherit fixed-pitch))))
+ '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
+ '(org-table ((t (:inherit fixed-pitch))))
+ '(org-tag ((t (:inherit fixed-pitch))))
  '(org-verbatim ((t (:inherit fixed-pitch :foreground "#008223"))))
 
  ;; LaTeX

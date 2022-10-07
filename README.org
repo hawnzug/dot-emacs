@@ -1710,7 +1710,11 @@ Keybindings
   (use-package python
     :mode ("\\.py\\'" . python-mode)
     :config
-    (setq python-flymake-command '("flake8" "-")))
+    (with-eval-after-load 'eglot
+      (add-to-list
+       'eglot-server-programs
+       '(python-mode . ("pdm" "run"
+                        "pyright-langserver" "--stdio")))))
 #+END_SRC
 
 ** Cubicaltt

@@ -1494,6 +1494,12 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     (setq c-basic-offset 4))
 #+END_SRC
 
+#+BEGIN_SRC elisp
+  (use-package modern-cpp-font-lock
+    :ensure t
+    :hook (c++-mode . modern-c++-font-lock-mode))
+#+END_SRC
+
 ** tree-sitter
 #+BEGIN_SRC elisp
   (use-package tree-sitter

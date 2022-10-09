@@ -405,6 +405,14 @@ For lsp mode
     (moody-replace-vc-mode))
 #+END_SRC
 
+* boon
+#+BEGIN_SRC elisp
+  (use-package boon-qwerty
+    :load-path "~/Projects/boon"
+    :config
+    (boon-mode))
+#+END_SRC
+
 * general.el
 #+BEGIN_SRC elisp
   (use-package general :ensure t)

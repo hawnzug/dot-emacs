@@ -419,8 +419,11 @@ For lsp mode
 #+END_SRC
 
 #+BEGIN_SRC elisp
-  (general-def 'override
+  (general-def
     "C-x f" 'find-file
+    "C-x b" 'consult-buffer
+    "C-x g" 'magit-status)
+  (general-def 'override
     "C-=" 'text-scale-adjust
     "C--" 'text-scale-adjust)
 #+END_SRC
@@ -1008,6 +1011,7 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package magit
     :ensure t
+    :commands magit-status
     :defer 5)
 #+END_SRC
 

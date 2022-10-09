@@ -547,7 +547,7 @@ vertico-directory
     :defer 4
     :mode ("\\.org\\'" . org-mode)
     :hook
-    (org-mode . variable-pitch-mode)
+    ;; (org-mode . variable-pitch-mode)
     (org-mode . my:show-trailing-space)
     (org-babel-after-execute . org-redisplay-inline-images)
     :config

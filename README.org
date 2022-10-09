@@ -111,7 +111,7 @@ Font setup.
 #+BEGIN_SRC elisp
   (defun my:font-setup ()
     (let ( ;; (primary-font "Iosevka Curly Slab 16")
-          (primary-font "Rec Mono Duotone 14"))
+          (primary-font "Rec Mono Duotone 12"))
       (set-fontset-font t 'unicode "Iosevka Curly Slab")
       (set-fontset-font t 'unicode "Noto Color Emoji" nil 'append)
       (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
@@ -418,29 +418,9 @@ For lsp mode
   (use-package general :ensure t)
 #+END_SRC
 
-Use comma as the global leader key.
-#+BEGIN_SRC elisp
-  (general-create-definer my:global-def
-    :states '(emacs)
-    :prefix "M-,")
-  (my:global-def "" nil)
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (my:global-def
-    "f" 'find-file
-    "o" 'other-window)
-#+END_SRC
-
-Use semicolon as the major mode leader key.
-#+BEGIN_SRC elisp
-  (general-create-definer my:major-def
-    :states '(emacs)
-    :global-prefix "M-m")
-#+END_SRC
-
 #+BEGIN_SRC elisp
   (general-def 'override
+    "C-x f" 'find-file
     "C-=" 'text-scale-adjust
     "C--" 'text-scale-adjust)
 #+END_SRC
@@ -520,32 +500,27 @@ vertico-directory
 #+BEGIN_SRC elisp
   (use-package consult
     :ensure t
-    :general
-    (my:global-def
-      "b" 'consult-buffer
-      "s" 'consult-line
-      "r" 'consult-ripgrep
-      "h" 'consult-outline))
+    :commands
+    (consult-line
+     consult-buffer
+     consult-ripgrep))
   (use-package consult-xref
     :after (xref consult)
     :config
     (setq xref-show-xrefs-function #'consult-xref))
   (use-package consult-org
     :after org
-    :general
-    (my:global-def org-mode-map
-      "h" 'consult-org-heading))
+    :commands consult-org-heading)
   (use-package consult-imenu
-    :general
-    (my:global-def
-      "i" 'consult-imenu))
+    :commands consult-imenu)
   (use-package consult-flymake
     :after flymake
-    :commands (consult-flymake))
+    :commands consult-flymake)
   (use-package consult-register
-    :commands (consult-register
-               consult-register-load
-               consult-register-store))
+    :commands
+    (consult-register
+     consult-register-load
+     consult-register-store))
 #+END_SRC
 
 ** embark
@@ -572,8 +547,6 @@ vertico-directory
     (org-mode . variable-pitch-mode)
     (org-mode . my:show-trailing-space)
     (org-babel-after-execute . org-redisplay-inline-images)
-    :general
-    (my:global-def "a" 'org-agenda)
     :config
     (use-package org-mouse)
     (use-package ob-shell)
@@ -663,15 +636,6 @@ org-maketoc
 
 keybindings
 #+BEGIN_SRC elisp
-  ;; (general-def 'normal org-mode-map
-  ;;   "gh" 'outline-up-heading
-  ;;   "gj" 'org-forward-heading-same-level
-  ;;   "gk" 'org-backward-heading-same-level
-  ;;   "gl" 'outline-next-visible-heading
-  ;;   "<tab>" 'org-cycle
-  ;;   "<" 'org-metaleft
-  ;;   ">" 'org-metaright
-  ;;   "t" 'org-todo)
   (general-def org-mode-map
     "M-h" 'org-metaleft
     "M-j" 'org-metadown
@@ -681,31 +645,6 @@ keybindings
     "M-J" 'org-shiftmetadown
     "M-K" 'org-shiftmetaup
     "M-L" 'org-shiftmetaright)
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (my:major-def org-mode-map
-    "e" 'org-edit-special
-    "v t" 'org-babel-tangle
-    "v j" 'org-babel-next-src-block
-    "v k" 'org-babel-previous-src-block
-    "t i" 'org-toggle-inline-images
-    "t l" 'org-toggle-latex-fragment
-    "l s" 'org-store-link
-    "l i" 'org-insert-last-stored-link
-    "o" 'org-open-at-point
-    "m" 'org-ctrl-c-ctrl-c)
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (general-define-key
-   :definer 'minor-mode
-   :states '(motion normal insert emacs)
-   :keymaps 'org-src-mode
-   :prefix "m"
-   :global-prefix "M-m"
-   "m" 'org-edit-src-exit
-   "k" 'org-edit-src-abort)
 #+END_SRC
 
 * dired
@@ -719,39 +658,7 @@ keybindings
     (setq dired-recursive-copies 'always)
     (setq dired-recursive-deletes 'always)
     (setq dired-listing-switches "-alhvG --group-directories-first")
-    (setq dired-isearch-filenames 'dwim)
-    :general
-    ('normal dired-mode-map
-      "/" 'dired-goto-file
-      "+" 'dired-create-directory
-      "c" 'dired-do-copy
-      "d" 'dired-flag-file-deletion
-      "D" 'dired-do-flagged-delete
-      "e" 'ediff
-      "f" 'dired-mark
-      "g" 'revert-buffer
-      "h" 'dired-up-directory
-      "i" 'dired-toggle-read-only
-      "j" 'dired-next-line
-      "k" 'dired-previous-line
-      "l" 'dired-find-file
-      "n" 'dired-narrow-regexp
-      "q" 'quit-window
-      "r" 'dired-do-rename
-      "s" 'dired-sort-toggle-or-edit
-      "u" 'dired-unmark
-      "U" 'dired-unmark-all-marks
-      "z" 'dired-do-compress
-      "m" nil
-      "m ." 'dired-mark-extension
-      "m d" 'dired-mark-directories
-      "m r" 'dired-mark-files-containing-regexp
-      "m t" 'dired-toggle-marks
-      "m k" 'dired-do-kill-lines
-      "v" nil
-      "v o" 'dired-omit-mode
-      "v d" 'dired-hide-details-mode
-      "v i" 'all-the-icons-dired-mode))
+    (setq dired-isearch-filenames 'dwim))
 #+END_SRC
 
 ** dirvish
@@ -781,9 +688,7 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package avy
     :ensure t
-    :general
-    ('motion
-     "r" 'avy-goto-char-timer)
+    :commands avy-goto-char-timer
     :config
     (setq avy-timeout-seconds 0.3))
 #+END_SRC
@@ -810,9 +715,7 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package consult-bibtex
     :load-path "~/.config/emacs/packages/consult-bibtex"
-    :general
-    (my:global-def
-      "c" 'consult-bibtex)
+    :commands consult-bibtex
     :config
     (with-eval-after-load 'embark
       (add-to-list 'embark-keymap-alist
@@ -856,11 +759,6 @@ keybindings
 ** bookmark
 #+BEGIN_SRC elisp
   (use-package bookmark
-    :general
-    (my:global-def
-      "m" '(:ignore t :which-key "bookmark")
-      "m s" 'bookmark-set
-      "m j" 'bookmark-jump)
     :config
     (setq bookmark-fontify nil))
 #+END_SRC
@@ -965,45 +863,25 @@ keybindings
     :ensure t
     :commands eglot
     :init
-    (add-hook 'eglot-managed-mode-hook #'evil-normalize-keymaps)
-    :config
-    ;; (general-def 'normal eglot-mode-map
-    ;;   "K" 'eglot-help-at-point)
-    (my:global-def eglot-mode-map
-      "e r" 'eglot-rename
-      "e f" 'eglot-format
-      "e a" 'eglot-code-actions))
+    (add-hook 'eglot-managed-mode-hook #'evil-normalize-keymaps))
 #+END_SRC
 
 #+BEGIN_SRC elisp
   (use-package consult-eglot
     :ensure t
-    :after (consult eglot)
-    :general
-    (my:global-def eglot-mode-map
-      "e s" 'consult-eglot-symbols))
+    :after (consult eglot))
 #+END_SRC
 
 ** vterm
 #+BEGIN_SRC elisp
   (use-package vterm
-    :ensure t
-    ;; :general
-    ;; (my:global-def "v" 'vterm)
-    :config
-    (defun evil-collection-vterm-escape-stay ()
-      "Go back to normal state but don't move cursor backwards.
-  Moving cursor backwards is the default vim behavior but
-  it is not appropriate in some cases like terminals."
-      (setq-local evil-move-cursor-back nil))
-    (add-hook 'vterm-mode-hook 'evil-collection-vterm-escape-stay))
+    :ensure t)
 #+END_SRC
 
 #+BEGIN_SRC elisp
   (use-package vterm-toggle
     :ensure t
-    :general
-    (my:global-def "v" 'vterm-toggle)
+    :commands vterm-toggle
     :config
     (setq vterm-toggle-scope 'project))
 #+END_SRC
@@ -1043,29 +921,12 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package flymake
     :defer t)
-    ;; :general
-    ;; ('normal flymake-diagnostics-buffer-mode-map
-    ;;   "q" 'quit-window
-    ;;   "<tab>" 'forward-button
-    ;;   "<S-tab>" 'backward-button
-    ;;   "<return>" 'flymake-goto-diagnostic
-    ;;   "<space>" 'flymake-show-diagnostic)
-    ;; ('normal flymake-mode-map
-    ;;   "M-j" 'flymake-goto-next-error
-    ;;   "M-k" 'flymake-goto-next-error))
 #+END_SRC
 
 ** project.el
 #+BEGIN_SRC elisp
   (use-package project
     :defer t
-    :general
-    (my:global-def
-      "p" nil
-      "p p" 'project-switch-project
-      "p f" 'project-find-file
-      "p b" 'project-switch-to-buffer
-      "p d" 'project-dired)
     :config
     (defun my:find-project-root (dir)
       "Try to locate a project root."
@@ -1082,9 +943,6 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package help-mode
     :defer t)
-    ;; :general
-    ;; ('normal help-mode-map
-    ;;  "q" 'quit-window))
 #+END_SRC
 
 ** hl-todo
@@ -1125,19 +983,6 @@ keybindings
     :commands imenu-list)
 #+END_SRC
 
-** info
-#+BEGIN_SRC elisp
-  (general-def 'motion Info-mode-map
-    "q" 'quit-window
-    "u" 'Info-up
-    "b" 'Info-history-back
-    "n" 'Info-next
-    "p" 'Info-prev
-    "<return>" 'Info-follow-nearest-node
-    "<tab>" 'Info-next-reference
-    "S-<tab>" 'Info-prev-reference)
-#+END_SRC
-
 ** jieba
 #+BEGIN_SRC elisp
   (use-package jieba
@@ -1163,10 +1008,7 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package magit
     :ensure t
-    :defer 5
-    :general
-    (my:global-def "g" 'magit-status))
-    ;; :hook (git-commit-mode . evil-insert-state))
+    :defer 5)
 #+END_SRC
 
 #+BEGIN_SRC elisp
@@ -1178,25 +1020,11 @@ keybindings
     (add-to-list 'magit-delta-delta-args "--max-line-length=2048"))
 #+END_SRC
 
-#+BEGIN_SRC elisp :tangle no
-  (general-define-key
-   :definer 'minor-mode
-   :states '(motion normal insert emacs)
-   :keymaps 'git-commit-mode
-   :prefix "m"
-   :global-prefix "M-m"
-   "m" 'with-editor-finish
-   "k" 'with-editor-cancel)
-#+END_SRC
-
 ** markdown
 #+BEGIN_SRC elisp
   (use-package markdown-mode
     :ensure t
     :commands (gfm-view-mode markdown-view-mode)
-    ;; :general
-    ;; ('normal markdown-mode-map
-    ;;   "<tab>" 'markdown-cycle)
     :mode (("README\\.md\\'" . gfm-mode)
            ("\\.md\\'" . markdown-mode)
            ("\\.mkd\\'" . markdown-mode)
@@ -1227,9 +1055,6 @@ keybindings
   (use-package outline
     :hook ((LaTeX-mode agda2-mode) . outline-minor-mode))
   (add-hook 'outline-minor-mode-hook #'evil-normalize-keymaps)
-  (general-def 'motion outline-minor-mode-map
-    "<tab>" 'outline-cycle
-    "S-<iso-lefttab>" 'outline-cycle-buffer)
 #+END_SRC
 
 ** flypy-re
@@ -1347,8 +1172,7 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 #+BEGIN_SRC elisp
   (use-package terminal-here
     :ensure t
-    :general
-    (my:global-def "t" 'terminal-here-launch)
+    :commands terminal-here-launch
     :config
     (setq terminal-here-terminal-command
           '("alacritty")))
@@ -1395,22 +1219,6 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     :hook
     (after-init . winner-mode)
     (ediff-quit . winner-undo))
-#+END_SRC
-
-** xref
-#+BEGIN_SRC elisp
-  (use-package xref
-    ;; :general
-    ;; ('normal
-    ;;  "g d" 'xref-find-definitions
-    ;;  "g r" 'xref-find-references)
-    :config
-    (general-def 'normal xref--xref-buffer-mode-map
-      "j" 'xref-next-line
-      "k" 'xref-prev-line
-      "q" 'quit-window
-      "o" 'xref-show-location-at-point
-      "<return>" 'xref-goto-xref))
 #+END_SRC
 
 * languages
@@ -1472,21 +1280,6 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
                company-coq--refman-ltac-abbrevs-cache)
        :preselect (ivy-thing-at-point)
        :action 'company-coq-doc-buffer-refman)))
-#+END_SRC
-
-Keybindings
-#+BEGIN_SRC elisp
-  ;; (general-def 'normal coq-mode-map
-  ;;   "K" 'my:company-coq-doc-search)
-  (my:major-def coq-mode-map
-    "g" '(company-coq-proof-goto-point :wk "goto")
-    "d" '(company-coq-doc :wk "doc")
-    "q" '(proof-shell-exit :wk "exit")
-    "c" '(proof-interrupt-process :wk "abort")
-    "p" '(proof-prf :wk "goal")
-    "u" 'proof-undo-last-successful-command
-    "s" 'proof-find-theorems
-    "l" 'proof-layout-windows)
 #+END_SRC
 
 ** CSV
@@ -1562,28 +1355,6 @@ Keybindings
     :mode ("\\.agda\\'" . agda2-mode)
     :config
     (setq outline-regexp "-- #+"))
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (my:major-def agda2-mode-map
-    "a" 'agda2-auto-maybe-all
-    "c" 'agda2-make-case
-    "d" 'agda2-goto-definition-keyboard
-    "h" 'agda2-helper-function-type
-    "j" 'agda2-next-goal
-    "k" 'agda2-previous-goal
-    "l" 'agda2-load
-    "r" 'agda2-refine
-    "n" 'agda2-compute-normalised-maybe-toplevel
-    "s" 'agda2-solve-maybe-all
-    "w" 'agda2-why-in-scope-maybe-toplevel
-    "z" 'agda2-search-about-toplevel
-    "," 'agda2-goal-and-context
-    "." 'agda2-goal-and-context-and-inferred
-    ";" 'agda2-goal-and-context-and-checked
-    "x h" 'agda2-display-implicit-arguments
-    "x r" 'agda2-restart
-    "x q" 'agda2-quit)
 #+END_SRC
 
 ** Ocaml

@@ -413,8 +413,8 @@ For lsp mode
 Use comma as the global leader key.
 #+BEGIN_SRC elisp
   (general-create-definer my:global-def
-    :states '(motion normal)
-    :prefix "x")
+    :states '(emacs)
+    :prefix "M-,")
   (my:global-def "" nil)
 #+END_SRC
 
@@ -427,8 +427,7 @@ Use comma as the global leader key.
 Use semicolon as the major mode leader key.
 #+BEGIN_SRC elisp
   (general-create-definer my:major-def
-    :states '(motion normal insert emacs)
-    :prefix "m"
+    :states '(emacs)
     :global-prefix "M-m")
 #+END_SRC
 
@@ -436,83 +435,6 @@ Use semicolon as the major mode leader key.
   (general-def 'override
     "C-=" 'text-scale-adjust
     "C--" 'text-scale-adjust)
-#+END_SRC
-
-* evil
-#+BEGIN_SRC elisp
-  (use-package evil
-    :ensure t
-    :init
-    (setq evil-want-keybinding nil)
-    (setq evil-want-abbrev-expand-on-insert-exit nil)
-    (setq evil-disable-insert-state-bindings t)
-    (setq evil-respect-visual-line-mode t)
-    :config
-    (evil-mode 1)
-    (evil-set-initial-state 'org-capture-mode 'insert)
-    (evil-set-initial-state 'vterm-mode 'insert)
-    (evil-set-initial-state 'wdired-mode 'normal))
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (general-def 'normal
-    "C-." nil
-    "m" nil
-    "X" nil
-    "r" nil
-    "s" nil
-    "S" nil
-    "u" 'undo-only
-    "U" 'undo
-    "C-r" 'undo-redo)
-#+END_SRC
-
-** evil-surround
-#+BEGIN_SRC elisp
-  (use-package evil-surround
-    :ensure t
-    :after evil
-    :config
-    (setq-default
-     evil-surround-pairs-alist
-     (push '(?c . ("{" . "}")) evil-surround-pairs-alist))
-    (general-def 'normal evil-surround-mode-map
-      "s" 'evil-surround-region
-      "S" 'evil-Surround-region)
-    (general-def 'visual evil-surround-mode-map
-      "s" 'evil-surround-region
-      "S" 'evil-Surround-region)
-    (global-evil-surround-mode 1))
-#+END_SRC
-
-** evil-matchit
-#+BEGIN_SRC elisp
-  (use-package evil-matchit
-    :ensure t
-    :after evil
-    :config
-    (global-evil-matchit-mode 1))
-#+END_SRC
-
-** evil-motion-trainer
-#+BEGIN_SRC elisp
-  (use-package evil-motion-trainer
-    :load-path "~/.config/emacs/packages/evil-motion-trainer"
-    :after evil
-    :config
-    (global-evil-motion-trainer-mode 1))
-#+END_SRC
-
-** evil inherit input method in minibuffer
-#+BEGIN_SRC elisp :tangle no
-  (defun my:inherit-input-method ()
-    "Inherit input method from evil"
-    (let (input-method-activate-hook
-          input-method-deactivate-hook)
-      (when-let ((im (with-minibuffer-selected-window evil-input-method)))
-        (activate-input-method im))))
-
-  (add-hook 'minibuffer-setup-hook #'my:inherit-input-method)
 #+END_SRC
 
 * completion
@@ -733,15 +655,15 @@ org-maketoc
 
 keybindings
 #+BEGIN_SRC elisp
-  (general-def 'normal org-mode-map
-    "gh" 'outline-up-heading
-    "gj" 'org-forward-heading-same-level
-    "gk" 'org-backward-heading-same-level
-    "gl" 'outline-next-visible-heading
-    "<tab>" 'org-cycle
-    "<" 'org-metaleft
-    ">" 'org-metaright
-    "t" 'org-todo)
+  ;; (general-def 'normal org-mode-map
+  ;;   "gh" 'outline-up-heading
+  ;;   "gj" 'org-forward-heading-same-level
+  ;;   "gk" 'org-backward-heading-same-level
+  ;;   "gl" 'outline-next-visible-heading
+  ;;   "<tab>" 'org-cycle
+  ;;   "<" 'org-metaleft
+  ;;   ">" 'org-metaright
+  ;;   "t" 'org-todo)
   (general-def org-mode-map
     "M-h" 'org-metaleft
     "M-j" 'org-metadown
@@ -1037,8 +959,8 @@ keybindings
     :init
     (add-hook 'eglot-managed-mode-hook #'evil-normalize-keymaps)
     :config
-    (general-def 'normal eglot-mode-map
-      "K" 'eglot-help-at-point)
+    ;; (general-def 'normal eglot-mode-map
+    ;;   "K" 'eglot-help-at-point)
     (my:global-def eglot-mode-map
       "e r" 'eglot-rename
       "e f" 'eglot-format
@@ -1112,17 +1034,17 @@ keybindings
 ** flymake
 #+BEGIN_SRC elisp
   (use-package flymake
-    :defer t
-    :general
-    ('normal flymake-diagnostics-buffer-mode-map
-      "q" 'quit-window
-      "<tab>" 'forward-button
-      "<S-tab>" 'backward-button
-      "<return>" 'flymake-goto-diagnostic
-      "<space>" 'flymake-show-diagnostic)
-    ('normal flymake-mode-map
-      "M-j" 'flymake-goto-next-error
-      "M-k" 'flymake-goto-next-error))
+    :defer t)
+    ;; :general
+    ;; ('normal flymake-diagnostics-buffer-mode-map
+    ;;   "q" 'quit-window
+    ;;   "<tab>" 'forward-button
+    ;;   "<S-tab>" 'backward-button
+    ;;   "<return>" 'flymake-goto-diagnostic
+    ;;   "<space>" 'flymake-show-diagnostic)
+    ;; ('normal flymake-mode-map
+    ;;   "M-j" 'flymake-goto-next-error
+    ;;   "M-k" 'flymake-goto-next-error))
 #+END_SRC
 
 ** project.el
@@ -1151,10 +1073,10 @@ keybindings
 ** help-mode
 #+BEGIN_SRC elisp
   (use-package help-mode
-    :defer t
-    :general
-    ('normal help-mode-map
-     "q" 'quit-window))
+    :defer t)
+    ;; :general
+    ;; ('normal help-mode-map
+    ;;  "q" 'quit-window))
 #+END_SRC
 
 ** hl-todo
@@ -1235,8 +1157,8 @@ keybindings
     :ensure t
     :defer 5
     :general
-    (my:global-def "g" 'magit-status)
-    :hook (git-commit-mode . evil-insert-state))
+    (my:global-def "g" 'magit-status))
+    ;; :hook (git-commit-mode . evil-insert-state))
 #+END_SRC
 
 #+BEGIN_SRC elisp
@@ -1248,7 +1170,7 @@ keybindings
     (add-to-list 'magit-delta-delta-args "--max-line-length=2048"))
 #+END_SRC
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (general-define-key
    :definer 'minor-mode
    :states '(motion normal insert emacs)
@@ -1264,9 +1186,9 @@ keybindings
   (use-package markdown-mode
     :ensure t
     :commands (gfm-view-mode markdown-view-mode)
-    :general
-    ('normal markdown-mode-map
-      "<tab>" 'markdown-cycle)
+    ;; :general
+    ;; ('normal markdown-mode-map
+    ;;   "<tab>" 'markdown-cycle)
     :mode (("README\\.md\\'" . gfm-mode)
            ("\\.md\\'" . markdown-mode)
            ("\\.mkd\\'" . markdown-mode)
@@ -1470,10 +1392,10 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 ** xref
 #+BEGIN_SRC elisp
   (use-package xref
-    :general
-    ('normal
-     "g d" 'xref-find-definitions
-     "g r" 'xref-find-references)
+    ;; :general
+    ;; ('normal
+    ;;  "g d" 'xref-find-definitions
+    ;;  "g r" 'xref-find-references)
     :config
     (general-def 'normal xref--xref-buffer-mode-map
       "j" 'xref-next-line
@@ -1546,8 +1468,8 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 
 Keybindings
 #+BEGIN_SRC elisp
-  (general-def 'normal coq-mode-map
-    "K" 'my:company-coq-doc-search)
+  ;; (general-def 'normal coq-mode-map
+  ;;   "K" 'my:company-coq-doc-search)
   (my:major-def coq-mode-map
     "g" '(company-coq-proof-goto-point :wk "goto")
     "d" '(company-coq-doc :wk "doc")

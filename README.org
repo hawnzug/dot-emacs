@@ -1012,7 +1012,20 @@ keybindings
   (use-package magit
     :ensure t
     :commands magit-status
-    :defer 5)
+    :defer 5
+    :config
+    (setq
+     magit-repolist-columns
+     '(("Name" 15 magit-repolist-column-ident nil)
+       ("Flag" 4 magit-repolist-column-flag nil)
+       ("B<U" 3 magit-repolist-column-unpulled-from-upstream
+        ((:right-align t)
+         (:sort <)))
+       ("B>U" 3 magit-repolist-column-unpushed-to-upstream
+        ((:right-align t)
+         (:sort <)))
+       ("Branch" 15 magit-repolist-column-branch nil)
+       ("Path" 99 magit-repolist-column-path nil))))
 #+END_SRC
 
 #+BEGIN_SRC elisp

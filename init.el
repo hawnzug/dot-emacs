@@ -1,4 +1,5 @@
 (load "~/.config/emacs/config")
+(load "~/.config/emacs/secrets")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.

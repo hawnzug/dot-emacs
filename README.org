@@ -556,6 +556,10 @@ vertico-directory
     (add-to-list 'org-file-apps '(t . "xdg-open %s") t)
     (setq org-refile-targets
           '(("~/org/readings.org" . (:maxlevel . 2))))
+    (setq
+     org-capture-templates
+     '(("j" "Journal" entry (file+datetree "~/org/journal.org")
+        "* %<%H:%M> %?\n")))
     (setq org-refile-use-outline-path nil)
     (setq org-reverse-note-order t)
     (setq org-adapt-indentation nil)

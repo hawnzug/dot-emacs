@@ -1,9 +1,6 @@
 [submodule "packages/consult-bibtex"]
 	path = packages/consult-bibtex
 	url = git@github.com:mohkale/consult-bibtex.git
-[submodule "packages/evil-motion-trainer"]
-	path = packages/evil-motion-trainer
-	url = git@github.com:martinbaillie/evil-motion-trainer.git
 [submodule "jieba.el"]
 	path = packages/jieba.el
 	url = git@github.com:cireu/jieba.el.git

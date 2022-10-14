@@ -722,7 +722,8 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package consult-bibtex
     :load-path "~/.config/emacs/packages/consult-bibtex"
-    :commands consult-bibtex
+    :general
+    ("C-x j" 'consult-bibtex)
     :config
     (with-eval-after-load 'embark
       (add-to-list 'embark-keymap-alist
@@ -735,7 +736,6 @@ keybindings
     :config
     (defun my:bibtex-insert-download-by-doi (doi)
       (require 'biblio)
-      (require 'scihub)
       (interactive "sDOI: " bibtex-mode)
       (let ((biblio-synchronous t)
             (biblio-bibtex-use-autokey t)
@@ -747,10 +747,18 @@ keybindings
         (bibtex-beginning-first-field)
         (bibtex-make-field
          (list "file" nil (concat title ".pdf") nil))
-        (scihub doi
-                (file-name-concat
-                 (car bibtex-completion-library-path)
-                 (concat title ".pdf"))))))
+        (let ((filename (file-name-concat
+                         "~/Documents/"
+                         (concat title ".pdf"))))
+          (pcase (completing-read "PDF: " '("ACM" "SciHub" "SKIP") nil t)
+            ("ACM"
+             (url-copy-file (concat "https://dl.acm.org/doi/pdf/" doi) filename))
+            ("SciHub"
+             (require 'scihub)
+             (scihub doi filename))
+            (_
+             (kill-new title)
+             (message "Copied to clipboard: %s" title)))))))
 #+END_SRC
 
 #+BEGIN_SRC elisp :tangle no

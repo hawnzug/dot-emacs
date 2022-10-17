@@ -111,7 +111,7 @@ Font setup.
 #+BEGIN_SRC elisp
   (defun my:font-setup ()
     (let ( ;; (primary-font "Iosevka Curly Slab 16")
-          (primary-font "Rec Mono Duotone 12"))
+          (primary-font "Rec Mono Duotone 10"))
       (set-fontset-font t 'unicode "Iosevka Curly Slab")
       (set-fontset-font t 'unicode "Noto Color Emoji" nil 'append)
       (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
@@ -856,7 +856,7 @@ keybindings
   (use-package eldoc
     :defer t
     :config
-    (setq eldoc-idle-delay 0.5)
+    (setq eldoc-idle-delay 0)
     (setq eldoc-echo-area-use-multiline-p t)
     (setq eldoc-echo-area-display-truncation-message nil)
     (setq eldoc-echo-area-prefer-doc-buffer t))
@@ -878,7 +878,15 @@ keybindings
     :ensure t
     :commands eglot
     :init
-    (add-hook 'eglot-managed-mode-hook #'evil-normalize-keymaps))
+    (add-hook
+     'eglot-managed-mode-hook
+     (lambda ()
+       ;; Show flymake diagnostics first.
+       (setq eldoc-documentation-functions
+             (cons #'flymake-eldoc-function
+                   (remove #'flymake-eldoc-function eldoc-documentation-functions)))
+       ;; Show all eldoc feedback.
+       (setq eldoc-documentation-strategy #'eldoc-documentation-compose))))
 #+END_SRC
 
 #+BEGIN_SRC elisp

@@ -148,7 +148,7 @@ Font setup.
 #+END_SRC
 
 Ligature
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (let ((ligatures `((?-  . ,(regexp-opt '("->" "->>" "-->")))
                      (?*  . ,(regexp-opt '("*>")))
                      (?<  . ,(regexp-opt '("<-" "<<-" "<=>" "<|" "<||" "<|||::=" "<|>" "<:" "<>" "<-<"
@@ -1244,9 +1244,11 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 #+BEGIN_SRC elisp
   (use-package which-key
     :ensure t
-    :config
+    :init
     (setq which-key-add-column-padding 2)
     (setq which-key-idle-delay 0)
+    (setq which-key-dont-use-unicode t)
+    :config
     (which-key-mode 1))
 #+END_SRC
 

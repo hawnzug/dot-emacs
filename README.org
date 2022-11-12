@@ -413,6 +413,25 @@ For lsp mode
     (boon-mode))
 #+END_SRC
 
+* rime
+#+BEGIN_SRC elisp
+  (use-package rime
+    :ensure t
+    :init
+    (setq default-input-method 'rime)
+    (defun rime-predicate-boon-mode-p ()
+      (not boon-insert-map))
+    :config
+    (setq rime-show-candidate 'posframe)
+    (setq rime-show-preedit 'inline)
+    (setq rime-disable-predicates
+          '(rime-predicate-boon-mode-p
+            rime-predicate-after-alphabet-char-p
+            rime-predicate-prog-in-code-p
+            rime-predicate-space-after-cc-p)))
+#+END_SRC
+
+
 * general.el
 #+BEGIN_SRC elisp
   (use-package general :ensure t)

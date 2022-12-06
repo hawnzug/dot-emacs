@@ -589,11 +589,14 @@ vertico-directory
     (use-package ob-shell)
     (add-to-list 'org-file-apps '(t . "xdg-open %s") t)
     (setq org-refile-targets
-          '(("~/org/readings.org" . (:maxlevel . 2))))
+          '(("~/org/gtd.org" . (:level . 1))))
     (setq
      org-capture-templates
      '(("j" "Journal" entry (file+datetree "~/org/journal.org")
-        "* %<%H:%M> %?\n")))
+        "* %<%H:%M> %?\n")
+       ("i" "Inbox" entry (file+headline "~/org/gtd.org" "Inbox")
+        "* TODO %?\n:PROPERTIES:\n:CREATED:  %U\n:END:"
+        :prepend t)))
     (setq org-refile-use-outline-path nil)
     (setq org-reverse-note-order t)
     (setq org-adapt-indentation nil)

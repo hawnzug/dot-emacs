@@ -41,8 +41,9 @@
 
  ;; org
  '(org-drawer ((t (:foreground "#BBBBBB"))))
- '(org-todo ((t (:inherit fixed-pitch :background "#ff7073"))))
- '(org-date ((t (:inherit fixed-pitch :underline t :foreground "#6F7408"))))
+ '(org-todo ((t (:foreground "#BB0202" :background "#F2F2F2"))))
+ '(org-done ((t (:foreground "#066B1F" :background "#F2F2F2"))))
+ '(org-date ((t (:underline t :foreground "#6F7408"))))
  '(org-block ((t (:inherit fixed-pitch))))
  '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
  '(org-table ((t (:inherit fixed-pitch))))

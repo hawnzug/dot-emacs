@@ -576,6 +576,7 @@ vertico-directory
     (setq org-agenda-files '("~/org/gtd.org"))
     (setq org-todo-keywords
         '((sequence "TODO" "NEXT" "|" "DONE" "WAITING" "SOMEDAY")))
+    (setq org-fontify-done-headline nil)
     (setq org-agenda-custom-commands
         '(("g" "GTD View"
            ((agenda "")

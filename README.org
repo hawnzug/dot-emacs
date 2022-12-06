@@ -413,6 +413,13 @@ For lsp mode
   (use-package boon-qwerty
     :load-path "~/Projects/boon"
     :config
+    (defun my:boon-set-command-state ()
+      "Quit corfu and then return to boon command state."
+      (interactive)
+      (call-interactively 'corfu-quit)
+      (boon-set-command-state))
+    (general-def boon-insert-map
+      "<escape>" 'my:boon-set-command-state)
     (boon-mode))
 #+END_SRC
 

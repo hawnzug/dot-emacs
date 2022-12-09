@@ -299,7 +299,6 @@ For lsp mode
 
 #+BEGIN_SRC elisp
   (with-eval-after-load 'package
-    (add-to-list 'package-archives '("ublt" . "https://elpa.ubolonton.org/packages/")) ;; tree-sitter
     (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
 #+END_SRC
 
@@ -1343,14 +1342,14 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 #+END_SRC
 
 ** tree-sitter
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package tree-sitter
     :ensure t
     :hook ((html-mode) . tree-sitter-hl-mode)
     :commands (tree-sitter-hl-mode))
 #+END_SRC
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package tree-sitter-langs
     :ensure t
     :after tree-sitter)

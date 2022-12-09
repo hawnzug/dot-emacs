@@ -282,7 +282,9 @@ For lsp mode
 #+BEGIN_SRC elisp
   (setq package-user-dir "~/.config/emacs/elpa")
   (let ((default-directory package-user-dir))
-    (normal-top-level-add-subdirs-to-load-path))
+    (normal-top-level-add-subdirs-to-load-path)
+    ; Prefer elpa packages
+    (setq load-path (reverse load-path)))
   (require 'use-package)
 #+END_SRC
 
@@ -571,8 +573,11 @@ vertico-directory
 * org
 #+BEGIN_SRC elisp
   (use-package org
+    :ensure t
     :defer 4
     :mode ("\\.org\\'" . org-mode)
+    :init
+    (setq org-modules '())
     :hook
     ;; (org-mode . variable-pitch-mode)
     (org-mode . my:show-trailing-space)
@@ -584,9 +589,7 @@ vertico-directory
     (setq org-fontify-done-headline nil)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
-    (use-package org-habit)
     (use-package org-mouse)
-    (use-package ob-shell)
     (add-to-list 'org-file-apps '(t . "xdg-open %s") t)
     (setq org-reverse-note-order t)
     (setq org-adapt-indentation nil)
@@ -612,6 +615,7 @@ vertico-directory
     :general
     ("C-x a" 'org-agenda)
     :config
+    (use-package org-habit)
     (setq org-agenda-custom-commands
           '(("g" "GTD View"
              ((agenda "")

@@ -574,9 +574,6 @@ vertico-directory
   (use-package org
     :defer 4
     :mode ("\\.org\\'" . org-mode)
-    :general
-    ("C-x a" 'org-agenda
-     "C-x c" 'org-capture)
     :hook
     ;; (org-mode . variable-pitch-mode)
     (org-mode . my:show-trailing-space)
@@ -586,29 +583,12 @@ vertico-directory
     (setq org-todo-keywords
         '((sequence "TODO" "NEXT" "|" "DONE" "WAITING" "SOMEDAY")))
     (setq org-fontify-done-headline nil)
-    (setq org-agenda-custom-commands
-        '(("g" "GTD View"
-           ((agenda "")
-            (todo "NEXT"
-                  ((org-agenda-overriding-header "Next Actions")))
-            (todo "WAITING"
-                  ((org-agenda-overriding-header "Waiting For")))))))
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
     (use-package org-habit)
     (use-package org-mouse)
     (use-package ob-shell)
     (add-to-list 'org-file-apps '(t . "xdg-open %s") t)
-    (setq org-refile-targets
-          '(("~/org/gtd.org" . (:level . 1))))
-    (setq
-     org-capture-templates
-     '(("j" "Journal" entry (file+datetree "~/org/journal.org")
-        "* %<%H:%M> %?\n")
-       ("i" "Inbox" entry (file+headline "~/org/gtd.org" "Inbox")
-        "* TODO %?\n:PROPERTIES:\n:CREATED:  %U\n:END:"
-        :prepend t)))
-    (setq org-refile-use-outline-path nil)
     (setq org-reverse-note-order t)
     (setq org-adapt-indentation nil)
     (setq org-startup-indented t)
@@ -617,6 +597,43 @@ vertico-directory
     (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
     (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
     (setq org-footnote-section nil))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package org-refile
+    :commands org-refile
+    :config
+    (setq org-refile-targets
+          '(("~/org/gtd.org" . (:level . 1))))
+    (setq org-refile-use-outline-path nil))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package org-agenda
+    :general
+    ("C-x a" 'org-agenda)
+    :config
+    (setq org-agenda-custom-commands
+          '(("g" "GTD View"
+             ((agenda "")
+              (todo "NEXT"
+                    ((org-agenda-overriding-header "Next Actions")))
+              (todo "WAITING"
+                    ((org-agenda-overriding-header "Waiting For"))))))))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package org-capture
+    :general
+    ("C-x c" 'org-capture)
+    :config
+    (setq
+     org-capture-templates
+     '(("j" "Journal" entry (file+olp+datetree "~/org/journal.org")
+        "* %<%H:%M> %?\n")
+       ("i" "Inbox" entry (file+headline "~/org/gtd.org" "Inbox")
+        "* TODO %?\n:PROPERTIES:\n:CREATED:  %U\n:END:"
+        :prepend t))))
 #+END_SRC
 
 #+BEGIN_SRC elisp

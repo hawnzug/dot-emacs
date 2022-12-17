@@ -589,6 +589,7 @@ vertico-directory
     (setq org-fontify-done-headline nil)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
+    (setq org-extend-today-until 2)
     (use-package org-mouse)
     (add-to-list 'org-file-apps '(t . "xdg-open %s") t)
     (setq org-reverse-note-order t)

@@ -812,7 +812,7 @@ keybindings
         (insert "\n")
         (biblio-doi-insert-bibtex doi)
         (bibtex-beginning-of-entry)
-        (setq title (bibtex-text-in-field "title"))
+        (setq title (string-replace "\n" "" (bibtex-text-in-field "title")))
         (bibtex-beginning-first-field)
         (bibtex-make-field
          (list "file" nil (concat title ".pdf") nil))

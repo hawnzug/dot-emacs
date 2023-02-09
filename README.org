@@ -585,7 +585,7 @@ vertico-directory
     :config
     (setq org-agenda-files '("~/org/gtd.org"))
     (setq org-todo-keywords
-        '((sequence "TODO" "NEXT" "|" "DONE" "WAITING" "SOMEDAY")))
+        '((sequence "TODO" "DONE")))
     (setq org-fontify-done-headline nil)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
@@ -619,7 +619,7 @@ vertico-directory
     (use-package org-habit)
     (setq org-agenda-custom-commands
           '(("g" "GTD View"
-             ((agenda "")
+             ((agenda "" ((org-agenda-span 'day)))
               (todo "NEXT"
                     ((org-agenda-overriding-header "Next Actions")))
               (todo "WAITING"

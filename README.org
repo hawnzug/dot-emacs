@@ -426,8 +426,8 @@ For lsp mode
 
 * boon
 #+BEGIN_SRC elisp
-  (use-package boon-qwerty
-    :load-path "~/Projects/boon"
+  (use-package boon
+    :ensure t
     :config
     (defun my:boon-set-command-state ()
       "Quit corfu and then return to boon command state."
@@ -436,6 +436,78 @@ For lsp mode
       (boon-set-command-state))
     (general-def boon-insert-map
       "<escape>" 'my:boon-set-command-state)
+    (general-def boon-select-map
+      "q"  'boon-select-outside-quotes
+      "w"  'boon-select-word
+      "r"  'boon-select-inside-quotes
+      "g"  'boon-select-paragraph
+      "a"  'boon-select-borders
+      "s"  'boon-select-wim
+      "v"  'boon-select-with-spaces
+      "d"  'boon-select-document
+      "C"  'boon-select-comment
+      "z"  'boon-select-content
+      "x"  'boon-select-outside-pairs
+      "c"  'boon-select-inside-pairs
+      "b"  'boon-select-blanks)
+    (general-def boon-moves-map
+      "n" 'boon-switch-mark
+      "N" 'xref-pop-marker-stack
+      "y"  'xref-find-definitions
+      "Y"  'xref-find-references
+      "u"  'boon-beginning-of-line
+      "p"  'boon-end-of-line
+      "i"  'boon-smarter-backward
+      "o"  'boon-smarter-forward
+      "K"  'boon-smarter-upward
+      "L"  'boon-smarter-downward
+      "h"  'backward-char
+      "j"  'next-line
+      "k"  'previous-line
+      "l"  'forward-char
+      "H"  'scroll-down-command
+      "J"  'forward-paragraph
+      "K"  'backward-paragraph
+      "L"  'scroll-up-command
+      ";"  'avy-goto-char-timer
+      ","  'forward-word
+      "."  'backward-word
+      "m"  'forward-to-word
+      "/"  'boon-find-char-forward
+      "<"  'beginning-of-buffer
+      "w" 'boon-backward-search-map
+      "e" 'boon-forward-search-map
+      "W"  'boon-qsearch-previous
+      "E"  'boon-qsearch-next
+      ">"  'end-of-buffer)
+    (general-def boon-command-map
+      "q" 'boon-quote-character
+      "r" 'consult-line
+      "R" 'kmacro-start-macro
+      "P" 'kmacro-end-or-call-macro
+      "X" 'boon-highlight-regexp
+      "t" 'boon-replace-by-character
+      "a" 'boon-enclose
+      "s" 'boon-substitute-region
+      "d" 'boon-take-region
+      "D" 'boon-treasure-region
+      "f" 'boon-splice
+      "F" 'yank-pop
+      "g" 'boon-goto-map
+      "z" 'boon-repeat-command
+      "x" 'boon-x-map
+      "c" 'boon-c-god
+      "M" 'join-line
+      "V" 'boon-open-next-line-and-insert
+      "v" 'boon-set-insert-like-state
+      "B" 'boon-copy-to-register
+      "b" 'insert-register
+      "C-k" 'scroll-down-line
+      "C-j" 'scroll-up-line
+      "C-v" 'boon-open-line-and-insert)
+    (general-def indent-rigidly-map
+      "k" 'indent-rigidly-right
+      "l" 'indent-rigidly-left)
     (boon-mode))
 #+END_SRC
 

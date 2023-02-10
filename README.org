@@ -664,7 +664,7 @@ vertico-directory
     (setq org-extend-today-until 2)
     (use-package org-mouse)
     (add-to-list 'org-file-apps '(t . "xdg-open %s") t)
-    (setq org-reverse-note-order t)
+    (setq org-reverse-note-order nil)
     (setq org-adapt-indentation nil)
     (setq org-startup-indented t)
     (setq org-startup-truncated t)

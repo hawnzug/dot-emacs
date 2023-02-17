@@ -7,3 +7,6 @@
 [submodule "packages/scihub.el"]
 	path = packages/scihub.el
 	url = git@github.com:emacs-pe/scihub.el.git
+[submodule "lsp-bridge"]
+	path = packages/lsp-bridge
+	url = git@github.com:manateelazycat/lsp-bridge.git

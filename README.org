@@ -429,6 +429,8 @@ For lsp mode
   (use-package boon
     :ensure t
     :config
+    (remove-hook 'window-selection-change-functions
+                 'boon-reset-state-for-switchw)
     (defun my:boon-set-command-state ()
       "Quit corfu and then return to boon command state."
       (interactive)

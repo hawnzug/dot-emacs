@@ -1169,7 +1169,7 @@ keybindings
 #+END_SRC
 
 ** lsp-bridge
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package lsp-bridge
     :load-path "~/.config/emacs/packages/lsp-bridge"
     :config
@@ -1510,6 +1510,13 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     :config
     (require 'haskell)
     (require 'haskell-doc))
+#+END_SRC
+
+** Markdown
+#+BEGIN_SRC elisp
+  (use-package markdown-mode
+    :ensure t
+    :mode "\\.md\\'")
 #+END_SRC
 
 ** HTML

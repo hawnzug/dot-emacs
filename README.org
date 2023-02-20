@@ -453,52 +453,53 @@ For lsp mode
       "c"  'boon-select-inside-pairs
       "b"  'boon-select-blanks)
     (general-def boon-moves-map
-      "n" 'boon-switch-mark
-      "N" 'xref-pop-marker-stack
-      "y"  'xref-find-definitions
-      "Y"  'xref-find-references
-      "u"  'boon-beginning-of-line
-      "p"  'boon-end-of-line
-      "i"  'boon-smarter-backward
+      "k" 'boon-switch-mark
+      "K" 'xref-pop-marker-stack
+      "j"  'xref-find-definitions
+      "J"  'xref-find-references
+      "l"  'boon-beginning-of-line
+      ";"  'boon-end-of-line
+      "n"  'boon-smarter-backward
       "o"  'boon-smarter-forward
-      "K"  'boon-smarter-upward
-      "L"  'boon-smarter-downward
-      "h"  'backward-char
-      "j"  'next-line
-      "k"  'previous-line
-      "l"  'forward-char
-      "H"  'scroll-down-command
-      "J"  'forward-paragraph
-      "K"  'backward-paragraph
-      "L"  'scroll-up-command
-      ";"  'avy-goto-char-timer
+      "E"  'boon-smarter-upward
+      "I"  'boon-smarter-downward
+      "e"  'backward-char
+      "y"  'next-line
+      "u"  'previous-line
+      "i"  'forward-char
+      "N"  'scroll-down-command
+      "U"  'backward-paragraph
+      "Y"  'forward-paragraph
+      "O"  'scroll-up-command
+      "h"  'avy-goto-char-timer
       ","  'forward-word
       "."  'backward-word
       "m"  'forward-to-word
       "/"  'boon-find-char-forward
       "<"  'beginning-of-buffer
       "w" 'boon-backward-search-map
-      "e" 'boon-forward-search-map
+      "f" 'boon-forward-search-map
       "W"  'boon-qsearch-previous
-      "E"  'boon-qsearch-next
+      "F"  'boon-qsearch-next
       ">"  'end-of-buffer)
     (general-def boon-command-map
       "q" 'boon-quote-character
-      "r" 'consult-line
+      "p" 'consult-line
       "R" 'kmacro-start-macro
       "P" 'kmacro-end-or-call-macro
       "X" 'boon-highlight-regexp
-      "t" 'boon-replace-by-character
       "a" 'boon-enclose
-      "s" 'boon-substitute-region
-      "d" 'boon-take-region
-      "D" 'boon-treasure-region
-      "f" 'boon-splice
-      "F" 'yank-pop
+      "r" 'boon-substitute-region
+      "t" 'boon-take-region
+      "T" 'boon-treasure-region
+      "s" 'boon-splice
+      "S" 'yank-pop
       "g" 'boon-goto-map
+      "d" 'boon-replace-by-character
       "z" 'boon-repeat-command
       "x" 'boon-x-map
       "c" 'boon-c-god
+      "C" 'boon-exchange
       "M" 'join-line
       "V" 'boon-open-next-line-and-insert
       "v" 'boon-set-insert-like-state

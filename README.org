@@ -490,10 +490,10 @@ For lsp mode
       "X" 'boon-highlight-regexp
       "a" 'boon-enclose
       "r" 'boon-substitute-region
-      "t" 'boon-take-region
-      "T" 'boon-treasure-region
-      "s" 'boon-splice
-      "S" 'yank-pop
+      "s" 'boon-take-region
+      "S" 'boon-treasure-region
+      "t" 'boon-splice
+      "T" 'yank-pop
       "g" 'boon-goto-map
       "d" 'boon-replace-by-character
       "z" 'boon-repeat-command

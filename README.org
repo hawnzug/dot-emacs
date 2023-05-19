@@ -111,7 +111,7 @@ Font setup.
 #+BEGIN_SRC elisp
   (defun my:font-setup ()
     (let ( ;; (primary-font "Iosevka Curly Slab 16")
-          (primary-font "Rec Mono Duotone 10"))
+          (primary-font "Rec Mono Casual 10"))
       (set-fontset-font t 'unicode "Iosevka Curly Slab")
       (set-fontset-font t 'unicode "Noto Color Emoji" nil 'append)
       (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
@@ -190,6 +190,11 @@ Blink!
 Automatically close parenthesis/brackets/...
 #+BEGIN_SRC elisp
   (electric-pair-mode 1)
+#+END_SRC
+
+Pixel scroll
+#+BEGIN_SRC elisp
+  (pixel-scroll-precision-mode 1)
 #+END_SRC
 
 Disable backup.
@@ -973,8 +978,7 @@ keybindings
     :ensure t
     :mode "Dockerfile\\'")
 
-  (use-package docker-tramp
-    :ensure t
+  (use-package tramp-container
     :after tramp)
 #+END_SRC
 
@@ -1103,7 +1107,8 @@ keybindings
                (seq-some (lambda (name) (file-exists-p (expand-file-name name d)))
                          '(".python-version"))))
         (cons 'transient dir)))
-    (add-hook 'project-find-functions 'my:find-project-root nil nil))
+    ;; (add-hook 'project-find-functions 'my:find-project-root nil nil)
+    )
 #+END_SRC
 
 ** help-mode
@@ -1277,7 +1282,7 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package outline
     :hook ((LaTeX-mode agda2-mode) . outline-minor-mode))
-  (add-hook 'outline-minor-mode-hook #'evil-normalize-keymaps)
+  ; (add-hook 'outline-minor-mode-hook #'evil-normalize-keymaps)
 #+END_SRC
 
 ** flypy-re

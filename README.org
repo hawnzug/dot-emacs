@@ -1597,16 +1597,18 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
   (eval-and-compile
     (defun opam-emacs-load-path ()
       (expand-file-name
-       "share/emacs/site-lisp"
-       (file-name-directory
-        (shell-command-to-string "opam var share")))))
+       "emacs/site-lisp"
+       (car (process-lines "opam" "var" "share")))))
 #+END_SRC
 
 #+BEGIN_SRC elisp
   (use-package merlin
     :load-path (lambda () (opam-emacs-load-path))
     :hook
-    (tuareg-mode . merlin-mode))
+    (tuareg-mode . merlin-mode)
+    (caml-mode . merlin-mode)
+    :config
+    (setq merlin-command 'opam))
 #+END_SRC
 
 #+BEGIN_SRC elisp

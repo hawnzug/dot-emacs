@@ -16,3 +16,5 @@ config.el
 /early-init.el
 /test-config.el
 /xenops/
+/tutorial/
+/rime/

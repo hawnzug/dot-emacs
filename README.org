@@ -850,7 +850,7 @@ keybindings
 #+END_SRC
 
 ** bibtex
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package bibtex-completion
     :ensure t
     :defer t
@@ -868,7 +868,7 @@ keybindings
     (setq bibtex-completion-library-path '("~/Documents/")))
 #+END_SRC
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package consult-bibtex
     :load-path "~/.config/emacs/packages/consult-bibtex"
     :general
@@ -910,14 +910,38 @@ keybindings
              (message "Copied to clipboard: %s" title)))))))
 #+END_SRC
 
-#+BEGIN_SRC elisp :tangle no
+#+BEGIN_SRC elisp
   (use-package citar
     :ensure t
-    :general
-    (my:global-def
-      "c" 'citar-open)
+    :init
+    (require 'citar-autoloads)
+    :custom
+    (citar-bibliography '("~/org/refs.bib" "~/org/incomplete.bib"))
+    (citar-library-paths '("~/Documents/"))
+    (citar-file-open-functions (list (cons "html" #'citar-file-open-external)
+                                     (cons "pdf" #'citar-file-open-external)
+                                     (cons t #'find-file)))
+    (org-cite-global-bibliography citar-bibliography)
+    (org-cite-insert-processor 'citar)
+    (org-cite-follow-processor 'citar)
+    (org-cite-activate-processor 'citar))
+  (use-package citar-capf
+    :after citar
+    :hook
+    (LaTeX-mode . citar-capf-setup)
+    (org-mode . citar-capf-setup))
+  (use-package citar-embark
+    :ensure t
+    :after citar embark
+    :config (citar-embark-mode))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package citar-denote
+    :after (citar denote)
+    :ensure t
     :config
-    (setq citar-file-open-function #'my:bibtex-open-pdf))
+    (citar-denote-mode))
 #+END_SRC
 
 ** bookmark

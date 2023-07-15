@@ -1711,7 +1711,7 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)
     (setq font-latex-fontify-sectioning 'color)
     (setq font-latex-fontify-script nil)
-    (setq TeX-view-program-selection '((output-pdf "Zathura"))))
+    (setq TeX-view-program-selection '((output-pdf "Sioyek"))))
 #+END_SRC
 
 #+BEGIN_SRC elisp :tangle no

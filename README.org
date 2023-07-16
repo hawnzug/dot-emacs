@@ -1261,8 +1261,9 @@ keybindings
     :config
     (setq magit-repository-directories
           '(("~/.config/emacs" . 0)
-            ("~/Projects/boon" . 0)
-            ("~/org" . 0)))
+            ("~/Documents/notes" . 0)
+            ("~/org" . 0)
+            ("~/Dev" . 1)))
     (setq
      magit-repolist-columns
      '(("Name" 15 magit-repolist-column-ident nil)

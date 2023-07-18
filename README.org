@@ -441,6 +441,11 @@ For lsp mode
       (interactive)
       (call-interactively 'corfu-quit)
       (boon-set-command-state))
+    (defun my:boon-beginning-of-line ()
+      (interactive)
+      (if (equal major-mode 'org-mode)
+          (org-beginning-of-line)
+        (boon-beginning-of-line)))
     (general-def boon-insert-map
       "<escape>" 'my:boon-set-command-state)
     (general-def boon-select-map
@@ -462,7 +467,7 @@ For lsp mode
       "K" 'xref-pop-marker-stack
       "j"  'xref-find-definitions
       "J"  'xref-find-references
-      "l"  'boon-beginning-of-line
+      "l"  'my:boon-beginning-of-line
       ";"  'boon-end-of-line
       "n"  'boon-smarter-backward
       "o"  'boon-smarter-forward

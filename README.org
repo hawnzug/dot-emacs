@@ -653,7 +653,7 @@ vertico-directory
 * org
 #+BEGIN_SRC elisp
   (use-package org
-    :ensure t
+    :load-path "~/Projects/org-mode/lisp"
     :defer 4
     :mode ("\\.org\\'" . org-mode)
     :init
@@ -663,9 +663,8 @@ vertico-directory
     (org-mode . my:show-trailing-space)
     (org-babel-after-execute . org-redisplay-inline-images)
     :config
+    (setq org-special-ctrl-a/e t)
     (setq org-agenda-files '("~/org/gtd.org"))
-    (setq org-todo-keywords
-        '((sequence "TODO" "DONE")))
     (setq org-fontify-done-headline nil)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
@@ -677,8 +676,6 @@ vertico-directory
     (setq org-startup-indented t)
     (setq org-startup-truncated t)
     (setq org-hide-emphasis-markers t)
-    (setq org-format-latex-options (plist-put org-format-latex-options :scale 1.4))
-    (setq org-latex-pdf-process '("latexmk -f -pdf -outdir=%o %f"))
     (setq org-footnote-section nil))
 #+END_SRC
 

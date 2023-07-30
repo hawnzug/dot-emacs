@@ -192,11 +192,6 @@ Automatically close parenthesis/brackets/...
   (electric-pair-mode 1)
 #+END_SRC
 
-Pixel scroll
-#+BEGIN_SRC elisp
-  (pixel-scroll-precision-mode 1)
-#+END_SRC
-
 Disable backup.
 #+BEGIN_SRC elisp
   (setq make-backup-files nil)
@@ -396,12 +391,24 @@ For lsp mode
 #+END_SRC
 
 * mode line
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package hide-mode-line
     :ensure t
     :config
     (setq hide-mode-line-excluded-modes nil)
     (global-hide-mode-line-mode))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package nerd-icons
+    :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package doom-modeline
+    :ensure t
+    :config
+    (doom-modeline-mode 1))
 #+END_SRC
 
 ** moody
@@ -429,8 +436,39 @@ For lsp mode
     "C--" 'text-scale-adjust)
 #+END_SRC
 
-* boon
+* evil
 #+BEGIN_SRC elisp
+  (use-package evil
+    :ensure t
+    :config
+    (evil-mode 1))
+
+  (general-def 'motion
+    " " nil
+    "n" #'evil-next-line
+    "N" #'evil-join
+    "e" #'evil-previous-line
+    "E" nil
+    "i" #'evil-forward-char
+    "j" #'evil-search-next
+    "J" #'evil-search-previous
+    "l" #'evil-forward-word-end
+    "l" #'evil-forward-WORD-end)
+
+  (general-def 'normal
+    "i" nil
+    "k" #'evil-insert)
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package evil-surround
+    :ensure t
+    :config
+    (global-evil-surround-mode 1))
+#+END_SRC
+
+* boon
+#+BEGIN_SRC elisp :tangle no
   (use-package boon
     :ensure t
     :config
@@ -1202,6 +1240,15 @@ keybindings
     :commands jieba-mode)
 #+END_SRC
 
+** keyfreq
+#+BEGIN_SRC elisp
+  (use-package keyfreq
+    :ensure t
+    :config
+    (keyfreq-mode 1)
+    (keyfreq-autosave-mode 1))
+#+END_SRC
+
 ** ledger-mode
 #+BEGIN_SRC elisp
   (use-package ledger-mode
@@ -1300,6 +1347,7 @@ keybindings
            ("\\.markdown\\'" . markdown-mode)))
 #+END_SRC
 
+
 ** newcomment
 #+BEGIN_SRC elisp
   (use-package newcomment
@@ -1324,6 +1372,16 @@ keybindings
   (use-package outline
     :hook ((LaTeX-mode agda2-mode) . outline-minor-mode))
   ; (add-hook 'outline-minor-mode-hook #'evil-normalize-keymaps)
+#+END_SRC
+
+** pixel-scroll
+#+BEGIN_SRC elisp
+  (use-package pixel-scroll
+    :custom
+    (pixel-scroll-precision-use-momentum t)
+    (pixel-scroll-precision-interpolate-page t)
+    :config
+    (pixel-scroll-precision-mode 1))
 #+END_SRC
 
 ** flypy-re
@@ -1484,6 +1542,16 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 #+END_SRC
 
 * languages
+** Common Lisp
+#+BEGIN_SRC elisp
+  (use-package slime
+    :ensure t
+    :init
+    (load (expand-file-name "~/quicklisp/slime-helper.el"))
+    :config
+    (setq inferior-lisp-program "sbcl"))
+#+END_SRC
+
 ** cc-mode
 #+BEGIN_SRC elisp
   (use-package cc-mode

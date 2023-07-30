@@ -39,6 +39,10 @@
  '(outline-7 ((t nil)))
  '(outline-8 ((t nil)))
 
+ ;; mode line
+ '(mode-line ((t (:background "#d8d8ff"))))
+ '(mode-line-inactive ((t (:background "#f0f0ff"))))
+
  ;; org
  '(org-drawer ((t (:foreground "#BBBBBB"))))
  '(org-todo ((t (:foreground "#BB0202" :background "#F2F2F2"))))

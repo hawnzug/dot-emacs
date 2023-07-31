@@ -621,6 +621,15 @@ vertico-directory
   (use-package corfu
     :ensure t
     :config
+    (with-eval-after-load 'evil
+      (defun my:corfu-quit-and-escape ()
+        (interactive)
+        (call-interactively 'corfu-quit)
+        (evil-normal-state))
+      (general-def 'insert corfu-map
+        "<escape>" 'my:corfu-quit-and-escape)
+      (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
+      (advice-add 'corfu--teardown :after 'evil-normalize-keymaps))
     (setq corfu-auto t)
     (global-corfu-mode))
 #+END_SRC

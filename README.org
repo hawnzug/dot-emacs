@@ -445,19 +445,23 @@ For lsp mode
 
   (general-def 'motion
     " " nil
+    "H" #'evil-beginning-of-line
     "n" #'evil-next-line
     "N" #'evil-join
     "e" #'evil-previous-line
     "E" nil
     "i" #'evil-forward-char
+    "I" #'evil-end-of-line
     "j" #'evil-search-next
     "J" #'evil-search-previous
     "l" #'evil-forward-word-end
-    "l" #'evil-forward-WORD-end)
+    "L" #'evil-forward-WORD-end)
 
   (general-def 'normal
     "i" nil
-    "k" #'evil-insert)
+    "I" nil
+    "k" #'evil-insert
+    "K" #'evil-insert-line)
 #+END_SRC
 
 #+BEGIN_SRC elisp
@@ -715,6 +719,8 @@ vertico-directory
     (org-mode . my:show-trailing-space)
     (org-babel-after-execute . org-redisplay-inline-images)
     :config
+    (general-def 'normal org-mode-map
+      "<tab>" 'org-cycle)
     (setq org-special-ctrl-a/e t)
     (setq org-agenda-files '("~/org/gtd.org"))
     (setq org-fontify-done-headline nil)
@@ -1553,10 +1559,10 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 * languages
 ** Common Lisp
 #+BEGIN_SRC elisp
-  (use-package slime
+  (use-package sly
     :ensure t
     :init
-    (load (expand-file-name "~/quicklisp/slime-helper.el"))
+    (require 'sly-autoloads)
     :config
     (setq inferior-lisp-program "sbcl"))
 #+END_SRC

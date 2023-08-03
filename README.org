@@ -444,24 +444,152 @@ For lsp mode
     (evil-mode 1))
 
   (general-def 'motion
+    ;; Upper-left
+    "q" nil
+    "Q" nil
+    "w" nil
+    "W" nil
+    "f" nil
+    "F" nil
+    "p" nil
+    "P" nil
+    ;; "g"
+    ;; "G"
+    ;; Middle-left
+    "a" nil
+    "A" nil
+    "r" nil
+    "R" nil
+    "s" nil
+    "S" nil
+    "t" nil
+    "T" nil
+    "d" nil
+    "D" nil
+    ;; Lower-left
+    "z" nil
+    "Z" nil
+    "x" nil
+    "X" nil
+    "c" nil
+    "C" nil
+    ;; "v"
+    ;; "V"
+    "b" nil
+    "B" nil
     " " nil
-    "H" #'evil-beginning-of-line
+
+
+    ;; Upper-right
+    "j" #'evil-backward-word-begin
+    "J" #'evil-backward-WORD-begin
+    "l" #'evil-first-non-blank
+    "L" #'evil-beginning-of-line
+    "u" #'evil-end-of-line
+    "U" nil
+    "y" #'evil-forward-word-begin
+    "Y" #'evil-forward-WORD-begin
+    ";" #'evil-forward-word-end
+    ":" #'evil-forward-WORD-end
+    ;; Middle-right
+    "h" #'evil-backward-char
+    "H" nil
     "n" #'evil-next-line
-    "N" #'evil-join
+    "N" nil
     "e" #'evil-previous-line
     "E" nil
     "i" #'evil-forward-char
-    "I" #'evil-end-of-line
-    "j" #'evil-search-next
-    "J" #'evil-search-previous
-    "l" #'evil-forward-word-end
-    "L" #'evil-forward-WORD-end)
+    "I" nil
+    "o" #'evil-jump-item
+    "O" nil
+    ;; Lower-right
+    "k" #'evil-find-char
+    "K" #'evil-find-char-backward
+    "m" #'evil-find-char-to
+    "M" #'evil-find-char-to-backward
+    "," #'evil-repeat-find-char-reverse
+    "<" nil
+    "." #'evil-repeat-find-char
+    ">" nil
+    "/" nil
+    "?" nil
+    )
 
   (general-def 'normal
+    ;; Upper-left
+    "q" #'evil-replace
+    "Q" #'evil-join
+    "w" #'evil-open-below
+    "W" #'evil-open-above
+    "f" #'evil-insert
+    "F" #'evil-insert-line
+    "p" #'evil-append
+    "P" #'evil-append-line
+    ;; "g"
+    ;; "G"
+    ;; Middle-left
+    "a" #'evil-yank
+    "A" #'evil-yank-line
+    "r" #'evil-delete
+    "R" #'evil-delete-line
+    "s" #'evil-change
+    "S" #'evil-change-line
+    "t" #'evil-paste-after
+    "T" #'evil-paste-before
+    "d" #'evil-undo
+    "D" #'evil-redo
+    ;; Lower-left
+    "z" nil
+    "Z" nil
+    "x" nil
+    "X" nil
+    "c" nil
+    "C" nil
+    ;; "v"
+    ;; "V"
+    "b" nil
+    "B" nil
+
+    ;; Upper-right
+    "j" nil
+    "J" nil
+    "l" nil
+    "L" nil
+    "u" nil
+    "U" nil
+    "y" nil
+    "Y" nil
+    ";" nil
+    ":" nil
+    ;; Middle-right
+    "h" nil
+    "H" nil
+    "n" nil
+    "N" nil
+    "e" nil
+    "E" nil
     "i" nil
     "I" nil
-    "k" #'evil-insert
-    "K" #'evil-insert-line)
+    "o" nil
+    "O" nil
+    ;; Lower-right
+    "k" nil
+    "K" nil
+    "m" nil
+    "M" nil
+    "," nil
+    "<" nil
+    "." nil
+    ">" nil
+    "/" nil
+    "?" nil
+
+    "<backspace>" #'evil-delete-char
+    )
+
+  (general-def 'visual
+    "f" 
+    )
 #+END_SRC
 
 #+BEGIN_SRC elisp

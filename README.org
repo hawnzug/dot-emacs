@@ -436,13 +436,29 @@ For lsp mode
     "C--" 'text-scale-adjust)
 #+END_SRC
 
+#+BEGIN_SRC elisp
+  (general-define-key
+   :keymaps '(minibuffer-mode-map
+              minibuffer-local-map
+              minibuffer-local-ns-map
+              minibuffer-local-completion-map
+              minibuffer-local-must-match-map
+              minibuffer-local-isearch-map)
+    "<escape>" 'abort-minibuffers)
+#+END_SRC
+
 * evil
 #+BEGIN_SRC elisp
   (use-package evil
     :ensure t
+    :custom
+    (evil-want-C-i-jump nil)
     :config
     (evil-mode 1))
+#+END_SRC
 
+** motion state
+#+BEGIN_SRC elisp
   (general-def 'motion
     ;; Upper-left
     "q" nil
@@ -479,7 +495,6 @@ For lsp mode
     "B" nil
     " " nil
 
-
     ;; Upper-right
     "j" #'evil-backward-word-begin
     "J" #'evil-backward-WORD-begin
@@ -511,10 +526,13 @@ For lsp mode
     "<" nil
     "." #'evil-repeat-find-char
     ">" nil
-    "/" nil
+    "/" #'avy-goto-char-timer
     "?" nil
     )
+#+END_SRC
 
+** normal state
+#+BEGIN_SRC elisp
   (general-def 'normal
     ;; Upper-left
     "q" #'evil-replace
@@ -525,8 +543,8 @@ For lsp mode
     "F" #'evil-insert-line
     "p" #'evil-append
     "P" #'evil-append-line
-    ;; "g"
-    ;; "G"
+    "g" #'evil-repeat
+    "G" nil
     ;; Middle-left
     "a" #'evil-yank
     "A" #'evil-yank-line
@@ -586,17 +604,72 @@ For lsp mode
 
     "<backspace>" #'evil-delete-char
     )
-
-  (general-def 'visual
-    "f" 
-    )
 #+END_SRC
 
+** visual state
+#+BEGIN_SRC elisp
+  (general-def 'visual
+    "a" nil
+    "A" nil
+    "i" nil
+    "I" nil
+    "o" nil
+    "O" nil
+    "u" nil
+    "U" nil
+    "f" evil-inner-text-objects-map
+    "F" #'evil-insert
+    "p" evil-outer-text-objects-map
+    "P" #'evil-append
+    "q" #'exchange-point-and-mark
+    "Q" #'evil-visual-exchange-corners)
+#+END_SRC
+
+** operator state
+#+BEGIN_SRC elisp
+  (general-def 'operator
+    "a" nil
+    "i" nil
+    "f" evil-inner-text-objects-map
+    "p" evil-outer-text-objects-map)
+#+END_SRC
+
+** space leader
+#+BEGIN_SRC elisp
+  (general-define-key
+   :keymaps '(motion insert)
+   :prefix "SPC"
+   :non-normal-prefix "C-SPC"
+   :prefix-command 'my:space-prefix-command
+   :prefix-map 'my:space-prefix-map
+   "SPC" #'execute-extended-command
+   "r" #'consult-ripgrep
+   "t" #'consult-line
+   "n" #'consult-buffer
+   "e" #'find-file
+   "i" #'magit-status
+   "o" #'other-window
+
+   "c" #'citar-open
+   "d" #'denote)
+#+END_SRC
+
+** evil-surround
 #+BEGIN_SRC elisp
   (use-package evil-surround
     :ensure t
     :config
-    (global-evil-surround-mode 1))
+    (global-evil-surround-mode 1)
+    (general-def 'operator evil-surround-mode-map
+      "s" nil
+      "S" nil
+      "w" #'evil-surround-edit
+      "W" #'evil-Surround-edit)
+    (general-def 'visual evil-surround-mode-map
+      "S" nil
+      "gS" nil
+      "w" #'evil-surround-edit
+      "W" #'evil-Surround-edit))
 #+END_SRC
 
 * boon

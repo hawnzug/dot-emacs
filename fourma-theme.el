@@ -1,33 +1,51 @@
 (deftheme fourma
   "Created 2020-10-25.")
 
+;; https://colorjs.io/apps/picker/jzczhz
+;; (new Color("color(jzczhz jz cz hz)")).to("srgb").toString({format: "hex"})
+;; rgb     jz   cz   hz
+;; #f1e5b6 0.2  0.04 90
+;; #b8face 0.2  0.04 150
+;; #a9f5fe 0.2  0.04 215
+;; #a44148 0.1  0.08 30
+;; #0673a4 0.1  0.08 240
+;; #973787 0.1  0.08 330
+;; #ec8ba0 0.16 0.06 15
+;; #c4b373 0.16 0.06 90
+;; #81cc8b 0.16 0.06 140
+;; #67c1e1 0.16 0.06 230
+;; #7d383c 0.08 0.06 30
+;; #1d5b7c 0.08 0.06 240
+;; #743368 0.08 0.06 330
+
 (custom-theme-set-faces
  'fourma
- '(cursor ((t (:background "#009b7c"))))
- '(highlight ((t (:background "#add9ff"))))
+ '(cursor ((t (:background "black"))))
+ '(highlight ((t (:background "#67c1e1"))))
  '(hl-line ((t nil)))
- '(region ((t (:background "#add9ff"))))
+ '(region ((t (:background "#67c1e1"))))
  '(warning ((t (:background "#FF6666"))))
  '(secondary-selection ((t (:background "light yellow"))))
  '(trailing-whitespace ((t (:background "red"))))
+ '(show-paren-match ((t (:background "#c4b373"))))
  '(font-lock-builtin-face ((t (:slant italic))))
  '(font-lock-comment-delimiter-face ((t (:inherit (font-lock-comment-face)))))
- '(font-lock-comment-face ((t (:background "#c1eec1"))))
+ '(font-lock-comment-face ((t (:background "#81cc8b"))))
  '(font-lock-constant-face ((t nil)))
  '(font-lock-doc-face ((t (:inherit (font-lock-comment-face)))))
- '(font-lock-function-name-face ((t nil)))
+ '(font-lock-function-name-face ((t (:foreground "#7d383c"))))
  '(font-lock-keyword-face ((t (:slant italic))))
  '(font-lock-negation-char-face ((t nil)))
  '(font-lock-preprocessor-face ((t (:inherit (font-lock-builtin-face)))))
  '(font-lock-regexp-grouping-backslash ((t nil)))
  '(font-lock-regexp-grouping-construct ((t nil)))
- '(font-lock-string-face ((t (:foreground "#A244C9"))))
+ '(font-lock-string-face ((t (:foreground "#743368"))))
  '(font-lock-type-face ((t nil)))
  '(font-lock-variable-name-face ((t nil)))
  '(font-lock-warning-face ((t (:inherit (warning)))))
  '(fringe ((t (:background "white"))))
  '(minibuffer-prompt ((t (:weight bold))))
- '(link ((t (:underline t :foreground "#0070CE"))))
+ '(link ((t (:underline t :foreground "#1d5b7c"))))
 
  ;; outline
  '(outline-1 ((t nil)))
@@ -39,20 +57,18 @@
  '(outline-7 ((t nil)))
  '(outline-8 ((t nil)))
 
- ;; mode line
- '(mode-line ((t (:background "#d8d8ff"))))
- '(mode-line-inactive ((t (:background "#f0f0ff"))))
-
  ;; org
- '(org-drawer ((t (:foreground "#BBBBBB"))))
- '(org-todo ((t (:foreground "#BB0202" :background "#F2F2F2"))))
- '(org-done ((t (:foreground "#066B1F" :background "#F2F2F2"))))
- '(org-date ((t (:underline t :foreground "#6F7408"))))
+ '(org-drawer ((t (:inherit shadow))))
+ '(org-todo ((t (:background "#ec8ba0"))))
+ '(org-done ((t (:inherit shadow))))
+ '(org-date ((t (:underline t :foreground "#1d5b7c"))))
+ '(org-document-title ((t (:weight bold :foreground "#1d5b7c"))))
+ '(org-document-info ((t (:foreground "#1d5b7c"))))
  '(org-block ((t (:inherit fixed-pitch))))
  '(org-indent ((t (:inherit (org-hide fixed-pitch)))))
  '(org-table ((t (:inherit fixed-pitch))))
  '(org-tag ((t (:inherit fixed-pitch))))
- '(org-verbatim ((t (:inherit fixed-pitch :foreground "#008223"))))
+ '(org-verbatim ((t (:inherit fixed-pitch :foreground "#7d383c"))))
 
  ;; LaTeX
  '(font-latex-sedate-face ((t (:inherit (font-lock-keyword-face)))))
@@ -61,15 +77,7 @@
  '(font-latex-script-char-face ((t nil)))
 
  ;; Dired
- '(dired-directory ((t (:weight bold :foreground "#268bd2"))))
-
- ;; Company
- '(company-tooltip ((t (:background "#f0f0f0"))))
- '(company-tooltip-selection ((t (:inherit region))))
- '(company-tooltip-common ((t (:foreground "#707070"))))
- '(company-tooltip-annotation ((t (:foreground "#999999"))))
- '(company-tooltip-scrollbar-thumb ((t (:background "#666666"))))
- '(company-tooltip-scrollbar-track ((t (:background "#f6f6f6"))))
+ '(dired-directory ((t (:weight bold :foreground "#1d5b7c"))))
 
  ;; Haskell
  '(haskell-constructor-face ((t nil)))

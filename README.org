@@ -453,6 +453,8 @@ For lsp mode
     :ensure t
     :custom
     (evil-want-C-i-jump nil)
+    (evil-undo-system 'undo-redo)
+    (evil-want-change-word-to-end nil)
     :config
     (evil-mode 1))
 #+END_SRC

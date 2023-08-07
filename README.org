@@ -1646,10 +1646,16 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 #+END_SRC
 
 ** snippets
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package yasnippet
     :ensure t
     :hook (LaTeX-mode . yas-minor-mode))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package tempel
+    :ensure t
+    :after aas)
 #+END_SRC
 
 #+BEGIN_SRC elisp
@@ -1661,7 +1667,9 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     (aas-set-snippets 'org-mode
       "bsrc" (lambda () (interactive)
                  (insert "#+BEGIN_SRC elisp\n#+END_SRC")
-                 (org-edit-special)))
+                 (org-edit-special))
+      "\\(" '(tempel "\\(" q "\\)")
+      "\\[" '(tempel "\\[" n q n "\\]"))
 
     (defun my:agda-auto-script-condition ()
       "Condition used for auto-sub/superscript snippets."
@@ -1684,7 +1692,7 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 #+BEGIN_SRC elisp
   (use-package laas
     :ensure t
-    :hook (LaTeX-mode . laas-mode)
+    :hook ((LaTeX-mode org-mode). laas-mode)
     :config
     (setq laas-enable-auto-space nil))
 #+END_SRC

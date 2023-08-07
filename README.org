@@ -106,8 +106,125 @@ Disable useless UIs.
   (menu-bar-mode -1)
 #+END_SRC
 
+* use-package
+#+BEGIN_SRC elisp
+  (setq package-user-dir "~/.config/emacs/elpa")
+  (let ((default-directory package-user-dir))
+    (normal-top-level-add-subdirs-to-load-path)
+    ; Prefer elpa packages
+    (setq load-path (reverse load-path)))
+  (require 'use-package)
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (with-eval-after-load 'info
+    (info-initialize)
+    (dolist (dir (directory-files package-user-dir))
+      (let ((fdir (concat (file-name-as-directory package-user-dir) dir)))
+        (unless (or (member dir '("." ".." "archives" "gnupg"))
+                    (not (file-directory-p fdir))
+                    (not (file-exists-p (concat (file-name-as-directory fdir) "dir"))))
+          (add-to-list 'Info-directory-list fdir)))))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (with-eval-after-load 'package
+    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
+#+END_SRC
+
 * init
-Font setup.
+** quiet startup
+#+BEGIN_SRC elisp
+  (setq inhibit-startup-screen t)
+  (setq inhibit-startup-message t)
+  (setq inhibit-startup-echo-area-message t)
+  (setq initial-scratch-message nil)
+  (setq initial-major-mode 'fundamental-mode)
+#+END_SRC
+
+** frame
+#+BEGIN_SRC elisp
+  (use-package frame
+    :custom
+    (window-divider-default-right-width 1)
+    (window-divider-default-bottom-width 1)
+    (window-divider-default-places t)
+    :config
+    (blink-cursor-mode)
+    (window-divider-mode))
+#+END_SRC
+
+** parentheses
+#+BEGIN_SRC elisp
+  (use-package elec-pair
+    :config
+    (electric-pair-mode))
+  (use-package paren
+    :config
+    (show-paren-mode 1))
+#+END_SRC
+
+** files
+#+BEGIN_SRC elisp
+  (use-package files
+    :custom
+    (make-backup-files nil)
+    (auto-save-default nil)
+    (auto-save-visited-interval 1)
+    :config
+    (auto-save-visited-mode))
+#+END_SRC
+
+** tab
+#+BEGIN_SRC elisp
+  (setq-default indent-tabs-mode nil)
+#+END_SRC
+
+** C code variables
+#+BEGIN_SRC elisp
+  (use-package emacs
+    :custom
+    (word-wrap-by-category t)
+    (delete-by-moving-to-trash t)
+    (text-quoting-style 'straight)
+    (kill-buffer-query-functions nil)
+    (read-process-output-max (* 1024 1024))
+    :config
+    (defun system-move-file-to-trash (filename)
+      (shell-command (concat "trash " (shell-quote-argument filename))))
+    (defalias 'yes-or-no-p 'y-or-n-p)
+    (setq-default tab-width 4)
+    (setq-default truncate-lines t))
+#+END_SRC
+
+** window
+#+BEGIN_SRC elisp
+  (use-package window
+    :custom
+    (split-width-threshold 100))
+#+END_SRC
+
+** help
+#+BEGIN_SRC elisp
+  (use-package help
+    :custom
+    (help-window-select t))
+#+END_SRC
+
+** native compilation
+#+BEGIN_SRC elisp
+  (use-package comp
+    :custom
+    (native-comp-async-report-warnings-errors 'silent))
+#+END_SRC
+
+* theme
+#+BEGIN_SRC elisp
+  (load-theme 'fourma t)
+#+END_SRC
+
+** font
+*** font setup.
 #+BEGIN_SRC elisp
   (defun my:font-setup ()
     (let ( ;; (primary-font "Iosevka Curly Slab 16")
@@ -150,7 +267,7 @@ Font setup.
   (my:font-setup)
 #+END_SRC
 
-Ligature
+*** ligature
 #+BEGIN_SRC elisp :tangle no
   (let ((ligatures `((?-  . ,(regexp-opt '("->" "->>" "-->")))
                      (?*  . ,(regexp-opt '("*>")))
@@ -168,148 +285,65 @@ Ligature
                             `([,(cdr char-regexp) 0 font-shape-gstring]))))
 #+END_SRC
 
-Quiet startup
+** mode line
 #+BEGIN_SRC elisp
-  (setq inhibit-startup-screen t)
-  (setq inhibit-startup-message t)
-  (setq inhibit-startup-echo-area-message t)
-  (setq initial-scratch-message nil)
-  (setq initial-major-mode 'fundamental-mode)
-#+END_SRC
-
-Show paren pair.
-#+BEGIN_SRC elisp
-  (show-paren-mode 1)
-#+END_SRC
-
-Blink!
-#+BEGIN_SRC elisp
-  (blink-cursor-mode)
-#+END_SRC
-
-Automatically close parenthesis/brackets/...
-#+BEGIN_SRC elisp
-  (electric-pair-mode 1)
-#+END_SRC
-
-Disable backup.
-#+BEGIN_SRC elisp
-  (setq make-backup-files nil)
-#+END_SRC
-
-Auto save after 1 second idle.
-#+BEGIN_SRC elisp
-  (setq auto-save-default nil)
-  (setq auto-save-visited-interval 1)
-  (auto-save-visited-mode)
-#+END_SRC
-
-Trash instead of delete.
-#+BEGIN_SRC elisp
-  (setq trash-directory "~/Trash")
-  (setq delete-by-moving-to-trash t)
-  (defun system-move-file-to-trash (filename)
-    (shell-command (concat "trash " (shell-quote-argument filename))))
-#+END_SRC
-
-Tab.
-#+BEGIN_SRC elisp
-  (setq-default indent-tabs-mode nil)
-  (setq-default tab-width 4)
-#+END_SRC
-
-No wrap line.
-#+BEGIN_SRC elisp
-  (setq-default truncate-lines t)
-#+END_SRC
-
-Better word wrap for CJK
-#+BEGIN_SRC elisp
-  (setq word-wrap-by-category t)
-  (load "kinsoku.el")
-#+END_SRC
-
-Split window threshold (Split window vertically by default)
-#+BEGIN_SRC elisp
-  (setq split-width-threshold 100)
-#+END_SRC
-
-80 characters one line.
-#+BEGIN_SRC elisp
-  (setq-default fill-column 80)
-  (setq sentence-end-double-space nil)
-#+END_SRC
-
-Use straight single quote in help and messages.
-#+BEGIN_SRC elisp
-  (setq text-quoting-style 'straight)
-#+END_SRC
-
-y or n.
-#+BEGIN_SRC elisp
-  (defalias 'yes-or-no-p 'y-or-n-p)
-  (setq kill-buffer-query-functions nil)
-#+END_SRC
-
-Window divider on right.
-#+BEGIN_SRC elisp
-  (setq window-divider-default-right-width 1)
-  (setq window-divider-default-bottom-width 1)
-  (setq window-divider-default-places t)
-  (window-divider-mode t)
-#+END_SRC
-
-Avoid crash when open image in Emacs.
-#+BEGIN_SRC elisp
-  (setenv "MAGICK_OCL_DEVICE" "OFF")
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (setq password-cache-expiry 1200)
-#+END_SRC
-
-Always select the help window.
-#+BEGIN_SRC elisp
-  (setq help-window-select t)
-#+END_SRC
-
-For lsp mode
-#+BEGIN_SRC elisp
-  (setq read-process-output-max (* 1024 1024))
-#+END_SRC
-
-* use-package
-#+BEGIN_SRC elisp
-  (setq package-user-dir "~/.config/emacs/elpa")
-  (let ((default-directory package-user-dir))
-    (normal-top-level-add-subdirs-to-load-path)
-    ; Prefer elpa packages
-    (setq load-path (reverse load-path)))
-  (require 'use-package)
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (with-eval-after-load 'info
-    (info-initialize)
-    (dolist (dir (directory-files package-user-dir))
-      (let ((fdir (concat (file-name-as-directory package-user-dir) dir)))
-        (unless (or (member dir '("." ".." "archives" "gnupg"))
-                    (not (file-directory-p fdir))
-                    (not (file-exists-p (concat (file-name-as-directory fdir) "dir"))))
-          (add-to-list 'Info-directory-list fdir)))))
-#+END_SRC
-
-#+BEGIN_SRC elisp
-  (with-eval-after-load 'package
-    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
-#+END_SRC
-
-* native compilation
-#+BEGIN_SRC elisp
-  (use-package comp
+  (use-package hide-mode-line
+    :ensure t
     :config
-    (setq native-comp-async-report-warnings-errors 'silent)
-    (setq comp-deferred-compilation-deny-list '("bibtex-actions.el")))
+    (setq hide-mode-line-excluded-modes nil)
+    (global-hide-mode-line-mode))
+#+END_SRC
+
+#+BEGIN_SRC elisp :tangle no
+  (use-package nerd-icons
+    :ensure t)
+#+END_SRC
+
+#+BEGIN_SRC elisp :tangle no
+  (use-package doom-modeline
+    :ensure t
+    :config
+    (doom-modeline-mode 1))
+#+END_SRC
+
+*** moody
+#+BEGIN_SRC elisp :tangle no
+  (use-package moody
+    :ensure t
+    :config
+    (setq x-underline-at-descent-line t)
+    (moody-replace-mode-line-buffer-identification)
+    (moody-replace-vc-mode))
+#+END_SRC
+
+** alternative themes
+#+BEGIN_SRC elisp :tangle no
+  (use-package modus-themes
+    :ensure t
+    :init
+    (setq modus-themes-italic-constructs t)
+    (setq modus-themes-syntax '(yellow-comments green-strings))
+    (setq modus-themes-region '(bg-only no-extend))
+    (setq modus-themes-org-blocks 'gray-background)
+    (setq modus-themes-headings
+          '((t . (monochrome overline background))))
+    (setq modus-themes-mode-line '(accented))
+    :config
+    (modus-themes-load-operandi))
+#+END_SRC
+
+#+BEGIN_SRC elisp :tangle no
+  (use-package lab-themes
+    :ensure t
+    :config
+    (lab-themes-load-style 'light))
+#+END_SRC
+
+#+BEGIN_SRC elisp :tangle no
+  (use-package flucui-themes
+    :ensure t
+    :config
+    (flucui-themes-load-style 'light))
 #+END_SRC
 
 * help functions
@@ -354,71 +388,6 @@ For lsp mode
       (if (and (numberp old-alpha) (< old-alpha opacity))
           (set-frame-parameter nil 'alpha opacity)
         (set-frame-parameter nil 'alpha transparency))))
-#+END_SRC
-
-* theme
-#+BEGIN_SRC elisp
-  (load-theme 'fourma t)
-#+END_SRC
-
-#+BEGIN_SRC elisp :tangle no
-  (use-package modus-themes
-    :ensure t
-    :init
-    (setq modus-themes-italic-constructs t)
-    (setq modus-themes-syntax '(yellow-comments green-strings))
-    (setq modus-themes-region '(bg-only no-extend))
-    (setq modus-themes-org-blocks 'gray-background)
-    (setq modus-themes-headings
-          '((t . (monochrome overline background))))
-    (setq modus-themes-mode-line '(accented))
-    :config
-    (modus-themes-load-operandi))
-#+END_SRC
-
-#+BEGIN_SRC elisp :tangle no
-  (use-package lab-themes
-    :ensure t
-    :config
-    (lab-themes-load-style 'light))
-#+END_SRC
-
-#+BEGIN_SRC elisp :tangle no
-  (use-package flucui-themes
-    :ensure t
-    :config
-    (flucui-themes-load-style 'light))
-#+END_SRC
-
-* mode line
-#+BEGIN_SRC elisp
-  (use-package hide-mode-line
-    :ensure t
-    :config
-    (setq hide-mode-line-excluded-modes nil)
-    (global-hide-mode-line-mode))
-#+END_SRC
-
-#+BEGIN_SRC elisp :tangle no
-  (use-package nerd-icons
-    :ensure t)
-#+END_SRC
-
-#+BEGIN_SRC elisp :tangle no
-  (use-package doom-modeline
-    :ensure t
-    :config
-    (doom-modeline-mode 1))
-#+END_SRC
-
-** moody
-#+BEGIN_SRC elisp :tangle no
-  (use-package moody
-    :ensure t
-    :config
-    (setq x-underline-at-descent-line t)
-    (moody-replace-mode-line-buffer-identification)
-    (moody-replace-vc-mode))
 #+END_SRC
 
 * general.el
@@ -773,15 +742,15 @@ For lsp mode
 #+BEGIN_SRC elisp
   (use-package rime
     :ensure t
+    :defer t
     :init
     (setq default-input-method 'rime)
-    (defun rime-predicate-boon-mode-p ()
-      (not boon-insert-map))
+    (require 'rime-autoloads)
     :config
     (setq rime-show-candidate 'posframe)
     (setq rime-show-preedit 'inline)
     (setq rime-disable-predicates
-          '(rime-predicate-boon-mode-p
+          '(rime-predicate-evil-mode-p
             rime-predicate-after-alphabet-char-p
             rime-predicate-prog-in-code-p
             rime-predicate-space-after-cc-p)))
@@ -851,7 +820,6 @@ vertico-directory
 #+END_SRC
 
 ** cape
-
 #+BEGIN_SRC elisp
   (use-package cape
     :ensure t
@@ -1076,7 +1044,7 @@ keybindings
 #+END_SRC
 
 ** dirvish
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package dirvish
     :ensure t)
 #+END_SRC

@@ -1038,6 +1038,16 @@ keybindings
     "M-L" 'org-shiftmetaright)
 #+END_SRC
 
+* holo-layer
+#+BEGIN_SRC elisp :tangle no
+  (use-package holo-layer
+    :load-path "~/Projects/holo-layer"
+    :custom
+    (holo-layer-python-command "emacs-python.sh")
+    :config
+    (holo-layer-enable))
+#+END_SRC
+
 * dired
 #+BEGIN_SRC elisp
   (use-package dired

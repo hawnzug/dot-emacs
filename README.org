@@ -415,8 +415,19 @@ Disable useless UIs.
               minibuffer-local-isearch-map)
     "<escape>" 'abort-minibuffers)
 #+END_SRC
+* tooe
+#+BEGIN_SRC elisp
+  (use-package tooe-colemak
+    :load-path "~/Dev/tooe"
+    :config
+    (tooe-mode))
+#+END_SRC
 
 * evil
+:PROPERTIES:
+:header-args:elisp: :tangle no
+:END:
+
 #+BEGIN_SRC elisp
   (use-package evil
     :ensure t
@@ -797,15 +808,13 @@ vertico-directory
   (use-package corfu
     :ensure t
     :config
-    (with-eval-after-load 'evil
+    (with-eval-after-load 'tooe-colemak
       (defun my:corfu-quit-and-escape ()
         (interactive)
         (call-interactively 'corfu-quit)
-        (evil-normal-state))
-      (general-def 'insert corfu-map
-        "<escape>" 'my:corfu-quit-and-escape)
-      (advice-add 'corfu--setup :after 'evil-normalize-keymaps)
-      (advice-add 'corfu--teardown :after 'evil-normalize-keymaps))
+        (tooe-set-normal-state))
+      (general-def tooe-insert-map
+        "<escape>" 'my:corfu-quit-and-escape))
     (setq corfu-auto t)
     (global-corfu-mode))
 #+END_SRC
@@ -1419,6 +1428,14 @@ keybindings
     :commands imenu-list)
 #+END_SRC
 
+** isearch
+#+BEGIN_SRC elisp
+  (use-package isearch
+    :config
+    (setq isearch-wrap-pause 'no
+          isearch-lazy-count t
+          isearch-repeat-on-direction-change t))
+#+END_SRC
 ** jieba
 #+BEGIN_SRC elisp
   (use-package jieba

@@ -1773,6 +1773,13 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     (setq inferior-lisp-program "sbcl"))
 #+END_SRC
 
+** cooltt
+#+BEGIN_SRC elisp
+  (use-package cooltt
+    :mode ("\\.cooltt\\'" . cooltt-mode)
+    :load-path "~/Projects/cooltt/emacs")
+#+END_SRC
+
 ** cc-mode
 #+BEGIN_SRC elisp
   (use-package cc-mode

@@ -228,7 +228,7 @@ Disable useless UIs.
 #+BEGIN_SRC elisp
   (defun my:font-setup ()
     (let ( ;; (primary-font "Iosevka Curly Slab 16")
-          (primary-font "Rec Mono Casual 10"))
+          (primary-font "Rec Mono Casual 12"))
       (set-fontset-font t 'unicode "Iosevka Curly Slab")
       (set-fontset-font t 'unicode "Noto Color Emoji" nil 'append)
       (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
@@ -1039,11 +1039,15 @@ keybindings
 #+END_SRC
 
 * holo-layer
-#+BEGIN_SRC elisp :tangle no
+#+BEGIN_SRC elisp
   (use-package holo-layer
     :load-path "~/Projects/holo-layer"
     :custom
     (holo-layer-python-command "emacs-python.sh")
+    (holo-layer-enable-cursor-animation t)
+    (holo-layer-cursor-animation-interval 1)
+    (holo-layer-cursor-animation-duration 50)
+    (holo-layer-cursor-animation-type "jelly easing")
     :config
     (holo-layer-enable))
 #+END_SRC

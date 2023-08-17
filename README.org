@@ -423,6 +423,23 @@ Disable useless UIs.
     (tooe-mode))
 #+END_SRC
 
+#+BEGIN_SRC elisp
+  (defvar-keymap my:global-leader-map
+    "RET" #'execute-extended-command
+    "h" help-map
+    "t" #'consult-buffer
+    "n" #'find-file
+    "o" #'other-window
+    "i" #'magit-status
+    "e" #'consult-line
+    "l" #'eval-last-sexp
+    "f" #'eval-defun)
+
+  (define-keymap
+    :keymap tooe-normal-map
+    "SPC" my:global-leader-map)
+#+END_SRC
+
 * evil
 :PROPERTIES:
 :header-args:elisp: :tangle no
@@ -899,8 +916,6 @@ vertico-directory
     (org-mode . my:show-trailing-space)
     (org-babel-after-execute . org-redisplay-inline-images)
     :config
-    (general-def 'normal org-mode-map
-      "<tab>" 'org-cycle)
     (setq org-special-ctrl-a/e t)
     (setq org-agenda-files '("~/org/gtd.org"))
     (setq org-fontify-done-headline nil)
@@ -928,8 +943,6 @@ vertico-directory
 
 #+BEGIN_SRC elisp
   (use-package org-agenda
-    :general
-    ("C-x a" 'org-agenda)
     :config
     (use-package org-habit)
     (setq org-agenda-custom-commands
@@ -943,8 +956,6 @@ vertico-directory
 
 #+BEGIN_SRC elisp
   (use-package org-capture
-    :general
-    ("C-x c" 'org-capture)
     :config
     (setq
      org-capture-templates
@@ -1027,6 +1038,19 @@ org-maketoc
 
 keybindings
 #+BEGIN_SRC elisp
+  (defvar-keymap my:org-mode-leader-map
+    "c" #'org-ctrl-c-ctrl-c
+    "t" #'org-babel-tangle)
+
+  (defun my:org-mode-set-keymap ()
+    (setq tooe-normal-local-map
+          (define-keymap
+            "c" my:org-mode-leader-map)))
+
+  (add-hook 'org-mode-hook #'my:org-mode-set-keymap)
+#+END_SRC
+
+#+BEGIN_SRC elisp :tangle no
   (general-def org-mode-map
     "M-h" 'org-metaleft
     "M-j" 'org-metadown
@@ -1772,7 +1796,7 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
   (use-package sly
     :ensure t
     :init
-    (require 'sly-autoloads)
+    (load "sly-autoloads")
     :config
     (setq inferior-lisp-program "sbcl"))
 #+END_SRC

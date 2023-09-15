@@ -1063,10 +1063,20 @@ keybindings
     "M-L" 'org-shiftmetaright)
 #+END_SRC
 
+* lsp
+#+BEGIN_SRC elisp
+  (use-package lsp-bridge
+    :load-path "~/Projects/emacs-py/lsp-bridge"
+    :custom
+    (lsp-bridge-python-command "emacs-python.sh")
+    :config
+    (global-lsp-bridge-mode))
+#+END_SRC
+
 * holo-layer
 #+BEGIN_SRC elisp
   (use-package holo-layer
-    :load-path "~/Projects/holo-layer"
+    :load-path "~/Projects/emacs-py/holo-layer"
     :custom
     (holo-layer-python-command "emacs-python.sh")
     (holo-layer-enable-cursor-animation t)

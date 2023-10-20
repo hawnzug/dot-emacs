@@ -833,8 +833,7 @@ vertico-directory
         (tooe-set-normal-state))
       (general-def tooe-insert-map
         "<escape>" 'my:corfu-quit-and-escape))
-    (setq corfu-auto t)
-    (global-corfu-mode))
+    (setq corfu-auto t))
 #+END_SRC
 
 #+BEGIN_SRC elisp
@@ -918,7 +917,9 @@ vertico-directory
     (org-babel-after-execute . org-redisplay-inline-images)
     :config
     (setq org-special-ctrl-a/e t)
-    (setq org-agenda-files '("~/org/gtd.org"))
+    (setq org-todo-keywords
+          '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)" "SOMEDAY(s)")))
+    (setq org-agenda-files '("~/org/projects" "~/org/notes"))
     (setq org-fontify-done-headline nil)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
@@ -1041,7 +1042,8 @@ keybindings
 #+BEGIN_SRC elisp
   (defvar-keymap my:org-mode-leader-map
     "c" #'org-ctrl-c-ctrl-c
-    "t" #'org-babel-tangle)
+    "b" #'org-babel-tangle
+    "t" #'org-todo)
 
   (defun my:org-mode-set-keymap ()
     (setq tooe-normal-local-map
@@ -1068,6 +1070,7 @@ keybindings
   (use-package lsp-bridge
     :load-path "~/Projects/emacs-py/lsp-bridge"
     :custom
+    (lsp-bridge-python-multi-lsp-server "pyright_ruff")
     (lsp-bridge-python-command "emacs-python.sh")
     :config
     (global-lsp-bridge-mode))
@@ -1285,7 +1288,7 @@ keybindings
   (use-package denote
     :load-path "~/.config/emacs/packages/denote"
     :config
-    (setq denote-directory (expand-file-name "~/Documents/notes/"))
+    (setq denote-directory (expand-file-name "~/org/notes/"))
     (setq denote-infer-keywords t)
     (setq denote-sort-keywords t)
     (setq denote-date-prompt-use-org-read-date t)
@@ -1562,7 +1565,6 @@ keybindings
     :config
     (setq magit-repository-directories
           '(("~/.config/emacs" . 0)
-            ("~/Documents/notes" . 0)
             ("~/org" . 0)
             ("~/Dev" . 1)))
     (setq
@@ -2016,7 +2018,7 @@ keybindings
        (car (process-lines "opam" "var" "share")))))
 #+END_SRC
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package merlin
     :load-path (lambda () (opam-emacs-load-path))
     :hook

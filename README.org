@@ -157,6 +157,7 @@ Disable useless UIs.
 
 ** parentheses
 #+BEGIN_SRC elisp
+  (setq delete-pair-blink-delay 0)
   (use-package elec-pair
     :config
     (electric-pair-mode))

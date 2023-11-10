@@ -98,6 +98,11 @@
  '(agda2-highlight-operator-face ((t (:inherit (agda2-highlight-datatype-face)))))
  '(agda2-highlight-inductive-constructor-face ((t (:inherit (agda2-highlight-datatype-face)))))
 
+ ;; tab-bar
+ '(tab-bar ((t (:background "#dddddd"))))
+ '(tab-bar-tab ((t (:weight bold :background "#ffffff"))))
+ '(tab-bar-tab-inactive ((t (:foreground "#999999"))))
+
  ;; eglot
  '(eglot-highlight-symbol-face ((t (:inherit (region)))))
 

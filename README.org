@@ -1748,6 +1748,14 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     :commands symbol-overlay-put)
 #+END_SRC
 
+** tabspaces
+#+BEGIN_SRC elisp
+  (use-package tabspaces
+    :ensure t
+    :commands (tabspaces-switch-or-create-workspace
+               tabspaces-open-or-create-project-and-workspace))
+#+END_SRC
+
 ** terminal-here
 #+BEGIN_SRC elisp
   (use-package terminal-here

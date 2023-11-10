@@ -1077,6 +1077,21 @@ keybindings
     (global-lsp-bridge-mode))
 #+END_SRC
 
+keybindings
+#+BEGIN_SRC elisp
+  (defvar-keymap my:lsp-bridge-mode-leader-map
+    "d" #'lsp-bridge-popup-documentation
+    "n" #'lsp-bridge-diagnostic-jump-next
+    "e" #'lsp-bridge-diagnostic-jump-prev)
+
+  (defun my:lsp-bridge-mode-set-keymap ()
+    (setq tooe-normal-local-map
+          (define-keymap
+            "x" my:lsp-bridge-mode-leader-map)))
+
+  (add-hook 'lsp-bridge-mode-hook #'my:lsp-bridge-mode-set-keymap)
+#+END_SRC
+
 * holo-layer
 #+BEGIN_SRC elisp
   (use-package holo-layer

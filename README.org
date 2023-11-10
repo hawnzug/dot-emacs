@@ -111,8 +111,9 @@ Disable useless UIs.
   (setq package-user-dir "~/.config/emacs/elpa")
   (let ((default-directory package-user-dir))
     (normal-top-level-add-subdirs-to-load-path)
-    ; Prefer elpa packages
-    (setq load-path (reverse load-path)))
+    ;; Prefer elpa packages
+    ;; (setq load-path (reverse load-path))
+    )
   (require 'use-package)
 #+END_SRC
 
@@ -906,7 +907,7 @@ vertico-directory
 * org
 #+BEGIN_SRC elisp
   (use-package org
-    :load-path "~/Projects/org-mode/lisp"
+    ;; :load-path "~/Projects/org-mode/lisp"
     :defer 4
     :mode ("\\.org\\'" . org-mode)
     :init
@@ -2098,7 +2099,7 @@ keybindings
     (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)
     (setq font-latex-fontify-sectioning 'color)
     (setq font-latex-fontify-script nil)
-    (setq TeX-view-program-selection '((output-pdf "Sioyek"))))
+    (setq TeX-view-program-selection '((output-pdf "Okular"))))
 #+END_SRC
 
 #+BEGIN_SRC elisp :tangle no

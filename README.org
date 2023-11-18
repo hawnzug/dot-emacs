@@ -436,6 +436,7 @@ Disable useless UIs.
     "i" #'magit-status
     "e" #'consult-line
     "l" #'eval-last-sexp
+    "w" #'tabspaces-command-map
     "f" #'eval-defun)
 
   (define-keymap
@@ -1780,6 +1781,10 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     (tab-bar-tab-hints t)
     (tab-bar-format '(tab-bar-format-tabs))
     :config
+    (setq tab-bar-tab-name-format-function
+          (lambda (tab i)
+            (let ((face (funcall tab-bar-tab-face-function tab)))
+              (propertize (concat " " (number-to-string i) " " (alist-get 'name tab) " ") 'face face))))
     (tab-bar-mode))
 #+END_SRC
 
@@ -1787,10 +1792,38 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 #+BEGIN_SRC elisp
   (use-package tabspaces
     :ensure t
-    :commands (tabspaces-switch-or-create-workspace
-               tabspaces-open-or-create-project-and-workspace))
+    :custom
+    (tabspaces-use-filtered-buffers-as-default t)
+    (tabspaces-default-tab "Default")
+    (tabspaces-remove-to-default t)
+    (tabspaces-include-buffers '("*scratch*"))
+    (tabspaces-initialize-project-with-todo nil)
+    (tabspaces-session t)
+    (tabspaces-session-auto-restore t)
+    :config
+    (tabspaces-mode))
 #+END_SRC
 
+#+BEGIN_SRC elisp
+  (with-eval-after-load 'consult
+    ;; hide full buffer list (still available with "b" prefix)
+    (consult-customize consult--source-buffer :hidden t :default nil)
+    ;; set consult-workspace buffer list
+    (defvar consult--source-workspace
+      (list :name     "Workspace Buffers"
+            :narrow   ?w
+            :history  'buffer-name-history
+            :category 'buffer
+            :state    #'consult--buffer-state
+            :default  t
+            :items    (lambda () (consult--buffer-query
+                                  :predicate #'tabspaces--local-buffer-p
+                                  :sort 'visibility
+                                  :as #'buffer-name)))
+
+      "Set workspace buffer list for consult-buffer.")
+    (add-to-list 'consult-buffer-sources 'consult--source-workspace))
+#+END_SRC
 ** terminal-here
 #+BEGIN_SRC elisp
   (use-package terminal-here

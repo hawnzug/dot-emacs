@@ -1765,6 +1765,24 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     :commands symbol-overlay-put)
 #+END_SRC
 
+** tabbar
+#+BEGIN_SRC elisp
+  (use-package tab-bar
+    :custom
+    (tab-bar-separator "")
+    (tab-bar-select-tab-modifiers '(meta))
+    (tab-bar-tab-name-truncated-max 20)
+    (tab-bar-auto-width nil)
+    (tab-bar-new-tab-to 'rightmost)
+    (tab-bar-show 1)
+    (tab-bar-close-button-show nil)
+    (tab-bar-new-tab-choice "*scratch*")
+    (tab-bar-tab-hints t)
+    (tab-bar-format '(tab-bar-format-tabs))
+    :config
+    (tab-bar-mode))
+#+END_SRC
+
 ** tabspaces
 #+BEGIN_SRC elisp
   (use-package tabspaces

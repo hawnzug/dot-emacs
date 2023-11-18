@@ -1768,6 +1768,10 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 
 ** tabbar
 #+BEGIN_SRC elisp
+  (defun tab-bar-format-buffer-name ()
+    "Produce display of the current buffer name in the tab bar."
+    `((global menu-item ,(format-mode-line mode-line-buffer-identification) ignore)))
+
   (use-package tab-bar
     :custom
     (tab-bar-separator "")
@@ -1779,7 +1783,9 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     (tab-bar-close-button-show nil)
     (tab-bar-new-tab-choice "*scratch*")
     (tab-bar-tab-hints t)
-    (tab-bar-format '(tab-bar-format-tabs))
+    (tab-bar-format '(tab-bar-format-tabs
+                      tab-bar-format-align-right
+                      tab-bar-format-buffer-name))
     :config
     (setq tab-bar-tab-name-format-function
           (lambda (tab i)

@@ -99,9 +99,9 @@
  '(agda2-highlight-inductive-constructor-face ((t (:inherit (agda2-highlight-datatype-face)))))
 
  ;; tab-bar
- '(tab-bar ((t (:background "#dddddd"))))
+ '(tab-bar ((t (:background "#e0e0e0"))))
  '(tab-bar-tab ((t (:weight bold :background "#ffffff"))))
- '(tab-bar-tab-inactive ((t (:foreground "#999999"))))
+ '(tab-bar-tab-inactive ((t (:foreground "#555555"))))
 
  ;; eglot
  '(eglot-highlight-symbol-face ((t (:inherit (region)))))

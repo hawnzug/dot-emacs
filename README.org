@@ -192,6 +192,7 @@ Disable useless UIs.
     (text-quoting-style 'straight)
     (kill-buffer-query-functions nil)
     (read-process-output-max (* 1024 1024))
+    (frame-resize-pixelwise t)
     :config
     (defun system-move-file-to-trash (filename)
       (shell-command (concat "trash " (shell-quote-argument filename))))
@@ -266,6 +267,7 @@ Disable useless UIs.
     (remove-hook 'after-make-frame-functions 'my:font-setup-hook))
   (setq use-default-font-for-symbols nil)
   (setq inhibit-compacting-font-caches t)
+  (setq-default line-spacing 0.2)
   (add-hook 'after-make-frame-functions 'my:font-setup-hook nil)
   (my:font-setup)
 #+END_SRC
@@ -1773,6 +1775,7 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     `((global menu-item ,(format-mode-line mode-line-buffer-identification) ignore)))
 
   (use-package tab-bar
+    :hook (window-setup . tab-bar-mode)
     :custom
     (tab-bar-separator "")
     (tab-bar-select-tab-modifiers '(meta))
@@ -1790,8 +1793,7 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     (setq tab-bar-tab-name-format-function
           (lambda (tab i)
             (let ((face (funcall tab-bar-tab-face-function tab)))
-              (propertize (concat " " (number-to-string i) " " (alist-get 'name tab) " ") 'face face))))
-    (tab-bar-mode))
+              (propertize (concat " " (number-to-string i) " " (alist-get 'name tab) " ") 'face face)))))
 #+END_SRC
 
 ** tabspaces

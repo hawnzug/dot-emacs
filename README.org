@@ -267,7 +267,7 @@ Disable useless UIs.
     (remove-hook 'after-make-frame-functions 'my:font-setup-hook))
   (setq use-default-font-for-symbols nil)
   (setq inhibit-compacting-font-caches t)
-  (setq-default line-spacing 0.2)
+  (setq-default line-spacing nil)
   (add-hook 'after-make-frame-functions 'my:font-setup-hook nil)
   (my:font-setup)
 #+END_SRC
@@ -924,7 +924,7 @@ vertico-directory
     (setq org-special-ctrl-a/e t)
     (setq org-todo-keywords
           '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)" "SOMEDAY(s)")))
-    (setq org-agenda-files '("~/org/projects" "~/org/notes"))
+    (setq org-agenda-files '("~/org/projects"))
     (setq org-fontify-done-headline nil)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)

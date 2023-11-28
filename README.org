@@ -422,6 +422,7 @@ Disable useless UIs.
               minibuffer-local-isearch-map)
     "<escape>" 'abort-minibuffers)
 #+END_SRC
+
 * tooe
 #+BEGIN_SRC elisp
   (use-package tooe-colemak
@@ -1099,7 +1100,7 @@ keybindings
 #+END_SRC
 
 * holo-layer
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package holo-layer
     :load-path "~/Projects/emacs-py/holo-layer"
     :custom
@@ -2192,7 +2193,12 @@ keybindings
     :ensure t
     :hook (LaTeX-mode . cdlatex-mode)
     :init
-    (setq cdlatex-takeover-parenthesis nil))
+    (setq cdlatex-takeover-parenthesis nil)
+    :config
+    (add-hook 'cdlatex-tab-hook
+              (defun cdlatex-indent-maybe ()
+                (when (or (bolp) (looking-back "^[ \t]+"))
+                  (LaTeX-indent-line)))))
 #+END_SRC
 
 #+BEGIN_SRC elisp

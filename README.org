@@ -1092,6 +1092,7 @@ keybindings
     "e" #'lsp-bridge-diagnostic-jump-prev)
 
   (defun my:lsp-bridge-mode-set-keymap ()
+    (keymap-local-set "RET" #'newline-and-indent)
     (setq tooe-normal-local-map
           (define-keymap
             "x" my:lsp-bridge-mode-leader-map)))

@@ -435,14 +435,14 @@ Disable useless UIs.
   (defvar-keymap my:global-leader-map
     "RET" #'execute-extended-command
     "h" help-map
-    "t" #'consult-buffer
-    "n" #'find-file
+    "b" #'consult-buffer
+    "f" #'find-file
     "o" #'other-window
-    "i" #'magit-status
-    "e" #'consult-line
-    "l" #'eval-last-sexp
-    "w" #'tabspaces-command-map
-    "f" #'eval-defun)
+    "g" #'magit-status
+    "e" #'eval-last-sexp
+    "d" #'denote
+    "c" #'citar-open
+    "t" #'tabspaces-command-map)
 
   (define-keymap
     :keymap tooe-normal-map

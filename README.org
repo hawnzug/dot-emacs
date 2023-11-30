@@ -894,6 +894,25 @@ vertico-directory
     (consult-register
      consult-register-load
      consult-register-store))
+  (use-package consult-info
+    :commands
+    (consult-info))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (defvar-keymap my:consult-mode-map
+    "l" #'consult-line
+    "i" #'consult-imenu
+    "o" #'consult-org-heading
+    "r" #'consult-ripgrep
+    "g" #'consult-goto-line
+    "m" #'consult-mark
+    "f" #'consult-fd
+    "n" #'consult-info)
+
+  (define-keymap
+    :keymap my:global-leader-map
+    "s" my:consult-mode-map)
 #+END_SRC
 
 ** embark

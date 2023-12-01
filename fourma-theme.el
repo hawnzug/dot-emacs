@@ -85,6 +85,12 @@
    `(orderless-match-face-2 ((t (:slant italic :background ,bg-green))))
    `(orderless-match-face-3 ((t (:slant italic :background ,bg-red))))
 
+   ;; magit
+   `(magit-section-heading ((t (:foreground ,fg-blue :weight bold))))
+   `(magit-section-highlight ((t (:background "white"))))
+   `(magit-diff-hunk-heading ((t (:background ,bg-grey :foreground ,fg-grey))))
+   `(magit-diff-hunk-heading-highlight ((t (:foreground "black" :weight bold))))
+
    ;; consult
    `(consult-line-number-wrapped ((t (:background ,bg-pink))))
 

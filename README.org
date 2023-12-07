@@ -876,6 +876,7 @@ vertico-directory
     :commands
     (consult-line
      consult-buffer
+     consult-recent-file
      consult-ripgrep))
   (use-package consult-xref
     :after (xref consult)
@@ -901,13 +902,14 @@ vertico-directory
 
 #+BEGIN_SRC elisp
   (defvar-keymap my:consult-mode-map
-    "l" #'consult-line
+    "s" #'consult-line
     "i" #'consult-imenu
     "o" #'consult-org-heading
     "r" #'consult-ripgrep
-    "g" #'consult-goto-line
+    "l" #'consult-goto-line
     "m" #'consult-mark
-    "f" #'consult-fd
+    "d" #'consult-fd
+    "h" #'consult-recent-file
     "n" #'consult-info)
 
   (define-keymap
@@ -1711,6 +1713,7 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 #+BEGIN_SRC elisp
   (use-package recentf
     :config
+    (setq recentf-max-saved-items 10000)
     (recentf-mode))
 #+END_SRC
 

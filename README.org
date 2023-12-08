@@ -434,13 +434,15 @@ Disable useless UIs.
 #+BEGIN_SRC elisp
   (defvar-keymap my:global-leader-map
     "RET" #'execute-extended-command
+    "a" #'org-agenda
+    "n" #'org-capture
     "h" help-map
     "b" #'consult-buffer
     "f" #'find-file
     "o" #'other-window
     "g" #'magit-status
     "e" #'eval-last-sexp
-    "d" #'denote
+    "d" #'denote-open-or-create
     "c" #'citar-open
     "t" #'tabspaces-command-map)
 
@@ -947,8 +949,9 @@ vertico-directory
     :config
     (setq org-special-ctrl-a/e t)
     (setq org-todo-keywords
-          '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)" "SOMEDAY(s)")))
+          '((sequence "TODO(t)" "|" "DONE(d)" "SOMEDAY(s)")))
     (setq org-agenda-files '("~/org/projects"))
+    (setq org-archive-location "~/org/archive.org::datetree/")
     (setq org-fontify-done-headline nil)
     (setq org-log-done 'time)
     (setq org-log-into-drawer t)
@@ -974,30 +977,23 @@ vertico-directory
 
 #+BEGIN_SRC elisp
   (use-package org-agenda
+    :commands org-agenda
     :config
-    (use-package org-habit)
-    (setq org-agenda-custom-commands
-          '(("g" "GTD View"
-             ((agenda "" ((org-agenda-span 'day)))
-              (todo "NEXT"
-                    ((org-agenda-overriding-header "Next Actions")))
-              (todo "WAITING"
-                    ((org-agenda-overriding-header "Waiting For"))))))))
+    (use-package org-habit))
 #+END_SRC
 
 #+BEGIN_SRC elisp
   (use-package org-capture
+    :commands org-capture
     :config
     (setq
      org-capture-templates
-     '(("j" "Journal" entry (file+olp+datetree "~/org/journal.org")
-        "* %<%H:%M> %?\n")
-       ("i" "Inbox" entry (file+headline "~/org/gtd.org" "Inbox")
-        "* TODO %?\n:PROPERTIES:\n:CREATED:  %U\n:END:"
+     '(("i" "Inbox" entry (file "~/org/projects/inbox.org")
+        "* %?\n:PROPERTIES:\n:CREATED:  %U\n:END:"
         :prepend t))))
 #+END_SRC
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (defun my:org-export-all ()
     "https://emacs.stackexchange.com/a/2260/21752
   Export all subtrees that are *not* tagged with :noexport: to
@@ -1067,21 +1063,6 @@ org-maketoc
     (setq org-superstar-headline-bullets-list '("•")))
 #+END_SRC
 
-keybindings
-#+BEGIN_SRC elisp
-  (defvar-keymap my:org-mode-leader-map
-    "c" #'org-ctrl-c-ctrl-c
-    "b" #'org-babel-tangle
-    "t" #'org-todo)
-
-  (defun my:org-mode-set-keymap ()
-    (setq tooe-normal-local-map
-          (define-keymap
-            "c" my:org-mode-leader-map)))
-
-  (add-hook 'org-mode-hook #'my:org-mode-set-keymap)
-#+END_SRC
-
 #+BEGIN_SRC elisp :tangle no
   (general-def org-mode-map
     "M-h" 'org-metaleft
@@ -1127,7 +1108,7 @@ keybindings
     (keymap-local-set "RET" #'newline-and-indent)
     (setq tooe-normal-local-map
           (define-keymap
-            "x" my:lsp-bridge-mode-leader-map)))
+            "g" my:lsp-bridge-mode-leader-map)))
 
   (add-hook 'lsp-bridge-mode-hook #'my:lsp-bridge-mode-set-keymap)
 #+END_SRC

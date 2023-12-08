@@ -1094,6 +1094,17 @@ keybindings
     "M-L" 'org-shiftmetaright)
 #+END_SRC
 
+* eshell
+#+BEGIN_SRC elisp
+  (use-package eshell)
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package eat
+    :ensure t
+    :commands eat)
+#+END_SRC
+
 * lsp
 #+BEGIN_SRC elisp
   (use-package lsp-bridge

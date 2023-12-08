@@ -235,6 +235,7 @@ Disable useless UIs.
           (primary-font "Rec Mono Casual 12")
           (chinese-font (font-spec :family "Source Han Serif CN"
                                    :weight 'bold)))
+      (setq face-font-rescale-alist '(("Source Han Serif CN" . 0.825)))
       (set-fontset-font t 'unicode "Iosevka Curly Slab")
       (set-fontset-font t 'unicode "Noto Color Emoji" nil 'append)
       (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
@@ -261,7 +262,7 @@ Disable useless UIs.
       (set-face-font 'fixed-pitch primary-font)
       (set-face-font 'fixed-pitch-serif primary-font)
       ;; (set-face-font 'variable-pitch "Recursive Sans Casual Static 14")
-      (set-face-font 'variable-pitch "Alegreya 14")))
+      (set-face-font 'variable-pitch "Alegreya 12")))
   (defun my:font-setup-hook (frame)
     "Setup the font, then remove the hook."
     (select-frame frame)

@@ -929,7 +929,8 @@ vertico-directory
     :after embark)
 #+END_SRC
 
-* org
+* org mode
+** org
 #+BEGIN_SRC elisp
   (use-package org
     ;; :load-path "~/Projects/org-mode/lisp"
@@ -961,6 +962,7 @@ vertico-directory
     (setq org-footnote-section nil))
 #+END_SRC
 
+** org-refile
 #+BEGIN_SRC elisp
   (use-package org-refile
     :commands org-refile
@@ -970,6 +972,7 @@ vertico-directory
     (setq org-refile-use-outline-path nil))
 #+END_SRC
 
+** org-agenda
 #+BEGIN_SRC elisp
   (use-package org-agenda
     :commands org-agenda
@@ -977,6 +980,7 @@ vertico-directory
     (use-package org-habit))
 #+END_SRC
 
+** org-capture
 #+BEGIN_SRC elisp
   (use-package org-capture
     :commands org-capture
@@ -985,9 +989,19 @@ vertico-directory
      org-capture-templates
      '(("i" "Inbox" entry (file "~/org/projects/inbox.org")
         "* %?\n:PROPERTIES:\n:CREATED:  %U\n:END:"
+        :prepend t)
+       ("b" "Bookmark" entry (file "~/org/projects/inbox.org")
+        "* %a\n:PROPERTIES:\n:CREATED:  %U\n:END:\n%i"
         :prepend t))))
 #+END_SRC
 
+** org-protocol
+#+BEGIN_SRC elisp
+  (use-package org-protocol
+    :after org)
+#+END_SRC
+
+** org-export
 #+BEGIN_SRC elisp :tangle no
   (defun my:org-export-all ()
     "https://emacs.stackexchange.com/a/2260/21752
@@ -1029,6 +1043,7 @@ vertico-directory
   (add-hook 'org-export-before-parsing-hook #'my:org-export-html-hook)
 #+END_SRC
 
+** org-id
 org-id
 #+BEGIN_SRC elisp
   (use-package org-id
@@ -1037,37 +1052,26 @@ org-id
     (setq org-id-link-to-org-use-id 'create-if-interactive))
 #+END_SRC
 
-org-checklist
+** org-checklist
 #+BEGIN_SRC elisp :tangle no
   (use-package org-checklist
     :after org)
 #+END_SRC
 
-org-maketoc
+** org-maketoc
 #+BEGIN_SRC elisp
   (use-package org-make-toc
     :ensure t
     :commands (org-make-toc))
 #+END_SRC
 
+** org-superstar
 #+BEGIN_SRC elisp
   (use-package org-superstar
     :ensure t
     :hook (org-mode . org-superstar-mode)
     :config
     (setq org-superstar-headline-bullets-list '("•")))
-#+END_SRC
-
-#+BEGIN_SRC elisp :tangle no
-  (general-def org-mode-map
-    "M-h" 'org-metaleft
-    "M-j" 'org-metadown
-    "M-k" 'org-metaup
-    "M-l" 'org-metaright
-    "M-H" 'org-shiftmetaleft
-    "M-J" 'org-shiftmetadown
-    "M-K" 'org-shiftmetaup
-    "M-L" 'org-shiftmetaright)
 #+END_SRC
 
 * eshell

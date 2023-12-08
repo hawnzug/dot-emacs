@@ -438,14 +438,8 @@ Disable useless UIs.
     "a" #'org-agenda
     "n" #'org-capture
     "h" help-map
-    "b" #'consult-buffer
-    "f" #'find-file
-    "o" #'other-window
-    "g" #'magit-status
-    "e" #'eval-last-sexp
     "d" #'denote-open-or-create
-    "c" #'citar-open
-    "t" #'tabspaces-command-map)
+    "c" #'citar-open)
 
   (define-keymap
     :keymap tooe-normal-map
@@ -1816,7 +1810,7 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 #+END_SRC
 
 ** tabspaces
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (use-package tabspaces
     :ensure t
     :custom
@@ -1831,7 +1825,7 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
     (tabspaces-mode))
 #+END_SRC
 
-#+BEGIN_SRC elisp
+#+BEGIN_SRC elisp :tangle no
   (with-eval-after-load 'consult
     ;; hide full buffer list (still available with "b" prefix)
     (consult-customize consult--source-buffer :hidden t :default nil)
@@ -1851,6 +1845,7 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
       "Set workspace buffer list for consult-buffer.")
     (add-to-list 'consult-buffer-sources 'consult--source-workspace))
 #+END_SRC
+
 ** terminal-here
 #+BEGIN_SRC elisp
   (use-package terminal-here

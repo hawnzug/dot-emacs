@@ -968,7 +968,7 @@ vertico-directory
     :commands org-refile
     :config
     (setq org-refile-targets
-          '(("~/org/gtd.org" . (:level . 1))))
+          '((nil . (:level . 1))))
     (setq org-refile-use-outline-path nil))
 #+END_SRC
 
@@ -987,10 +987,10 @@ vertico-directory
     :config
     (setq
      org-capture-templates
-     '(("i" "Inbox" entry (file "~/org/projects/inbox.org")
+     '(("i" "Inbox" entry (file+headline "~/org/projects/inbox.org" "Inbox")
         "* %?\n:PROPERTIES:\n:CREATED:  %U\n:END:"
         :prepend t)
-       ("b" "Bookmark" entry (file "~/org/projects/inbox.org")
+       ("b" "Bookmark" entry (file+headline "~/org/projects/inbox.org" "Inbox")
         "* %a\n:PROPERTIES:\n:CREATED:  %U\n:END:\n%i"
         :prepend t))))
 #+END_SRC

@@ -945,8 +945,8 @@ vertico-directory
     :config
     (setq org-special-ctrl-a/e t)
     (setq org-todo-keywords
-          '((sequence "TODO(t)" "|" "DONE(d)" "SOMEDAY(s)")))
-    (setq org-agenda-files '("~/org/projects"))
+          '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)" "SOMEDAY(s)")))
+    (setq org-agenda-files '("~/org/inbox.org"))
     (setq org-archive-location "~/org/archive.org::datetree/")
     (setq org-fontify-done-headline nil)
     (setq org-log-done 'time)
@@ -987,10 +987,10 @@ vertico-directory
     :config
     (setq
      org-capture-templates
-     '(("i" "Inbox" entry (file+headline "~/org/projects/inbox.org" "Inbox")
+     '(("i" "Inbox" entry (file+headline "~/org/inbox.org" "Inbox")
         "* %?\n:PROPERTIES:\n:CREATED:  %U\n:END:"
         :prepend t)
-       ("b" "Bookmark" entry (file+headline "~/org/projects/inbox.org" "Inbox")
+       ("b" "Bookmark" entry (file+headline "~/org/inbox.org" "Inbox")
         "* %a\n:PROPERTIES:\n:CREATED:  %U\n:END:\n%i"
         :prepend t))))
 #+END_SRC

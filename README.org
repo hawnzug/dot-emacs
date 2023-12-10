@@ -1653,8 +1653,8 @@ keybindings
     :ensure t
     :commands olivetti-mode
     :config
-    (setq olivetti-body-width 0.4)
-    (setq olivetti-minimum-body-width 72))
+    (setq-default olivetti-body-width 0.4)
+    (setq olivetti-minimum-body-width 40))
 #+END_SRC
 
 ** outline

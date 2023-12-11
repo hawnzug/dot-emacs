@@ -109,10 +109,11 @@ Disable useless UIs.
 * use-package
 #+BEGIN_SRC elisp
   (setq package-user-dir "~/.config/emacs/elpa")
+  (setq package-install-upgrade-built-in t)
   (let ((default-directory package-user-dir))
     (normal-top-level-add-subdirs-to-load-path)
     ;; Prefer elpa packages
-    ;; (setq load-path (reverse load-path))
+    (setq load-path (reverse load-path))
     )
   (require 'use-package)
 #+END_SRC
@@ -1445,7 +1446,8 @@ keybindings
 ** vterm
 #+BEGIN_SRC elisp
   (use-package vterm
-    :ensure t)
+    :ensure t
+    :commands vterm)
 #+END_SRC
 
 #+BEGIN_SRC elisp

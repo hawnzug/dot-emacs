@@ -2214,20 +2214,27 @@ keybindings
 
 ** LaTeX
 #+BEGIN_SRC elisp
-  (use-package tex-site
-    :ensure auctex
-    :mode ("\\.tex\\'" . TeX-latex-mode)
+  (use-package tex
+    :defer t
     :config
-    ;; TODO: move it to tex mode later
     (add-to-list
      'TeX-command-list
-     '("LaTeXmk" "latexmk %s" TeX-run-TeX nil t :help "Run latexmk."))
+     '("LaTeXmk" "latexmk %s" TeX-run-TeX nil t :help "Run latexmk.")))
+#+END_SRC
+
+#+BEGIN_SRC elisp
+  (use-package tex-site
+    :ensure auctex
+    :defer t
+    :init
+    (require 'auctex-autoloads)
+    :config
     (add-hook 'LaTeX-mode-hook 'my:show-trailing-space)
     (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
     (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)
     (setq font-latex-fontify-sectioning 'color)
     (setq font-latex-fontify-script nil)
-    (setq TeX-view-program-selection '((output-pdf "Okular"))))
+    (setq TeX-view-program-selection '((output-pdf "Zathura"))))
 #+END_SRC
 
 #+BEGIN_SRC elisp :tangle no

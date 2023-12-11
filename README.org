@@ -2218,6 +2218,10 @@ keybindings
     :ensure auctex
     :mode ("\\.tex\\'" . TeX-latex-mode)
     :config
+    ;; TODO: move it to tex mode later
+    (add-to-list
+     'TeX-command-list
+     '("LaTeXmk" "latexmk %s" TeX-run-TeX nil t :help "Run latexmk."))
     (add-hook 'LaTeX-mode-hook 'my:show-trailing-space)
     (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
     (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)

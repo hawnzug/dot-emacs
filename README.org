@@ -165,7 +165,7 @@ Disable useless UIs.
     (electric-pair-mode))
   (use-package paren
     :config
-    (show-paren-mode 1))
+    (show-paren-mode))
 #+END_SRC
 
 ** files
@@ -1078,13 +1078,16 @@ org-id
 
 * eshell
 #+BEGIN_SRC elisp
-  (use-package eshell)
+  (use-package eshell
+    :commands eshell)
 #+END_SRC
 
 #+BEGIN_SRC elisp
   (use-package eat
     :ensure t
-    :commands eat)
+    :defer t
+    :init
+    (load "eat-autoloads"))
 #+END_SRC
 
 * lsp
@@ -1363,6 +1366,7 @@ keybindings
 #+BEGIN_SRC elisp
   (use-package denote
     :load-path "~/.config/emacs/packages/denote"
+    :commands denote-open-or-create
     :config
     (setq denote-directory (expand-file-name "~/org/notes/"))
     (setq denote-infer-keywords t)
@@ -1565,6 +1569,7 @@ keybindings
           isearch-lazy-count t
           isearch-repeat-on-direction-change t))
 #+END_SRC
+
 ** jieba
 #+BEGIN_SRC elisp
   (use-package jieba
@@ -1593,44 +1598,6 @@ keybindings
     (setq ledger-report-links-in-register nil)
     (setq ledger-report-auto-width nil)
     (setq ledger-report-use-native-highlighting nil))
-#+END_SRC
-
-** lsp-bridge
-#+BEGIN_SRC elisp :tangle no
-  (use-package lsp-bridge
-    :load-path "~/.config/emacs/packages/lsp-bridge"
-    :config
-    (defun lsp-bridge-start-process ()
-      "Start LSP-Bridge process if it isn't started."
-      (setq lsp-bridge-is-starting t)
-      (unless (lsp-bridge-epc-live-p lsp-bridge-epc-process)
-        ;; start epc server and set `lsp-bridge-server-port'
-        (lsp-bridge--start-epc-server)
-        (let* ((lsp-bridge-args (append
-                                 (list lsp-bridge-python-file)
-                                 (list (number-to-string lsp-bridge-server-port))
-                                 (when lsp-bridge-enable-profile
-                                   (list "profile"))
-                                 )))
-
-          ;; ;; Set process arguments.
-          ;; (if lsp-bridge-enable-debug
-          ;;     (progn
-          ;;       (setq lsp-bridge-internal-process-prog "gdb")
-          ;;       (setq lsp-bridge-internal-process-args (append (list "-batch" "-ex" "run" "-ex" "bt" "--args" lsp-bridge-python-command) lsp-bridge-args)))
-          ;;   (setq lsp-bridge-internal-process-prog lsp-bridge-python-command)
-          ;;   (setq lsp-bridge-internal-process-args lsp-bridge-args))
-          (setq lsp-bridge-internal-process-prog "pdm")
-          (setq lsp-bridge-internal-process-args (append (list "run" "-p" "/home/zhu/.config/emacs" "python")
-                                                         lsp-bridge-args))
-
-          ;; Start python process.
-          (let ((process-connection-type (not (lsp-bridge--called-from-wsl-on-windows-p))))
-            (setq lsp-bridge-internal-process
-                  (apply 'start-process
-                         lsp-bridge-name lsp-bridge-name
-                         lsp-bridge-internal-process-prog lsp-bridge-internal-process-args)))
-          (set-process-query-on-exit-flag lsp-bridge-internal-process nil)))))
 #+END_SRC
 
 ** magit
@@ -1677,7 +1644,6 @@ keybindings
            ("\\.mkd\\'" . markdown-mode)
            ("\\.markdown\\'" . markdown-mode)))
 #+END_SRC
-
 
 ** newcomment
 #+BEGIN_SRC elisp
@@ -1737,6 +1703,7 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 ** recentf
 #+BEGIN_SRC elisp
   (use-package recentf
+    :defer 2
     :config
     (setq recentf-max-saved-items 10000)
     (recentf-mode))

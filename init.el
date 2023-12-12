@@ -1,4 +1,5 @@
-(load "~/.config/emacs/config")
+(let ((file-name-handler-alist nil))
+  (load "~/.config/emacs/config"))
 ;; (load "~/.config/emacs/test-config")
 
 (custom-set-variables
@@ -7,7 +8,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(bind-key eldoc faceup flymake jsonrpc project soap-client tramp use-package-ensure-system-package verilog-mode eat tabspaces tempel sly nerd-icons slime citar-embark citar tramp-container org rime boon modern-cpp-font-lock ledger-mode xenops compat cape vterm-toggle dirvish consult-eglot eldoc-box json-mode typescript-mode org-superstar cdlatex demo-it elcord laas aas hide-mode-line auctex-latexmk async bibtex-completion marginalia embark-consult embark consult orderless vertico flymake-shellcheck emmet-mode markdown-mode vterm lua-mode hl-todo magit-delta eglot haskell-mode wgrep find-file-in-project olivetti terminal-here company-posframe docker-tramp dockerfile-mode csv-mode yaml-mode sml-mode org-plus-contrib imenu-list tuareg keyfreq org-make-toc exec-path-from-shell avy fcitx ibuffer-vc symbol-overlay htmlize evil-matchit alert proof-general general auctex hydra which-key evil-surround evil magit company-coq company use-package))
+   '(citar-denote corfu denote bind-key eldoc faceup flymake jsonrpc project soap-client tramp use-package-ensure-system-package verilog-mode eat tempel sly nerd-icons slime citar-embark citar tramp-container org rime modern-cpp-font-lock ledger-mode xenops compat cape vterm-toggle eldoc-box json-mode typescript-mode org-superstar cdlatex demo-it elcord laas aas hide-mode-line async bibtex-completion marginalia embark-consult embark consult orderless vertico flymake-shellcheck emmet-mode markdown-mode vterm lua-mode hl-todo magit-delta eglot haskell-mode wgrep find-file-in-project olivetti terminal-here company-posframe docker-tramp dockerfile-mode csv-mode yaml-mode sml-mode org-plus-contrib imenu-list tuareg keyfreq org-make-toc exec-path-from-shell avy fcitx ibuffer-vc symbol-overlay htmlize alert proof-general general auctex hydra which-key magit company-coq company use-package))
  '(safe-local-variable-values
    '((auto-save-visited-interval . 0)
      (dired-omit-extensions ".vo" ".vok" ".vos" ".aux" ".glob")

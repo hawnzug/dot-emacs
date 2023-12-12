@@ -108,13 +108,11 @@ Disable useless UIs.
 
 * use-package
 #+BEGIN_SRC elisp
-  (setq package-user-dir "~/.config/emacs/elpa")
-  (setq package-install-upgrade-built-in t)
-  (let ((default-directory package-user-dir))
-    (normal-top-level-add-subdirs-to-load-path)
-    ;; Prefer elpa packages
-    (setq load-path (reverse load-path))
-    )
+  (dolist (path (directory-files package-user-dir))
+    (when-let (((not (member path '("." ".." "archives" "gnupg"))))
+               (abspath (expand-file-name path package-user-dir))
+               ((file-directory-p abspath)))
+      (add-to-list 'load-path abspath)))
   (require 'use-package)
 #+END_SRC
 
@@ -130,15 +128,18 @@ Disable useless UIs.
 #+END_SRC
 
 #+BEGIN_SRC elisp
-  (with-eval-after-load 'package
-    (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
+  (use-package package
+    :defer t
+    :config
+    (setq package-install-upgrade-built-in t)
+    (add-to-list 'package-archives
+                 '("melpa" . "https://melpa.org/packages/") t))
 #+END_SRC
 
 * init
 ** quiet startup
 #+BEGIN_SRC elisp
   (setq inhibit-startup-screen t)
-  (setq inhibit-startup-message t)
   (setq inhibit-startup-echo-area-message t)
   (setq initial-scratch-message nil)
   (setq initial-major-mode 'fundamental-mode)

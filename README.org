@@ -85,20 +85,28 @@
   - [[#yaml][YAML]]
 :END:
 * early init
+:PROPERTIES:
+:header-args:elisp: :tangle early-init.el
+:END:
+
 Credit: [[https://www.reddit.com/r/emacs/comments/xjyuni/comment/ipbbvkn][/r/xjyuni]]
-#+BEGIN_SRC elisp :tangle early-init.el
+#+BEGIN_SRC elisp
   (setq frame-inhibit-implied-resize t)
 #+END_SRC
 
 Allow large garbage collection threshold when init.
-#+BEGIN_SRC elisp :tangle early-init.el
+#+BEGIN_SRC elisp
   (setq gc-cons-threshold 64000000)
   (add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold 800000)))
+#+END_SRC
+
+Prevent package.el activating packages.
+#+BEGIN_SRC elisp
   (setq package-enable-at-startup nil)
 #+END_SRC
 
 Disable useless UIs.
-#+BEGIN_SRC elisp :tangle early-init.el
+#+BEGIN_SRC elisp
   (scroll-bar-mode -1)
   (horizontal-scroll-bar-mode -1)
   (tool-bar-mode -1)
@@ -106,16 +114,22 @@ Disable useless UIs.
   (menu-bar-mode -1)
 #+END_SRC
 
-* use-package
+* package setup
+Use the builtin use-package since it is a rather stable package.
+#+BEGIN_SRC elisp
+  (require 'use-package)
+#+END_SRC
+
+Setup =load-path=.
 #+BEGIN_SRC elisp
   (dolist (path (directory-files package-user-dir))
     (when-let (((not (member path '("." ".." "archives" "gnupg"))))
                (abspath (expand-file-name path package-user-dir))
                ((file-directory-p abspath)))
       (add-to-list 'load-path abspath)))
-  (require 'use-package)
 #+END_SRC
 
+Setup =Info-directory-list=.
 #+BEGIN_SRC elisp
   (with-eval-after-load 'info
     (info-initialize)
@@ -1703,7 +1717,6 @@ Steal from [[https://github.com/cute-jumper/pinyinlib.el][pinyinlib.el]].
 ** recentf
 #+BEGIN_SRC elisp
   (use-package recentf
-    :defer 2
     :config
     (setq recentf-max-saved-items 10000)
     (recentf-mode))

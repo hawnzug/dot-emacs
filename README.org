@@ -239,6 +239,11 @@ Setup =Info-directory-list=.
 #+END_SRC
 
 * theme
+Avoid annoying extra confirmations when tweaking themes.
+#+BEGIN_SRC elisp
+  (setq custom-safe-themes t)
+#+END_SRC
+
 #+BEGIN_SRC elisp
   (load-theme 'fourma t)
 #+END_SRC
@@ -2229,6 +2234,29 @@ keybindings
 #+END_SRC
 
 #+BEGIN_SRC elisp
+  (defun my:cdlatex-smarter-tab ()
+    "Assuming outline-minor-mode and hs-minor-mode are enabled"
+    (cond
+     ((outline-on-heading-p) (outline-cycle))
+     ((save-excursion
+        (back-to-indentation)
+        (hs-looking-at-block-start-p))
+      (save-excursion
+        (end-of-line)
+        (hs-toggle-hiding)
+        t))
+     ((save-excursion
+        (back-to-indentation)
+        (looking-at hs-block-end-regexp))
+      (save-excursion
+        (back-to-indentation)
+        (hs-toggle-hiding)
+        t))
+     ((or (bolp) (looking-back "^[ \t]+"))
+      (LaTeX-indent-line))))
+#+END_SRC
+
+#+BEGIN_SRC elisp
   (use-package cdlatex
     :ensure t
     :hook (LaTeX-mode . cdlatex-mode)
@@ -2236,9 +2264,7 @@ keybindings
     (setq cdlatex-takeover-parenthesis nil)
     :config
     (add-hook 'cdlatex-tab-hook
-              (defun cdlatex-indent-maybe ()
-                (when (or (bolp) (looking-back "^[ \t]+"))
-                  (LaTeX-indent-line)))))
+              #'my:cdlatex-smarter-tab))
 #+END_SRC
 
 #+BEGIN_SRC elisp

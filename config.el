@@ -865,7 +865,9 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :commands (htmlize htmlize-file htmlize-region htmlize-buffer))
 
 (use-package outline
-  :hook ((LaTeX-mode agda2-mode) . outline-minor-mode))
+  :hook ((LaTeX-mode prog-mode) . outline-minor-mode)
+  :config
+  (setq outline-minor-mode-cycle t))
 
 (use-package hideshow
   :hook (LaTeX-mode . hs-minor-mode)
@@ -1105,6 +1107,8 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 (defun my:cdlatex-smarter-tab ()
   "Assuming outline-minor-mode and hs-minor-mode are enabled"
   (cond
+   ;; Somehow outline-minor-mode-cycle has no effect.
+   ;; Maybe cdlatex overrides the TAB
    ((outline-on-heading-p) (outline-cycle))
    ((save-excursion
       (back-to-indentation)

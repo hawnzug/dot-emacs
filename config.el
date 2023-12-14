@@ -28,28 +28,7 @@
 (setq initial-scratch-message nil)
 (setq initial-major-mode 'fundamental-mode)
 
-;;;; Init
-(setq custom-file "~/.config/emacs/emacs-custom.el")
-(load custom-file)
-
-(use-package frame
-  ;; Already loaded before init
-  :config
-  (setopt
-   window-divider-default-right-width 1
-   window-divider-default-bottom-width 1
-   window-divider-default-places t)
-  (blink-cursor-mode)
-  (window-divider-mode))
-
-(setopt delete-pair-blink-delay 0)
-(use-package elec-pair
-  :hook (after-init . electric-pair-mode))
-(use-package paren
-  ;; Already loaded before init
-  :config
-  (show-paren-mode))
-
+;;;; Sane Setup
 (use-package files
   ;; Already loaded before init
   :config
@@ -58,9 +37,6 @@
    auto-save-default nil
    auto-save-visited-interval 1)
   (auto-save-visited-mode))
-
-(setq-default indent-tabs-mode nil)
-
 (use-package emacs
   :config
   (setopt
@@ -77,16 +53,6 @@
   (defalias 'yes-or-no-p 'y-or-n-p)
   (setq-default tab-width 4)
   (setq-default truncate-lines t))
-
-(use-package window
-  ;; Already loaded before init
-  :config
-  (setopt split-width-threshold 100))
-
-(use-package help
-  ;; Already loaded before init
-  :config
-  (setopt help-window-select t))
 
 (use-package comp
   ;; Already loaded before init
@@ -138,7 +104,8 @@
   (remove-hook 'after-make-frame-functions 'my:font-setup-hook))
 (setq use-default-font-for-symbols nil)
 (setq inhibit-compacting-font-caches t)
-(setq-default line-spacing nil)
+(setopt delete-pair-blink-delay 0)
+(setopt line-spacing nil)
 (add-hook 'after-make-frame-functions 'my:font-setup-hook nil)
 (my:font-setup)
 
@@ -179,6 +146,16 @@
   :config
   (setq hide-mode-line-excluded-modes nil)
   (global-hide-mode-line-mode))
+
+(use-package frame
+  ;; Already loaded before init
+  :config
+  (setopt
+   window-divider-default-right-width 1
+   window-divider-default-bottom-width 1
+   window-divider-default-places t)
+  (blink-cursor-mode)
+  (window-divider-mode))
 
 (use-package pixel-scroll
   :defer 1
@@ -583,7 +560,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (setq terminal-here-terminal-command
         '("alacritty")))
 
-;;;; Version Control
+;;;; Version Control, Backup, Autosave
 (use-package magit
   :ensure t
   :commands magit-status
@@ -769,12 +746,29 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
                     tab-bar-format-align-right)
    tab-bar-tab-name-format-function 'my:tab-name-format))
 
+(use-package window
+  ;; Already loaded before init
+  :config
+  (setopt split-width-threshold 100))
+
+(use-package help
+  ;; Already loaded before init
+  :config
+  (setopt help-window-select t))
+
 (use-package winner
   :hook
   (after-init . winner-mode)
   (ediff-quit . winner-undo))
 
 ;;;; Programming Utilities
+(use-package simple
+  ;; Already loaded before init
+  :config
+  (setopt indent-tabs-mode nil))
+
+(use-package elec-pair
+  :hook (after-init . electric-pair-mode))
 
 ;; Use lsp-bridge for lsp primarily.
 ;; If something doesn't work, try eglot instead.
@@ -1178,3 +1172,6 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
          ("\\.mkd\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)))
 
+;;;; Custom
+(setq custom-file "~/.config/emacs/emacs-custom.el")
+(load custom-file)

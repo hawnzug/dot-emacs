@@ -211,26 +211,6 @@
         (set-frame-parameter nil 'alpha opacity)
       (set-frame-parameter nil 'alpha transparency))))
 
-;;;; general.el
-(use-package general :ensure t)
-
-(general-def
-  "C-x f" 'find-file
-  "C-x b" 'consult-buffer
-  "C-x g" 'magit-status)
-(general-def 'override
-  "C-=" 'text-scale-adjust
-  "C--" 'text-scale-adjust)
-
-(general-define-key
- :keymaps '(minibuffer-mode-map
-            minibuffer-local-map
-            minibuffer-local-ns-map
-            minibuffer-local-completion-map
-            minibuffer-local-must-match-map
-            minibuffer-local-isearch-map)
-  "<escape>" 'abort-minibuffers)
-
 ;;;; Modal Editing
 (use-package tooe-colemak
   :load-path "~/Dev/tooe"
@@ -249,20 +229,41 @@
   :keymap tooe-normal-map
   "SPC" my:global-leader-map)
 
+(define-keymap
+  :keymap ctl-x-map
+  "f" #'find-file
+  "b" #'consult-buffer
+  ;; swap C-x C-e and C-x e
+  "e" #'eval-last-sexp
+  "C-e" #'kmacro-end-and-call-macro)
+
+(keymap-global-set "C-=" #'text-scale-adjust)
+(keymap-global-set "C--" #'text-scale-adjust)
+
+(dolist (km (list minibuffer-mode-map
+                  minibuffer-local-map
+                  minibuffer-local-ns-map
+                  minibuffer-local-completion-map
+                  minibuffer-local-must-match-map
+                  minibuffer-local-isearch-map))
+  (keymap-set km "<escape>" 'abort-minibuffers))
+
 ;;;; Search and Completion
 (use-package vertico
   :ensure t
   :config
   (vertico-mode))
 
+;; No need to autoload. It is almost always needed.
 (use-package vertico-directory
   :after vertico
-  :general
-  (vertico-map
-   "RET" 'vertico-directory-enter
-   "DEL" 'vertico-directory-delete-char
-   "M-DEL" 'vertico-directory-delete-word)
-  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+  :config
+  (define-keymap :keymap vertico-map
+    "RET" #'vertico-directory-enter
+    "DEL" #'vertico-directory-delete-char
+    "M-DEL"  #'vertico-directory-delete-word)
+  (add-hook 'rfn-eshadow-update-overlay-hook
+            #'vertico-directory-tidy))
 
 (use-package orderless
   :ensure t
@@ -284,8 +285,7 @@
       (interactive)
       (call-interactively 'corfu-quit)
       (tooe-set-normal-state))
-    (general-def tooe-insert-map
-      "<escape>" 'my:corfu-quit-and-escape))
+    (keymap-set tooe-insert-map "<escape>" #'my:corfu-quit-and-escape))
   (setq corfu-auto t))
 
 (use-package emacs
@@ -350,9 +350,9 @@
 
 (use-package embark
   :ensure t
-  :general
-  (:keymaps 'override
-   "M-o" 'embark-act))
+  :commands embark-act
+  :init
+  (keymap-global-set "M-o" #'embark-act))
 
 (use-package embark-consult
   :ensure t
@@ -736,14 +736,9 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 ;;;; Buffer and Window
 (use-package ibuffer
-  :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
-  :general
-  ('emacs ibuffer-mode-map
-    "M-j" 'ibuffer-forward-filter-group
-    "M-k" 'ibuffer-backward-filter-group
-    "j" 'ibuffer-forward-line
-    "k" 'ibuffer-backward-line)
+  :commands ibuffer
   :config
+  (add-hook 'ibuffer-mode-hook #'ibuffer-vc-set-filter-groups-by-vc-root)
   (setq
    ibuffer-formats
    '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
@@ -844,10 +839,9 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :hook (prog-mode . hl-todo-mode))
 
 (use-package newcomment
-  :general
-  ('override
-   "M-;" nil
-   "C-/" 'comment-dwim))
+  :commands comment-dwim
+  :init
+  (keymap-global-set "C-/" #'comment-dwim))
 
 (use-package symbol-overlay
   :ensure t

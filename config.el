@@ -1,3 +1,4 @@
+;;;; Package Management
 (require 'use-package)
 
 (dolist (path (directory-files package-user-dir))
@@ -27,6 +28,7 @@
 (setq initial-scratch-message nil)
 (setq initial-major-mode 'fundamental-mode)
 
+;;;; Init
 (use-package frame
   :custom
   (window-divider-default-right-width 1)
@@ -82,6 +84,7 @@
   :custom
   (native-comp-async-report-warnings-errors 'silent))
 
+;;;; User Interface
 (setq custom-safe-themes t)
 
 (load-theme 'fourma t)
@@ -136,6 +139,41 @@
   (setq hide-mode-line-excluded-modes nil)
   (global-hide-mode-line-mode))
 
+(use-package pixel-scroll
+  :custom
+  (pixel-scroll-precision-use-momentum t)
+  (pixel-scroll-precision-interpolate-page t)
+  :config
+  (pixel-scroll-precision-mode 1))
+
+(use-package olivetti
+  :ensure t
+  :commands olivetti-mode
+  :config
+  (setq-default olivetti-body-width 0.4)
+  (setq olivetti-minimum-body-width 40))
+
+(use-package which-key
+  :ensure t
+  :init
+  (setq which-key-add-column-padding 2)
+  (setq which-key-idle-delay 0)
+  (setq which-key-dont-use-unicode t)
+  :config
+  (which-key-mode 1))
+
+(use-package keyfreq
+  :ensure t
+  :config
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1))
+
+(use-package elcord
+  :ensure t
+  :if (executable-find "discord")
+  :commands elcord-mode)
+
+;;;; helper functions
 (defun my:show-trailing-space ()
   (setq show-trailing-whitespace t))
 (add-hook 'prog-mode-hook #'my:show-trailing-space)
@@ -173,6 +211,7 @@
         (set-frame-parameter nil 'alpha opacity)
       (set-frame-parameter nil 'alpha transparency))))
 
+;;;; general.el
 (use-package general :ensure t)
 
 (general-def
@@ -192,6 +231,7 @@
             minibuffer-local-isearch-map)
   "<escape>" 'abort-minibuffers)
 
+;;;; Modal Editing
 (use-package tooe-colemak
   :load-path "~/Dev/tooe"
   :config
@@ -209,21 +249,7 @@
   :keymap tooe-normal-map
   "SPC" my:global-leader-map)
 
-(use-package rime
-  :ensure t
-  :defer t
-  :init
-  (setq default-input-method 'rime)
-  (require 'rime-autoloads)
-  :config
-  (setq rime-show-candidate 'posframe)
-  (setq rime-show-preedit 'inline)
-  (setq rime-disable-predicates
-        '(rime-predicate-evil-mode-p
-          rime-predicate-after-alphabet-char-p
-          rime-predicate-prog-in-code-p
-          rime-predicate-space-after-cc-p)))
-
+;;;; Search and Completion
 (use-package vertico
   :ensure t
   :config
@@ -332,6 +358,115 @@
   :ensure t
   :after embark)
 
+(use-package avy
+  :ensure t
+  :commands avy-goto-char-timer
+  :config
+  (setq avy-timeout-seconds 0.3))
+
+(use-package isearch
+  :config
+  (setq isearch-wrap-pause 'no
+        isearch-lazy-count t
+        isearch-repeat-on-direction-change t))
+
+(use-package tempel
+  :ensure t
+  :after aas)
+
+(use-package aas
+  :ensure t
+  :hook (org-mode . aas-activate-for-major-mode)
+  :hook (agda2-mode . aas-activate-for-major-mode)
+  :config
+  (aas-set-snippets 'org-mode
+    "bsrc" (lambda () (interactive)
+               (insert "#+BEGIN_SRC elisp\n#+END_SRC")
+               (org-edit-special))
+    "\\(" '(tempel "\\(" q "\\)")
+    "\\[" '(tempel "\\[" n q n "\\]"))
+
+  (defun my:agda-auto-script-condition ()
+    "Condition used for auto-sub/superscript snippets."
+    (not (or (bobp) (= (1- (point)) (point-min)) (eq ?\s (char-before)))))
+  (aas-set-snippets 'agda2-mode
+    :cond #'my:agda-auto-script-condition
+    "'" "′"
+    "0" "₀"
+    "1" "₁"
+    "2" "₂"
+    "3" "₃"
+    "4" "₄"
+    "5" "₅"
+    "6" "₆"
+    "7" "₇"
+    "8" "₈"
+    "9" "₉"))
+
+(use-package laas
+  :ensure t
+  :hook ((LaTeX-mode org-mode). laas-mode)
+  :config
+  (setq laas-enable-auto-space nil))
+
+(use-package wgrep
+  :ensure t
+  :defer t)
+
+(use-package bookmark
+  :config
+  (setq bookmark-fontify nil))
+
+;;;; Input Methods and Localization
+(use-package rime
+  :ensure t
+  :defer t
+  :init
+  (setq default-input-method 'rime)
+  (require 'rime-autoloads)
+  :config
+  (setq rime-show-candidate 'posframe)
+  (setq rime-show-preedit 'inline)
+  (setq rime-disable-predicates
+        '(rime-predicate-evil-mode-p
+          rime-predicate-after-alphabet-char-p
+          rime-predicate-prog-in-code-p
+          rime-predicate-space-after-cc-p)))
+
+(use-package fcitx
+  :if (executable-find "fcitx5-remote")
+  :ensure t
+  :defer 2
+  :config
+  (setq fcitx-remote-command "fcitx5-remote")
+  (fcitx-aggressive-setup))
+
+(use-package jieba
+  :load-path "~/.config/emacs/packages/jieba.el"
+  :commands jieba-mode)
+(use-package flypy-re
+  :load-path "~/.config/emacs/packages/flypy-re"
+  :config
+  ;; orderless
+  (with-eval-after-load 'orderless
+    (defun completion--regex-pinyin (str)
+      (orderless-regexp (flypy-re-build-regexp str)))
+    (add-to-list 'orderless-matching-styles 'completion--regex-pinyin))
+  ;; avy: overload avy-goto-char-timer
+  (with-eval-after-load 'avy
+    (defun avy-goto-char-timer (&optional arg)
+      "Read one or many consecutive chars and jump to the first one.
+The window scope is determined by `avy-all-windows' (ARG negates it)."
+      (interactive "P")
+      (let ((avy-all-windows (if arg
+                                 (not avy-all-windows)
+                               avy-all-windows)))
+        (avy-with avy-goto-char-timer
+                  (setq avy--old-cands (avy--read-candidates #'flypy-re-build-regexp))
+                  (avy-process avy--old-cands))))))
+
+
+;;;; Org Mode and Notes
 (use-package org
   ;; :load-path "~/Projects/org-mode/lisp"
   :defer 4
@@ -403,6 +538,19 @@
   :config
   (setq org-superstar-headline-bullets-list '("•")))
 
+(use-package denote
+  :load-path "~/.config/emacs/packages/denote"
+  :commands denote-open-or-create
+  :config
+  (setq denote-directory (expand-file-name "~/org/notes/"))
+  (setq denote-infer-keywords t)
+  (setq denote-sort-keywords t)
+  (setq denote-date-prompt-use-org-read-date t)
+  (setq denote-backlinks-show-context t)
+  (setq denote-dired-directories (list denote-directory))
+  (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories))
+
+;;;; Shell and Terminal
 (use-package eshell
   :commands eshell)
 
@@ -412,82 +560,71 @@
   :init
   (load "eat-autoloads"))
 
-(use-package lsp-bridge
-  :load-path "~/Projects/emacs-py/lsp-bridge"
-  :custom
-  (lsp-bridge-python-multi-lsp-server "pyright_ruff")
-  (lsp-bridge-python-command "emacs-python.sh")
-  :config
-  (global-lsp-bridge-mode))
-
-(defvar-keymap my:lsp-bridge-mode-leader-map
-  "d" #'lsp-bridge-popup-documentation
-  "n" #'lsp-bridge-diagnostic-jump-next
-  "e" #'lsp-bridge-diagnostic-jump-prev)
-
-(defun my:lsp-bridge-mode-set-keymap ()
-  (keymap-local-set "RET" #'newline-and-indent)
-  (setq tooe-normal-local-map
-        (define-keymap
-          "g" my:lsp-bridge-mode-leader-map)))
-
-(add-hook 'lsp-bridge-mode-hook #'my:lsp-bridge-mode-set-keymap)
-
-(use-package dired
-  :commands dired
-  :hook ((dired-mode . dired-omit-mode)
-         (dired-mode . dired-hide-details-mode))
-  :config
-  (setq dired-dwim-target t)
-  (setq dired-recursive-copies 'always)
-  (setq dired-recursive-deletes 'always)
-  (setq dired-listing-switches "-alhvG --group-directories-first")
-  (setq dired-isearch-filenames 'dwim))
-
-(use-package outline
-  :hook ((LaTeX-mode agda2-mode) . outline-minor-mode))
-
-(use-package hideshow
-  :hook (LaTeX-mode . hs-minor-mode)
-  :config
-  ;; From Doom Emacs
-  (add-to-list 'hs-special-modes-alist
-               '(latex-mode
-                 ;; LaTeX-find-matching-end needs to be inside the env
-                 ("\\\\begin{[a-zA-Z*]+}\\(\\)" 1)
-                 "\\\\end{[a-zA-Z*]+}"
-                 "%"
-                 (lambda (_arg)
-                   ;; Don't fold whole document, that's useless
-                   (unless (save-excursion
-                             (search-backward "\\begin{document}"
-                                              (line-beginning-position) t))
-                     (LaTeX-find-matching-end))))))
-
-(defvar-keymap my:outline-hs-map
-  "o" #'outline-cycle
-  "b" #'hs-toggle-hiding)
-
-(define-keymap
-  :keymap my:global-leader-map
-  "z" my:outline-hs-map)
-
-(use-package alert
-  :commands alert
+(use-package vterm
   :ensure t
-  :config
-  (setq alert-default-style 'libnotify))
+  :commands vterm)
 
-(use-package async
+(use-package vterm-toggle
   :ensure t
-  :defer t)
-
-(use-package avy
-  :ensure t
-  :commands avy-goto-char-timer
+  :commands vterm-toggle
   :config
-  (setq avy-timeout-seconds 0.3))
+  (setq vterm-toggle-scope 'project))
 
+(use-package exec-path-from-shell
+  :ensure t
+  :defer 1
+  :config
+  (setq exec-path-from-shell-check-startup-files nil)
+  (exec-path-from-shell-copy-env "SSH_AGENT_PID")
+  (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
+
+(use-package terminal-here
+  :ensure t
+  :commands terminal-here-launch
+  :config
+  (setq terminal-here-terminal-command
+        '("alacritty")))
+
+;;;; Version Control
+(use-package magit
+  :ensure t
+  :commands magit-status
+  :defer 5
+  :config
+  (setq magit-repository-directories
+        '(("~/.config/emacs" . 0)
+          ("~/org" . 0)
+          ("~/Dev" . 1)))
+  (setq
+   magit-repolist-columns
+   '(("Name" 15 magit-repolist-column-ident nil)
+     ("Flag" 4 magit-repolist-column-flag nil)
+     ("B<U" 3 magit-repolist-column-unpulled-from-upstream
+      ((:right-align t)
+       (:sort <)))
+     ("B>U" 3 magit-repolist-column-unpushed-to-upstream
+      ((:right-align t)
+       (:sort <)))
+     ("Branch" 15 magit-repolist-column-branch nil)
+     ("Path" 99 magit-repolist-column-path nil))))
+
+(use-package magit-delta
+  :ensure t
+  :after magit
+  :hook (magit-mode . magit-delta-mode)
+  :config
+  (add-to-list 'magit-delta-delta-args "--max-line-length=2048"))
+
+(use-package vc
+  :defer t
+  :config
+  (with-eval-after-load 'tramp
+    (setq vc-ignore-dir-regexp
+          (format "\\(%s\\)\\|\\(%s\\)"
+                  vc-ignore-dir-regexp
+                  tramp-file-name-regexp))))
+
+;;;; Citation Management
 (use-package emacs
   :after bibtex
   :config
@@ -547,121 +684,19 @@
   :config
   (citar-denote-mode))
 
-(use-package bookmark
-  :config
-  (setq bookmark-fontify nil))
-
-(use-package comint
+(use-package scihub
+  :load-path "~/.config/emacs/packages/scihub.el"
   :defer t
   :config
-  (general-def comint-mode-map
-    "M-n" nil
-    "M-p" nil
-    "M-k" 'comint-previous-input
-    "M-j" 'comint-next-input))
+  (setq scihub-download-directory "~/Documents/")
+  (setq scihub-open-after-download nil))
 
-(use-package demo-it
-  :ensure t
-  :defer t)
-
-(use-package denote
-  :load-path "~/.config/emacs/packages/denote"
-  :commands denote-open-or-create
-  :config
-  (setq denote-directory (expand-file-name "~/org/notes/"))
-  (setq denote-infer-keywords t)
-  (setq denote-sort-keywords t)
-  (setq denote-date-prompt-use-org-read-date t)
-  (setq denote-backlinks-show-context t)
-  (setq denote-dired-directories (list denote-directory))
-  (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories))
-
-(use-package dockerfile-mode
-  :ensure t
-  :mode "Dockerfile\\'")
-
-(use-package tramp-container
-  :after tramp)
-
-(use-package ediff
-  :commands ediff
-  :config
-  (setq ediff-split-window-function 'split-window-horizontally)
-  (setq ediff-window-setup-function 'ediff-setup-windows-plain))
-
-(use-package elcord
-  :ensure t
-  :if (executable-find "discord")
-  :commands elcord-mode)
-
-(use-package eldoc
-  :defer t
-  :config
-  (setq eldoc-idle-delay 0)
-  (setq eldoc-echo-area-use-multiline-p t)
-  (setq eldoc-echo-area-display-truncation-message nil)
-  (setq eldoc-echo-area-prefer-doc-buffer t))
-
-(use-package eldoc-box
-  :ensure t
-  :hook
-  (eldoc-mode . eldoc-box-hover-at-point-mode)
-  :config
-  (setq eldoc-box-max-pixel-width 3000)
-  (setq eldoc-box-max-pixel-height 2000))
-
-(use-package eglot
-  :ensure t
-  :commands eglot
-  :init
-  (add-hook
-   'eglot-managed-mode-hook
-   (lambda ()
-     ;; Show flymake diagnostics first.
-     (setq eldoc-documentation-functions
-           (cons #'flymake-eldoc-function
-                 (remove #'flymake-eldoc-function eldoc-documentation-functions)))
-     ;; Show all eldoc feedback.
-     (setq eldoc-documentation-strategy #'eldoc-documentation-compose))))
-
-(use-package consult-eglot
-  :ensure t
-  :after (consult eglot))
-
-(use-package vterm
-  :ensure t
-  :commands vterm)
-
-(use-package vterm-toggle
-  :ensure t
-  :commands vterm-toggle
-  :config
-  (setq vterm-toggle-scope 'project))
-
-(use-package exec-path-from-shell
-  :ensure t
-  :defer 1
-  :config
-  (setq exec-path-from-shell-check-startup-files nil)
-  (exec-path-from-shell-copy-env "SSH_AGENT_PID")
-  (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
-
-(use-package fcitx
-  :if (executable-find "fcitx5-remote")
-  :ensure t
-  :defer 2
-  :config
-  (setq fcitx-remote-command "fcitx5-remote")
-  (fcitx-aggressive-setup))
-
+;;;; Project and File
 (use-package find-file-in-project
   :ensure t
   :commands (find-file-in-project)
   :config
   (setq ffip-use-rust-fd t))
-
-(use-package flymake
-  :defer t)
 
 (use-package project
   :defer t
@@ -677,17 +712,29 @@
   ;; (add-hook 'project-find-functions 'my:find-project-root nil nil)
   )
 
-(use-package help-mode
+(use-package dired
+  :commands dired
+  :hook ((dired-mode . dired-omit-mode)
+         (dired-mode . dired-hide-details-mode))
+  :config
+  (setq dired-dwim-target t)
+  (setq dired-recursive-copies 'always)
+  (setq dired-recursive-deletes 'always)
+  (setq dired-listing-switches "-alhvG --group-directories-first")
+  (setq dired-isearch-filenames 'dwim))
+
+(use-package tramp
   :defer t)
 
-(use-package hl-todo
-  :ensure t
-  :hook (prog-mode . hl-todo-mode))
+(use-package tramp-container
+  :after tramp)
 
-(use-package htmlize
-  :ensure t
-  :commands (htmlize htmlize-file htmlize-region htmlize-buffer))
+(use-package recentf
+  :config
+  (setq recentf-max-saved-items 10000)
+  (recentf-mode))
 
+;;;; Buffer and Window
 (use-package ibuffer
   :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
   :general
@@ -701,175 +748,6 @@
    ibuffer-formats
    '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
   (use-package ibuffer-vc :ensure t))
-
-(use-package imenu-list
-  :ensure t
-  :commands imenu-list)
-
-(use-package isearch
-  :config
-  (setq isearch-wrap-pause 'no
-        isearch-lazy-count t
-        isearch-repeat-on-direction-change t))
-
-(use-package jieba
-  :load-path "~/.config/emacs/packages/jieba.el"
-  :commands jieba-mode)
-
-(use-package keyfreq
-  :ensure t
-  :config
-  (keyfreq-mode 1)
-  (keyfreq-autosave-mode 1))
-
-(use-package ledger-mode
-  :ensure t
-  :mode "\\.journal\\'"
-  :commands ledger-mode
-  :config
-  (setq ledger-binary-path "ledger.sh")
-  (setq ledger-mode-should-check-version nil)
-  (setq ledger-report-links-in-register nil)
-  (setq ledger-report-auto-width nil)
-  (setq ledger-report-use-native-highlighting nil))
-
-(use-package magit
-  :ensure t
-  :commands magit-status
-  :defer 5
-  :config
-  (setq magit-repository-directories
-        '(("~/.config/emacs" . 0)
-          ("~/org" . 0)
-          ("~/Dev" . 1)))
-  (setq
-   magit-repolist-columns
-   '(("Name" 15 magit-repolist-column-ident nil)
-     ("Flag" 4 magit-repolist-column-flag nil)
-     ("B<U" 3 magit-repolist-column-unpulled-from-upstream
-      ((:right-align t)
-       (:sort <)))
-     ("B>U" 3 magit-repolist-column-unpushed-to-upstream
-      ((:right-align t)
-       (:sort <)))
-     ("Branch" 15 magit-repolist-column-branch nil)
-     ("Path" 99 magit-repolist-column-path nil))))
-
-(use-package magit-delta
-  :ensure t
-  :after magit
-  :hook (magit-mode . magit-delta-mode)
-  :config
-  (add-to-list 'magit-delta-delta-args "--max-line-length=2048"))
-
-(use-package markdown-mode
-  :ensure t
-  :commands (gfm-view-mode markdown-view-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.mkd\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)))
-
-(use-package newcomment
-  :general
-  ('override
-   "M-;" nil
-   "C-/" 'comment-dwim))
-
-(use-package olivetti
-  :ensure t
-  :commands olivetti-mode
-  :config
-  (setq-default olivetti-body-width 0.4)
-  (setq olivetti-minimum-body-width 40))
-
-(use-package pixel-scroll
-  :custom
-  (pixel-scroll-precision-use-momentum t)
-  (pixel-scroll-precision-interpolate-page t)
-  :config
-  (pixel-scroll-precision-mode 1))
-
-(use-package flypy-re
-  :load-path "~/.config/emacs/packages/flypy-re"
-  :config
-  ;; orderless
-  (with-eval-after-load 'orderless
-    (defun completion--regex-pinyin (str)
-      (orderless-regexp (flypy-re-build-regexp str)))
-    (add-to-list 'orderless-matching-styles 'completion--regex-pinyin))
-  ;; avy: overload avy-goto-char-timer
-  (with-eval-after-load 'avy
-    (defun avy-goto-char-timer (&optional arg)
-      "Read one or many consecutive chars and jump to the first one.
-The window scope is determined by `avy-all-windows' (ARG negates it)."
-      (interactive "P")
-      (let ((avy-all-windows (if arg
-                                 (not avy-all-windows)
-                               avy-all-windows)))
-        (avy-with avy-goto-char-timer
-                  (setq avy--old-cands (avy--read-candidates #'flypy-re-build-regexp))
-                  (avy-process avy--old-cands))))))
-
-(use-package recentf
-  :config
-  (setq recentf-max-saved-items 10000)
-  (recentf-mode))
-
-(use-package scihub
-  :load-path "~/.config/emacs/packages/scihub.el"
-  :defer t
-  :config
-  (setq scihub-download-directory "~/Documents/")
-  (setq scihub-open-after-download nil))
-
-(use-package tempel
-  :ensure t
-  :after aas)
-
-(use-package aas
-  :ensure t
-  :hook (org-mode . aas-activate-for-major-mode)
-  :hook (agda2-mode . aas-activate-for-major-mode)
-  :config
-  (aas-set-snippets 'org-mode
-    "bsrc" (lambda () (interactive)
-               (insert "#+BEGIN_SRC elisp\n#+END_SRC")
-               (org-edit-special))
-    "\\(" '(tempel "\\(" q "\\)")
-    "\\[" '(tempel "\\[" n q n "\\]"))
-
-  (defun my:agda-auto-script-condition ()
-    "Condition used for auto-sub/superscript snippets."
-    (not (or (bobp) (= (1- (point)) (point-min)) (eq ?\s (char-before)))))
-  (aas-set-snippets 'agda2-mode
-    :cond #'my:agda-auto-script-condition
-    "'" "′"
-    "0" "₀"
-    "1" "₁"
-    "2" "₂"
-    "3" "₃"
-    "4" "₄"
-    "5" "₅"
-    "6" "₆"
-    "7" "₇"
-    "8" "₈"
-    "9" "₉"))
-
-(use-package laas
-  :ensure t
-  :hook ((LaTeX-mode org-mode). laas-mode)
-  :config
-  (setq laas-enable-auto-space nil))
-
-(use-package strokes
-  :commands (strokes-do-stroke))
-(general-def strokes-mode-map
-  "<down-mouse-3>" 'strokes-do-stroke)
-
-(use-package symbol-overlay
-  :ensure t
-  :commands symbol-overlay-put)
 
 (defun tab-bar-format-buffer-name ()
   "Produce display of the current buffer name in the tab bar."
@@ -896,43 +774,131 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
           (let ((face (funcall tab-bar-tab-face-function tab)))
             (propertize (concat " " (number-to-string i) " " (alist-get 'name tab) " ") 'face face)))))
 
-(use-package terminal-here
-  :ensure t
-  :commands terminal-here-launch
-  :config
-  (setq terminal-here-terminal-command
-        '("alacritty")))
-
-(use-package tramp
-  :defer t)
-
-(use-package vc
-  :defer t
-  :config
-  (with-eval-after-load 'tramp
-    (setq vc-ignore-dir-regexp
-          (format "\\(%s\\)\\|\\(%s\\)"
-                  vc-ignore-dir-regexp
-                  tramp-file-name-regexp))))
-
-(use-package wgrep
-  :ensure t
-  :defer t)
-
-(use-package which-key
-  :ensure t
-  :init
-  (setq which-key-add-column-padding 2)
-  (setq which-key-idle-delay 0)
-  (setq which-key-dont-use-unicode t)
-  :config
-  (which-key-mode 1))
-
 (use-package winner
   :hook
   (after-init . winner-mode)
   (ediff-quit . winner-undo))
 
+;;;; Programming Utilities
+
+;; Use lsp-bridge for lsp primarily.
+;; If something doesn't work, try eglot instead.
+
+(use-package lsp-bridge
+  :load-path "~/Projects/emacs-py/lsp-bridge"
+  :custom
+  (lsp-bridge-python-multi-lsp-server "pyright_ruff")
+  (lsp-bridge-python-command "emacs-python.sh")
+  :config
+  (global-lsp-bridge-mode))
+
+(defvar-keymap my:lsp-bridge-mode-leader-map
+  "d" #'lsp-bridge-popup-documentation
+  "n" #'lsp-bridge-diagnostic-jump-next
+  "e" #'lsp-bridge-diagnostic-jump-prev)
+
+(defun my:lsp-bridge-mode-set-keymap ()
+  (keymap-local-set "RET" #'newline-and-indent)
+  (setq tooe-normal-local-map
+        (define-keymap
+          "g" my:lsp-bridge-mode-leader-map)))
+
+(add-hook 'lsp-bridge-mode-hook #'my:lsp-bridge-mode-set-keymap)
+
+(use-package eglot
+  :ensure t
+  :commands eglot
+  :init
+  (add-hook
+   'eglot-managed-mode-hook
+   (lambda ()
+     ;; Show flymake diagnostics first.
+     (setq eldoc-documentation-functions
+           (cons #'flymake-eldoc-function
+                 (remove #'flymake-eldoc-function eldoc-documentation-functions)))
+     ;; Show all eldoc feedback.
+     (setq eldoc-documentation-strategy #'eldoc-documentation-compose))))
+
+(use-package consult-eglot
+  :ensure t
+  :after (consult eglot))
+
+(use-package eldoc
+  :defer t
+  :config
+  (setq eldoc-idle-delay 0)
+  (setq eldoc-echo-area-use-multiline-p t)
+  (setq eldoc-echo-area-display-truncation-message nil)
+  (setq eldoc-echo-area-prefer-doc-buffer t))
+
+(use-package eldoc-box
+  :ensure t
+  :hook
+  (eldoc-mode . eldoc-box-hover-at-point-mode)
+  :config
+  (setq eldoc-box-max-pixel-width 3000)
+  (setq eldoc-box-max-pixel-height 2000))
+
+(use-package hl-todo
+  :ensure t
+  :hook (prog-mode . hl-todo-mode))
+
+(use-package newcomment
+  :general
+  ('override
+   "M-;" nil
+   "C-/" 'comment-dwim))
+
+(use-package symbol-overlay
+  :ensure t
+  :commands symbol-overlay-put)
+
+(use-package flymake
+  :defer t)
+
+(use-package imenu-list
+  :ensure t
+  :commands imenu-list)
+
+(use-package ediff
+  :commands ediff
+  :config
+  (setq ediff-split-window-function 'split-window-horizontally)
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain))
+
+(use-package htmlize
+  :ensure t
+  :commands (htmlize htmlize-file htmlize-region htmlize-buffer))
+
+(use-package outline
+  :hook ((LaTeX-mode agda2-mode) . outline-minor-mode))
+
+(use-package hideshow
+  :hook (LaTeX-mode . hs-minor-mode)
+  :config
+  ;; From Doom Emacs
+  (add-to-list 'hs-special-modes-alist
+               '(latex-mode
+                 ;; LaTeX-find-matching-end needs to be inside the env
+                 ("\\\\begin{[a-zA-Z*]+}\\(\\)" 1)
+                 "\\\\end{[a-zA-Z*]+}"
+                 "%"
+                 (lambda (_arg)
+                   ;; Don't fold whole document, that's useless
+                   (unless (save-excursion
+                             (search-backward "\\begin{document}"
+                                              (line-beginning-position) t))
+                     (LaTeX-find-matching-end))))))
+
+(defvar-keymap my:outline-hs-map
+  "o" #'outline-cycle
+  "b" #'hs-toggle-hiding)
+
+(define-keymap
+  :keymap my:global-leader-map
+  "z" my:outline-hs-map)
+
+;;;; Programming Languages
 (use-package sly
   :ensure t
   :init
@@ -1021,6 +987,10 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 (use-package csv-mode
   :ensure t
   :mode ("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+
+(use-package dockerfile-mode
+  :ensure t
+  :mode "Dockerfile\\'")
 
 (use-package haskell-mode
   :ensure t
@@ -1175,3 +1145,22 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 (use-package yaml-mode
   :ensure t
   :mode "\\.yaml\\'")
+(use-package ledger-mode
+  :ensure t
+  :mode "\\.journal\\'"
+  :commands ledger-mode
+  :config
+  (setq ledger-binary-path "ledger.sh")
+  (setq ledger-mode-should-check-version nil)
+  (setq ledger-report-links-in-register nil)
+  (setq ledger-report-auto-width nil)
+  (setq ledger-report-use-native-highlighting nil))
+
+(use-package markdown-mode
+  :ensure t
+  :commands (gfm-view-mode markdown-view-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.mkd\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)))
+

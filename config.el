@@ -222,9 +222,13 @@
   "d" #'denote-open-or-create
   "c" #'citar-open)
 
+(use-package repeat
+  :hook
+  (after-init . repeat-mode))
 (define-keymap
   :keymap tooe-normal-map
-  "SPC" my:global-leader-map)
+  "SPC" my:global-leader-map
+  "z" #'repeat)
 
 (define-keymap
   :keymap ctl-x-map
@@ -868,6 +872,25 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 (use-package outline
   :hook ((LaTeX-mode prog-mode) . outline-minor-mode)
   :config
+  (setq outline-navigation-repeat-map
+        (define-keymap
+          "l" #'outline-backward-same-level
+          "u" #'outline-forward-same-level
+          "n" #'outline-next-visible-heading
+          "e" #'outline-previous-visible-heading
+          "h" #'outline-up-heading))
+  (setq outline-editing-repeat-map
+        (define-keymap
+          "n" #'outline-move-subtree-down
+          "e" #'outline-move-subtree-up
+          "i" #'outline-demote
+          "h" #'outline-promote))
+  (defvar-keymap my:outline-prefix-map
+    :parent outline-navigation-repeat-map
+    "m" outline-editing-repeat-map)
+  (define-keymap
+    :keymap my:global-leader-map
+    "z" my:outline-prefix-map)
   (setq outline-minor-mode-cycle t))
 
 (use-package hideshow
@@ -886,14 +909,6 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
                              (search-backward "\\begin{document}"
                                               (line-beginning-position) t))
                      (LaTeX-find-matching-end))))))
-
-(defvar-keymap my:outline-hs-map
-  "o" #'outline-cycle
-  "b" #'hs-toggle-hiding)
-
-(define-keymap
-  :keymap my:global-leader-map
-  "z" my:outline-hs-map)
 
 ;;;; Programming Languages
 (use-package sly

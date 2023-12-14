@@ -781,8 +781,12 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :custom
   (lsp-bridge-python-multi-lsp-server "pyright_ruff")
   (lsp-bridge-python-command "emacs-python.sh")
-  :config
-  (global-lsp-bridge-mode))
+  :hook
+  ((LaTeX-mode python-mode c-mode c++-mode tuareg-mode
+    agda2-mode haskell-mode typescript-mode js-mode js2-mode
+    bibtex-mode sh-mode bash-mode web-mode css-mode
+    emacs-lisp-mode dockerfile-mode)
+   . lsp-bridge-mode))
 
 (defvar-keymap my:lsp-bridge-mode-leader-map
   "d" #'lsp-bridge-popup-documentation

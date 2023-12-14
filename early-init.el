@@ -1,9 +1,5 @@
-(setq frame-inhibit-implied-resize t)
-
-(setq gc-cons-threshold 64000000)
-(add-hook 'after-init-hook #'(lambda () (setq gc-cons-threshold 800000)))
-
 (setq package-enable-at-startup nil)
+(setq frame-inhibit-implied-resize t)
 
 (scroll-bar-mode -1)
 (horizontal-scroll-bar-mode -1)

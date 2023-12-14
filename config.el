@@ -29,6 +29,9 @@
 (setq initial-major-mode 'fundamental-mode)
 
 ;;;; Init
+(setq custom-file "~/.config/emacs/emacs-custom.el")
+(load custom-file)
+
 (use-package frame
   :custom
   (window-divider-default-right-width 1)
@@ -133,6 +136,38 @@
 (add-hook 'after-make-frame-functions 'my:font-setup-hook nil)
 (my:font-setup)
 
+(defun my:syntax-color-hex ()
+  (interactive)
+  (font-lock-add-keywords
+   nil
+   '(("#[[:xdigit:]]\\{6\\}"
+      (0 (put-text-property
+          (match-beginning 0)
+          (match-end 0)
+          'face (list :background (match-string-no-properties 0)))))))
+  (font-lock-flush))
+
+(defun my:toggle-line-number ()
+  "Toggle line number between relative and nil."
+  (interactive)
+  (setq display-line-numbers
+        (pcase display-line-numbers
+          ('relative nil)
+          (_ 'relative))))
+
+(defun my:toggle-transparency ()
+  (interactive)
+  (let ((transparency 90)
+        (opacity 100)
+        (old-alpha (frame-parameter nil 'alpha)))
+    (if (and (numberp old-alpha) (< old-alpha opacity))
+        (set-frame-parameter nil 'alpha opacity)
+      (set-frame-parameter nil 'alpha transparency))))
+
+(defun my:show-trailing-space ()
+  (setq show-trailing-whitespace t))
+(add-hook 'prog-mode-hook #'my:show-trailing-space)
+
 (use-package hide-mode-line
   :ensure t
   :config
@@ -172,44 +207,6 @@
   :ensure t
   :if (executable-find "discord")
   :commands elcord-mode)
-
-;;;; helper functions
-(defun my:show-trailing-space ()
-  (setq show-trailing-whitespace t))
-(add-hook 'prog-mode-hook #'my:show-trailing-space)
-
-(defun my:other-window-or-buffer ()
-  "Switch to other window or buffer"
-  (interactive)
-  (if (one-window-p) (switch-to-buffer (other-buffer)) (select-window (next-window))))
-
-(defun my:syntax-color-hex ()
-  (interactive)
-  (font-lock-add-keywords
-   nil
-   '(("#[[:xdigit:]]\\{6\\}"
-      (0 (put-text-property
-          (match-beginning 0)
-          (match-end 0)
-          'face (list :background (match-string-no-properties 0)))))))
-  (font-lock-flush))
-
-(defun my:toggle-line-number ()
-  "Toggle line number between relative and nil."
-  (interactive)
-  (setq display-line-numbers
-        (pcase display-line-numbers
-          ('relative nil)
-          (_ 'relative))))
-
-(defun my:toggle-transparency ()
-  (interactive)
-  (let ((transparency 90)
-        (opacity 100)
-        (old-alpha (frame-parameter nil 'alpha)))
-    (if (and (numberp old-alpha) (< old-alpha opacity))
-        (set-frame-parameter nil 'alpha opacity)
-      (set-frame-parameter nil 'alpha transparency))))
 
 ;;;; Modal Editing
 (use-package tooe-colemak

@@ -740,30 +740,28 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
    '(("    " (name 24 24) " " (mode 24 24) " " filename-and-process)))
   (use-package ibuffer-vc :ensure t))
 
-(defun tab-bar-format-buffer-name ()
-  "Produce display of the current buffer name in the tab bar."
-  `((global menu-item ,(format-mode-line mode-line-buffer-identification) ignore)))
 
+(defun my:tab-name-format (tab i)
+  (let ((face (funcall tab-bar-tab-face-function tab)))
+    (propertize (concat " " (number-to-string i) " "
+                        (alist-get 'name tab) " ")
+                'face face)))
 (use-package tab-bar
   :hook (window-setup . tab-bar-mode)
-  :custom
-  (tab-bar-separator "")
-  (tab-bar-select-tab-modifiers '(meta))
-  (tab-bar-tab-name-truncated-max 20)
-  (tab-bar-auto-width nil)
-  (tab-bar-new-tab-to 'rightmost)
-  (tab-bar-show 1)
-  (tab-bar-close-button-show nil)
-  (tab-bar-new-tab-choice "*scratch*")
-  (tab-bar-tab-hints t)
-  (tab-bar-format '(tab-bar-format-tabs
-                    tab-bar-format-align-right
-                    tab-bar-format-buffer-name))
   :config
-  (setq tab-bar-tab-name-format-function
-        (lambda (tab i)
-          (let ((face (funcall tab-bar-tab-face-function tab)))
-            (propertize (concat " " (number-to-string i) " " (alist-get 'name tab) " ") 'face face)))))
+  (setq tab-bar-separator "")
+  (setopt
+   tab-bar-select-tab-modifiers '(meta)
+   tab-bar-tab-name-truncated-max 20
+   tab-bar-auto-width nil
+   tab-bar-new-tab-to 'rightmost
+   tab-bar-show 1
+   tab-bar-close-button-show nil
+   tab-bar-new-tab-choice "*scratch*"
+   tab-bar-tab-hints t
+   tab-bar-format '(tab-bar-format-tabs
+                    tab-bar-format-align-right)
+   tab-bar-tab-name-format-function 'my:tab-name-format))
 
 (use-package winner
   :hook

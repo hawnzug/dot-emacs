@@ -33,42 +33,45 @@
 (load custom-file)
 
 (use-package frame
-  :custom
-  (window-divider-default-right-width 1)
-  (window-divider-default-bottom-width 1)
-  (window-divider-default-places t)
+  ;; Already loaded before init
   :config
+  (setopt
+   window-divider-default-right-width 1
+   window-divider-default-bottom-width 1
+   window-divider-default-places t)
   (blink-cursor-mode)
   (window-divider-mode))
 
-(setq delete-pair-blink-delay 0)
+(setopt delete-pair-blink-delay 0)
 (use-package elec-pair
-  :config
-  (electric-pair-mode))
+  :hook (after-init . electric-pair-mode))
 (use-package paren
+  ;; Already loaded before init
   :config
   (show-paren-mode))
 
 (use-package files
-  :custom
-  (make-backup-files nil)
-  (auto-save-default nil)
-  (auto-save-visited-interval 1)
+  ;; Already loaded before init
   :config
+  (setopt
+   make-backup-files nil
+   auto-save-default nil
+   auto-save-visited-interval 1)
   (auto-save-visited-mode))
 
 (setq-default indent-tabs-mode nil)
 
 (use-package emacs
-  :custom
-  (default-process-coding-system '(utf-8-unix . utf-8-unix))
-  (word-wrap-by-category t)
-  (delete-by-moving-to-trash t)
-  (text-quoting-style 'straight)
-  (kill-buffer-query-functions nil)
-  (read-process-output-max (* 1024 1024))
-  (frame-resize-pixelwise t)
   :config
+  (setopt
+   word-wrap-by-category t
+   delete-by-moving-to-trash t
+   text-quoting-style 'straight
+   frame-resize-pixelwise t)
+  (setq
+   default-process-coding-system '(utf-8-unix . utf-8-unix)
+   kill-buffer-query-functions nil
+   read-process-output-max (* 1024 1024))
   (defun system-move-file-to-trash (filename)
     (shell-command (concat "trash " (shell-quote-argument filename))))
   (defalias 'yes-or-no-p 'y-or-n-p)
@@ -76,16 +79,19 @@
   (setq-default truncate-lines t))
 
 (use-package window
-  :custom
-  (split-width-threshold 100))
+  ;; Already loaded before init
+  :config
+  (setopt split-width-threshold 100))
 
 (use-package help
-  :custom
-  (help-window-select t))
+  ;; Already loaded before init
+  :config
+  (setopt help-window-select t))
 
 (use-package comp
-  :custom
-  (native-comp-async-report-warnings-errors 'silent))
+  ;; Already loaded before init
+  :config
+  (setopt native-comp-async-report-warnings-errors 'silent))
 
 ;;;; User Interface
 (setq custom-safe-themes t)
@@ -176,10 +182,10 @@
 
 (use-package pixel-scroll
   :defer 1
-  :custom
-  (pixel-scroll-precision-use-momentum t)
-  (pixel-scroll-precision-interpolate-page t)
   :config
+  (setopt
+   pixel-scroll-precision-use-momentum t
+   pixel-scroll-precision-interpolate-page t)
   (pixel-scroll-precision-mode 1))
 
 (use-package olivetti
@@ -775,9 +781,10 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 (use-package lsp-bridge
   :load-path "~/Projects/emacs-py/lsp-bridge"
-  :custom
-  (lsp-bridge-python-multi-lsp-server "pyright_ruff")
-  (lsp-bridge-python-command "emacs-python.sh")
+  :init
+  (setopt
+   lsp-bridge-python-multi-lsp-server "pyright_ruff"
+   lsp-bridge-python-command "emacs-python.sh")
   :hook
   ((LaTeX-mode python-mode c-mode c++-mode tuareg-mode
     agda2-mode haskell-mode typescript-mode js-mode js2-mode

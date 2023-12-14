@@ -175,6 +175,7 @@
   (global-hide-mode-line-mode))
 
 (use-package pixel-scroll
+  :defer 1
   :custom
   (pixel-scroll-precision-use-momentum t)
   (pixel-scroll-precision-interpolate-page t)
@@ -190,6 +191,7 @@
 
 (use-package which-key
   :ensure t
+  :defer 1
   :init
   (setq which-key-add-column-padding 2)
   (setq which-key-idle-delay 0)
@@ -199,14 +201,9 @@
 
 (use-package keyfreq
   :ensure t
-  :config
-  (keyfreq-mode 1)
-  (keyfreq-autosave-mode 1))
-
-(use-package elcord
-  :ensure t
-  :if (executable-find "discord")
-  :commands elcord-mode)
+  :hook
+  (after-init . keyfreq-mode)
+  (after-init . keyfreq-autosave-mode))
 
 ;;;; Modal Editing
 (use-package tooe-colemak
@@ -252,8 +249,7 @@
 ;;;; Search and Completion
 (use-package vertico
   :ensure t
-  :config
-  (vertico-mode))
+  :hook (after-init . vertico-mode))
 
 ;; No need to autoload. It is almost always needed.
 (use-package vertico-directory
@@ -268,6 +264,7 @@
 
 (use-package orderless
   :ensure t
+  :after vertico
   :init
   ;; (defun my:orderless-in-minibuffer ()
   ;;   (setq-local completion-styles '(orderless)))
@@ -280,6 +277,7 @@
 
 (use-package corfu
   :ensure t
+  :commands corfu-mode
   :config
   (with-eval-after-load 'tooe-colemak
     (defun my:corfu-quit-and-escape ()
@@ -303,6 +301,7 @@
 
 (use-package marginalia
   :ensure t
+  :after vertico
   :config
   (marginalia-mode))
 
@@ -433,14 +432,6 @@
           rime-predicate-after-alphabet-char-p
           rime-predicate-prog-in-code-p
           rime-predicate-space-after-cc-p)))
-
-(use-package fcitx
-  :if (executable-find "fcitx5-remote")
-  :ensure t
-  :defer 2
-  :config
-  (setq fcitx-remote-command "fcitx5-remote")
-  (fcitx-aggressive-setup))
 
 (use-package jieba
   :load-path "~/.config/emacs/packages/jieba.el"
@@ -657,18 +648,22 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 (use-package citar
   :ensure t
+  :defer t
   :init
   (require 'citar-autoloads)
-  :custom
-  (citar-bibliography '("~/org/refs.bib" "~/org/incomplete.bib"))
-  (citar-library-paths '("~/Documents/"))
-  (citar-file-open-functions (list (cons "html" #'citar-file-open-external)
+  :config
+  (setopt
+   citar-bibliography '("~/org/refs.bib" "~/org/incomplete.bib")
+   citar-library-paths '("~/Documents/")
+   citar-file-open-functions (list (cons "html" #'citar-file-open-external)
                                    (cons "pdf" #'citar-file-open-external)
                                    (cons t #'find-file)))
-  (org-cite-global-bibliography citar-bibliography)
-  (org-cite-insert-processor 'citar)
-  (org-cite-follow-processor 'citar)
-  (org-cite-activate-processor 'citar))
+  (with-eval-after-load 'oc
+    (setopt
+     org-cite-global-bibliography citar-bibliography
+     org-cite-insert-processor 'citar
+     org-cite-follow-processor 'citar
+     org-cite-activate-processor 'citar)))
 (use-package citar-capf
   :after citar
   :hook
@@ -731,9 +726,9 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :after tramp)
 
 (use-package recentf
+  :hook (after-init . recentf-mode)
   :config
-  (setq recentf-max-saved-items 10000)
-  (recentf-mode))
+  (setq recentf-max-saved-items 10000))
 
 ;;;; Buffer and Window
 (use-package ibuffer

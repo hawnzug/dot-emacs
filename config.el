@@ -514,16 +514,18 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (setq org-superstar-headline-bullets-list '("•")))
 
 (use-package denote
-  :load-path "~/.config/emacs/packages/denote"
+  :ensure t
   :commands denote-open-or-create
   :config
-  (setq denote-directory (expand-file-name "~/org/notes/"))
-  (setq denote-infer-keywords t)
-  (setq denote-sort-keywords t)
-  (setq denote-date-prompt-use-org-read-date t)
-  (setq denote-backlinks-show-context t)
-  (setq denote-dired-directories (list denote-directory))
-  (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories))
+  (setopt
+   denote-directory (expand-file-name "~/org/notes/")
+   denote-infer-keywords t
+   denote-sort-keywords t
+   denote-date-prompt-use-org-read-date t
+   denote-backlinks-show-context t
+   denote-dired-directories (list denote-directory))
+  (with-eval-after-load 'dired
+    (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories)))
 
 ;;;; Shell and Terminal
 (use-package eshell

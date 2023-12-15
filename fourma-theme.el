@@ -135,20 +135,6 @@
    '(haskell-keyword-face ((t (:family "Monoflow"))))
    '(haskell-pragma-face ((t (:family "Monoflow"))))
 
-   ;; Agda
-   '(agda2-highlight-module-face ((t nil)))
-   '(agda2-highlight-keyword-face ((t (:family "Monoflow"))))
-   '(agda2-highlight-symbol-face ((t (:foreground "#555555" :weight light))))
-   '(agda2-highlight-primitive-face ((t nil)))
-   '(agda2-highlight-primitive-type-face ((t nil)))
-   '(agda2-highlight-number-face ((t nil)))
-   '(agda2-highlight-bound-variable-face ((t (:background "#FFF4F4"))))
-   '(agda2-highlight-datatype-face ((t (:background "#F4F4FF"))))
-   '(agda2-highlight-catchall-clause-face ((t nil)))
-   '(agda2-highlight-function-face ((t (:inherit (agda2-highlight-datatype-face)))))
-   '(agda2-highlight-operator-face ((t (:inherit (agda2-highlight-datatype-face)))))
-   '(agda2-highlight-inductive-constructor-face ((t (:inherit (agda2-highlight-datatype-face)))))
-
    ;; tab-bar
    `(tab-bar ((t (:background "#ffffff" :font "Rec Mono Casual 12"))))
    `(tab-bar-tab ((t (:background ,bg-orange))))

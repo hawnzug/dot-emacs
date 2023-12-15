@@ -456,6 +456,8 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (setq org-special-ctrl-a/e t)
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)" "SOMEDAY(s)")))
+  (setopt
+   org-todo-keyword-faces '(("NEXT" . highlight)))
   (setq org-agenda-files '("~/org/inbox.org"))
   (setq org-archive-location "~/org/archive.org::datetree/")
   (setq org-fontify-done-headline nil)
@@ -1049,7 +1051,19 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :load-path (lambda () (agda-mode-load-path))
   :mode ("\\.agda\\'" . agda2-mode)
   :config
-  (setq outline-regexp "-- #+"))
+  (setq outline-regexp "-- #+")
+  (define-keymap
+    :keymap agda2-mode-map
+    "C-c C-," nil
+    "C-c ," #'agda2-goal-and-context
+    "C-c C-." nil
+    "C-c ." #'agda2-goal-and-context-and-inferred
+    "C-c C-;" nil
+    "C-c ;" #'agda2-goal-and-context-and-checked
+    "C-c C-=" nil
+    "C-c =" #'agda2-show-constraints
+    "C-c C-?" nil
+    "C-c C-q" #'agda2-show-goals))
 
 (use-package tuareg
   :ensure t

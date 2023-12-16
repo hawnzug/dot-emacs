@@ -94,6 +94,13 @@
    ;; consult
    `(consult-line-number-wrapped ((t (:background ,bg-pink))))
 
+   ;; rime
+   `(rime-default-face ((t (:background ,bg-green))))
+   `(rime-candidate-num-face ((t (:foreground ,fg-red :inherit rime-default-face))))
+   `(rime-highlight-candidate-face ((t (:inherit highlight))))
+   `(rime-comment-face ((t (:foreground ,fg-grey :inherit rime-default-face))))
+   `(rime-code-face ((t (:inherit rime-default-face))))
+
    ;; outline
    '(outline-1 ((t nil)))
    '(outline-2 ((t nil)))

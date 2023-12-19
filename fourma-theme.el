@@ -43,7 +43,8 @@
        (fg-red "#820000")
        (fg-brown "#573F00")
        (fg-green "#237142")
-       (fg-blue "#005280")
+       (fg-sky-blue "#3E6366")
+       (fg-blue "#00327A")
        (fg-purple "#7B006C")
 
        (bg-selection bg-orange)
@@ -69,7 +70,7 @@
    `(font-lock-builtin-face ((t (:weight ultra-light :foreground ,fg-green))))
    `(font-lock-constant-face ((t (:foreground ,fg-red))))
    `(font-lock-keyword-face ((t (:inherit font-lock-builtin-face))))
-   `(font-lock-function-name-face ((t (:foreground ,fg-red))))
+   `(font-lock-function-name-face ((t (:foreground ,fg-sky-blue))))
    '(font-lock-negation-char-face ((t nil)))
    '(font-lock-preprocessor-face ((t (:inherit (font-lock-builtin-face)))))
    '(font-lock-regexp-grouping-backslash ((t nil)))
@@ -127,6 +128,17 @@
    `(org-agenda-structure ((t (:foreground ,fg-blue))))
    `(org-scheduled ((t (:foreground ,fg-grey))))
    `(org-scheduled-today ((t (:foreground ,fg-red))))
+
+   ;; Agda
+   `(agda2-highlight-function-face ((t (:inherit font-lock-function-name-face))))
+   `(agda2-highlight-operator-face ((t (:inherit font-lock-function-name-face))))
+   `(agda2-highlight-datatype-face ((t (:inherit font-lock-function-name-face))))
+   `(agda2-highlight-module-face ((t (:foreground ,fg-purple))))
+   `(agda2-highlight-keyword-face ((t (:inherit font-lock-builtin-face))))
+   `(agda2-highlight-primitive-face ((t (:inherit font-lock-builtin-face))))
+   `(agda2-highlight-primitive-type-face ((t (:inherit font-lock-builtin-face))))
+   `(agda2-highlight-bound-variable-face ((t (:foreground ,fg-blue))))
+   `(agda2-highlight-postulate-face ((t (:background ,bg-red))))
 
    ;; LaTeX
    '(font-latex-sedate-face ((t (:inherit (font-lock-keyword-face)))))

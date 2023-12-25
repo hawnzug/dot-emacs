@@ -401,6 +401,9 @@
   (setq default-input-method 'rime)
   (require 'rime-autoloads)
   :config
+  (define-keymap
+    :keymap rime-mode-map
+    "C-`" #'rime-send-keybinding)
   (setq rime-show-candidate 'posframe)
   (setq rime-show-preedit 'inline)
   (setq rime-disable-predicates

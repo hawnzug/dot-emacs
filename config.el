@@ -147,6 +147,8 @@
    window-divider-default-right-width 1
    window-divider-default-bottom-width 1
    window-divider-default-places t)
+  (modify-all-frames-parameters
+   '((internal-border-width . 10)))
   (blink-cursor-mode)
   (window-divider-mode))
 

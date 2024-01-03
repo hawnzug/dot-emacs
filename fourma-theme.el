@@ -80,6 +80,9 @@
    '(font-lock-variable-name-face ((t nil)))
    '(font-lock-warning-face ((t (:inherit (warning)))))
 
+   `(mode-line ((t (:box t))))
+   `(mode-line-inactive ((t (:box "#AAAAAA" :foreground ,fg-grey))))
+
    ;; orderless
    `(orderless-match-face-0 ((t (:slant italic :background ,bg-blue))))
    `(orderless-match-face-1 ((t (:slant italic :background ,bg-purple))))

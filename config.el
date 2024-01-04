@@ -1185,6 +1185,17 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
          ("\\.md\\'" . markdown-mode)
          ("\\.mkd\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)))
+;;;; Dashboard
+(defun my:dashboard ()
+  (interactive)
+  (tab-bar-switch-to-tab "org")
+  (delete-other-windows)
+  (find-file "~/org/inbox.org")
+  (call-interactively #'org-show-todo-tree)
+  (org-remove-occur-highlights)
+  (split-window-right)
+  (magit-list-repositories))
+(run-with-idle-timer 120 t #'my:dashboard)
 
 ;;;; Custom
 (setq custom-file "~/.config/emacs/emacs-custom.el")

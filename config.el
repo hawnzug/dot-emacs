@@ -219,9 +219,20 @@
 
 ;;;; Modal Editing
 (use-package tooe-colemak
+  :disabled
   :load-path "~/Dev/tooe"
   :config
   (tooe-mode))
+
+(use-package boon-colemak
+  :ensure boon
+  :config
+  (boon-mode)
+  (define-keymap
+    :keymap boon-command-map
+    "T" #'join-line
+    "d" #'boon-treasure-region
+    "D" #'boon-replace-by-character))
 
 (defvar-keymap my:global-leader-map
   "RET" #'execute-extended-command
@@ -234,10 +245,10 @@
 (use-package repeat
   :hook
   (after-init . repeat-mode))
-(define-keymap
-  :keymap tooe-normal-map
-  "SPC" my:global-leader-map
-  "z" #'repeat)
+;; (define-keymap
+;;   :keymap tooe-normal-map
+;;   "SPC" my:global-leader-map
+;;   "z" #'repeat)
 
 (define-keymap
   :keymap ctl-x-map
@@ -818,22 +829,14 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
    lsp-bridge-python-multi-lsp-server "pyright_ruff"
    lsp-bridge-python-command "emacs-python.sh")
   :hook
-  ((LaTeX-mode python-mode c-mode c++-mode tuareg-mode
+  ((LaTeX-mode python-mode tuareg-mode
     agda2-mode haskell-mode typescript-mode js-mode js2-mode
     bibtex-mode sh-mode bash-mode web-mode css-mode
     emacs-lisp-mode dockerfile-mode)
    . lsp-bridge-mode))
 
-(defvar-keymap my:lsp-bridge-mode-leader-map
-  "d" #'lsp-bridge-popup-documentation
-  "n" #'lsp-bridge-diagnostic-jump-next
-  "e" #'lsp-bridge-diagnostic-jump-prev)
-
 (defun my:lsp-bridge-mode-set-keymap ()
-  (keymap-local-set "RET" #'newline-and-indent)
-  (setq tooe-normal-local-map
-        (define-keymap
-          "g" my:lsp-bridge-mode-leader-map)))
+  (keymap-local-set "RET" #'newline-and-indent))
 
 (add-hook 'lsp-bridge-mode-hook #'my:lsp-bridge-mode-set-keymap)
 
@@ -978,13 +981,6 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   "d z" #'sly-apropos-all
   "d r" #'common-lisp-hyperspec-lookup-reader-macro
   "d t" #'common-lisp-hyperspec-format)
-
-(defun my:sly-mode-set-keymap ()
-  (setq tooe-normal-local-map
-        (define-keymap
-          "c" my:sly-mode-leader-map)))
-
-(add-hook 'sly-mode-hook #'my:sly-mode-set-keymap)
 
 (use-package cooltt
   :mode ("\\.cooltt\\'" . cooltt-mode)

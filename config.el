@@ -413,7 +413,9 @@
     "Condition used for auto-sub/superscript snippets."
     (not (or (bobp) (= (1- (point)) (point-min)) (eq ?\s (char-before)))))
   (aas-set-snippets 'agda2-mode
-    ";+" "⁺")
+    ";+" "⁺"
+    "::" "∷"
+    "==" "≡")
   (aas-set-snippets 'agda2-mode
     :cond #'my:agda-auto-script-condition
     "'" "′"

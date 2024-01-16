@@ -230,9 +230,11 @@
   (boon-mode)
   (define-keymap
     :keymap boon-command-map
+    "p" #'consult-line
     "T" #'join-line
     "d" #'boon-treasure-region
-    "D" #'boon-replace-by-character))
+    "D" #'boon-replace-by-character
+    "h" #'avy-goto-char-timer))
 
 (defvar-keymap my:global-leader-map
   "RET" #'execute-extended-command

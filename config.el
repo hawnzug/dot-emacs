@@ -224,17 +224,49 @@
   :config
   (tooe-mode))
 
+(defun my:find-char-backward (count char)
+  "Move the cursor past the previous occurrence of CHAR."
+  (interactive "p\ncFind backward")
+  (search-backward (make-string 1 char) nil t count))
+
+(defun my:find-char-forward (count char)
+  "Move the cursor past the next occurrence of CHAR."
+  (interactive "p\ncFind forward")
+  (search-forward (make-string 1 char) nil t count))
+
+(defun my:till-char-backward (count char)
+  "Move the cursor till the previous occurrence of CHAR."
+  (interactive "p\ncTill backward")
+  (search-backward (make-string 1 char) nil t count)
+  (forward-char))
+
+(defun my:till-char-forward (count char)
+  "Move the cursor till the next occurrence of CHAR."
+  (interactive "p\ncTill forward")
+  (search-forward (make-string 1 char) nil t count)
+  (backward-char))
+
 (use-package boon-colemak
   :ensure boon
   :config
   (boon-mode)
   (define-keymap
+    :keymap boon-moves-map
+    "h" #'avy-goto-char-timer
+    "m" #'my:find-char-backward
+    "," #'my:till-char-backward
+    "." #'my:till-char-forward
+    "/" #'my:find-char-forward
+    "M" #'backward-up-list
+    "?" #'down-list
+    "N" #'boon-beginning-of-expression
+    "O" #'boon-end-of-expression)
+  (define-keymap
     :keymap boon-command-map
     "p" #'consult-line
     "T" #'join-line
     "d" #'boon-treasure-region
-    "D" #'boon-replace-by-character
-    "h" #'avy-goto-char-timer))
+    "D" #'boon-replace-by-character))
 
 (defvar-keymap my:global-leader-map
   "RET" #'execute-extended-command
@@ -302,15 +334,16 @@
 
 (use-package corfu
   :ensure t
-  :commands corfu-mode
   :config
-  (with-eval-after-load 'tooe-colemak
+  (with-eval-after-load 'boon-colemak
     (defun my:corfu-quit-and-escape ()
       (interactive)
       (call-interactively 'corfu-quit)
-      (tooe-set-normal-state))
-    (keymap-set tooe-insert-map "<escape>" #'my:corfu-quit-and-escape))
-  (setq corfu-auto t))
+      (boon-set-command-state))
+    (keymap-set boon-insert-map "<escape>" #'my:corfu-quit-and-escape))
+  (setq corfu-auto t)
+  :config
+  (global-corfu-mode))
 
 (use-package emacs
   :init
@@ -391,9 +424,9 @@
 
 (use-package isearch
   :config
-  (setq isearch-wrap-pause 'no
+  (setq isearch-wrap-pause t
         isearch-lazy-count t
-        isearch-repeat-on-direction-change t))
+        isearch-repeat-on-direction-change nil))
 
 (use-package tempel
   :ensure t
@@ -827,8 +860,11 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 ;; If something doesn't work, try eglot instead.
 
 (use-package lsp-bridge
+  :disabled
   :load-path "~/Projects/emacs-py/lsp-bridge"
   :init
+  (defun my:lsp-bridge-mode-set-keymap ()
+    (keymap-local-set "RET" #'newline-and-indent))
   (setopt
    lsp-bridge-python-multi-lsp-server "pyright_ruff"
    lsp-bridge-python-command "emacs-python.sh")
@@ -837,12 +873,9 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
     agda2-mode haskell-mode typescript-mode js-mode js2-mode
     bibtex-mode sh-mode bash-mode web-mode css-mode
     emacs-lisp-mode dockerfile-mode)
-   . lsp-bridge-mode))
-
-(defun my:lsp-bridge-mode-set-keymap ()
-  (keymap-local-set "RET" #'newline-and-indent))
-
-(add-hook 'lsp-bridge-mode-hook #'my:lsp-bridge-mode-set-keymap)
+   . lsp-bridge-mode)
+  :config
+  (add-hook 'lsp-bridge-mode-hook #'my:lsp-bridge-mode-set-keymap))
 
 (use-package eglot
   :ensure t

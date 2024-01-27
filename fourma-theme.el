@@ -67,7 +67,7 @@
    `(font-lock-comment-face ((t (:background ,bg-grey))))
    `(font-lock-comment-delimiter-face ((t (:inherit (font-lock-comment-face)))))
    '(font-lock-doc-face ((t (:inherit (font-lock-comment-face)))))
-   `(font-lock-builtin-face ((t (:weight ultra-light :foreground ,fg-green))))
+   `(font-lock-builtin-face ((t (:weight light))))
    `(font-lock-constant-face ((t (:foreground ,fg-red))))
    `(font-lock-keyword-face ((t (:inherit font-lock-builtin-face))))
    `(font-lock-function-name-face ((t (:foreground ,fg-sky-blue))))

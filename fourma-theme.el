@@ -66,7 +66,7 @@
    '(minibuffer-prompt ((t (:weight bold))))
    `(link ((t (:underline t :foreground ,fg-blue))))
 
-   `(font-lock-comment-face ((t (:background ,bg-grey))))
+   `(font-lock-comment-face ((t (:background ,background-dark :weight light))))
    `(font-lock-comment-delimiter-face ((t (:inherit (font-lock-comment-face)))))
    '(font-lock-doc-face ((t (:inherit (font-lock-comment-face)))))
    `(font-lock-builtin-face ((t (:weight light))))
@@ -91,7 +91,7 @@
    ;; magit
    `(magit-section-heading ((t (:foreground ,fg-blue :weight bold))))
    `(magit-section-highlight ((t (:background "white"))))
-   `(magit-diff-hunk-heading ((t (:background ,bg-grey :foreground ,fg-grey))))
+   `(magit-diff-hunk-heading ((t (:background ,background-dark :overline t :foreground ,fg-grey))))
    `(magit-diff-hunk-heading-highlight ((t (:foreground "black" :weight bold))))
 
    ;; consult
@@ -117,8 +117,8 @@
    ;; org
    `(org-hide ((t (:foreground ,background))))
    `(org-drawer ((t (:inherit shadow))))
-   `(org-todo ((t (:background ,bg-red))))
-   `(org-done ((t (:background ,bg-sky-blue))))
+   `(org-todo ((t (:background ,background-dark :foreground "#555555" :weight ultra-light))))
+   `(org-done ((t (:background ,background-dark :foreground "#AAAAAA" :strike-through t :weight ultra-light))))
    `(org-date ((t (:underline t :foreground ,fg-brown))))
    `(org-document-title ((t (:weight bold :foreground ,fg-blue))))
    `(org-document-info ((t (:foreground ,fg-blue))))

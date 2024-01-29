@@ -527,7 +527,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)" "SOMEDAY(s)")))
   (setopt
-   org-todo-keyword-faces '(("NEXT" . highlight)))
+   org-todo-keyword-faces '(("NEXT" . (:background "#E8E3CB" :weight light))))
   (setq org-agenda-files '("~/org/inbox.org"))
   (setq org-archive-location "~/org/archive.org::datetree/")
   (setq org-fontify-done-headline nil)

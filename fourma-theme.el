@@ -29,6 +29,8 @@
 ;; #743368 0.08 0.06 330
 
 (let* ((background "#F2EDD5")
+       (background-light "#FCF7DF")
+       (background-dark "#E8E3CB")
        (bg-grey "#D8E5E2")
        (bg-red "#FF8870")
        (bg-orange "#FFA247")
@@ -79,9 +81,6 @@
    '(font-lock-type-face ((t nil)))
    '(font-lock-variable-name-face ((t nil)))
    '(font-lock-warning-face ((t (:inherit (warning)))))
-
-   `(mode-line ((t (:box t))))
-   `(mode-line-inactive ((t (:box "#AAAAAA" :foreground ,fg-grey))))
 
    ;; orderless
    `(orderless-match-face-0 ((t (:slant italic :background ,bg-blue))))
@@ -157,8 +156,13 @@
    '(haskell-keyword-face ((t (:family "Monoflow"))))
    '(haskell-pragma-face ((t (:family "Monoflow"))))
 
+   `(header-line ((t (:box t))))
+
+   `(mode-line ((t (:box t :background ,background-light))))
+   `(mode-line-inactive ((t (:box "#AAAAAA" :foreground ,fg-grey))))
+
    ;; tab-bar
-   `(tab-bar ((t (:background "#ffffff" :font "Rec Mono Casual 12"))))
+   `(tab-bar ((t (:background ,background-light :box 1 :font "Rec Mono Casual 12"))))
    `(tab-bar-tab ((t (:background ,bg-orange))))
    `(tab-bar-tab-inactive ((t (:foreground ,fg-grey))))
 

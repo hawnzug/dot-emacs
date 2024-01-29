@@ -85,6 +85,7 @@
     (set-fontset-font t 'unicode primary-font)
     (set-fontset-font t 'unicode "JetBrains Mono NL" nil 'append)
     (set-fontset-font t 'unicode "Noto Color Emoji" nil 'append)
+    (set-fontset-font t 'unicode "Symbols Nerd Font Mono" nil 'append)
     (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
 
     (set-fontset-font t 'han primary-font)
@@ -144,15 +145,17 @@
   (setq show-trailing-whitespace t))
 (add-hook 'prog-mode-hook #'my:show-trailing-space)
 
+(use-package nerd-icons
+  :ensure t
+  :init
+  (require 'nerd-icons-autoloads))
+
 (use-package hide-mode-line
   :disabled
   :ensure t
   :config
   (setq hide-mode-line-excluded-modes nil)
   (global-hide-mode-line-mode))
-
-(default-value 'mode-line-format)
-
 
 (setopt mode-line-compact 'long)
 (column-number-mode)
@@ -182,8 +185,7 @@
    (format-mode-line
     (if (mode-line-window-selected-p)
         my:default-mode-line-format
-      my:inactive-mode-line-format)
-    t)))
+      my:inactive-mode-line-format))))
 
 (use-package frame
   ;; Already loaded before init
@@ -430,7 +432,7 @@
   :ensure t
   :commands avy-goto-char-timer
   :config
-  (setq avy-timeout-seconds 0.3))
+  (setq avy-timeout-seconds 0.25))
 
 (use-package isearch
   :config
@@ -797,6 +799,25 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (setq dired-recursive-deletes 'always)
   (setq dired-listing-switches "-alhvG --group-directories-first")
   (setq dired-isearch-filenames 'dwim))
+
+(use-package dirvish
+  :ensure t
+  :defer t
+  :init
+  (require 'dirvish-autoloads)
+  (dirvish-override-dired-mode)
+  :config
+  (setopt dirvish-use-mode-line 'global)
+  (setopt dirvish-use-header-line 'global)
+  (setopt dirvish-attributes
+          '(nerd-icons file-time file-size collapse subtree-state vc-state git-msg))
+  (setopt dirvish-subtree-state-style 'nerd)
+  (setopt
+   dirvish-path-separators
+   (list
+    (format "  %s " (nerd-icons-codicon "nf-cod-home"))
+    (format "  %s " (nerd-icons-codicon "nf-cod-root_folder"))
+    (format " %s " (nerd-icons-faicon "nf-fa-angle_right")))))
 
 (use-package tramp
   :defer t)
@@ -1187,13 +1208,6 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :ensure t
   :hook (sh-mode . flymake-shellcheck-load))
 
-(use-package tex
-  :defer t
-  :config
-  (add-to-list
-   'TeX-command-list
-   '("LaTeXmk" "latexmk %s" TeX-run-TeX nil t :help "Run latexmk.")))
-
 (use-package tex-site
   :ensure auctex
   :defer t
@@ -1206,6 +1220,12 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (setq font-latex-fontify-sectioning 'color)
   (setq font-latex-fontify-script nil)
   (setq TeX-view-program-selection '((output-pdf "Zathura"))))
+
+(use-package auctex-latexmk
+  :ensure t
+  :after tex-site
+  :config
+  (auctex-latexmk-setup))
 
 (defun my:cdlatex-smarter-tab ()
   "Assuming outline-minor-mode and hs-minor-mode are enabled"
@@ -1241,7 +1261,21 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 (use-package xenops
   :hook (LaTeX-mode . xenops-mode)
-  :ensure t)
+  :ensure t
+  :config
+  (add-to-list
+   'xenops-math-latex-process-alist
+   '(xdvsvgm
+     :programs ("xelatex" "dvisvgm")
+     :description "xdv > svg"
+     :message "you need to install the programs: xelatex and dvisvgm."
+     :image-input-type "xdv"
+     :image-output-type "svg"
+     :image-size-adjust (1.7 . 1.5)
+     :latex-compiler ("xelatex -interaction nonstopmode -shell-escape -no-pdf -output-directory %o %f")
+     :image-converter ("dvisvgm %f -n -b min -c %S -o %O")))
+  (setq xenops-math-latex-process 'xdvsvgm)
+  (setq xenops-reveal-on-entry t))
 
 (use-package yaml-mode
   :ensure t

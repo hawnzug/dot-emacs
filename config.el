@@ -797,7 +797,8 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (setq dired-dwim-target t)
   (setq dired-recursive-copies 'always)
   (setq dired-recursive-deletes 'always)
-  (setq dired-listing-switches "-alhvG --group-directories-first")
+  (setq dired-listing-switches
+        "-l --almost-all --human-readable --group-directories-first --no-group")
   (setq dired-isearch-filenames 'dwim))
 
 (use-package dirvish
@@ -807,6 +808,25 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (require 'dirvish-autoloads)
   (dirvish-override-dired-mode)
   :config
+  (define-keymap
+    :keymap dirvish-mode-map
+    "a" #'dirvish-quick-access
+    "f" #'dirvish-file-info-menu
+    "y" #'dirvish-yank-menu
+    "N" #'dirvish-narrow
+    "^" #'dirvish-history-last
+    "h" #'dirvish-history-jump
+    "s" #'dirvish-quicksort
+    "v" #'dirvish-vc-menu
+    "TAB" #'dirvish-subtree-toggle
+    "M-f" #'dirvish-history-go-forward
+    "M-b" #'dirvish-history-go-backward
+    "M-l" #'dirvish-ls-switches-menu
+    "M-m" #'dirvish-mark-menu
+    "M-t" #'dirvish-layout-toggle
+    "M-s" #'dirvish-layout-switch
+    "M-e" #'dirvish-emerge-menu
+    "M-j" #'dirvish-fd-jump)
   (setopt dirvish-use-mode-line 'global)
   (setopt dirvish-use-header-line 'global)
   (setopt dirvish-attributes

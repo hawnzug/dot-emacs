@@ -157,35 +157,11 @@
   (setq hide-mode-line-excluded-modes nil)
   (global-hide-mode-line-mode))
 
-(setopt mode-line-compact 'long)
-(column-number-mode)
-
-(defvar my:default-mode-line-format
-  '("%e"
-    mode-line-front-space
-    (:propertize ("" mode-line-mule-info mode-line-client mode-line-modified mode-line-remote) display (min-width (5.0)))
-    mode-line-frame-identification
-    mode-line-buffer-identification
-    "   "
-    mode-line-position
-    (vc-mode vc-mode)
-    "  "
-    mode-line-modes
-    mode-line-misc-info
-    mode-line-end-spaces)
-  "The original default value of mode-line-format")
-(defvar my:inactive-mode-line-format
-  '("%e"
-    mode-line-front-space
-    mode-line-buffer-identification)
-  "Inactive window mode-line-format")
-(setq-default
- mode-line-format
- '(:eval
-   (format-mode-line
-    (if (mode-line-window-selected-p)
-        my:default-mode-line-format
-      my:inactive-mode-line-format))))
+(use-package doom-modeline
+  :ensure t
+  :hook (after-init . doom-modeline-mode)
+  :config
+  (setq doom-modeline-hud nil))
 
 (use-package frame
   ;; Already loaded before init

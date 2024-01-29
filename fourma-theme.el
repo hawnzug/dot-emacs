@@ -158,13 +158,13 @@
 
    `(header-line ((t (:box t))))
 
-   `(mode-line ((t (:box t :background ,background-light))))
+   `(mode-line ((t (:box (:color "black" :line-width 1) :background ,background-light))))
    `(mode-line-inactive ((t (:box "#AAAAAA" :foreground ,fg-grey))))
 
    ;; tab-bar
-   `(tab-bar ((t (:background ,background-light :box 1 :font "Rec Mono Casual 12"))))
-   `(tab-bar-tab ((t (:background ,bg-orange))))
-   `(tab-bar-tab-inactive ((t (:foreground ,fg-grey))))
+   `(tab-bar ((t (:background ,background-light :underline (:color "black" :position t)))))
+   `(tab-bar-tab ((t (:background ,background :slant italic))))
+   `(tab-bar-tab-inactive ((t (:foreground ,fg-grey :weight light))))
 
    ;; eglot
    '(eglot-highlight-symbol-face ((t (:inherit (region)))))

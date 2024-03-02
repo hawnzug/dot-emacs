@@ -579,12 +579,6 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :ensure t
   :commands (org-make-toc))
 
-(use-package org-superstar
-  :ensure t
-  :hook (org-mode . org-superstar-mode)
-  :config
-  (setq org-superstar-headline-bullets-list '("•")))
-
 (use-package denote
   :ensure t
   :commands denote-open-or-create

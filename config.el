@@ -424,7 +424,10 @@
   :ensure t
   :hook (org-mode . aas-activate-for-major-mode)
   :hook (agda2-mode . aas-activate-for-major-mode)
+  :hook (html-mode . aas-activate-for-major-mode)
   :config
+  (aas-set-snippets 'html-mode
+    ";tweet" '(tempel "<tweet date=\"" (format-time-string "%F") "\">" n> "<p>" q "</p>" n "</tweet>"))
   (aas-set-snippets 'org-mode
     "bsrc" (lambda () (interactive)
                (insert "#+BEGIN_SRC elisp\n#+END_SRC")

@@ -66,13 +66,13 @@
 
 (defun my:font-setup ()
   (let (
-        (primary-font "Rec Mono Casual 12")
-        (primary-font "DejaVu Sans Mono 12")
+        (primary-font "Rec Mono Casual 14")
+        (primary-font "DejaVu Sans Mono 14")
         (primary-font "Iosevka Curly Slab 14")
-        (primary-font "FreeMono 12")
+        (primary-font "FreeMono 14")
+        (primary-font "JetBrains Mono NL 14")
         (primary-font "Iosevka SS15 Extended 14")
-        (primary-font "JetBrains Mono NL 12")
-        (primary-font "IBM Plex Mono 12")
+        (primary-font "IBM Plex Mono 14")
         (chinese-font (font-spec :family "Source Han Serif CN"
                                  :weight 'bold)))
     (setq face-font-rescale-alist '(("Source Han Serif CN" . 0.825)))
@@ -188,6 +188,9 @@
   :config
   (setq-default olivetti-body-width 0.4)
   (setq olivetti-minimum-body-width 40))
+
+(use-package perfect-margin
+  :ensure t)
 
 (use-package which-key
   :ensure t
@@ -584,7 +587,8 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 (use-package denote
   :ensure t
-  :commands denote-open-or-create
+  :init
+  (require 'denote-autoloads)
   :config
   (setopt
    denote-directory (expand-file-name "~/org/notes/")
@@ -593,6 +597,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
    denote-date-prompt-use-org-read-date t
    denote-backlinks-show-context t
    denote-dired-directories (list denote-directory))
+  (denote-rename-buffer-mode)
   (with-eval-after-load 'dired
     (add-hook 'dired-mode-hook #'denote-dired-mode-in-directories)))
 

@@ -31,6 +31,7 @@
 (let* ((background "#F2EDD5")
        (background-light "#FCF7DF")
        (background-dark "#E8E3CB")
+       (background-dark-1 "#CFC9AB")
        (bg-grey "#D8E5E2")
        (bg-red "#FF8870")
        (bg-orange "#FFA247")
@@ -162,9 +163,9 @@
    `(mode-line-inactive ((t (:box "#AAAAAA" :foreground ,fg-grey))))
 
    ;; tab-bar
-   `(tab-bar ((t (:background ,background-light :underline (:color "black" :position t)))))
-   `(tab-bar-tab ((t (:background ,background :slant italic))))
-   `(tab-bar-tab-inactive ((t (:foreground ,fg-grey :weight light))))
+   `(tab-bar ((t (:background ,background-dark))))
+   `(tab-bar-tab ((t (:background ,background :slant italic :overline t))))
+   `(tab-bar-tab-inactive ((t (:background ,background-dark-1 :foreground ,fg-grey :weight light))))
 
    ;; eglot
    '(eglot-highlight-symbol-face ((t (:inherit (region)))))

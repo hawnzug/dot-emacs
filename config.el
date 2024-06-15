@@ -72,7 +72,7 @@
         (primary-font "FreeMono 14")
         (primary-font "JetBrains Mono NL 14")
         (primary-font "Iosevka SS15 Extended 14")
-        (primary-font "IBM Plex Mono 14")
+        (primary-font "IBM Plex Mono 22")
         (chinese-font (font-spec :family "Source Han Serif CN"
                                  :weight 'bold)))
     (setq face-font-rescale-alist '(("Source Han Serif CN" . 0.825)))
@@ -121,7 +121,7 @@
       (0 (put-text-property
           (match-beginning 0)
           (match-end 0)
-          'face (list :background (match-string-no-properties 0)))))))
+          'face (list :foreground (match-string-no-properties 0)))))))
   (font-lock-flush))
 
 (defun my:toggle-line-number ()
@@ -1258,7 +1258,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
             #'my:cdlatex-smarter-tab))
 
 (use-package xenops
-  :hook (LaTeX-mode . xenops-mode)
+  ;; :hook (LaTeX-mode . xenops-mode)
   :ensure t
   :config
   (add-to-list

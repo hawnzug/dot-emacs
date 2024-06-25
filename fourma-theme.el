@@ -163,11 +163,11 @@
 
    `(header-line ((t (:box t))))
 
-   `(mode-line ((t (:box (:color "black" :line-width 1) :background ,background-light))))
-   `(mode-line-inactive ((t (:box "#AAAAAA" :foreground ,fg-grey))))
+   `(mode-line ((t (:box (:color "black" :line-width 1) :background ,background-light :font "IBM Plex Mono 14"))))
+   `(mode-line-inactive ((t (:box "#AAAAAA" :foreground ,fg-grey :font "IBM Plex Mono 14"))))
 
    ;; tab-bar
-   `(tab-bar ((t (:background ,background-dark))))
+   `(tab-bar ((t (:background ,background-dark :font "IBM Plex Mono 14"))))
    `(tab-bar-tab ((t (:background ,background :slant italic :overline t))))
    `(tab-bar-tab-inactive ((t (:background ,background-dark-1 :foreground ,fg-grey :weight light))))
 

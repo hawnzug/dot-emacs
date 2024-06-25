@@ -151,24 +151,26 @@
   (require 'nerd-icons-autoloads))
 
 (use-package hide-mode-line
-  :disabled
   :ensure t
   :config
   (setq hide-mode-line-excluded-modes nil)
   (global-hide-mode-line-mode))
 
 (use-package doom-modeline
+  :disabled
   :ensure t
   :hook (after-init . doom-modeline-mode)
   :config
-  (setq doom-modeline-hud nil))
+  (setq doom-modeline-hud nil)
+  (setq doom-modeline-height 18))
 
 (use-package frame
   ;; Already loaded before init
   :config
   (setopt
    window-divider-default-right-width 1
-   window-divider-default-places 'right-only)
+   window-divider-default-bottom-width 1
+   window-divider-default-places t)
   (modify-all-frames-parameters
    '((internal-border-width . 10)))
   (blink-cursor-mode)

@@ -1309,7 +1309,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (org-remove-occur-highlights)
   (split-window-right)
   (magit-list-repositories))
-(run-with-idle-timer 120 t #'my:dashboard)
+;; (run-with-idle-timer 120 t #'my:dashboard)
 
 ;;;; Custom
 (setq custom-file "~/.config/emacs/emacs-custom.el")

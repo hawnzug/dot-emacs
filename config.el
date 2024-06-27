@@ -108,6 +108,7 @@
   (remove-hook 'after-make-frame-functions 'my:font-setup-hook))
 (setq use-default-font-for-symbols nil)
 (setq inhibit-compacting-font-caches t)
+(setq ring-bell-function 'ignore)
 (setopt delete-pair-blink-delay 0)
 (setopt line-spacing nil)
 (add-hook 'after-make-frame-functions 'my:font-setup-hook nil)

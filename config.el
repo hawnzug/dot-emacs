@@ -282,6 +282,8 @@
   :keymap ctl-x-map
   "f" #'find-file
   "b" #'consult-buffer
+  "c" #'org-capture
+  "v" #'vterm
   ;; swap C-x C-e and C-x e
   "e" #'eval-last-sexp
   "C-e" #'kmacro-end-and-call-macro)

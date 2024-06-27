@@ -189,7 +189,7 @@
   :ensure t
   :commands olivetti-mode
   :config
-  (setq-default olivetti-body-width 0.4)
+  (setq-default olivetti-body-width 0.7)
   (setq olivetti-minimum-body-width 40))
 
 (use-package perfect-margin

@@ -799,8 +799,7 @@ if one already exists."
 
 (use-package dired
   :commands dired
-  :hook ((dired-mode . dired-omit-mode)
-         (dired-mode . dired-hide-details-mode))
+  :hook (dired-mode . dired-hide-details-mode)
   :config
   (setq dired-dwim-target t)
   (setq dired-recursive-copies 'always)
@@ -808,6 +807,11 @@ if one already exists."
   (setq dired-listing-switches
         "-l --almost-all --human-readable --group-directories-first --no-group")
   (setq dired-isearch-filenames 'dwim))
+
+(use-package dired-x
+  :hook (dired-mode . dired-omit-mode)
+  :config
+  (add-to-list 'dired-omit-extensions ".agdai"))
 
 (use-package dirvish
   :ensure t

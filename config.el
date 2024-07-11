@@ -72,7 +72,9 @@
         (primary-font "FreeMono 14")
         (primary-font "JetBrains Mono NL 14")
         (primary-font "Iosevka SS15 Extended 14")
-        (primary-font "IBM Plex Mono 22")
+        (primary-font (font-spec :family "IBM Plex Mono"
+                                 :size 22.0
+                                 :weight 'normal))
         (chinese-font (font-spec :family "Source Han Serif CN"
                                  :weight 'bold)))
     (setq face-font-rescale-alist '(("Source Han Serif CN" . 0.825)))

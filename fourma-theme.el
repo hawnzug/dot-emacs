@@ -145,6 +145,7 @@
    `(agda2-highlight-primitive-face ((t (:inherit font-lock-builtin-face))))
    `(agda2-highlight-primitive-type-face ((t (:inherit font-lock-builtin-face))))
    `(agda2-highlight-bound-variable-face ((t nil)))
+   `(agda2-highlight-field-face ((t nil)))
    `(agda2-highlight-postulate-face ((t nil)))
 
    ;; LaTeX

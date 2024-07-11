@@ -778,16 +778,24 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 (use-package project
   :defer t
   :config
-  (defun my:find-project-root (dir)
-    "Try to locate a project root."
-    (when (locate-dominating-file
-           dir
-           (lambda (d)
-             (seq-some (lambda (name) (file-exists-p (expand-file-name name d)))
-                       '(".python-version"))))
-      (cons 'transient dir)))
-  ;; (add-hook 'project-find-functions 'my:find-project-root nil nil)
-  )
+  ;; Copy project-shell
+  (defun project-vterm ()
+    "Start a vterm in the current project's root directory.
+If a buffer already exists for running a vterm in the project's root,
+switch to it.  Otherwise, create a new vterm buffer.
+With \\[universal-argument] prefix arg, create a new vterm buffer even
+if one already exists."
+    (interactive)
+    (require 'vterm)
+    (let* ((default-directory (project-root (project-current t)))
+           (default-project-vterm-name (project-prefixed-buffer-name "vterm"))
+           (vterm-buffer (get-buffer default-project-vterm-name)))
+      (if (and vterm-buffer (not current-prefix-arg))
+          (pop-to-buffer vterm-buffer)
+        (vterm default-project-vterm-name))))
+  (define-keymap
+    :keymap project-prefix-map
+    "v" #'project-vterm))
 
 (use-package dired
   :commands dired

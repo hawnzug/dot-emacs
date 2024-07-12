@@ -1,4 +1,5 @@
 ;;;; Package Management
+(setopt use-package-enable-imenu-support t)
 (require 'use-package)
 
 (dolist (path (directory-files package-user-dir))

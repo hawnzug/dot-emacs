@@ -30,6 +30,9 @@
 (setq initial-major-mode 'fundamental-mode)
 
 ;;;; Sane Setup
+(use-package no-littering
+  :ensure)
+
 (use-package files
   ;; Already loaded before init
   :config

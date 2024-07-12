@@ -231,34 +231,12 @@
 
 ;;;; Modal Editing
 (use-package tooe-colemak
-  :disabled
   :load-path "~/Dev/tooe"
   :config
   (tooe-mode))
 
-(defun my:find-char-backward (count char)
-  "Move the cursor past the previous occurrence of CHAR."
-  (interactive "p\ncFind backward")
-  (search-backward (make-string 1 char) nil t count))
-
-(defun my:find-char-forward (count char)
-  "Move the cursor past the next occurrence of CHAR."
-  (interactive "p\ncFind forward")
-  (search-forward (make-string 1 char) nil t count))
-
-(defun my:till-char-backward (count char)
-  "Move the cursor till the previous occurrence of CHAR."
-  (interactive "p\ncTill backward")
-  (search-backward (make-string 1 char) nil t count)
-  (forward-char))
-
-(defun my:till-char-forward (count char)
-  "Move the cursor till the next occurrence of CHAR."
-  (interactive "p\ncTill forward")
-  (search-forward (make-string 1 char) nil t count)
-  (backward-char))
-
 (use-package boon-colemak
+  :disabled
   :ensure boon
   :config
   (boon-mode)
@@ -280,21 +258,9 @@
     "d" #'boon-treasure-region
     "D" #'boon-replace-by-character))
 
-(defvar-keymap my:global-leader-map
-  "RET" #'execute-extended-command
-  "a" #'org-agenda
-  "n" #'org-capture
-  "h" help-map
-  "d" #'denote-open-or-create
-  "c" #'citar-open)
-
 (use-package repeat
   :hook
   (after-init . repeat-mode))
-;; (define-keymap
-;;   :keymap tooe-normal-map
-;;   "SPC" my:global-leader-map
-;;   "z" #'repeat)
 
 (define-keymap
   :keymap ctl-x-map
@@ -349,14 +315,13 @@
 (use-package corfu
   :ensure t
   :config
-  (with-eval-after-load 'boon-colemak
+  (with-eval-after-load 'tooe-colemak
     (defun my:corfu-quit-and-escape ()
       (interactive)
       (call-interactively 'corfu-quit)
-      (boon-set-command-state))
-    (keymap-set boon-insert-map "<escape>" #'my:corfu-quit-and-escape))
+      (tooe-set-normal-state))
+    (keymap-set tooe-insert-map "<escape>" #'my:corfu-quit-and-escape))
   (setq corfu-auto t)
-  :config
   (global-corfu-mode))
 
 (use-package emacs
@@ -387,7 +352,8 @@
 (use-package consult-xref
   :after (xref consult)
   :config
-  (setq xref-show-xrefs-function #'consult-xref))
+  (setq xref-show-xrefs-function #'consult-xref
+        xref-show-definitions-function #'consult-xref))
 (use-package consult-org
   :after org
   :commands consult-org-heading)
@@ -405,8 +371,8 @@
   :commands
   (consult-info))
 
-(defvar-keymap my:consult-mode-map
-  "s" #'consult-line
+(defvar-keymap my:consult-map
+  "g" #'consult-line
   "i" #'consult-imenu
   "o" #'consult-org-heading
   "r" #'consult-ripgrep
@@ -414,11 +380,9 @@
   "m" #'consult-mark
   "d" #'consult-fd
   "h" #'consult-recent-file
-  "n" #'consult-info)
-
-(define-keymap
-  :keymap my:global-leader-map
-  "s" my:consult-mode-map)
+  "n" #'consult-info
+  "f" #'consult-flymake)
+(keymap-set tooe-normal-map "g" my:consult-map)
 
 (use-package embark
   :ensure t
@@ -1024,9 +988,6 @@ if one already exists."
   (defvar-keymap my:outline-prefix-map
     :parent outline-navigation-repeat-map
     "m" outline-editing-repeat-map)
-  (define-keymap
-    :keymap my:global-leader-map
-    "z" my:outline-prefix-map)
   (setq outline-minor-mode-cycle t))
 
 (use-package hideshow

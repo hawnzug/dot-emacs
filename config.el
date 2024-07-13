@@ -63,6 +63,8 @@
   :config
   (setopt native-comp-async-report-warnings-errors 'silent))
 
+(load "~/.config/emacs/var/personal")
+
 ;;;; User Interface
 (setq custom-safe-themes t)
 
@@ -551,6 +553,10 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :config
   (use-package org-habit))
 
+(defun my:select-workout ()
+  (interactive)
+  (completing-read "Workout" my:workout-list nil t))
+
 (use-package org-capture
   :commands org-capture
   :config
@@ -559,6 +565,8 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
    '(("i" "Inbox" entry (file+headline "~/org/inbox.org" "Inbox")
       "* %?\n:PROPERTIES:\n:CREATED:  %U\n:END:"
       :prepend t)
+     ("w" "Workout" table-line (file "~/workout.org")
+      "| %(my:select-workout) | %? |  | %U |  |")
      ("b" "Bookmark" entry (file+headline "~/org/inbox.org" "Inbox")
       "* %a\n:PROPERTIES:\n:CREATED:  %U\n:END:\n%i"
       :prepend t))))

@@ -236,16 +236,6 @@
       (global-set-key (kbd (concat margin "<" multiple "wheel-up>")) 'mwheel-scroll)
       (global-set-key (kbd (concat margin "<" multiple "wheel-down>")) 'mwheel-scroll))))
 
-(use-package which-key
-  :ensure t
-  :defer 1
-  :init
-  (setq which-key-add-column-padding 2)
-  (setq which-key-idle-delay 0)
-  (setq which-key-dont-use-unicode t)
-  :config
-  (which-key-mode 1))
-
 (use-package keyfreq
   :ensure t
   :hook
@@ -409,9 +399,12 @@
 
 (use-package embark
   :ensure t
-  :commands embark-act
+  :commands (embark-act embark-dwim embark-bindings embark-prefix-help-command)
   :init
-  (keymap-global-set "M-o" #'embark-act))
+  (setq prefix-help-command #'embark-prefix-help-command)
+  (keymap-global-set "C-." #'embark-act)
+  (keymap-global-set "M-." #'embark-dwim)
+  (keymap-global-set "C-h B" #'embark-bindings))
 
 (use-package embark-consult
   :ensure t

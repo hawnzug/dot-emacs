@@ -130,7 +130,7 @@
       (0 (put-text-property
           (match-beginning 0)
           (match-end 0)
-          'face (list :foreground (match-string-no-properties 0)))))))
+          'face (list :background (match-string-no-properties 0)))))))
   (font-lock-flush))
 
 (defun my:toggle-line-number ()
@@ -143,12 +143,11 @@
 
 (defun my:toggle-transparency ()
   (interactive)
-  (let ((transparency 90)
-        (opacity 100)
-        (old-alpha (frame-parameter nil 'alpha)))
-    (if (and (numberp old-alpha) (< old-alpha opacity))
-        (set-frame-parameter nil 'alpha opacity)
-      (set-frame-parameter nil 'alpha transparency))))
+  (let ((old-alpha (frame-parameter nil 'alpha-background)))
+    (if (and (numberp old-alpha) (< old-alpha 100))
+        (set-frame-parameter nil 'alpha-background 100)
+      (set-frame-parameter nil 'alpha-background 90))))
+(my:toggle-transparency)
 
 (defun my:show-trailing-space ()
   (setq show-trailing-whitespace t))
@@ -181,7 +180,7 @@
    window-divider-default-bottom-width 1
    window-divider-default-places t)
   (modify-all-frames-parameters
-   '((internal-border-width . 10)))
+   '((internal-border-width . 0)))
   (blink-cursor-mode)
   (window-divider-mode))
 
@@ -193,6 +192,24 @@
    pixel-scroll-precision-interpolate-page t)
   (pixel-scroll-precision-mode 1))
 
+(use-package indent-bars
+  :init
+  (defun my:agda2-indent-bars-spacing-override ()
+    (setq indent-bars-spacing-override 2))
+  :hook
+  (prog-mode . indent-bars-mode)
+  (agda2-mode . my:agda2-indent-bars-spacing-override)
+  :config
+  (setq
+   indent-bars-pattern "."
+   indent-bars-width-frac 0.1
+   indent-bars-pad-frac 0
+   indent-bars-zigzag nil
+   indent-bars-color-by-depth nil
+   indent-bars-highlight-current-depth nil
+   indent-bars-starting-column nil
+   indent-bars-display-on-blank-lines nil))
+
 (use-package olivetti
   :ensure t
   :commands olivetti-mode
@@ -203,7 +220,7 @@
 (use-package perfect-margin
   :ensure t
   :custom
-  (perfect-margin-visible-width 100)
+  (perfect-margin-visible-width 80)
   :config
   ;; enable perfect-mode
   (perfect-margin-mode t)
@@ -218,6 +235,7 @@
   (dolist (multiple '("" "double-" "triple-"))
       (global-set-key (kbd (concat margin "<" multiple "wheel-up>")) 'mwheel-scroll)
       (global-set-key (kbd (concat margin "<" multiple "wheel-down>")) 'mwheel-scroll))))
+
 (use-package which-key
   :ensure t
   :defer 1
@@ -432,7 +450,8 @@
 
   (defun my:agda-auto-script-condition ()
     "Condition used for auto-sub/superscript snippets."
-    (not (or (bobp) (= (1- (point)) (point-min)) (eq ?\s (char-before)))))
+    (not (or (bobp) (= (1- (point)) (point-min)) (eq ?\s (char-before))))
+    nil)
   (aas-set-snippets 'agda2-mode
     ";+" "⁺"
     "::" "∷"

@@ -28,10 +28,10 @@
 ;; #1d5b7c 0.08 0.06 240
 ;; #743368 0.08 0.06 330
 
-(let* ((background "#F2EDD5")
-       (background-light "#FCF7DF")
-       (background-dark "#E8E3CB")
-       (background-dark-1 "#CFC9AB")
+(let* ((background "#FFFFFF")
+       (background-light "#FDFFFA")
+       (background-dark "#F4FAFF")
+       (background-dark-1 "#E0F0FF")
        (bg-grey "#D8E5E2")
        (bg-red "#FF8870")
        (bg-orange "#FFA247")
@@ -58,7 +58,6 @@
    `(default ((t (:background ,background))))
    `(fringe ((t (:inherit default))))
    `(cursor ((t (:background ,fg-green))))
-   `(hl-line ((t (:background "white"))))
    `(highlight ((t (:background ,bg-yellow))))
    `(show-paren-match ((t (:inherit highlight))))
    `(warning ((t (:background ,bg-error))))
@@ -67,6 +66,9 @@
    `(secondary-selection ((t (:background ,bg-selection))))
    '(minibuffer-prompt ((t (:weight bold))))
    `(link ((t (:underline t :foreground ,fg-blue))))
+   `(hl-line ((t (:background ,background-dark))))
+   `(line-number ((t (:foreground "#999999" :background ,background-dark :weight light))))
+   `(line-number-current-line ((t (:foreground "#444" :background "#FFFFFF" :weight light))))
 
    `(font-lock-comment-face ((t (:background ,background-dark :weight light))))
    `(font-lock-comment-delimiter-face ((t (:inherit (font-lock-comment-face)))))
@@ -144,7 +146,7 @@
    `(agda2-highlight-symbol-face ((t (:inherit font-lock-builtin-face))))
    `(agda2-highlight-primitive-face ((t (:inherit font-lock-builtin-face))))
    `(agda2-highlight-primitive-type-face ((t (:inherit font-lock-builtin-face))))
-   `(agda2-highlight-bound-variable-face ((t nil)))
+   `(agda2-highlight-bound-variable-face ((t (:slant italic))))
    `(agda2-highlight-field-face ((t nil)))
    `(agda2-highlight-postulate-face ((t nil)))
 

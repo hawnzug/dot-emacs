@@ -211,6 +211,7 @@
    indent-bars-display-on-blank-lines nil))
 
 (use-package olivetti
+  :disabled
   :ensure t
   :commands olivetti-mode
   :config
@@ -225,7 +226,7 @@
   ;; enable perfect-mode
   (perfect-margin-mode t)
   ;; auto-center minibuffer windows
-  (setq perfect-margin-ignore-filters nil)
+  ;; (setq perfect-margin-ignore-filters nil)
   ;; auto-center special windows
   (setq perfect-margin-ignore-regexps nil)
   ;; add additinal bding on margin area

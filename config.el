@@ -1317,6 +1317,18 @@ if one already exists."
          ("\\.mkd\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)))
 ;;;; Dashboard
+(use-package pomidor
+  :ensure t
+  :commands pomidor
+  :init
+  (keymap-global-set "<f12>" #'pomidor)
+  :config
+  (setq alert-default-style 'notifications)
+  (setopt pomidor-sound-tick nil)
+  (setopt pomidor-sound-tack nil)
+  (setopt pomidor-save-session-file
+          (no-littering-expand-var-file-name "pomidor-session.json")))
+
 (defun my:dashboard ()
   (interactive)
   (tab-bar-switch-to-tab "org")

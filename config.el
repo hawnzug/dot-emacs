@@ -804,6 +804,7 @@ if one already exists."
   (add-to-list 'dired-omit-extensions ".agdai"))
 
 (use-package dirvish
+  :disabled
   :ensure t
   :defer t
   :init
@@ -1035,6 +1036,7 @@ if one already exists."
 ;;;; Programming Languages
 (use-package sly
   :ensure t
+  :defer t
   :init
   (load "sly-autoloads")
   :config
@@ -1279,6 +1281,7 @@ if one already exists."
             #'my:cdlatex-smarter-tab))
 
 (use-package xenops
+  :disabled
   ;; :hook (LaTeX-mode . xenops-mode)
   :ensure t
   :config

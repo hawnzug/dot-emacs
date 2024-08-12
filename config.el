@@ -651,8 +651,9 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 ;;;; Version Control, Backup, Autosave
 (use-package magit
   :ensure t
-  :commands magit-status
   :defer 5
+  :init
+  (require 'magit-autoloads)
   :config
   (setq magit-repository-directories
         '(("~/.config/emacs" . 0)

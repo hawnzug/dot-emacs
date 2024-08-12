@@ -1034,6 +1034,11 @@ if one already exists."
                      (LaTeX-find-matching-end))))))
 
 ;;;; Programming Languages
+(use-package text-mode
+  :defer t
+  :config
+  (setopt text-mode-ispell-word-completion nil))
+
 (use-package sly
   :ensure t
   :defer t

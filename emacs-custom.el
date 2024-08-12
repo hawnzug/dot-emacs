@@ -4,14 +4,31 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(pomidor consult-eglot vertico indent-bars no-littering idlwave erc xref perfect-margin auctex-latexmk citar-denote corfu denote bind-key eldoc faceup flymake jsonrpc project soap-client tramp use-package-ensure-system-package verilog-mode eat tempel sly nerd-icons slime citar-embark citar tramp-container org rime modern-cpp-font-lock ledger-mode cape vterm-toggle eldoc-box json-mode typescript-mode org-superstar cdlatex demo-it elcord laas aas hide-mode-line async bibtex-completion marginalia embark-consult embark consult orderless flymake-shellcheck emmet-mode markdown-mode vterm lua-mode hl-todo magit-delta eglot haskell-mode wgrep find-file-in-project terminal-here docker-tramp dockerfile-mode csv-mode yaml-mode sml-mode org-plus-contrib imenu-list tuareg keyfreq org-make-toc exec-path-from-shell avy fcitx ibuffer-vc symbol-overlay htmlize alert proof-general general auctex hydra magit company-coq company use-package))
+   '(aas alert async auctex auctex-latexmk avy bibtex-completion bind-key
+         cape cdlatex citar citar-denote citar-embark company
+         company-coq consult consult-eglot corfu csv-mode demo-it
+         denote docker-tramp dockerfile-mode eat eglot elcord eldoc
+         eldoc-box embark embark-consult emmet-mode erc
+         exec-path-from-shell faceup fcitx find-file-in-project
+         flymake flymake-shellcheck general haskell-mode
+         hide-mode-line hl-todo htmlize hydra ibuffer-vc idlwave
+         imenu-list indent-bars json-mode jsonrpc keyfreq laas
+         ledger-mode lua-mode magit magit-delta marginalia
+         markdown-mode modern-cpp-font-lock nerd-icons no-littering
+         orderless org org-make-toc org-plus-contrib org-superstar
+         perfect-margin pomidor project proof-general rime slime sly
+         sml-mode soap-client symbol-overlay tempel terminal-here
+         tramp tramp-container tuareg typescript-mode use-package
+         use-package-ensure-system-package verilog-mode vertico vterm
+         vterm-toggle wgrep xref yaml-mode zig-mode))
  '(package-vc-selected-packages
-   '((indent-bars :vc-backend Git :url "https://github.com/jdtsmith/indent-bars")))
+   '((indent-bars :vc-backend Git :url
+                  "https://github.com/jdtsmith/indent-bars")))
  '(safe-local-variable-values
    '((etags-regen-ignores "test/manual/etags/")
      (etags-regen-regexp-alist
-      (("c" "objc")
-       "/[ \11]*DEFVAR_[A-Z_ \11(]+\"\\([^\"]+\\)\"/\\1/" "/[ \11]*DEFVAR_[A-Z_ \11(]+\"[^\"]+\",[ \11]\\([A-Za-z0-9_]+\\)/\\1/"))
+      (("c" "objc") "/[ \11]*DEFVAR_[A-Z_ \11(]+\"\\([^\"]+\\)\"/\\1/"
+       "/[ \11]*DEFVAR_[A-Z_ \11(]+\"[^\"]+\",[ \11]\\([A-Za-z0-9_]+\\)/\\1/"))
      (auto-save-visited-interval . 0)
      (dired-omit-extensions ".vo" ".vok" ".vos" ".aux" ".glob")
      (org-babel-use-quick-and-dirty-noweb-expansion . t))))

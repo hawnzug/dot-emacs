@@ -1075,6 +1075,10 @@ if one already exists."
   :mode ("\\.cooltt\\'" . cooltt-mode)
   :load-path "~/Projects/cooltt/emacs")
 
+(use-package zig-mode
+  :ensure t
+  :mode ("\\.zig\\'" . zig-mode))
+
 (use-package cc-mode
   :mode
   (("\\.c\\'" . c-mode)

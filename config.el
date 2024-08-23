@@ -1253,6 +1253,7 @@ if one already exists."
   (setq TeX-view-program-selection '((output-pdf "Zathura"))))
 
 (use-package auctex-latexmk
+  :disabled
   :ensure t
   :after tex-site
   :config

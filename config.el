@@ -469,7 +469,9 @@
   :ensure t
   :hook ((LaTeX-mode org-mode). laas-mode)
   :config
-  (setq laas-enable-auto-space nil))
+  (setq laas-enable-auto-space nil)
+  (aas-set-snippets 'laas-mode
+    "\\af" '(tempel "\\AgdaFunction{" q "}")))
 
 (use-package wgrep
   :ensure t
@@ -1178,7 +1180,7 @@ if one already exists."
     (file-name-directory (shell-command-to-string "agda-mode locate"))))
 (use-package agda2-mode
   :load-path (lambda () (agda-mode-load-path))
-  :mode ("\\.agda\\'" . agda2-mode)
+  :mode ("\\.l?agda\\'" . agda2-mode)
   :config
   (setq outline-regexp "-- #+")
   (define-keymap

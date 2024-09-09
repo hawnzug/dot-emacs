@@ -48,6 +48,12 @@
    delete-by-moving-to-trash t
    text-quoting-style 'straight
    frame-resize-pixelwise t)
+  ;; long lines
+  (setq-default bidi-display-reordering nil)
+  (setq bidi-inhibit-bpa t
+        long-line-threshold 1000
+        large-hscroll-threshold 1000
+        syntax-wholeline-max 1000)
   (setq
    default-process-coding-system '(utf-8-unix . utf-8-unix)
    kill-buffer-query-functions nil
@@ -207,7 +213,7 @@
    indent-bars-zigzag nil
    indent-bars-color-by-depth nil
    indent-bars-highlight-current-depth nil
-   indent-bars-starting-column nil
+   indent-bars-starting-column 0
    indent-bars-display-on-blank-lines nil))
 
 (use-package olivetti
@@ -248,7 +254,10 @@
 (use-package tooe-colemak
   :load-path "~/Dev/tooe"
   :config
-  (tooe-mode))
+  (tooe-mode)
+  (define-keymap
+    :keymap tooe-normal-map
+    "," #'avy-goto-char-timer))
 
 (use-package boon-colemak
   :disabled
@@ -471,7 +480,10 @@
   :config
   (setq laas-enable-auto-space nil)
   (aas-set-snippets 'laas-mode
-    "\\af" '(tempel "\\AgdaFunction{" q "}")))
+    "\\af" '(tempel "\\AgdaFunction{" q "}")
+    "\\ad" '(tempel "\\AgdaDatatype{" q "}")
+    "\\ac" '(tempel "\\AgdaInductiveConstructor{" q "}")
+    ))
 
 (use-package wgrep
   :ensure t
@@ -889,10 +901,45 @@ if one already exists."
                     tab-bar-format-align-right)
    tab-bar-tab-name-format-function 'my:tab-name-format))
 
+(use-package tabspaces
+  :ensure t
+  :hook (after-init . tabspaces-mode)
+  :commands (tabspaces-switch-or-create-workspace
+             tabspaces-open-or-create-project-and-workspace)
+  :init
+  (setopt tabspaces-keymap-prefix nil)
+  :config
+  (define-keymap
+    :keymap ctl-x-map
+    "w" tabspaces-command-map)
+  (setopt
+   tabspaces-use-filtered-buffers-as-default t
+   tabspaces-default-tab "org"
+   tabspaces-remove-to-default t
+   tabspaces-include-buffers '("*scratch*")
+   tabspaces-initialize-project-with-todo nil
+   tabspaces-session t
+   tabspaces-session-auto-restore t)
+  (with-eval-after-load 'consult
+    (consult-customize consult--source-buffer :hidden t :default nil)
+    (defvar consult--source-workspace
+      (list :name     "Workspace Buffers"
+            :narrow   ?w
+            :history  'buffer-name-history
+            :category 'buffer
+            :state    #'consult--buffer-state
+            :default  t
+            :items    (lambda () (consult--buffer-query
+                                  :predicate #'tabspaces--local-buffer-p
+                                  :sort 'visibility
+                                  :as #'buffer-name)))
+      "Set workspace buffer list for consult-buffer.")
+    (add-to-list 'consult-buffer-sources 'consult--source-workspace)))
+
 (use-package window
   ;; Already loaded before init
   :config
-  (setopt split-width-threshold 100))
+  (setopt split-width-threshold 60))
 
 (use-package help
   ;; Already loaded before init

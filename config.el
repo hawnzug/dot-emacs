@@ -459,7 +459,14 @@
   (aas-set-snippets 'agda2-mode
     ";+" "⁺"
     "::" "∷"
-    "==" "≡")
+    "==" "≡"
+    "leqrsn"
+    '(tempel "let open ≡-Reasoning in begin" n>
+             (p (my:agda2-match-eq-reasoning) lr noinsert)
+             (car lr) n> "≡⟨ ?" q " ⟩" n> (cdr lr) "∎")
+    "eqrsn"
+    '(tempel (p (my:agda2-match-eq-reasoning) lr noinsert)
+             "begin " n> (car lr) n> "≡⟨ ?" q " ⟩" n> (cdr lr) "∎"))
   (aas-set-snippets 'agda2-mode
     :cond #'my:agda-auto-script-condition
     "'" "′"
@@ -1229,6 +1236,17 @@ if one already exists."
   :load-path (lambda () (agda-mode-load-path))
   :mode ("\\.l?agda\\'" . agda2-mode)
   :config
+  (defun my:agda2-match-eq-reasoning ()
+    (with-current-buffer agda2-info-buffer
+      (let ((goal-regexp (rx "Goal: " (group (*? anything))
+                             "≡" (group (*? anything)) "———"))
+            (space-regexp (rx (+ (or space "\n")))))
+        (goto-char (point-min))
+        (when (re-search-forward goal-regexp)
+          (let ((lhs (substring-no-properties (match-string 1)))
+                (rhs (substring-no-properties (match-string 2))))
+            (cons (replace-regexp-in-string space-regexp " " lhs)
+                  (replace-regexp-in-string space-regexp " " rhs)))))))
   (setq outline-regexp "-- #+")
   (define-keymap
     :keymap agda2-mode-map

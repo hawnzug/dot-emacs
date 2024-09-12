@@ -211,8 +211,8 @@
    indent-bars-width-frac 0.1
    indent-bars-pad-frac 0
    indent-bars-zigzag nil
-   indent-bars-color-by-depth nil
-   indent-bars-highlight-current-depth nil
+   indent-bars-color-by-depth '(:palette ("red" "green" "orange" "cyan") :blend 0.1)
+   indent-bars-highlight-current-depth '(:blend 1)
    indent-bars-starting-column 0
    indent-bars-display-on-blank-lines nil))
 

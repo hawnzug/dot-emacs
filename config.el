@@ -1414,6 +1414,7 @@ if one already exists."
 (use-package elfeed-score
   :ensure t
   :after elfeed
+  :config
   (elfeed-score-enable)
   (define-key elfeed-search-mode-map "=" elfeed-score-map)
   (setq elfeed-search-print-entry-function #'elfeed-score-print-entry))

@@ -570,6 +570,10 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (setq org-log-into-drawer t)
   (setq org-extend-today-until 2)
   (use-package org-mouse)
+  (use-package ol-info)
+  (use-package ol-doi)
+  (use-package ol-bibtex)
+  (use-package ol-gnus)
   (add-to-list 'org-file-apps '(t . "xdg-open %s") t)
   (setq org-reverse-note-order nil)
   (setq org-adapt-indentation nil)
@@ -716,8 +720,8 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :after bibtex
   :config
   (defun my:bibtex-insert-download-by-doi (doi)
-    (require 'biblio)
     (interactive "sDOI: " bibtex-mode)
+    (require 'biblio)
     (let ((biblio-synchronous t)
           (biblio-bibtex-use-autokey t)
           title)

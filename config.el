@@ -87,6 +87,7 @@
         (primary-font (font-spec :family "Iosevka"
                                  :size 22.0
                                  :weight 'normal))
+        (chinese-font (font-spec :family "FZGuoMeiJinDaoTi"))
         (chinese-font (font-spec :family "Source Han Serif CN"
                                  :weight 'bold)))
     (setq face-font-rescale-alist '(("Source Han Serif CN" . 0.825)))
@@ -114,7 +115,8 @@
     (set-face-font 'default primary-font)
     (set-face-font 'fixed-pitch primary-font)
     (set-face-font 'fixed-pitch-serif primary-font)
-    (set-face-font 'variable-pitch "Alegreya 12")))
+    (set-face-font 'variable-pitch "Alegreya 22")))
+
 (defun my:font-setup-hook (frame)
   "Setup the font, then remove the hook."
   (select-frame frame)

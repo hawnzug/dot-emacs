@@ -1399,6 +1399,19 @@ if one already exists."
          ("\\.mkd\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)))
 ;;;; Dashboard
+(use-package elfeed
+  :ensure t
+  :commands (elfeed elfeed-update)
+  :config
+  (setq elfeed-feeds my:elfeed-list))
+
+(use-package elfeed-score
+  :ensure t
+  :after elfeed
+  (elfeed-score-enable)
+  (define-key elfeed-search-mode-map "=" elfeed-score-map)
+  (setq elfeed-search-print-entry-function #'elfeed-score-print-entry))
+
 (use-package pomidor
   :ensure t
   :commands pomidor

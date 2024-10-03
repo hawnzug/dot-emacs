@@ -8,13 +8,13 @@
               cdlatex citar citar-denote citar-embark company
               company-coq consult consult-eglot corfu csv-mode demo-it
               denote docker-tramp dockerfile-mode eat editorconfig
-              eglot elcord eldoc eldoc-box embark embark-consult
-              emmet-mode erc exec-path-from-shell faceup fcitx
-              find-file-in-project flymake flymake-shellcheck general
-              haskell-mode hide-mode-line hl-todo htmlize hydra
-              ibuffer-vc idlwave imenu-list indent-bars json-mode
-              jsonrpc keyfreq laas ledger-mode lua-mode magit
-              magit-delta marginalia markdown-mode
+              eglot elcord eldoc eldoc-box elfeed elfeed-score embark
+              embark-consult emmet-mode erc exec-path-from-shell
+              faceup fcitx find-file-in-project flymake
+              flymake-shellcheck general haskell-mode hide-mode-line
+              hl-todo htmlize hydra ibuffer-vc idlwave imenu-list
+              indent-bars json-mode jsonrpc keyfreq laas ledger-mode
+              lua-mode magit magit-delta marginalia markdown-mode
               modern-cpp-font-lock nerd-icons no-littering orderless
               org org-make-toc org-plus-contrib org-superstar
               perfect-margin pomidor project proof-general rime slime

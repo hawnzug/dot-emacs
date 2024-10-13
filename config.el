@@ -294,6 +294,8 @@
   "b" #'consult-buffer
   "c" #'org-capture
   "v" #'vterm
+  "d" #'denote-open-or-create
+  "l" #'citar-open
   ;; swap C-x C-e and C-x e
   "e" #'eval-last-sexp
   "C-e" #'kmacro-end-and-call-macro)
@@ -1323,7 +1325,7 @@ if one already exists."
   (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)
   (setq font-latex-fontify-sectioning 'color)
   (setq font-latex-fontify-script nil)
-  (setq TeX-view-program-selection '((output-pdf "Zathura"))))
+  (setq TeX-view-program-selection '((output-pdf "Sioyek"))))
 
 (use-package auctex-latexmk
   :disabled

@@ -30,8 +30,11 @@
 
 (let* ((background "#FFFFFF")
        (background-light "#FDFFFA")
-       (background-dark "#F4FAFF")
-       (background-dark-1 "#E0F0FF")
+       ;; (background-dark "#F4FAFF")
+       ;; (background-dark-1 "#E0F0FF")
+       (background-dark "#F8F8F8")
+       (background-dark-1 "#E0E0E0")
+       (bg-selection "#E0E0E0")
        (bg-grey "#D8E5E2")
        (bg-red "#FF8870")
        (bg-orange "#FFA247")
@@ -51,14 +54,16 @@
        (fg-blue "#00327A")
        (fg-purple "#AB208C")
 
-       (bg-selection bg-orange)
        (bg-error "#FF451E"))
   (custom-theme-set-faces
    'fourma
    `(default ((t (:background ,background))))
    `(fringe ((t (:inherit default))))
-   `(cursor ((t (:background ,fg-green))))
-   `(highlight ((t (:background ,bg-yellow))))
+   `(window-divider ((t (:foreground "#000000"))))
+   `(window-divider-first-pixel ((t (:foreground "#000000"))))
+   `(window-divider-last-pixel ((t (:foreground "#000000"))))
+   `(cursor ((t (:background "#000000"))))
+   `(highlight ((t (:background ,bg-selection))))
    `(show-paren-match ((t (:inherit highlight))))
    `(warning ((t (:background ,bg-error))))
    `(trailing-whitespace ((t (:inherit warning))))
@@ -70,10 +75,10 @@
    `(line-number ((t (:foreground "#999999" :background ,background-dark :weight light))))
    `(line-number-current-line ((t (:foreground "#444" :background "#FFFFFF" :weight light))))
 
-   `(font-lock-comment-face ((t (:background ,background-dark :weight light))))
+   `(font-lock-comment-face ((t (:background ,background-dark :weight light :font "Iosevka Curly Slab"))))
    `(font-lock-comment-delimiter-face ((t (:inherit (font-lock-comment-face)))))
    '(font-lock-doc-face ((t (:inherit (font-lock-comment-face)))))
-   `(font-lock-builtin-face ((t (:weight light :foreground "#093e59"))))
+   `(font-lock-builtin-face ((t (:weight light :font "Iosevka Curly Slab"))))
    `(font-lock-constant-face ((t (:foreground ,fg-red))))
    `(font-lock-keyword-face ((t (:inherit font-lock-builtin-face))))
    `(font-lock-function-name-face ((t nil)))
@@ -81,7 +86,7 @@
    '(font-lock-preprocessor-face ((t (:inherit (font-lock-builtin-face)))))
    '(font-lock-regexp-grouping-backslash ((t nil)))
    '(font-lock-regexp-grouping-construct ((t nil)))
-   `(font-lock-string-face ((t (:foreground ,fg-purple))))
+   `(font-lock-string-face ((t (:foreground "#333" :background "#F9F9F9"))))
    '(font-lock-type-face ((t nil)))
    '(font-lock-variable-name-face ((t nil)))
    '(font-lock-warning-face ((t (:inherit (warning)))))
@@ -170,9 +175,9 @@
    `(mode-line-inactive ((t (:box "#AAAAAA" :foreground ,fg-grey :font "IBM Plex Mono 14"))))
 
    ;; tab-bar
-   `(tab-bar ((t (:background ,background-dark :font "IBM Plex Mono 14"))))
-   `(tab-bar-tab ((t (:background ,background :slant italic :overline t))))
-   `(tab-bar-tab-inactive ((t (:background ,background-dark-1 :foreground ,fg-grey :weight light))))
+   `(tab-bar ((t (:background ,background :font "Iosevka 16" :underline (:color "#000000" :position 0)))))
+   `(tab-bar-tab ((t (:background "#F0F0F0" :weight semi-bold))))
+   `(tab-bar-tab-inactive ((t (:background ,background :foreground ,fg-grey :weight light))))
 
    ;; eglot
    '(eglot-highlight-symbol-face ((t (:inherit (region)))))

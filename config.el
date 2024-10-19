@@ -912,7 +912,7 @@ if one already exists."
    tab-bar-close-button-show nil
    tab-bar-new-tab-choice "*scratch*"
    tab-bar-tab-hints t
-   tab-bar-format '(tab-bar-format-tabs
+   tab-bar-format '(tab-bar-format-tabs-groups
                     tab-bar-format-align-right)
    tab-bar-tab-name-format-function 'my:tab-name-format))
 
@@ -1407,6 +1407,10 @@ if one already exists."
          ("\\.mkd\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode)))
 ;;;; Dashboard
+(use-package server
+  :config
+  (server-mode))
+
 (use-package elfeed
   :ensure t
   :commands (elfeed elfeed-update)

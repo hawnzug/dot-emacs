@@ -75,10 +75,10 @@
    `(line-number ((t (:foreground "#999999" :background ,background-dark :weight light))))
    `(line-number-current-line ((t (:foreground "#444" :background "#FFFFFF" :weight light))))
 
-   `(font-lock-comment-face ((t (:background ,background-dark :weight light :font "Iosevka Curly Slab"))))
+   `(font-lock-comment-face ((t (:background ,background-dark :weight light :font "Iosevka Curly Slab 22"))))
    `(font-lock-comment-delimiter-face ((t (:inherit (font-lock-comment-face)))))
    '(font-lock-doc-face ((t (:inherit (font-lock-comment-face)))))
-   `(font-lock-builtin-face ((t (:weight light :font "Iosevka Curly Slab"))))
+   `(font-lock-builtin-face ((t (:weight light :font "Iosevka Curly Slab 22"))))
    `(font-lock-constant-face ((t (:foreground ,fg-red))))
    `(font-lock-keyword-face ((t (:inherit font-lock-builtin-face))))
    `(font-lock-function-name-face ((t nil)))

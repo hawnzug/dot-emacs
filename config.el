@@ -253,6 +253,17 @@
   (after-init . keyfreq-autosave-mode))
 
 ;;;; Modal Editing
+(use-package puni
+  :ensure t
+  :defer t
+  :init
+  ;; The autoloads of Puni are set up so you can enable `puni-mode` or
+  ;; `puni-global-mode` before `puni` is actually loaded. Only after you press
+  ;; any key that calls Puni commands, it's loaded.
+  (require 'puni-autoloads)
+  (puni-global-mode)
+  (add-hook 'term-mode-hook #'puni-disable-puni-mode))
+
 (use-package tooe-colemak
   :disabled
   :load-path "~/Dev/tooe"

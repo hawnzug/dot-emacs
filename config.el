@@ -254,6 +254,7 @@
 
 ;;;; Modal Editing
 (use-package tooe-colemak
+  :disabled
   :load-path "~/Dev/tooe"
   :config
   (tooe-mode)
@@ -290,26 +291,22 @@
 
 (define-keymap
   :keymap ctl-x-map
-  "f" #'find-file
   "b" #'consult-buffer
   "c" #'org-capture
   "v" #'vterm
   "d" #'denote-open-or-create
-  "l" #'citar-open
-  ;; swap C-x C-e and C-x e
-  "e" #'eval-last-sexp
-  "C-e" #'kmacro-end-and-call-macro)
+  "l" #'citar-open)
 
 (keymap-global-set "C-=" #'text-scale-adjust)
 (keymap-global-set "C--" #'text-scale-adjust)
 
-(dolist (km (list minibuffer-mode-map
-                  minibuffer-local-map
-                  minibuffer-local-ns-map
-                  minibuffer-local-completion-map
-                  minibuffer-local-must-match-map
-                  minibuffer-local-isearch-map))
-  (keymap-set km "<escape>" 'abort-minibuffers))
+;; (dolist (km (list minibuffer-mode-map
+;;                   minibuffer-local-map
+;;                   minibuffer-local-ns-map
+;;                   minibuffer-local-completion-map
+;;                   minibuffer-local-must-match-map
+;;                   minibuffer-local-isearch-map))
+;;   (keymap-set km "<escape>" 'abort-minibuffers))
 
 ;;;; Search and Completion
 (use-package vertico
@@ -399,18 +396,24 @@
   :commands
   (consult-info))
 
-(defvar-keymap my:consult-map
-  "g" #'consult-line
+(define-keymap
+  :keymap goto-map
+  "e" #'consult-compile-error
+  "f" #'consult-flymake
   "i" #'consult-imenu
-  "o" #'consult-org-heading
-  "r" #'consult-ripgrep
-  "l" #'consult-goto-line
+  "o" #'consult-outline
   "m" #'consult-mark
+  "k" #'consult-global-mark
+  "g" #'consult-goto-line
+  "M-g" #'consult-goto-line)
+(define-keymap
+  :keymap search-map
   "d" #'consult-fd
-  "h" #'consult-recent-file
-  "n" #'consult-info
-  "f" #'consult-flymake)
-(keymap-set tooe-normal-map "g" my:consult-map)
+  "r" #'consult-ripgrep
+  "l" #'consult-line
+  "c" #'consult-locate
+  "g" #'consult-grep
+  "G" #'consult-git-grep)
 
 (use-package embark
   :ensure t

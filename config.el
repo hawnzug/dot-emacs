@@ -253,7 +253,24 @@
   (after-init . keyfreq-autosave-mode))
 
 ;;;; Modal Editing
+(use-package nothing
+  :disabled t
+  :load-path "~/Dev/nothing"
+  :config
+  (define-keymap
+    :keymap global-map
+    "M-w" #'nothing-save
+    "C-w" #'nothing-kill))
+
+(use-package easy-kill
+  :disabled t
+  :ensure t
+  :config
+  (global-set-key [remap kill-ring-save] 'easy-kill)
+  (global-set-key [remap mark-sexp] 'easy-mark))
+
 (use-package puni
+  :disabled t
   :ensure t
   :defer t
   :init
@@ -265,13 +282,9 @@
   (add-hook 'term-mode-hook #'puni-disable-puni-mode))
 
 (use-package tooe-colemak
-  :disabled
   :load-path "~/Dev/tooe"
   :config
-  (tooe-mode)
-  (define-keymap
-    :keymap tooe-normal-map
-    "," #'avy-goto-char-timer))
+  (tooe-mode))
 
 (use-package boon-colemak
   :disabled
@@ -443,7 +456,12 @@
   :ensure t
   :commands avy-goto-char-timer
   :config
-  (setq avy-timeout-seconds 0.25))
+  (setq avy-timeout-seconds 0.25)
+  (setopt avy-style 'de-bruijn
+          avy-keys '(?n ?e ?i ?o ?v ?c ?x ?z))
+  (define-keymap
+    :keymap global-map
+    "M-o" #'avy-goto-char-timer))
 
 (use-package isearch
   :config

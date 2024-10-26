@@ -72,10 +72,6 @@
 (load "~/.config/emacs/var/personal")
 
 ;;;; User Interface
-(setq custom-safe-themes t)
-
-(load-theme 'fourma t)
-
 (defun my:font-setup ()
   (let (
         (primary-font "Rec Mono Casual 14")
@@ -129,6 +125,9 @@
 (setopt line-spacing nil)
 (add-hook 'after-make-frame-functions 'my:font-setup-hook nil)
 (my:font-setup)
+
+(setq custom-safe-themes t)
+(load-theme 'fourma t)
 
 (defun my:syntax-color-hex ()
   (interactive)
@@ -227,6 +226,7 @@
   (setq olivetti-minimum-body-width 40))
 
 (use-package perfect-margin
+  :disabled
   :ensure t
   :custom
   (perfect-margin-visible-width 80)
@@ -986,7 +986,7 @@ if one already exists."
 (use-package window
   ;; Already loaded before init
   :config
-  (setopt split-width-threshold 60))
+  (setopt split-width-threshold 140))
 
 (use-package help
   ;; Already loaded before init

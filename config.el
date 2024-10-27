@@ -348,6 +348,24 @@
   (add-hook 'rfn-eshadow-update-overlay-hook
             #'vertico-directory-tidy))
 
+(use-package vertico-multiform
+  :after vertico
+  :config
+  (use-package vertico-unobtrusive)
+  (use-package vertico-buffer)
+  (use-package vertico-flat)
+  (use-package vertico-grid)
+  (use-package vertico-mouse)
+  (use-package vertico-reverse)
+  (vertico-multiform-mode)
+  (setq vertico-multiform-commands
+        '((consult-imenu buffer)
+          (consult-outline buffer)
+          (consult-buffer unobtrusive)))
+  (setq vertico-multiform-categories
+        '((consult-grep buffer)
+          (buffer unobtrusive))))
+
 (use-package orderless
   :ensure t
   :after vertico

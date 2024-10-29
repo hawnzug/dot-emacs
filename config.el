@@ -2,20 +2,20 @@
 (setopt use-package-enable-imenu-support t)
 (require 'use-package)
 
-(dolist (path (directory-files package-user-dir))
-  (when-let (((not (member path '("." ".." "archives" "gnupg"))))
-             (abspath (expand-file-name path package-user-dir))
-             ((file-directory-p abspath)))
-    (add-to-list 'load-path abspath)))
+;; (dolist (path (directory-files package-user-dir))
+;;   (when-let (((not (member path '("." ".." "archives" "gnupg"))))
+;;              (abspath (expand-file-name path package-user-dir))
+;;              ((file-directory-p abspath)))
+;;     (add-to-list 'load-path abspath)))
 
-(with-eval-after-load 'info
-  (info-initialize)
-  (dolist (dir (directory-files package-user-dir))
-    (let ((fdir (concat (file-name-as-directory package-user-dir) dir)))
-      (unless (or (member dir '("." ".." "archives" "gnupg"))
-                  (not (file-directory-p fdir))
-                  (not (file-exists-p (concat (file-name-as-directory fdir) "dir"))))
-        (add-to-list 'Info-directory-list fdir)))))
+;; (with-eval-after-load 'info
+;;   (info-initialize)
+;;   (dolist (dir (directory-files package-user-dir))
+;;     (let ((fdir (concat (file-name-as-directory package-user-dir) dir)))
+;;       (unless (or (member dir '("." ".." "archives" "gnupg"))
+;;                   (not (file-directory-p fdir))
+;;                   (not (file-exists-p (concat (file-name-as-directory fdir) "dir"))))
+;;         (add-to-list 'Info-directory-list fdir)))))
 
 (use-package package
   :defer t
@@ -161,9 +161,7 @@
 (add-hook 'prog-mode-hook #'my:show-trailing-space)
 
 (use-package nerd-icons
-  :ensure t
-  :init
-  (require 'nerd-icons-autoloads))
+  :ensure t)
 
 (use-package hide-mode-line
   :ensure t
@@ -192,7 +190,6 @@
   (window-divider-mode))
 
 (use-package pixel-scroll
-  :defer 1
   :config
   (setopt
    pixel-scroll-precision-use-momentum t
@@ -200,6 +197,7 @@
   (pixel-scroll-precision-mode 1))
 
 (use-package indent-bars
+  :disabled
   :init
   (defun my:agda2-indent-bars-spacing-override ()
     (setq indent-bars-spacing-override 2))
@@ -351,12 +349,6 @@
 (use-package vertico-multiform
   :after vertico
   :config
-  (use-package vertico-unobtrusive)
-  (use-package vertico-buffer)
-  (use-package vertico-flat)
-  (use-package vertico-grid)
-  (use-package vertico-mouse)
-  (use-package vertico-reverse)
   (vertico-multiform-mode)
   (setq vertico-multiform-commands
         '((consult-imenu buffer)
@@ -411,32 +403,12 @@
 
 (use-package consult
   :ensure t
-  :commands
-  (consult-line
-   consult-buffer
-   consult-recent-file
-   consult-ripgrep))
+  :defer t)
 (use-package consult-xref
   :after (xref consult)
   :config
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref))
-(use-package consult-org
-  :after org
-  :commands consult-org-heading)
-(use-package consult-imenu
-  :commands consult-imenu)
-(use-package consult-flymake
-  :after flymake
-  :commands consult-flymake)
-(use-package consult-register
-  :commands
-  (consult-register
-   consult-register-load
-   consult-register-store))
-(use-package consult-info
-  :commands
-  (consult-info))
 
 (define-keymap
   :keymap goto-map
@@ -459,7 +431,7 @@
 
 (use-package embark
   :ensure t
-  :commands (embark-act embark-dwim embark-bindings embark-prefix-help-command)
+  :defer t
   :init
   (setq prefix-help-command #'embark-prefix-help-command)
   (keymap-global-set "C-." #'embark-act)
@@ -468,11 +440,11 @@
 
 (use-package embark-consult
   :ensure t
-  :after embark)
+  :after (embark consult))
 
 (use-package avy
   :ensure t
-  :commands avy-goto-char-timer
+  :defer t
   :config
   (setq avy-timeout-seconds 0.25)
   (setopt avy-style 'de-bruijn
@@ -560,7 +532,6 @@
   :defer t
   :init
   (setq default-input-method 'rime)
-  (require 'rime-autoloads)
   :config
   (define-keymap
     :keymap rime-mode-map
@@ -597,12 +568,9 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
                   (setq avy--old-cands (avy--read-candidates #'flypy-re-build-regexp))
                   (avy-process avy--old-cands))))))
 
-
 ;;;; Org Mode and Notes
 (use-package org
-  ;; :load-path "~/Projects/org-mode/lisp"
   :defer 4
-  :mode ("\\.org\\'" . org-mode)
   :init
   (setq org-modules '())
   :hook
@@ -635,14 +603,14 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (setq org-footnote-section nil))
 
 (use-package org-refile
-  :commands org-refile
+  :defer t
   :config
   (setq org-refile-targets
         '((nil . (:level . 1))))
   (setq org-refile-use-outline-path nil))
 
 (use-package org-agenda
-  :commands org-agenda
+  :defer t
   :config
   (use-package org-habit))
 
@@ -651,7 +619,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (completing-read "Workout" my:workout-list nil t))
 
 (use-package org-capture
-  :commands org-capture
+  :defer t
   :config
   (setq
    org-capture-templates
@@ -674,12 +642,11 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 (use-package org-make-toc
   :ensure t
-  :commands (org-make-toc))
+  :defer t)
 
 (use-package denote
   :ensure t
-  :init
-  (require 'denote-autoloads)
+  :defer t
   :config
   (setopt
    denote-directory (expand-file-name "~/org/notes/")
@@ -694,21 +661,19 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 ;;;; Shell and Terminal
 (use-package eshell
-  :commands eshell)
+  :defer t)
 
 (use-package eat
   :ensure t
-  :defer t
-  :init
-  (load "eat-autoloads"))
+  :defer t)
 
 (use-package vterm
   :ensure t
-  :commands vterm)
+  :defer t)
 
 (use-package vterm-toggle
   :ensure t
-  :commands vterm-toggle
+  :defer t
   :config
   (setq vterm-toggle-scope 'project))
 
@@ -722,7 +687,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 (use-package terminal-here
   :ensure t
-  :commands terminal-here-launch
+  :defer t
   :config
   (setq terminal-here-terminal-command
         '("alacritty")))
@@ -731,8 +696,6 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 (use-package magit
   :ensure t
   :defer 5
-  :init
-  (require 'magit-autoloads)
   :config
   (setq magit-repository-directories
         '(("~/.config/emacs" . 0)
@@ -800,8 +763,6 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 (use-package citar
   :ensure t
   :defer t
-  :init
-  (require 'citar-autoloads)
   :config
   (setopt
    citar-bibliography '("~/org/refs.bib" "~/org/incomplete.bib")
@@ -841,7 +802,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 ;;;; Project and File
 (use-package find-file-in-project
   :ensure t
-  :commands (find-file-in-project)
+  :defer t
   :config
   (setq ffip-use-rust-fd t))
 
@@ -868,7 +829,6 @@ if one already exists."
     "v" #'project-vterm))
 
 (use-package dired
-  :commands dired
   :hook (dired-mode . dired-hide-details-mode)
   :config
   (setq dired-dwim-target t)
@@ -935,7 +895,7 @@ if one already exists."
 
 ;;;; Buffer and Window
 (use-package ibuffer
-  :commands ibuffer
+  :defer t
   :config
   (add-hook 'ibuffer-mode-hook #'ibuffer-vc-set-filter-groups-by-vc-root)
   (setq
@@ -969,8 +929,6 @@ if one already exists."
 (use-package tabspaces
   :ensure t
   :hook (after-init . tabspaces-mode)
-  :commands (tabspaces-switch-or-create-workspace
-             tabspaces-open-or-create-project-and-workspace)
   :init
   (setopt tabspaces-keymap-prefix nil)
   :config
@@ -1048,7 +1006,7 @@ if one already exists."
 
 (use-package eglot
   :ensure t
-  :commands eglot
+  :defer t
   :init
   (add-hook
    'eglot-managed-mode-hook
@@ -1085,30 +1043,30 @@ if one already exists."
   :hook (prog-mode . hl-todo-mode))
 
 (use-package newcomment
-  :commands comment-dwim
+  :defer t
   :init
   (keymap-global-set "C-/" #'comment-dwim))
 
 (use-package symbol-overlay
   :ensure t
-  :commands symbol-overlay-put)
+  :defer t)
 
 (use-package flymake
   :defer t)
 
 (use-package imenu-list
   :ensure t
-  :commands imenu-list)
+  :defer t)
 
 (use-package ediff
-  :commands ediff
+  :defer t
   :config
   (setq ediff-split-window-function 'split-window-horizontally)
   (setq ediff-window-setup-function 'ediff-setup-windows-plain))
 
 (use-package htmlize
   :ensure t
-  :commands (htmlize htmlize-file htmlize-region htmlize-buffer))
+  :defer t)
 
 (use-package outline
   :hook ((LaTeX-mode prog-mode) . outline-minor-mode)
@@ -1157,8 +1115,6 @@ if one already exists."
 (use-package sly
   :ensure t
   :defer t
-  :init
-  (load "sly-autoloads")
   :config
   (setq inferior-lisp-program "sbcl"))
 
@@ -1192,27 +1148,25 @@ if one already exists."
   "d t" #'common-lisp-hyperspec-format)
 
 (use-package cooltt
-  :mode ("\\.cooltt\\'" . cooltt-mode)
-  :load-path "~/Projects/cooltt/emacs")
+  :load-path "~/Projects/cooltt/emacs"
+  :defer t)
 
 (use-package zig-mode
   :ensure t
-  :mode ("\\.zig\\'" . zig-mode))
+  :defer t)
 
 (use-package cc-mode
-  :mode
-  (("\\.c\\'" . c-mode)
-   ("\\.h\\'" . c-or-c++-mode))
+  :defer t
   :config
   (setq c-basic-offset 4))
 
 (use-package modern-cpp-font-lock
   :ensure t
-  :hook (c++-mode . modern-c++-font-lock-mode))
+  :defer t)
 
 (use-package proof-general
   :ensure t
-  :mode ("\\.v\\'" . coq-mode)
+  :defer t
   :config
   (setq proof-splash-enable nil))
 (use-package company-coq
@@ -1239,25 +1193,25 @@ if one already exists."
 
 (use-package csv-mode
   :ensure t
-  :mode ("\\.[Cc][Ss][Vv]\\'" . csv-mode))
+  :defer t)
 
 (use-package dockerfile-mode
   :ensure t
-  :mode "Dockerfile\\'")
+  :defer t)
 
 (use-package haskell-mode
   :ensure t
-  :mode "\\.hs\\'"
+  :defer t
   :config
   (require 'haskell)
   (require 'haskell-doc))
 
 (use-package markdown-mode
   :ensure t
-  :mode "\\.md\\'")
+  :defer t)
 
 (use-package sgml-mode
-  :mode ("\\.html\\'" . html-mode)
+  :defer t
   :config
   (defun my:html-mode-face-remap ()
     (face-remap-set-base
@@ -1277,15 +1231,15 @@ if one already exists."
 
 (use-package typescript-mode
   :ensure t
-  :mode ("\\.ts\\'" . typescript-mode))
+  :defer t)
 
 (use-package json-mode
   :ensure t
-  :mode "\\.json\\'")
+  :defer t)
 
 (use-package lua-mode
   :ensure t
-  :mode "\\.lua\\'")
+  :defer t)
 
 (eval-and-compile
   (defun agda-mode-load-path ()
@@ -1321,7 +1275,6 @@ if one already exists."
 
 (use-package tuareg
   :ensure t
-  :mode ("\\.ml[ip]?\\'" . tuareg-mode)
   :defer t)
 
 (eval-and-compile
@@ -1337,18 +1290,18 @@ if one already exists."
 
 (use-package sml-mode
   :ensure t
-  :mode "\\.sml\\'"
+  :defer t
   :config
   (setq sml-indent-level 4)
   (setq sml-indent-args 2))
 
 (use-package prolog
-  :mode ("\\.pl\\'" . prolog-mode)
+  :defer t
   :init
   (setq prolog-system 'swi))
 
 (use-package python
-  :mode ("\\.py\\'" . python-mode)
+  :defer t
   :config
   (with-eval-after-load 'eglot
     (add-to-list
@@ -1367,8 +1320,6 @@ if one already exists."
 (use-package tex-site
   :ensure auctex
   :defer t
-  :init
-  (require 'auctex-autoloads)
   :config
   (add-hook 'LaTeX-mode-hook 'my:show-trailing-space)
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
@@ -1437,11 +1388,10 @@ if one already exists."
 
 (use-package yaml-mode
   :ensure t
-  :mode "\\.yaml\\'")
+  :defer t)
 (use-package ledger-mode
   :ensure t
-  :mode "\\.journal\\'"
-  :commands ledger-mode
+  :defer t
   :config
   (setq ledger-binary-path "ledger.sh")
   (setq ledger-mode-should-check-version nil)
@@ -1451,11 +1401,8 @@ if one already exists."
 
 (use-package markdown-mode
   :ensure t
-  :commands (gfm-view-mode markdown-view-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.mkd\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)))
+  :defer t)
+
 ;;;; Dashboard
 (use-package server
   :config
@@ -1463,7 +1410,7 @@ if one already exists."
 
 (use-package elfeed
   :ensure t
-  :commands (elfeed elfeed-update)
+  :defer t
   :config
   (setq elfeed-feeds my:elfeed-list))
 
@@ -1477,7 +1424,7 @@ if one already exists."
 
 (use-package pomidor
   :ensure t
-  :commands pomidor
+  :defer t
   :init
   (keymap-global-set "<f12>" #'pomidor)
   :config

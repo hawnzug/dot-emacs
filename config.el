@@ -81,7 +81,7 @@
         (primary-font "JetBrains Mono NL 14")
         (primary-font "Iosevka SS15 Extended 14")
         (primary-font (font-spec :family "Iosevka"
-                                 :size 22.0
+                                 :size 20.0
                                  :weight 'normal))
         (chinese-font (font-spec :family "FZGuoMeiJinDaoTi"))
         (chinese-font (font-spec :family "Source Han Serif CN"
@@ -111,7 +111,7 @@
     (set-face-font 'default primary-font)
     (set-face-font 'fixed-pitch primary-font)
     (set-face-font 'fixed-pitch-serif primary-font)
-    (set-face-font 'variable-pitch "Alegreya 22")))
+    (set-face-font 'variable-pitch "Alegreya 20")))
 
 (defun my:font-setup-hook (frame)
   "Setup the font, then remove the hook."
@@ -126,8 +126,14 @@
 (add-hook 'after-make-frame-functions 'my:font-setup-hook nil)
 (my:font-setup)
 
-(setq custom-safe-themes t)
-(load-theme 'fourma t)
+;; (setq custom-safe-themes t)
+;; (load-theme 'fourma t)
+(use-package modus-themes
+  :ensure t
+  :config
+  (setq modus-themes-italic-constructs t
+        modus-themes-bold-constructs t)
+  (load-theme 'modus-operandi :no-confirm))
 
 (defun my:syntax-color-hex ()
   (interactive)
@@ -930,7 +936,7 @@ if one already exists."
   :ensure t
   :hook (after-init . tabspaces-mode)
   :init
-  (setopt tabspaces-keymap-prefix nil)
+  (setq tabspaces-keymap-prefix nil)
   :config
   (define-keymap
     :keymap ctl-x-map

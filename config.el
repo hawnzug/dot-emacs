@@ -603,7 +603,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (add-to-list 'org-file-apps '(t . "xdg-open %s") t)
   (setq org-reverse-note-order nil)
   (setq org-adapt-indentation nil)
-  (setq org-startup-indented t)
+  (setq org-startup-indented nil)
   (setq org-startup-truncated t)
   (setq org-hide-emphasis-markers t)
   (setq org-footnote-section nil))
@@ -629,14 +629,10 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :config
   (setq
    org-capture-templates
-   '(("i" "Inbox" entry (file+headline "~/org/inbox.org" "Inbox")
-      "* %?\n:PROPERTIES:\n:CREATED:  %U\n:END:"
-      :prepend t)
-     ("w" "Workout" table-line (file "~/workout.org")
-      "| %(my:select-workout) | %? |  | %U |  |")
-     ("b" "Bookmark" entry (file+headline "~/org/inbox.org" "Inbox")
-      "* %a\n:PROPERTIES:\n:CREATED:  %U\n:END:\n%i"
-      :prepend t))))
+   '(("j" "Journal" entry (file+olp+datetree "~/org/inbox.org" "Journal")
+      "* %?\n:PROPERTIES:\n:CREATED:  %U\n:END:")
+     ("b" "Bookmark" entry (file+olp+datetree "~/org/inbox.org" "Journal")
+      "* %a\n:PROPERTIES:\n:CREATED:  %U\n:END:\n%i"))))
 
 (use-package org-protocol
   :after org)

@@ -1120,35 +1120,6 @@ if one already exists."
   :config
   (setq inferior-lisp-program "sbcl"))
 
-(defvar-keymap my:sly-mode-leader-map
-  "e" #'sly-eval-last-expression
-  "l" #'sly-load-file
-  "c" #'sly-compile-defun
-  "k" #'sly-compile-and-load-file
-  "." #'sly-edit-definition
-  "," #'sly-pop-find-definition-stack
-  "?" #'sly-edit-uses
-  "~" #'sly-mrepl-sync
-  "z" #'sly-mrepl
-  ":" #'sly-interactive-eval
-  "f" #'sly-eval-defun
-  "w a" #'sly-who-specializes
-  "w b" #'sly-who-binds
-  "w c" #'sly-who-calls
-  "w RET" #'sly-who-macroexpands
-  "w r" #'sly-who-references
-  "w s" #'sly-who-sets
-  "w w" #'sly-calls-who
-  "d a" #'sly-apropos
-  "d d" #'sly-describe-symbol
-  "d f" #'sly-describe-function
-  "d g" #'common-lisp-hyperspec-glossary-term
-  "d h" #'sly-documentation-lookup
-  "d p" #'sly-apropos-package
-  "d z" #'sly-apropos-all
-  "d r" #'common-lisp-hyperspec-lookup-reader-macro
-  "d t" #'common-lisp-hyperspec-format)
-
 (use-package cooltt
   :load-path "~/Projects/cooltt/emacs"
   :defer t)

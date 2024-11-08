@@ -2,6 +2,8 @@
 (setopt use-package-enable-imenu-support t)
 (require 'use-package)
 
+(add-to-list 'load-path "~/.config/emacs/lisp")
+
 ;; (dolist (path (directory-files package-user-dir))
 ;;   (when-let (((not (member path '("." ".." "archives" "gnupg"))))
 ;;              (abspath (expand-file-name path package-user-dir))
@@ -576,7 +578,6 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 ;;;; Org Mode and Notes
 (use-package org
-  :defer 4
   :init
   (setq org-modules '())
   :hook
@@ -766,7 +767,9 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :ensure t
   :defer t
   :config
+  (require 'my:citar-notes)
   (setopt
+   citar-notes-source 'my:citar-notes
    citar-bibliography '("~/org/refs.bib" "~/org/incomplete.bib")
    citar-library-paths '("~/Documents/")
    citar-file-open-functions (list (cons "html" #'citar-file-open-external)
@@ -789,6 +792,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :config (citar-embark-mode))
 
 (use-package citar-denote
+  :disabled t
   :after (citar denote)
   :ensure t
   :config

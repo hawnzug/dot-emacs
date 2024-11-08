@@ -556,7 +556,6 @@
   :load-path "~/.config/emacs/packages/jieba.el"
   :commands jieba-mode)
 (use-package flypy-re
-  :load-path "~/.config/emacs/packages/flypy-re"
   :config
   ;; orderless
   (with-eval-after-load 'orderless

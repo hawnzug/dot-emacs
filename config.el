@@ -66,6 +66,12 @@
   (setq-default tab-width 4)
   (setq-default truncate-lines t))
 
+(use-package gcmh
+  :ensure t
+  :config
+  (setopt gcmh-idle-delay 10)
+  (gcmh-mode 1))
+
 (use-package comp
   ;; Already loaded before init
   :config

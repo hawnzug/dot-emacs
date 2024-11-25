@@ -88,7 +88,7 @@
         (primary-font "FreeMono 14")
         (primary-font "JetBrains Mono NL 14")
         (primary-font "Iosevka SS15 Extended 14")
-        (primary-font (font-spec :family "Iosevka"
+        (primary-font (font-spec :family "Iosevka Term"
                                  :size 20.0
                                  :weight 'normal))
         (chinese-font (font-spec :family "FZGuoMeiJinDaoTi"))

@@ -486,8 +486,11 @@
   (aas-set-snippets 'html-mode
     ";tweet" '(tempel "<tweet date=\"" (format-time-string "%F") "\">" n> "<p>" q "</p>" n "</tweet>"))
   (aas-set-snippets 'org-mode
-    "bsrc" (lambda () (interactive)
+    "srce" (lambda () (interactive)
                (insert "#+BEGIN_SRC elisp\n#+END_SRC")
+               (org-edit-special))
+    "srcl" (lambda () (interactive)
+               (insert "#+BEGIN_SRC latex\n#+END_SRC")
                (org-edit-special))
     "\\(" '(tempel "\\(" q "\\)")
     "\\[" '(tempel "\\[" n q n "\\]"))

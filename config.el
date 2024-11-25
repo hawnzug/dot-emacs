@@ -1394,12 +1394,14 @@ if one already exists."
   (server-mode))
 
 (use-package elfeed
+  :disabled
   :ensure t
   :defer t
   :config
   (setq elfeed-feeds my:elfeed-list))
 
 (use-package elfeed-score
+  :disabled
   :ensure t
   :after elfeed
   :config

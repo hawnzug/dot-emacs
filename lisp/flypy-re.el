@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defconst flypy-re--char-table
   '(("aa" . "吁吖呵啊嗄腌锕阿")
     ("ah" . "昂盎肮腌")
@@ -420,7 +422,7 @@
            (lambda (second)
              (if (and (>= second ?a) (<= second ?z))
                  (if first
-                     (if-let ((chars (cdr (assoc (string first second) flypy-re--char-table))))
+                     (if-let* ((chars (cdr (assoc (string first second) flypy-re--char-table))))
                          (prog1 (format "\\(?:%c%c\\|[%s]\\)" first second chars)
                            (setq first nil))
                        (prog1 (string first)

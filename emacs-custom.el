@@ -11,14 +11,15 @@
               embark embark-consult emmet-mode exec-path-from-shell
               faceup find-file-in-project flymake flymake-shellcheck
               gcmh haskell-mode hide-mode-line hl-todo htmlize hydra
-              ibuffer-vc idlwave imenu-list json-mode jsonrpc keyfreq
-              laas ledger-mode lua-mode magit magit-delta marginalia
-              markdown-mode modern-cpp-font-lock modus-themes
-              nerd-icons no-littering orderless org org-make-toc
-              org-plus-contrib perfect-margin pomidor project
-              proof-general rime slime sly sml-mode soap-client
-              symbol-overlay tabspaces tempel terminal-here tramp
-              tramp-container tuareg typescript-mode use-package
+              ibuffer-vc idlwave imenu-list json-mode jsonrpc
+              kdeconnect keyfreq laas ledger-mode lua-mode magit
+              magit-delta marginalia markdown-mode
+              modern-cpp-font-lock modus-themes nerd-icons
+              no-littering orderless org org-make-toc org-plus-contrib
+              perfect-margin pomidor project proof-general rime slime
+              sly sml-mode soap-client symbol-overlay tabspaces tempel
+              terminal-here tramp tramp-container tuareg
+              typescript-mode use-package
               use-package-ensure-system-package verilog-mode vertico
               vterm vterm-toggle wgrep which-key xref yaml-mode
               zig-mode))

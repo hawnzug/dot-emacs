@@ -1399,6 +1399,14 @@ if one already exists."
   :config
   (server-mode))
 
+(use-package kdeconnect
+  :ensure t
+  :defer t
+  :config
+  (setopt kdeconnect-devices my:kdeconnect-devices)
+  (setopt kdeconnect-active-device (car kdeconnect-devices))
+  (keymap-set embark-file-map "k" 'kdeconnect-send-file))
+
 (use-package elfeed
   :disabled
   :ensure t

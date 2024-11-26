@@ -25,6 +25,10 @@
   (setq package-install-upgrade-built-in t)
   (add-to-list 'package-archives
                '("melpa" . "https://melpa.org/packages/") t))
+(use-package package-vc
+  :defer t
+  :config
+  (setopt package-vc-allow-build-commands t))
 
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-echo-area-message t)
@@ -675,7 +679,9 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :defer t)
 
 (use-package eat
-  :ensure t
+  :vc (:url "https://codeberg.org/hawnzug/emacs-eat.git"
+       :rev :newest
+       :doc "eat.texi")
   :defer t)
 
 (use-package vterm

@@ -22,9 +22,7 @@
               use-package-ensure-system-package verilog-mode vertico
               vterm vterm-toggle wgrep which-key xref yaml-mode
               zig-mode))
- '(package-vc-selected-packages
-   '((indent-bars :vc-backend Git :url
-                  "https://github.com/jdtsmith/indent-bars")))
+ '(package-vc-selected-packages '((eat :url "https://codeberg.org/hawnzug/emacs-eat.git")))
  '(safe-local-variable-values
    '((etags-regen-ignores "test/manual/etags/")
      (etags-regen-regexp-alist

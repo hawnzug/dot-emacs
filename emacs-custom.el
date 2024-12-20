@@ -5,12 +5,13 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    '(0blayout aas alert async auctex avy bind-key cape cdlatex citar
-              citar-embark company company-coq consult consult-eglot
-              corfu csv-mode demo-it denote dockerfile-mode eat
-              editorconfig eglot eldoc eldoc-box elfeed elfeed-score
-              embark embark-consult emmet-mode exec-path-from-shell
-              faceup find-file-in-project flymake flymake-shellcheck
-              gcmh haskell-mode hide-mode-line hl-todo htmlize hydra
+              citar-embark company company-coq consult consult-dir
+              consult-eglot corfu corfu-candidate-overlay csv-mode
+              demo-it denote dirvish dockerfile-mode eat editorconfig
+              eglot eldoc eldoc-box elfeed elfeed-score embark
+              embark-consult emmet-mode exec-path-from-shell faceup
+              find-file-in-project flymake flymake-shellcheck gcmh
+              haskell-mode hide-mode-line hl-todo htmlize hydra
               ibuffer-vc idlwave imenu-list json-mode jsonrpc
               kdeconnect keyfreq laas ledger-mode lua-mode magit
               magit-delta marginalia markdown-mode

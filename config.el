@@ -885,7 +885,6 @@ if one already exists."
   (add-to-list 'dired-omit-extensions ".agdai"))
 
 (use-package dirvish
-  :disabled
   :ensure t
   :defer t
   :init

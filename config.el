@@ -692,13 +692,18 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 ;;;; Shell and Terminal
 (use-package eshell
-  :defer t)
+  :defer t
+  :config
+  (setopt eshell-visual-commands nil)
+  (setopt eshell-history-size 100000))
 
 (use-package eat
   :vc (:url "https://codeberg.org/hawnzug/emacs-eat.git"
        :rev :newest
        :doc "eat.texi")
-  :defer t)
+  :defer t
+  :config
+  (eat-eshell-mode))
 
 (use-package vterm
   :ensure t

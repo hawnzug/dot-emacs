@@ -1408,10 +1408,12 @@ if one already exists."
 (use-package kdeconnect
   :ensure t
   :defer t
+  :init
+  (with-eval-after-load 'embark
+    (keymap-set embark-file-map "k" 'kdeconnect-send-file))
   :config
   (setopt kdeconnect-devices my:kdeconnect-devices)
-  (setopt kdeconnect-active-device (car kdeconnect-devices))
-  (keymap-set embark-file-map "k" 'kdeconnect-send-file))
+  (setopt kdeconnect-active-device (car kdeconnect-devices)))
 
 (use-package elfeed
   :disabled

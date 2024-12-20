@@ -398,8 +398,14 @@
       (call-interactively 'corfu-quit)
       (tooe-set-normal-state))
     (keymap-set tooe-insert-map "<escape>" #'my:corfu-quit-and-escape))
-  (setq corfu-auto t)
   (global-corfu-mode))
+
+(use-package corfu-candidate-overlay
+  :ensure t
+  :after corfu
+  :config
+  (corfu-candidate-overlay-mode +1)
+  (keymap-global-set "C-<tab>" #'corfu-candidate-overlay-complete-at-point))
 
 (use-package emacs
   :init

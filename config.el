@@ -453,6 +453,16 @@
   "g" #'consult-grep
   "G" #'consult-git-grep)
 
+(use-package consult-dir
+  :ensure t
+  :after (consult vertico)
+  :config
+  (keymap-set ctl-x-map "C-d" #'consult-dir)
+  (define-keymap
+    :keymap vertico-map
+    "C-x C-d" #'consult-dir
+    "C-x C-j" #'consult-dir-jump-file))
+
 (use-package embark
   :ensure t
   :defer t

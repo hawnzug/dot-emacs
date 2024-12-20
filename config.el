@@ -613,6 +613,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (org-mode . my:show-trailing-space)
   (org-babel-after-execute . org-redisplay-inline-images)
   :config
+  (setopt org-use-property-inheritance t)
   (setq org-special-ctrl-a/e t)
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)" "SOMEDAY(s)")))
@@ -967,6 +968,7 @@ if one already exists."
    tab-bar-tab-name-format-function 'my:tab-name-format))
 
 (use-package tabspaces
+  :disabled
   :ensure t
   :hook (after-init . tabspaces-mode)
   :init

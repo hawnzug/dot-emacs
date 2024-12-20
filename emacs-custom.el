@@ -18,7 +18,7 @@
               modern-cpp-font-lock modus-themes nerd-icons
               no-littering orderless org org-make-toc org-plus-contrib
               perfect-margin pomidor project proof-general rime slime
-              sly sml-mode soap-client symbol-overlay tabspaces tempel
+              sly sml-mode soap-client symbol-overlay tempel
               terminal-here tramp tramp-container tuareg
               typescript-mode use-package
               use-package-ensure-system-package verilog-mode vertico

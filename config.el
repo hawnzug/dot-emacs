@@ -93,7 +93,7 @@
         (primary-font "JetBrains Mono NL 14")
         (primary-font "Iosevka SS15 Extended 14")
         (primary-font (font-spec :family "Iosevka Term"
-                                 :size 20.0
+                                 :size 24.0
                                  :weight 'normal))
         (chinese-font (font-spec :family "FZGuoMeiJinDaoTi"))
         (chinese-font (font-spec :family "Source Han Serif CN"
@@ -398,21 +398,35 @@
       (call-interactively 'corfu-quit)
       (tooe-set-normal-state))
     (keymap-set tooe-insert-map "<escape>" #'my:corfu-quit-and-escape))
+  (defun corfu-move-to-minibuffer ()
+    (interactive)
+    (pcase completion-in-region--data
+      (`(,beg ,end ,table ,pred ,extras)
+       (let ((completion-extra-properties extras)
+             completion-cycle-threshold completion-cycling)
+         (consult-completion-in-region beg end table pred)))))
+  (keymap-set corfu-map "M-m" #'corfu-move-to-minibuffer)
+  (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)
+  (setopt corfu-cycle t)
+  (setopt corfu-auto t)
+  (setopt corfu-auto-delay 0.1)
   (global-corfu-mode))
-
-(use-package corfu-candidate-overlay
-  :ensure t
-  :after corfu
-  :config
-  (corfu-candidate-overlay-mode +1)
-  (keymap-global-set "C-<tab>" #'corfu-candidate-overlay-complete-at-point))
 
 (use-package emacs
   :init
   (setq completion-cycle-threshold 3)
   (setq read-extended-command-predicate
         #'command-completion-default-include-p)
+  (setopt text-mode-ispell-word-completion nil)
   (setq tab-always-indent 'complete))
+
+(use-package corfu-candidate-overlay
+  :disabled
+  :ensure t
+  :after corfu
+  :config
+  (corfu-candidate-overlay-mode +1)
+  (keymap-global-set "C-<tab>" #'corfu-candidate-overlay-complete-at-point))
 
 (use-package cape
   :ensure t

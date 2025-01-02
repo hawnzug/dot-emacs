@@ -329,14 +329,6 @@
   :hook
   (after-init . repeat-mode))
 
-(define-keymap
-  :keymap ctl-x-map
-  "b" #'consult-buffer
-  "c" #'org-capture
-  "v" #'vterm
-  "d" #'denote-open-or-create
-  "l" #'citar-open)
-
 (keymap-global-set "C-=" #'text-scale-adjust)
 (keymap-global-set "C--" #'text-scale-adjust)
 
@@ -441,7 +433,9 @@
 
 (use-package consult
   :ensure t
-  :defer t)
+  :defer t
+  :init
+  (keymap-set ctl-x-map "b" #'consult-buffer))
 (use-package consult-xref
   :after (xref consult)
   :config
@@ -670,6 +664,8 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 (use-package org-capture
   :defer t
+  :init
+  (keymap-set ctl-x-map "c" #'org-capture)
   :config
   (setq
    org-capture-templates
@@ -708,21 +704,26 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 ;;;; Shell and Terminal
 (use-package eshell
   :defer t
+  :init
+  (keymap-set ctl-x-map "e" #'eshell)
   :config
   (setopt eshell-visual-commands nil)
-  (setopt eshell-history-size 100000))
+  (setopt eshell-history-size 100000)
+  (use-package eat
+    :config
+    (eat-eshell-mode)))
 
 (use-package eat
   :vc (:url "https://codeberg.org/hawnzug/emacs-eat.git"
        :rev :newest
        :doc "eat.texi")
-  :defer t
-  :config
-  (eat-eshell-mode))
+  :defer t)
 
 (use-package vterm
   :ensure t
-  :defer t)
+  :defer t
+  :init
+  (keymap-set ctl-x-map "v" #'vterm))
 
 (use-package vterm-toggle
   :ensure t
@@ -816,6 +817,8 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 (use-package citar
   :ensure t
   :defer t
+  :init
+  (keymap-set ctl-x-map "l" #'citar-open)
   :config
   (require 'my:citar-notes)
   (setopt

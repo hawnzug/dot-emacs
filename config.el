@@ -85,62 +85,35 @@
 
 ;;;; User Interface
 (defun my:font-setup ()
-  (let (
-        (primary-font "Rec Mono Casual 14")
-        (primary-font "DejaVu Sans Mono 14")
-        (primary-font "Iosevka Curly Slab 14")
-        (primary-font "FreeMono 14")
-        (primary-font "JetBrains Mono NL 14")
-        (primary-font "Iosevka SS15 Extended 14")
-        (primary-font (font-spec :family "Iosevka Term"
-                                 :size 24.0
-                                 :weight 'normal))
-        (chinese-font (font-spec :family "FZGuoMeiJinDaoTi"))
-        (chinese-font (font-spec :family "Source Han Serif CN"
-                                 :weight 'bold)))
+  (interactive)
+  (let ((primary-font (font-spec :family "Iosevka Term" :size 24.0 :weight 'normal))
+        (chinese-font (font-spec :family "Source Han Serif CN" :weight 'bold)))
+    (setq inhibit-compacting-font-caches t)
+    (setq use-default-font-for-symbols nil)
     (setq face-font-rescale-alist '(("Source Han Serif CN" . 0.825)))
-    (set-fontset-font t 'greek primary-font)
-    (set-fontset-font t 'greek "JetBrains Mono NL" nil 'append)
-    (set-fontset-font t 'greek "DejaVu Sans Mono" nil 'append)
-    (set-fontset-font t 'symbol primary-font)
-    (set-fontset-font t 'symbol "JetBrains Mono NL" nil 'append)
-    (set-fontset-font t 'symbol "DejaVu Sans Mono" nil 'append)
-    (set-fontset-font t 'unicode primary-font)
-    (set-fontset-font t 'unicode "JetBrains Mono NL" nil 'append)
-    (set-fontset-font t 'unicode "Noto Color Emoji" nil 'append)
-    (set-fontset-font t 'unicode "Symbols Nerd Font Mono" nil 'append)
-    (set-fontset-font t 'unicode "DejaVu Sans" nil 'append)
-
-    (set-fontset-font t 'han primary-font)
-    (set-fontset-font t 'han "JetBrains Mono NL" nil 'append)
-    (set-fontset-font t 'han chinese-font nil 'append)
-    (set-fontset-font t 'cjk-misc primary-font)
-    (set-fontset-font t 'cjk-misc "JetBrains Mono NL" nil 'append)
-    (set-fontset-font t 'cjk-misc chinese-font nil 'append)
-    (set-fontset-font t 'chinese-gbk primary-font)
-    (set-fontset-font t 'chinese-gbk "JetBrains Mono NL" nil 'append)
-    (set-fontset-font t 'chinese-gbk chinese-font nil 'append)
+    (dolist (characters '(greek symbol unicode))
+      (set-fontset-font t characters primary-font)
+      (set-fontset-font t characters "Noto Color Emoji" nil 'append)
+      (set-fontset-font t characters "Symbols Nerd Font Mono" nil 'append))
+    (dolist (characters '(han chinese-gbk cjk-misc))
+      (set-fontset-font t characters primary-font)
+      (set-fontset-font t characters chinese-font nil 'append))
     (set-face-font 'default primary-font)
     (set-face-font 'fixed-pitch primary-font)
     (set-face-font 'fixed-pitch-serif primary-font)
-    (set-face-font 'variable-pitch "Alegreya 20")))
+    (set-face-font 'variable-pitch "Alegreya 24")))
 
-(defun my:font-setup-hook (frame)
-  "Setup the font, then remove the hook."
-  (select-frame frame)
-  (my:font-setup)
-  (remove-hook 'after-make-frame-functions 'my:font-setup-hook))
-(setq use-default-font-for-symbols nil)
-(setq inhibit-compacting-font-caches t)
+;; (add-hook 'after-make-frame-functions #'my:font-setup nil)
+(my:font-setup)
+
 (setq ring-bell-function 'ignore)
 (setopt delete-pair-blink-delay 0)
 (setopt line-spacing nil)
-(add-hook 'after-make-frame-functions 'my:font-setup-hook nil)
-(my:font-setup)
 
 ;; (setq custom-safe-themes t)
-;; (load-theme 'fourma t)
+(load-theme 'fourma :no-confirm)
 (use-package modus-themes
+  :disabled
   :ensure t
   :config
   (setq modus-themes-italic-constructs t

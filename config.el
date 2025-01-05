@@ -487,6 +487,20 @@
   (aas-set-snippets 'html-mode
     ";tweet" '(tempel "<tweet date=\"" (format-time-string "%F") "\">" n> "<p>" q "</p>" n "</tweet>"))
   (aas-set-snippets 'org-mode
+    "bsb" '(lambda ()
+             (interactive)
+             (let ((name (my:org-complete-special-block)))
+               (if (use-region-p)
+                   (let ((beg (use-region-beginning))
+                         (end (use-region-end)))
+                     (set-mark-command)
+                     (goto-char end)
+                     (insert "#+end_" name "\n")
+                     (goto-char beg)
+                     (insert "#+begin_" name "\n"))
+                 (unless (bolp) (newline))
+                 (insert "#+begin_" name "\n")
+                 (save-excursion (insert "\n#+end_" name "\n")))))
     "srce" (lambda () (interactive)
                (insert "#+BEGIN_SRC elisp\n#+END_SRC")
                (org-edit-special))
@@ -617,7 +631,12 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (setq org-startup-indented nil)
   (setq org-startup-truncated t)
   (setq org-hide-emphasis-markers t)
-  (setq org-footnote-section nil))
+  (setq org-footnote-section nil)
+  (defun my:org-complete-special-block ()
+    (interactive)
+    (completing-read
+     "Special block: "
+     '("formula" "theorem" "proof" "placefigure" "MPcode"))))
 
 (use-package org-refile
   :defer t

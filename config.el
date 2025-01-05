@@ -631,6 +631,9 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :config
   (use-package org-habit))
 
+(use-package ox-context
+  :load-path "~/Dev/ox-context")
+
 (defun my:select-workout ()
   (interactive)
   (completing-read "Workout" my:workout-list nil t))

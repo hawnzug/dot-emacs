@@ -1327,6 +1327,7 @@ if one already exists."
   (add-hook 'LaTeX-mode-hook 'my:show-trailing-space)
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)
+  (setopt ConTeXt-Mark-version "IV")
   (setq font-latex-fontify-sectioning 'color)
   (setq font-latex-fontify-script nil)
   (setq TeX-view-program-selection '((output-pdf "Sioyek"))))

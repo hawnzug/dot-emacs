@@ -122,6 +122,14 @@
    '(outline-8 ((t nil)))
 
    ;; org
+   `(org-level-1 ((t (:weight bold))))
+   `(org-level-2 ((t (:inherit org-level-1))))
+   `(org-level-3 ((t (:inherit org-level-1))))
+   `(org-level-4 ((t (:inherit org-level-1))))
+   `(org-level-5 ((t (:inherit org-level-1))))
+   `(org-level-6 ((t (:inherit org-level-1))))
+   `(org-level-7 ((t (:inherit org-level-1))))
+   `(org-level-8 ((t (:inherit org-level-1))))
    `(org-hide ((t (:foreground ,background))))
    `(org-drawer ((t (:inherit shadow))))
    `(org-todo ((t (:background ,background-dark :foreground "#555555" :weight ultra-light))))

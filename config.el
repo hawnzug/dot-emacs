@@ -614,7 +614,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
         '((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)" "SOMEDAY(s)")))
   (setopt
    org-todo-keyword-faces '(("NEXT" . (:background "#E8E3CB" :weight light))))
-  (setq org-agenda-files '("~/org/inbox.org"))
+  (setq org-agenda-files '("~/org/inbox.org" "~/org/memo.org" "~/org/projects.org"))
   (setq org-archive-location "~/org/archive.org::datetree/")
   (setq org-fontify-done-headline nil)
   (setq org-log-done 'time)
@@ -676,6 +676,12 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :after org
   :config
   (setq org-id-link-to-org-use-id 'create-if-interactive))
+
+(use-package org-node
+  :ensure t
+  :after org
+  :config
+  (org-node-cache-mode))
 
 (use-package org-make-toc
   :ensure t

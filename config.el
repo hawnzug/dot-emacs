@@ -1478,6 +1478,10 @@ if one already exists."
   (setopt pomidor-save-session-file
           (no-littering-expand-var-file-name "pomidor-session.json")))
 
+(use-package erc
+  :init
+  (setopt erc-modules (add-to-list 'erc-modules 'sasl)))
+
 (defun my:dashboard ()
   (interactive)
   (tab-bar-switch-to-tab "org")

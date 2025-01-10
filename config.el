@@ -90,6 +90,8 @@
         (chinese-font (font-spec :family "Source Han Serif CN" :weight 'bold)))
     (setq inhibit-compacting-font-caches t)
     (setq use-default-font-for-symbols nil)
+    (setq xft-ignore-color-fonts nil)
+    (setq face-ignored-fonts nil)
     (setq face-font-rescale-alist '(("Source Han Serif CN" . 0.825)))
     (dolist (characters '(greek symbol unicode))
       (set-fontset-font t characters primary-font)

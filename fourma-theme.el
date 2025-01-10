@@ -46,7 +46,7 @@
        (bg-pink "#F7AEFF")
 
        (bg-selection bg-blue)
-       (bg-highlight bg-pink)
+       (bg-highlight bg-green)
        (bg-info bg-yellow)
        (bg-error "#FF451E")
 
@@ -169,6 +169,7 @@
 
    ;; Dired
    `(dired-directory ((t (:weight bold :foreground ,fg-6))))
+   `(dired-marked ((t (:background ,bg-blue))))
 
    ;; Haskell
    '(haskell-constructor-face ((t nil)))

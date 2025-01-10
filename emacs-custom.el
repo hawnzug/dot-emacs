@@ -20,11 +20,13 @@
               org-plus-contrib perfect-margin pomidor project
               proof-general rime slime sly sml-mode soap-client
               symbol-overlay tempel terminal-here tramp
-              tramp-container tuareg typescript-mode use-package
-              use-package-ensure-system-package verilog-mode vertico
-              vterm vterm-toggle wgrep which-key xref yaml-mode
-              zig-mode))
- '(package-vc-selected-packages '((eat :url "https://codeberg.org/hawnzug/emacs-eat.git")))
+              tramp-container tuareg typescript-mode ultra-scroll
+              use-package use-package-ensure-system-package
+              verilog-mode vertico vterm vterm-toggle wgrep which-key
+              xref yaml-mode zig-mode))
+ '(package-vc-selected-packages
+   '((ultra-scroll :url "https://github.com/jdtsmith/ultra-scroll")
+     (eat :url "https://codeberg.org/hawnzug/emacs-eat.git")))
  '(safe-local-variable-values
    '((etags-regen-ignores "test/manual/etags/")
      (etags-regen-regexp-alist

@@ -184,9 +184,11 @@
 
 (use-package pixel-scroll
   :config
-  (setopt
-   pixel-scroll-precision-use-momentum t
-   pixel-scroll-precision-interpolate-page t)
+  (setopt pixel-scroll-precision-use-momentum t)
+  (setopt pixel-scroll-precision-interpolate-page t)
+  (setopt pixel-scroll-precision-interpolation-total-time 0.2)
+  (setopt pixel-scroll-precision-interpolation-factor 3.0)
+  (setopt pixel-scroll-precision-large-scroll-height 40.0)
   (pixel-scroll-precision-mode 1))
 
 (use-package indent-bars
@@ -1507,6 +1509,21 @@ if one already exists."
   (split-window-right)
   (magit-list-repositories))
 ;; (run-with-idle-timer 120 t #'my:dashboard)
+
+(use-package ultra-scroll
+  :vc (:url "https://github.com/jdtsmith/ultra-scroll"
+       :rev :newest)
+  :init
+  (setq scroll-conservatively 101 ; important!
+        scroll-margin 0)
+  :config
+  (defalias 'pixel-scroll-precision-scroll-down-page 'ultra-scroll-down)
+  (defalias 'pixel-scroll-precision-scroll-up-page 'ultra-scroll-up))
+
+(use-package doc-view
+  :config
+  (setopt doc-view-continuous t)
+  (setopt doc-view-resolution 300))
 
 ;;;; Custom
 (setq custom-file "~/.config/emacs/emacs-custom.el")

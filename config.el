@@ -1482,6 +1482,19 @@ if one already exists."
   :init
   (setopt erc-modules (add-to-list 'erc-modules 'sasl)))
 
+(use-package notmuch
+  :ensure t)
+
+(use-package sendmail
+  :config
+  (setopt send-mail-function 'sendmail-send-it)
+  (setopt sendmail-program "/usr/bin/msmtp")
+  (setopt mail-specify-envelope-from t)
+  (setopt mail-envelope-from 'header))
+(use-package message
+  :config
+  (setopt message-sendmail-envelope-from 'header))
+
 (defun my:dashboard ()
   (interactive)
   (tab-bar-switch-to-tab "org")

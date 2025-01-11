@@ -1516,9 +1516,10 @@ if one already exists."
   :init
   (setq scroll-conservatively 101 ; important!
         scroll-margin 0)
-  :config
-  (defalias 'pixel-scroll-precision-scroll-down-page 'ultra-scroll-down)
-  (defalias 'pixel-scroll-precision-scroll-up-page 'ultra-scroll-up))
+  ;; :config
+  ;; (defalias 'pixel-scroll-precision-scroll-down-page 'ultra-scroll-down)
+  ;; (defalias 'pixel-scroll-precision-scroll-up-page 'ultra-scroll-up)
+  )
 
 (use-package doc-view
   :config

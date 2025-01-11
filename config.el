@@ -1525,6 +1525,9 @@ if one already exists."
   (setopt doc-view-continuous t)
   (setopt doc-view-resolution 300))
 
+(use-package citre
+  :ensure t)
+
 ;;;; Custom
 (setq custom-file "~/.config/emacs/emacs-custom.el")
 (load custom-file)

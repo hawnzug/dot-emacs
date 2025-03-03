@@ -1483,7 +1483,8 @@ if one already exists."
           (no-littering-expand-var-file-name "pomidor-session.json")))
 
 (use-package erc
-  :init
+  :defer t
+  :config
   (setopt erc-modules (add-to-list 'erc-modules 'sasl)))
 
 (use-package notmuch

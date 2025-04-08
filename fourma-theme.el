@@ -188,6 +188,7 @@
 
    ;; eglot
    '(eglot-highlight-symbol-face ((t (:inherit (region)))))
+   '(eglot-inlay-hint-face ((t (:slant italic :foreground "#BBBBBB"))))
 
    ;; which-key
    '(which-key-separator-face ((t nil)))))

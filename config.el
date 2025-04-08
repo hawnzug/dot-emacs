@@ -1180,7 +1180,13 @@ if one already exists."
   :ensure t
   :defer t
   :config
-  (setq inferior-lisp-program "sbcl"))
+  (setq inferior-lisp-program "sbcl")
+  (setq sly-default-lisp 'sbcl)
+  (setq sly-lisp-implementations
+        '((sbcl  ("vend" "repl" "sbcl")  :coding-system utf-8-unix)
+          (ecl   ("vend" "repl" "ecl")   :coding-system utf-8-unix)
+          (abcl  ("vend" "repl" "abcl")  :coding-system utf-8-unix)
+          (clasp ("vend" "repl" "clasp") :coding-system utf-8-unix))))
 
 (use-package cooltt
   :load-path "~/Projects/cooltt/emacs"

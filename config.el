@@ -1347,8 +1347,8 @@ if one already exists."
   (with-eval-after-load 'eglot
     (add-to-list
      'eglot-server-programs
-     '(python-mode . ("pdm" "run"
-                      "pyright-langserver" "--stdio")))))
+     '((python-mode python-ts-mode)
+       "uv" "run" "basedpyright-langserver" "--stdio"))))
 
 (use-package cubicaltt
   :load-path "~/cubicaltt"

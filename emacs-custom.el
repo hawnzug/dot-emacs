@@ -18,12 +18,12 @@
               modern-cpp-font-lock modus-themes nerd-icons
               no-littering notmuch orderless org org-make-toc org-node
               org-plus-contrib perfect-margin pomidor project
-              proof-general rime slime sly sml-mode soap-client
-              symbol-overlay tempel terminal-here tramp
+              proof-general python rime slime sly sml-mode soap-client
+              symbol-overlay tempel terminal-here track-changes tramp
               tramp-container tuareg typescript-mode ultra-scroll
               use-package use-package-ensure-system-package
               verilog-mode vertico vterm vterm-toggle wgrep which-key
-              xref yaml-mode zig-mode))
+              window-tool-bar xref yaml-mode zig-mode))
  '(package-vc-selected-packages
    '((ultra-scroll :url "https://github.com/jdtsmith/ultra-scroll")
      (eat :url "https://codeberg.org/hawnzug/emacs-eat.git")))

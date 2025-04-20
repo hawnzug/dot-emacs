@@ -86,7 +86,7 @@
 ;;;; User Interface
 (defun my:font-setup ()
   (interactive)
-  (let ((primary-font (font-spec :family "Iosevka Term" :size 24.0 :weight 'normal))
+  (let ((primary-font (font-spec :family "Iosevka Nono" :size 22.0 :weight 'normal))
         (chinese-font (font-spec :family "Source Han Serif CN" :weight 'bold)))
     (setq inhibit-compacting-font-caches t)
     (setq use-default-font-for-symbols nil)
@@ -103,7 +103,7 @@
     (set-face-font 'default primary-font)
     (set-face-font 'fixed-pitch primary-font)
     (set-face-font 'fixed-pitch-serif primary-font)
-    (set-face-font 'variable-pitch "Alegreya 24")))
+    (set-face-font 'variable-pitch "Alegreya 22")))
 
 ;; (add-hook 'after-make-frame-functions #'my:font-setup nil)
 (my:font-setup)

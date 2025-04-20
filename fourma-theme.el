@@ -80,10 +80,10 @@
    `(line-number ((t (:foreground "#999999" :background ,background-dark :weight light))))
    `(line-number-current-line ((t (:foreground "#444" :background "#FFFFFF" :weight light))))
 
-   `(font-lock-comment-face ((t (:background ,background-dark :weight light :font ,font-slab))))
+   `(font-lock-comment-face ((t (:foreground "#333" :background ,background-dark :weight light))))
    `(font-lock-comment-delimiter-face ((t (:inherit (font-lock-comment-face)))))
    '(font-lock-doc-face ((t (:inherit (font-lock-comment-face)))))
-   `(font-lock-builtin-face ((t (:weight light :font ,font-slab))))
+   `(font-lock-builtin-face ((t (:weight light :slant italic))))
    `(font-lock-constant-face ((t (:foreground ,fg-1))))
    `(font-lock-keyword-face ((t (:inherit font-lock-builtin-face))))
    `(font-lock-function-name-face ((t (:foreground ,fg-0))))
@@ -122,7 +122,7 @@
    '(outline-8 ((t nil)))
 
    ;; org
-   `(org-level-1 ((t (:weight bold))))
+   `(org-level-1 ((t nil)))
    `(org-level-2 ((t (:inherit org-level-1))))
    `(org-level-3 ((t (:inherit org-level-1))))
    `(org-level-4 ((t (:inherit org-level-1))))

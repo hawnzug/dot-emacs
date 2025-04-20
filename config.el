@@ -359,6 +359,7 @@
         '((file (styles . (partial-completion))))))
 
 (use-package corfu
+  :disabled
   :ensure t
   :config
   (with-eval-after-load 'tooe-colemak
@@ -547,12 +548,15 @@
   :ensure t
   :hook ((LaTeX-mode org-mode). laas-mode)
   :config
-  (setq laas-enable-auto-space nil)
+  (setopt laas-enable-auto-space nil)
+  (setopt laas-use-unicode t)
+  (defun nottexmathp () (not (texmathp)))
   (aas-set-snippets 'laas-mode
-    "\\af" '(tempel "\\AgdaFunction{" q "}")
-    "\\ad" '(tempel "\\AgdaDatatype{" q "}")
-    "\\ac" '(tempel "\\AgdaInductiveConstructor{" q "}")
-    ))
+    :cond #'texmathp
+    "oo" "∘")
+  (aas-set-snippets 'laas-mode
+    :cond #'nottexmathp
+    "mm" '(tempel "\\(" q "\\)")))
 
 (use-package wgrep
   :ensure t
@@ -612,6 +616,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (org-mode . my:show-trailing-space)
   (org-babel-after-execute . org-redisplay-inline-images)
   :config
+  (setopt org-startup-folded 'fold)
   (setopt org-use-property-inheritance t)
   (setq org-special-ctrl-a/e t)
   (setq org-todo-keywords
@@ -668,9 +673,9 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :config
   (setq
    org-capture-templates
-   '(("j" "Journal" entry (file+olp+datetree "~/org/inbox.org" "Journal")
+   '(("j" "Journal" entry (file+olp+datetree "~/org/journal.org")
       "* %?\n:PROPERTIES:\n:CREATED:  %U\n:END:")
-     ("b" "Bookmark" entry (file+olp+datetree "~/org/inbox.org" "Journal")
+     ("i" "Inbox" entry (file "~/org/inbox.org")
       "* %a\n:PROPERTIES:\n:CREATED:  %U\n:END:\n%i"))))
 
 (use-package org-protocol
@@ -1360,6 +1365,10 @@ if one already exists."
   (add-hook 'LaTeX-mode-hook 'my:show-trailing-space)
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode)
   (add-hook 'LaTeX-mode-hook 'TeX-PDF-mode)
+  (setopt TeX-engine 'luatex)
+  (setopt texmathp-tex-commands
+          '(("prooftree" env-on)
+            ("prooftree*" env-on)))
   (setopt ConTeXt-Mark-version "IV")
   (setq font-latex-fontify-sectioning 'color)
   (setq font-latex-fontify-script nil)

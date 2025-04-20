@@ -1051,11 +1051,8 @@ if one already exists."
 ;; If something doesn't work, try eglot instead.
 
 (use-package lsp-bridge
-  :disabled
   :load-path "~/Projects/emacs-py/lsp-bridge"
   :init
-  (defun my:lsp-bridge-mode-set-keymap ()
-    (keymap-local-set "RET" #'newline-and-indent))
   (setopt
    lsp-bridge-python-multi-lsp-server "pyright_ruff"
    lsp-bridge-python-command "emacs-python.sh")
@@ -1064,9 +1061,7 @@ if one already exists."
     agda2-mode haskell-mode typescript-mode js-mode js2-mode
     bibtex-mode sh-mode bash-mode web-mode css-mode
     emacs-lisp-mode dockerfile-mode)
-   . lsp-bridge-mode)
-  :config
-  (add-hook 'lsp-bridge-mode-hook #'my:lsp-bridge-mode-set-keymap))
+   . lsp-bridge-mode))
 
 (use-package eglot
   :ensure t
@@ -1535,6 +1530,15 @@ if one already exists."
 
 (use-package citre
   :ensure t)
+
+(use-package eaf
+  :load-path "~/Projects/emacs-py/emacs-application-framework"
+  :config
+  (setopt eaf-python-command "emacs-python.sh")
+  (setq eaf-epc-accept-process-timeout 20))
+
+(use-package eaf-pdf-viewer
+  :load-path "~/Projects/emacs-py/eaf-pdf-viewer")
 
 ;;;; Custom
 (setq custom-file "~/.config/emacs/emacs-custom.el")

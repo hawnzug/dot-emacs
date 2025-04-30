@@ -83,7 +83,7 @@
    `(font-lock-comment-face ((t (:foreground "#333" :background ,background-dark :weight light))))
    `(font-lock-comment-delimiter-face ((t (:inherit (font-lock-comment-face)))))
    '(font-lock-doc-face ((t (:inherit (font-lock-comment-face)))))
-   `(font-lock-builtin-face ((t (:weight light :slant italic))))
+   `(font-lock-builtin-face ((t (:weight extra-light))))
    `(font-lock-constant-face ((t (:foreground ,fg-1))))
    `(font-lock-keyword-face ((t (:inherit font-lock-builtin-face))))
    `(font-lock-function-name-face ((t (:foreground ,fg-0))))
@@ -162,7 +162,7 @@
    `(agda2-highlight-postulate-face ((t nil)))
 
    ;; LaTeX
-   '(font-latex-sedate-face ((t (:inherit (font-lock-keyword-face)))))
+   '(font-latex-sedate-face ((t nil)))
    '(font-latex-string-face ((t (:inherit (font-lock-string-face)))))
    '(font-latex-math-face ((t nil)))
    '(font-latex-script-char-face ((t nil)))

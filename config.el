@@ -86,7 +86,7 @@
 ;;;; User Interface
 (defun my:font-setup ()
   (interactive)
-  (let ((primary-font (font-spec :family "Iosevka Nono" :size 22.0 :weight 'normal))
+  (let ((primary-font (font-spec :family "Iosevka Nono" :size 24.0 :weight 'normal))
         (chinese-font (font-spec :family "Source Han Serif CN" :weight 'bold)))
     (setq inhibit-compacting-font-caches t)
     (setq use-default-font-for-symbols nil)
@@ -95,15 +95,17 @@
     (setq face-font-rescale-alist '(("Source Han Serif CN" . 0.825)))
     (dolist (characters '(greek symbol unicode))
       (set-fontset-font t characters primary-font)
+      (set-fontset-font t characters "Iosevka Nono" nil 'append)
       (set-fontset-font t characters "Noto Color Emoji" nil 'append)
       (set-fontset-font t characters "Symbols Nerd Font Mono" nil 'append))
     (dolist (characters '(han chinese-gbk cjk-misc))
       (set-fontset-font t characters primary-font)
+      (set-fontset-font t characters "Iosevka Nono" nil 'append)
       (set-fontset-font t characters chinese-font nil 'append))
     (set-face-font 'default primary-font)
     (set-face-font 'fixed-pitch primary-font)
     (set-face-font 'fixed-pitch-serif primary-font)
-    (set-face-font 'variable-pitch "Alegreya 22")))
+    (set-face-font 'variable-pitch "Alegreya 24")))
 
 ;; (add-hook 'after-make-frame-functions #'my:font-setup nil)
 (my:font-setup)
@@ -192,7 +194,7 @@
   (pixel-scroll-precision-mode 1))
 
 (use-package indent-bars
-  :disabled
+  :disable
   :init
   (defun my:agda2-indent-bars-spacing-override ()
     (setq indent-bars-spacing-override 2))
@@ -205,7 +207,7 @@
    indent-bars-width-frac 0.1
    indent-bars-pad-frac 0
    indent-bars-zigzag nil
-   indent-bars-color-by-depth '(:palette ("red" "green" "orange" "cyan") :blend 0.1)
+   indent-bars-color-by-depth '(:palette ("red" "green" "orange" "cyan") :blend 0.8)
    indent-bars-highlight-current-depth '(:blend 1)
    indent-bars-starting-column 0
    indent-bars-display-on-blank-lines nil))

@@ -12,9 +12,9 @@
               embark embark-consult emmet-mode exec-path-from-shell
               faceup find-file-in-project flymake flymake-shellcheck
               gcmh haskell-mode hide-mode-line hl-todo htmlize hydra
-              ibuffer-vc idlwave imenu-list json-mode jsonrpc
-              kdeconnect keyfreq laas ledger-mode lua-mode magit
-              magit-delta marginalia markdown-mode
+              ibuffer-vc idlwave imenu-list indent-bars json-mode
+              jsonrpc kdeconnect keyfreq laas ledger-mode lua-mode
+              magit magit-delta marginalia markdown-mode
               modern-cpp-font-lock modus-themes nerd-icons
               no-littering notmuch orderless org org-make-toc org-node
               org-plus-contrib perfect-margin pomidor project

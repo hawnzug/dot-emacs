@@ -1318,7 +1318,9 @@ if one already exists."
 
 (use-package tuareg
   :ensure t
-  :defer t)
+  :defer t
+  :config
+  (require 'flymake-proc))
 
 (eval-and-compile
   (defun opam-emacs-load-path ()
@@ -1326,10 +1328,20 @@ if one already exists."
      "emacs/site-lisp"
      (car (process-lines "opam" "var" "share")))))
 
-(use-package utop
+(use-package opam-autoloads
   :load-path (lambda () (opam-emacs-load-path))
-  :hook
-  (tuareg-mode . utop-minor-mode))
+  :config
+  (use-package dune
+    :defer t
+    :config
+    (use-package dune-flymake
+      :config
+      (add-hook 'dune-mode-hook #'dune-flymake-dune-mode-hook))
+    (use-package dune-watch
+      :defer t))
+  (use-package utop
+    :hook
+    (tuareg-mode . utop-minor-mode)))
 
 (use-package sml-mode
   :ensure t

@@ -1,3 +1,5 @@
+;;; config.el --- My Emacs config  -*- lexical-binding: t -*-
+
 ;;;; Package Management
 (setopt use-package-enable-imenu-support t)
 (require 'use-package)
@@ -194,7 +196,7 @@
   (pixel-scroll-precision-mode 1))
 
 (use-package indent-bars
-  :disable
+  :disabled
   :init
   (defun my:agda2-indent-bars-spacing-override ()
     (setq indent-bars-spacing-override 2))
@@ -361,8 +363,9 @@
         '((file (styles . (partial-completion))))))
 
 (use-package corfu
-  :disabled
   :ensure t
+  :hook
+  (merlin-mode . corfu-mode)
   :config
   (with-eval-after-load 'tooe-colemak
     (defun my:corfu-quit-and-escape ()
@@ -381,8 +384,7 @@
   (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)
   (setopt corfu-cycle t)
   (setopt corfu-auto t)
-  (setopt corfu-auto-delay 0.1)
-  (global-corfu-mode))
+  (setopt corfu-auto-delay 0.05))
 
 (use-package emacs
   :init
@@ -1062,13 +1064,19 @@ if one already exists."
   :init
   (setopt
    lsp-bridge-python-multi-lsp-server "pyright_ruff"
-   lsp-bridge-python-command "emacs-python.sh")
+   lsp-bridge-python-command "emacs-python.sh"
+   lsp-bridge-enable-hover-diagnostic t)
   :hook
-  ((LaTeX-mode python-mode tuareg-mode
+  ((LaTeX-mode python-mode
     agda2-mode haskell-mode typescript-mode js-mode js2-mode
     bibtex-mode sh-mode bash-mode web-mode css-mode
     emacs-lisp-mode dockerfile-mode)
-   . lsp-bridge-mode))
+   . lsp-bridge-mode)
+  :config
+  (use-package acm-backend-capf
+    :config
+    (setopt acm-enable-capf t)
+    (add-to-list 'acm-backend-capf-mode-list 'tuareg-mode)))
 
 (use-package eglot
   :ensure t
@@ -1284,11 +1292,12 @@ if one already exists."
   :ensure t
   :defer t)
 
-(eval-and-compile
-  (defun agda-mode-load-path ()
+(defvar my:agda-mode-load-path
+  (eval-and-compile
     (file-name-directory (shell-command-to-string "agda-mode locate"))))
+
 (use-package agda2-mode
-  :load-path (lambda () (agda-mode-load-path))
+  :load-path my:agda-mode-load-path
   :mode ("\\.l?agda\\'" . agda2-mode)
   :config
   (defun my:agda2-match-eq-reasoning ()
@@ -1322,14 +1331,19 @@ if one already exists."
   :config
   (require 'flymake-proc))
 
-(eval-and-compile
-  (defun opam-emacs-load-path ()
-    (expand-file-name
-     "emacs/site-lisp"
-     (car (process-lines "opam" "var" "share")))))
+(use-package opam-switch-mode
+  :ensure t
+  :hook
+  ((coq-mode tuareg-mode merlin-mode) . opam-switch-mode))
+
+;; (defvar my:opam-emacs-load-path
+;;   (eval-and-compile
+;;     (expand-file-name
+;;      "emacs/site-lisp"
+;;      (car (process-lines "opam" "var" "share")))))
 
 (use-package opam-autoloads
-  :load-path (lambda () (opam-emacs-load-path))
+  :load-path "~/Projects/opam-site-lisp"
   :config
   (use-package dune
     :defer t
@@ -1339,6 +1353,11 @@ if one already exists."
       (add-hook 'dune-mode-hook #'dune-flymake-dune-mode-hook))
     (use-package dune-watch
       :defer t))
+  (use-package merlin
+    :hook
+    (tuareg-mode . merlin-mode)
+    :config
+    (setopt merlin-completion-with-doc t))
   (use-package utop
     :hook
     (tuareg-mode . utop-minor-mode)))
@@ -1495,6 +1514,7 @@ if one already exists."
   (setq elfeed-search-print-entry-function #'elfeed-score-print-entry))
 
 (use-package pomidor
+  :disabled
   :ensure t
   :defer t
   :init

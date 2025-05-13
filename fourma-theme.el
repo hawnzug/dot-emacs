@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 (deftheme fourma
   "Created 2020-10-25.")
 

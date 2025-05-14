@@ -733,7 +733,13 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :vc (:url "https://codeberg.org/hawnzug/emacs-eat.git"
        :rev :newest
        :doc "eat.texi")
-  :defer t)
+  :defer t
+  :init
+  (defun my:eat--set-cursor (_ _)
+    "Do not set cursor-type at all to respect the modal editing setting.")
+  :config
+  (advice-add 'eat--set-cursor :override #'my:eat--set-cursor)
+  (add-hook 'eat-exit-hook #'kill-this-buffer))
 
 (use-package vterm
   :ensure t

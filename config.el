@@ -1353,14 +1353,14 @@ if one already exists."
 (use-package opam-autoloads
   :load-path "~/Projects/opam-site-lisp"
   :config
+  (use-package dune-watch
+    :commands dune-watch-minor-mode)
   (use-package dune
     :defer t
     :config
     (use-package dune-flymake
       :config
-      (add-hook 'dune-mode-hook #'dune-flymake-dune-mode-hook))
-    (use-package dune-watch
-      :defer t))
+      (add-hook 'dune-mode-hook #'dune-flymake-dune-mode-hook)))
   (use-package merlin
     :hook
     (tuareg-mode . merlin-mode)

@@ -343,11 +343,9 @@
   (vertico-multiform-mode)
   (setq vertico-multiform-commands
         '((consult-imenu buffer)
-          (consult-outline buffer)
-          (consult-buffer unobtrusive)))
+          (consult-outline buffer)))
   (setq vertico-multiform-categories
-        '((consult-grep buffer)
-          (buffer unobtrusive))))
+        '((consult-grep buffer))))
 
 (use-package orderless
   :ensure t

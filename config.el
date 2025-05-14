@@ -423,6 +423,10 @@
         xref-show-definitions-function #'consult-xref))
 
 (define-keymap
+  :keymap ctl-x-map
+  "f" #'find-file
+  "C-f" #'set-fill-column)
+(define-keymap
   :keymap goto-map
   "e" #'consult-compile-error
   "f" #'consult-flymake

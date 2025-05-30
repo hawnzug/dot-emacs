@@ -117,7 +117,7 @@
 (setopt line-spacing nil)
 
 ;; (setq custom-safe-themes t)
-(load-theme 'fourma :no-confirm)
+;; (load-theme 'fourma :no-confirm)
 (use-package modus-themes
   :disabled
   :ensure t
@@ -125,6 +125,14 @@
   (setq modus-themes-italic-constructs t
         modus-themes-bold-constructs t)
   (load-theme 'modus-operandi :no-confirm))
+
+(use-package ef-themes
+  :ensure t
+  :config
+  (setopt ef-themes-mixed-fonts t)
+  (setopt ef-themes-variable-pitch-ui t)
+  (mapc #'disable-theme custom-enabled-themes)
+  (load-theme 'ef-tritanopia-light :no-confirm))
 
 (defun my:syntax-color-hex ()
   (interactive)

@@ -9,19 +9,19 @@
               citar-embark citre company company-coq consult
               consult-dir consult-eglot corfu corfu-candidate-overlay
               csv-mode demo-it denote dirvish dockerfile-mode eat
-              editorconfig eglot eldoc eldoc-box elfeed elfeed-score
-              embark embark-consult emmet-mode exec-path-from-shell
-              faceup find-file-in-project flymake flymake-shellcheck
-              gcmh haskell-mode hide-mode-line hl-todo htmlize hydra
-              ibuffer-vc idlwave imenu-list indent-bars json-mode
-              jsonrpc kdeconnect keyfreq laas ledger-mode lua-mode
-              magit magit-delta marginalia markdown-mode
-              modern-cpp-font-lock modus-themes nerd-icons
-              no-littering notmuch opam-switch-mode orderless org
-              org-make-toc org-node org-plus-contrib perfect-margin
-              pomidor project proof-general python rime slime sly
-              sml-mode soap-client symbol-overlay tempel terminal-here
-              track-changes tramp tramp-container tuareg
+              editorconfig ef-themes eglot eldoc eldoc-box elfeed
+              elfeed-score embark embark-consult emmet-mode
+              exec-path-from-shell faceup find-file-in-project flymake
+              flymake-shellcheck gcmh haskell-mode hide-mode-line
+              hl-todo htmlize hydra ibuffer-vc idlwave imenu-list
+              indent-bars json-mode jsonrpc kdeconnect keyfreq laas
+              ledger-mode lua-mode magit magit-delta marginalia
+              markdown-mode modern-cpp-font-lock modus-themes
+              nerd-icons no-littering notmuch opam-switch-mode
+              orderless org org-make-toc org-node org-plus-contrib
+              perfect-margin pomidor project proof-general python rime
+              slime sly sml-mode soap-client symbol-overlay tempel
+              terminal-here track-changes tramp tramp-container tuareg
               typescript-mode ultra-scroll use-package
               use-package-ensure-system-package verilog-mode vertico
               vterm vterm-toggle wgrep which-key window-tool-bar xref

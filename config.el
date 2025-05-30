@@ -267,21 +267,14 @@
   (global-set-key [remap mark-sexp] 'easy-mark))
 
 (use-package puni
-  :disabled t
-  :ensure t
-  :defer t
-  :init
+  :load-path "~/Projects/puni"
   ;; The autoloads of Puni are set up so you can enable `puni-mode` or
   ;; `puni-global-mode` before `puni` is actually loaded. Only after you press
   ;; any key that calls Puni commands, it's loaded.
-  (require 'puni-autoloads)
-  (puni-global-mode)
-  (add-hook 'term-mode-hook #'puni-disable-puni-mode))
+  )
 
 (use-package tooe-colemak
-  :load-path "~/Dev/tooe"
-  :config
-  (tooe-mode))
+  :load-path "~/Dev/tooe")
 
 (use-package boon-colemak
   :disabled

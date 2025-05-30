@@ -150,7 +150,7 @@
   (let ((old-alpha (frame-parameter nil 'alpha-background)))
     (if (and (numberp old-alpha) (< old-alpha 100))
         (set-frame-parameter nil 'alpha-background 100)
-      (set-frame-parameter nil 'alpha-background 90))))
+      (set-frame-parameter nil 'alpha-background 85))))
 (my:toggle-transparency)
 
 (defun my:show-trailing-space ()

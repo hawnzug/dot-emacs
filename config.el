@@ -69,7 +69,7 @@
   (defun system-move-file-to-trash (filename)
     (shell-command (concat "trash " (shell-quote-argument filename))))
   (defalias 'yes-or-no-p 'y-or-n-p)
-  (setq-default tab-width 4)
+  (setq-default tab-width 8)
   (setq-default truncate-lines t))
 
 (use-package gcmh

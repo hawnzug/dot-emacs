@@ -366,12 +366,12 @@
   :hook
   (merlin-mode . corfu-mode)
   :config
-  (with-eval-after-load 'tooe-colemak
-    (defun my:corfu-quit-and-escape ()
-      (interactive)
-      (call-interactively 'corfu-quit)
-      (tooe-set-normal-state))
-    (keymap-set tooe-insert-map "<escape>" #'my:corfu-quit-and-escape))
+  ;; (with-eval-after-load 'tooe-colemak
+  ;;   (defun my:corfu-quit-and-escape ()
+  ;;     (interactive)
+  ;;     (call-interactively 'corfu-quit)
+  ;;     (tooe-set-normal-state))
+  ;;   (keymap-set tooe-insert-map "<escape>" #'my:corfu-quit-and-escape))
   (defun corfu-move-to-minibuffer ()
     (interactive)
     (pcase completion-in-region--data

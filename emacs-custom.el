@@ -27,8 +27,9 @@
               vterm vterm-toggle wgrep which-key window-tool-bar xref
               yaml-mode zig-mode))
  '(package-vc-selected-packages
-   '((ultra-scroll :url "https://github.com/jdtsmith/ultra-scroll")
-     (eat :url "https://codeberg.org/hawnzug/emacs-eat.git")))
+   '((eat :url "https://codeberg.org/hawnzug/emacs-eat.git" :make
+          "terminfo" :doc "eat.texi")
+     (ultra-scroll :url "https://github.com/jdtsmith/ultra-scroll")))
  '(safe-local-variable-values
    '((etags-regen-ignores "test/manual/etags/")
      (etags-regen-regexp-alist

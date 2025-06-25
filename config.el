@@ -4,6 +4,14 @@
 (setopt use-package-enable-imenu-support t)
 (require 'use-package)
 
+;; Enable :doc
+(defconst use-package-vc-valid-keywords
+  '( :url :branch :lisp-dir :main-file :vc-backend :rev
+     :shell-command :make :ignored-files
+     :doc)
+  "Valid keywords for the `:vc' keyword.
+See Info node `(emacs)Fetching Package Sources'.")
+
 (add-to-list 'load-path "~/.config/emacs/lisp")
 
 ;; (dolist (path (directory-files package-user-dir))
@@ -731,9 +739,10 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
     (eat-eshell-mode)))
 
 (use-package eat
-  :vc (:url "https://codeberg.org/hawnzug/emacs-eat.git"
-       :rev :newest
-       :doc "eat.texi")
+  :vc ( :url "https://codeberg.org/hawnzug/emacs-eat.git"
+        :rev :newest
+        :make "terminfo"
+        :doc "eat.texi")
   :defer t
   :init
   (defun my:eat--set-cursor (_ _)

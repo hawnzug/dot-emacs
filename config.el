@@ -1605,7 +1605,9 @@ if one already exists."
 
 (use-package nutrack
   :load-path "~/Dev/nutrack/"
-  :defer t)
+  :defer t
+  :init
+  (require 'nutrack-autoloads))
 
 ;;;; Custom
 (setq custom-file "~/.config/emacs/emacs-custom.el")

@@ -1584,13 +1584,19 @@ if one already exists."
   :ensure t)
 
 (use-package eaf
+  :disabled
   :load-path "~/Projects/emacs-py/emacs-application-framework"
   :config
   (setopt eaf-python-command "emacs-python.sh")
   (setq eaf-epc-accept-process-timeout 20))
 
 (use-package eaf-pdf-viewer
+  :disabled
   :load-path "~/Projects/emacs-py/eaf-pdf-viewer")
+
+(use-package nutrack
+  :load-path "~/Dev/nutrack/"
+  :defer t)
 
 ;;;; Custom
 (setq custom-file "~/.config/emacs/emacs-custom.el")

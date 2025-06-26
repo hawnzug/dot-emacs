@@ -16,7 +16,7 @@
               hl-todo htmlize hydra ibuffer-vc idlwave imenu-list
               indent-bars json-mode jsonrpc kdeconnect keyfreq laas
               ledger-mode lua-mode magit magit-delta marginalia
-              markdown-mode modern-cpp-font-lock modus-themes
+              markdown-mode minions modern-cpp-font-lock modus-themes
               nerd-icons no-littering notmuch opam-switch-mode
               orderless org org-make-toc org-node org-plus-contrib
               perfect-margin pomidor project proof-general python rime

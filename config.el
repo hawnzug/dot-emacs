@@ -138,7 +138,7 @@ See Info node `(emacs)Fetching Package Sources'.")
   :ensure t
   :config
   (setopt ef-themes-mixed-fonts t)
-  (setopt ef-themes-variable-pitch-ui t)
+  (setopt ef-themes-variable-pitch-ui nil)
   (mapc #'disable-theme custom-enabled-themes)
   (load-theme 'ef-tritanopia-light :no-confirm))
 
@@ -175,6 +175,21 @@ See Info node `(emacs)Fetching Package Sources'.")
 
 (use-package nerd-icons
   :ensure t)
+
+(setopt mode-line-position-column-line-format
+        (list " (%l,%C)"))
+(column-number-mode)
+(use-package minions
+  :ensure t
+  :config
+  (minions-mode))
+(use-package moody
+  :disabled
+  :ensure t
+  :config
+  (moody-replace-mode-line-front-space)
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode))
 
 (use-package hide-mode-line
   :ensure t

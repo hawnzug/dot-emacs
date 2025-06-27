@@ -372,17 +372,16 @@ See Info node `(emacs)Fetching Package Sources'.")
         '((consult-grep buffer))))
 
 (use-package orderless
-  :ensure t
-  :after vertico
-  :init
-  ;; (defun my:orderless-in-minibuffer ()
-  ;;   (setq-local completion-styles '(orderless)))
-  ;; (add-hook 'minibuffer-setup-hook
-  ;;           'my:orderless-in-minibuffer)
-  (setq completion-styles '(orderless basic))
-  (setq completion-category-defaults nil)
-  (setq completion-category-overrides
-        '((file (styles . (partial-completion))))))
+  :ensure t)
+(use-package hotfuzz
+  :ensure t)
+(setq completion-styles '(hotfuzz orderless))
+(setq completion-category-defaults nil)
+(setq completion-category-overrides
+      '((file (styles . (partial-completion)))))
+(setq completion-ignore-case t
+      read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t)
 
 (use-package corfu
   :ensure t

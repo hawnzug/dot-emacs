@@ -13,19 +13,19 @@
               elfeed-score embark embark-consult emmet-mode
               exec-path-from-shell faceup find-file-in-project flymake
               flymake-shellcheck gcmh haskell-mode hide-mode-line
-              hl-todo htmlize hydra ibuffer-vc idlwave imenu-list
-              indent-bars json-mode jsonrpc kdeconnect keyfreq laas
-              ledger-mode lua-mode magit magit-delta marginalia
-              markdown-mode minions modern-cpp-font-lock modus-themes
-              nerd-icons no-littering notmuch opam-switch-mode
-              orderless org org-make-toc org-node org-plus-contrib
-              perfect-margin pomidor project proof-general python rime
-              slime sly sml-mode soap-client symbol-overlay tempel
-              terminal-here track-changes tramp tramp-container tuareg
-              typescript-mode ultra-scroll use-package
-              use-package-ensure-system-package verilog-mode vertico
-              vterm vterm-toggle wgrep which-key window-tool-bar xref
-              yaml-mode zig-mode))
+              hl-todo hotfuzz htmlize hydra ibuffer-vc idlwave
+              imenu-list indent-bars json-mode jsonrpc kdeconnect
+              keyfreq laas ledger-mode lua-mode magit magit-delta
+              marginalia markdown-mode minions modern-cpp-font-lock
+              modus-themes nerd-icons no-littering notmuch
+              opam-switch-mode orderless org org-make-toc org-node
+              org-plus-contrib perfect-margin pomidor project
+              proof-general python rime slime sly sml-mode soap-client
+              symbol-overlay tempel terminal-here track-changes tramp
+              tramp-container tuareg typescript-mode ultra-scroll
+              use-package use-package-ensure-system-package
+              verilog-mode vertico vterm vterm-toggle wgrep which-key
+              window-tool-bar xref yaml-mode zig-mode))
  '(package-vc-selected-packages
    '((eat :url "https://codeberg.org/hawnzug/emacs-eat.git" :make
           "terminfo" :doc "eat.texi")

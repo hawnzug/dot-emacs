@@ -1324,6 +1324,18 @@ if one already exists."
   :ensure t
   :defer t)
 
+(defun my:imenu-add-lisp-section ()
+  (cl-pushnew
+   (list "Sections" (rx bol (>= 3 ?\;) space (group (* nonl))) 1)
+   imenu-generic-expression))
+(add-hook 'lisp-mode-hook #'my:imenu-add-lisp-section)
+(add-hook 'emacs-lisp-mode-hook #'my:imenu-add-lisp-section)
+(with-eval-after-load 'consult-imenu
+  (setf
+   (alist-get ?s (plist-get (alist-get 'emacs-lisp-mode consult-imenu-config)
+                            :types))
+   (list "Sections" 'outline-1)))
+
 (defvar my:agda-mode-load-path
   (eval-and-compile
     (file-name-directory (shell-command-to-string "agda-mode locate"))))

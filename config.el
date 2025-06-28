@@ -1,8 +1,51 @@
 ;;; config.el --- My Emacs config  -*- lexical-binding: t -*-
 
-;;;; Package Management
+;;;; elpaca
+;; See https://github.com/progfolio/elpaca/issues/222#issuecomment-1871351739.
+(defvar elpaca-core-date (list 20250625))
+(defvar elpaca-installer-version 0.11)
+(defvar elpaca-directory (expand-file-name "elpaca/" user-emacs-directory))
+(defvar elpaca-builds-directory (expand-file-name "builds/" elpaca-directory))
+(defvar elpaca-repos-directory (expand-file-name "repos/" elpaca-directory))
+(defvar elpaca-order '(elpaca :repo "https://github.com/progfolio/elpaca.git"
+                              :ref nil :depth 1 :inherit ignore
+                              :files (:defaults "elpaca-test.el" (:exclude "extensions"))
+                              :build (:not elpaca--activate-package)))
+(let* ((repo  (expand-file-name "elpaca/" elpaca-repos-directory))
+       (build (expand-file-name "elpaca/" elpaca-builds-directory))
+       (order (cdr elpaca-order))
+       (default-directory repo))
+  (add-to-list 'load-path (if (file-exists-p build) build repo))
+  (unless (file-exists-p repo)
+    (make-directory repo t)
+    (when (<= emacs-major-version 28) (require 'subr-x))
+    (condition-case-unless-debug err
+        (if-let* ((buffer (pop-to-buffer-same-window "*elpaca-bootstrap*"))
+                  ((zerop (apply #'call-process `("git" nil ,buffer t "clone"
+                                                  ,@(when-let* ((depth (plist-get order :depth)))
+                                                      (list (format "--depth=%d" depth) "--no-single-branch"))
+                                                  ,(plist-get order :repo) ,repo))))
+                  ((zerop (call-process "git" nil buffer t "checkout"
+                                        (or (plist-get order :ref) "--"))))
+                  (emacs (concat invocation-directory invocation-name))
+                  ((zerop (call-process emacs nil buffer nil "-Q" "-L" "." "--batch"
+                                        "--eval" "(byte-recompile-directory \".\" 0 'force)")))
+                  ((require 'elpaca))
+                  ((elpaca-generate-autoloads "elpaca" repo)))
+            (progn (message "%s" (buffer-string)) (kill-buffer buffer))
+          (error "%s" (with-current-buffer buffer (buffer-string))))
+      ((error) (warn "%s" err) (delete-directory repo 'recursive))))
+  (unless (require 'elpaca-autoloads nil t)
+    (require 'elpaca)
+    (elpaca-generate-autoloads "elpaca" repo)
+    (let ((load-source-file-function nil)) (load "./elpaca-autoloads"))))
+(add-hook 'after-init-hook #'elpaca-process-queues)
+(elpaca `(,@elpaca-order))
+
 (setopt use-package-enable-imenu-support t)
-(require 'use-package)
+;; This requires use-package.
+(elpaca elpaca-use-package
+  (elpaca-use-package-mode))
 
 ;; Enable :doc
 (defconst use-package-vc-valid-keywords
@@ -29,16 +72,16 @@ See Info node `(emacs)Fetching Package Sources'.")
 ;;                   (not (file-exists-p (concat (file-name-as-directory fdir) "dir"))))
 ;;         (add-to-list 'Info-directory-list fdir)))))
 
-(use-package package
-  :defer t
-  :config
-  (setq package-install-upgrade-built-in t)
-  (add-to-list 'package-archives
-               '("melpa" . "https://melpa.org/packages/") t))
-(use-package package-vc
-  :defer t
-  :config
-  (setopt package-vc-allow-build-commands t))
+;; (use-package package
+;;   :defer t
+;;   :config
+;;   (setq package-install-upgrade-built-in t)
+;;   (add-to-list 'package-archives
+;;                '("melpa" . "https://melpa.org/packages/") t))
+;; (use-package package-vc
+;;   :defer t
+;;   :config
+;;   (setopt package-vc-allow-build-commands t))
 
 (setq inhibit-startup-screen t)
 (setq inhibit-startup-echo-area-message t)
@@ -47,7 +90,7 @@ See Info node `(emacs)Fetching Package Sources'.")
 
 ;;;; Sane Setup
 (use-package no-littering
-  :ensure)
+  :ensure (:wait t))
 
 (use-package files
   ;; Already loaded before init
@@ -80,11 +123,11 @@ See Info node `(emacs)Fetching Package Sources'.")
   (setq-default tab-width 8)
   (setq-default truncate-lines t))
 
-(use-package gcmh
-  :ensure t
-  :config
-  (setopt gcmh-idle-delay 10)
-  (gcmh-mode 1))
+;; (use-package gcmh
+;;   :ensure t
+;;   :config
+;;   (setopt gcmh-idle-delay 10)
+;;   (gcmh-mode 1))
 
 (use-package comp
   ;; Already loaded before init
@@ -277,8 +320,8 @@ See Info node `(emacs)Fetching Package Sources'.")
 (use-package keyfreq
   :ensure t
   :hook
-  (after-init . keyfreq-mode)
-  (after-init . keyfreq-autosave-mode))
+  (elpaca-after-init . keyfreq-mode)
+  (elpaca-after-init . keyfreq-autosave-mode))
 
 ;;;; Modal Editing
 (use-package nothing
@@ -332,7 +375,7 @@ See Info node `(emacs)Fetching Package Sources'.")
 
 (use-package repeat
   :hook
-  (after-init . repeat-mode))
+  (elpaca-after-init . repeat-mode))
 
 (keymap-global-set "C-=" #'text-scale-adjust)
 (keymap-global-set "C--" #'text-scale-adjust)
@@ -348,7 +391,7 @@ See Info node `(emacs)Fetching Package Sources'.")
 ;;;; Search and Completion
 (use-package vertico
   :ensure t
-  :hook (after-init . vertico-mode))
+  :hook (elpaca-after-init . vertico-mode))
 
 ;; No need to autoload. It is almost always needed.
 (use-package vertico-directory
@@ -689,6 +732,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   (use-package org-habit))
 
 (use-package ox-context
+  :disabled
   :load-path "~/Dev/ox-context")
 
 (defun my:select-workout ()
@@ -717,8 +761,11 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 (use-package org-node
   :ensure t
-  :after org
+  :defer t
   :config
+  (setq org-mem-watch-dirs (list "~/org/"))
+  (setq org-mem-do-sync-with-org-id t)
+  (org-mem-updater-mode)
   (org-node-cache-mode))
 
 (use-package org-make-toc
@@ -753,10 +800,10 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
     (eat-eshell-mode)))
 
 (use-package eat
-  :vc ( :url "https://codeberg.org/hawnzug/emacs-eat.git"
-        :rev :newest
-        :make "terminfo"
-        :doc "eat.texi")
+  :ensure
+  ( :remotes
+    ("fork" :repo ("https://codeberg.org/hawnzug/emacs-eat" . "eat"))
+    :inherit t)
   :defer t
   :init
   (defun my:eat--set-cursor (_ _)
@@ -993,7 +1040,7 @@ if one already exists."
   :after tramp)
 
 (use-package recentf
-  :hook (after-init . recentf-mode)
+  :hook (elpaca-after-init . recentf-mode)
   :config
   (setq recentf-max-saved-items 10000))
 
@@ -1076,7 +1123,7 @@ if one already exists."
 
 (use-package winner
   :hook
-  (after-init . winner-mode)
+  (elpaca-after-init . winner-mode)
   (ediff-quit . winner-undo))
 
 ;;;; Programming Utilities
@@ -1086,7 +1133,7 @@ if one already exists."
   (setopt indent-tabs-mode nil))
 
 (use-package elec-pair
-  :hook (after-init . electric-pair-mode))
+  :hook (elpaca-after-init . electric-pair-mode))
 
 ;; Use lsp-bridge for lsp primarily.
 ;; If something doesn't work, try eglot instead.
@@ -1111,7 +1158,6 @@ if one already exists."
     (add-to-list 'acm-backend-capf-mode-list 'tuareg-mode)))
 
 (use-package eglot
-  :ensure t
   :defer t
   :init
   (add-hook
@@ -1436,7 +1482,12 @@ if one already exists."
   :hook (sh-mode . flymake-shellcheck-load))
 
 (use-package tex-site
-  :ensure auctex
+  :ensure
+  (auctex
+   :repo "https://git.savannah.gnu.org/git/auctex.git" :branch "main"
+   :pre-build (("make" "elpa" "doc/dir"))
+   :build (:not elpaca--compile-info)
+   :files ("*.el" "doc/*.info*" "etc" "images" "latex" "style"))
   :defer t
   :config
   (add-hook 'LaTeX-mode-hook 'my:show-trailing-space)
@@ -1522,10 +1573,6 @@ if one already exists."
   (setq ledger-report-auto-width nil)
   (setq ledger-report-use-native-highlighting nil))
 
-(use-package markdown-mode
-  :ensure t
-  :defer t)
-
 ;;;; Dashboard
 (use-package server
   :config
@@ -1600,6 +1647,7 @@ if one already exists."
 ;; (run-with-idle-timer 120 t #'my:dashboard)
 
 (use-package ultra-scroll
+  :disabled
   :vc (:url "https://github.com/jdtsmith/ultra-scroll"
        :rev :newest)
   :init
@@ -1630,10 +1678,10 @@ if one already exists."
   :load-path "~/Projects/emacs-py/eaf-pdf-viewer")
 
 (use-package nutrack
-  :load-path "~/Dev/nutrack/"
-  :defer t
-  :init
-  (require 'nutrack-autoloads))
+  :ensure
+  ( :repo "~/Dev/nutrack/"
+    :files (:defaults))
+  :defer t)
 
 ;;;; Custom
 (setq custom-file "~/.config/emacs/emacs-custom.el")

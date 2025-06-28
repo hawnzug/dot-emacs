@@ -1,5 +1,5 @@
 ;; -*- lexical-binding: t; -*-
-;; (setq package-enable-at-startup nil)
+(setq package-enable-at-startup nil)
 (setq frame-inhibit-implied-resize t)
 
 (scroll-bar-mode -1)

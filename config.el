@@ -1234,6 +1234,18 @@ if one already exists."
     "m" outline-editing-repeat-map)
   (setq outline-minor-mode-cycle t))
 
+(use-package outli
+  :ensure
+  ( :host github :repo "jdtsmith/outli"
+    :inherit t)
+  :hook ((prog-mode text-mode) . outli-mode)
+  :config
+  (with-eval-after-load 'consult-imenu
+    (setf
+     (alist-get ?s (plist-get (alist-get 'emacs-lisp-mode consult-imenu-config)
+                              :types))
+     (list "Headings" 'outline-1))))
+
 (use-package hideshow
   :hook (LaTeX-mode . hs-minor-mode)
   :config
@@ -1362,18 +1374,6 @@ if one already exists."
 (use-package lua-mode
   :ensure t
   :defer t)
-
-(defun my:imenu-add-lisp-section ()
-  (cl-pushnew
-   (list "Sections" (rx bol (>= 3 ?\;) space (group (* nonl))) 1)
-   imenu-generic-expression))
-(add-hook 'lisp-mode-hook #'my:imenu-add-lisp-section)
-(add-hook 'emacs-lisp-mode-hook #'my:imenu-add-lisp-section)
-(with-eval-after-load 'consult-imenu
-  (setf
-   (alist-get ?s (plist-get (alist-get 'emacs-lisp-mode consult-imenu-config)
-                            :types))
-   (list "Sections" 'outline-1)))
 
 (defvar my:agda-mode-load-path
   (eval-and-compile

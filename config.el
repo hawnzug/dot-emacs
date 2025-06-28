@@ -790,7 +790,10 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 (use-package eat
   :ensure
-  ( :remotes
+  ( :files ("*.el" "*.info" "integration" "term" "terminfo")
+    :pre-build (("make" "info" "terminfo"))
+    :build (:not elpaca--compile-info)
+    :remotes
     ("fork" :repo ("https://codeberg.org/hawnzug/emacs-eat" . "eat"))
     :inherit t)
   :defer t

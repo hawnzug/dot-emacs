@@ -48,12 +48,12 @@
   (elpaca-use-package-mode))
 
 ;; Enable :doc
-(defconst use-package-vc-valid-keywords
-  '( :url :branch :lisp-dir :main-file :vc-backend :rev
-     :shell-command :make :ignored-files
-     :doc)
-  "Valid keywords for the `:vc' keyword.
-See Info node `(emacs)Fetching Package Sources'.")
+;; (defconst use-package-vc-valid-keywords
+;;   '( :url :branch :lisp-dir :main-file :vc-backend :rev
+;;      :shell-command :make :ignored-files
+;;      :doc)
+;;   "Valid keywords for the `:vc' keyword.
+;; See Info node `(emacs)Fetching Package Sources'.")
 
 (add-to-list 'load-path "~/.config/emacs/lisp")
 
@@ -133,8 +133,6 @@ See Info node `(emacs)Fetching Package Sources'.")
   ;; Already loaded before init
   :config
   (setopt native-comp-async-report-warnings-errors 'silent))
-
-(load "~/.config/emacs/var/personal")
 
 ;;;; User Interface
 (defun my:font-setup ()
@@ -236,9 +234,9 @@ See Info node `(emacs)Fetching Package Sources'.")
 
 (use-package hide-mode-line
   :ensure t
+  :defer t
   :config
-  (setq hide-mode-line-excluded-modes nil)
-  (global-hide-mode-line-mode))
+  (setq hide-mode-line-excluded-modes nil))
 
 (use-package doom-modeline
   :disabled
@@ -341,13 +339,11 @@ See Info node `(emacs)Fetching Package Sources'.")
   (global-set-key [remap mark-sexp] 'easy-mark))
 
 (use-package puni
-  :load-path "~/Projects/puni"
-  ;; The autoloads of Puni are set up so you can enable `puni-mode` or
-  ;; `puni-global-mode` before `puni` is actually loaded. Only after you press
-  ;; any key that calls Puni commands, it's loaded.
-  )
+  :ensure t
+  :defer t)
 
 (use-package tooe-colemak
+  :disabled
   :load-path "~/Dev/tooe")
 
 (use-package boon-colemak
@@ -429,7 +425,7 @@ See Info node `(emacs)Fetching Package Sources'.")
 (use-package corfu
   :ensure t
   :hook
-  (merlin-mode . corfu-mode)
+  ((emacs-lisp-mode merlin-mode) . corfu-mode)
   :config
   ;; (with-eval-after-load 'tooe-colemak
   ;;   (defun my:corfu-quit-and-escape ()
@@ -488,10 +484,6 @@ See Info node `(emacs)Fetching Package Sources'.")
   (setq xref-show-xrefs-function #'consult-xref
         xref-show-definitions-function #'consult-xref))
 
-(define-keymap
-  :keymap ctl-x-map
-  "f" #'find-file
-  "C-f" #'set-fill-column)
 (define-keymap
   :keymap goto-map
   "e" #'consult-compile-error
@@ -735,10 +727,6 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :disabled
   :load-path "~/Dev/ox-context")
 
-(defun my:select-workout ()
-  (interactive)
-  (completing-read "Workout" my:workout-list nil t))
-
 (use-package org-capture
   :defer t
   :init
@@ -773,6 +761,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
   :defer t)
 
 (use-package denote
+  :disabled
   :ensure t
   :defer t
   :config
@@ -826,13 +815,14 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 
 (use-package exec-path-from-shell
   :ensure t
-  :defer 1
+  :defer t
   :config
   (setq exec-path-from-shell-check-startup-files nil)
   (exec-path-from-shell-copy-env "SSH_AGENT_PID")
   (exec-path-from-shell-copy-env "SSH_AUTH_SOCK"))
 
 (use-package terminal-here
+  :disabled
   :ensure t
   :defer t
   :config
@@ -842,7 +832,7 @@ The window scope is determined by `avy-all-windows' (ARG negates it)."
 ;;;; Version Control, Backup, Autosave
 (use-package magit
   :ensure t
-  :defer 5
+  :defer t
   :config
   (setq magit-repository-directories
         '(("~/.config/emacs" . 0)
@@ -1149,7 +1139,7 @@ if one already exists."
   ((LaTeX-mode python-mode
     agda2-mode haskell-mode typescript-mode js-mode js2-mode
     bibtex-mode sh-mode bash-mode web-mode css-mode
-    emacs-lisp-mode dockerfile-mode)
+    dockerfile-mode)
    . lsp-bridge-mode)
   :config
   (use-package acm-backend-capf
@@ -1585,7 +1575,8 @@ if one already exists."
   (with-eval-after-load 'embark
     (keymap-set embark-file-map "k" 'kdeconnect-send-file))
   :config
-  (setopt kdeconnect-devices my:kdeconnect-devices)
+  (require 'my:data)
+  (setopt kdeconnect-devices my:data:kdeconnect-devices)
   (setopt kdeconnect-active-device (car kdeconnect-devices)))
 
 (use-package elfeed
@@ -1623,7 +1614,8 @@ if one already exists."
   (setopt erc-modules (add-to-list 'erc-modules 'sasl)))
 
 (use-package notmuch
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package sendmail
   :config
@@ -1659,12 +1651,14 @@ if one already exists."
   )
 
 (use-package doc-view
+  :defer t
   :config
   (setopt doc-view-continuous t)
   (setopt doc-view-resolution 300))
 
 (use-package citre
-  :ensure t)
+  :ensure t
+  :defer t)
 
 (use-package eaf
   :disabled

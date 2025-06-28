@@ -4,3 +4,4 @@
 *.elc
 /test-config.el
 /elpaca/
+/lisp/my:data.el

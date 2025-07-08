@@ -1566,6 +1566,14 @@ if one already exists."
   (setq ledger-report-auto-width nil)
   (setq ledger-report-use-native-highlighting nil))
 
+(use-package flymake-vale
+  :disabled
+  :ensure
+  ( :host github :repo "tpeacock19/flymake-vale"
+    :inherit t)
+  :hook ((text-mode latex-mode org-mode markdown-mode message-mode)
+         . flymake-vale-load))
+
 ;;;; Dashboard
 (use-package server
   :config

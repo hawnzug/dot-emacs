@@ -1197,7 +1197,9 @@ if one already exists."
   :defer t)
 
 (use-package flymake
-  :defer t)
+  :defer t
+  :config
+  (setopt flymake-show-diagnostics-at-end-of-line 'fancy))
 
 (use-package imenu-list
   :ensure t
